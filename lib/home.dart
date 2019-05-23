@@ -1,0 +1,469 @@
+import 'package:flutter/material.dart';
+import 'package:zxplore_app/blocs/all_accounts_bloc.dart';
+import 'package:zxplore_app/models/form_model.dart';
+import 'package:zxplore_app/screens/category_screen.dart';
+
+import 'colors.dart';
+import 'login.dart';
+import 'models/accounts_response.dart';
+import 'utils/zxplore_crypto_helper.dart';
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List accounts;
+  AccountsBloc _accountsBloc;
+
+  @override
+  void initState() {
+    _accountsBloc = AccountsBloc();
+    _accountsBloc.getAccounts();
+    super.initState();
+  }
+
+  Widget _buildLoadingWidget() {
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Please wait while we get accounts you have created..."),
+        SizedBox(height: 20),
+        CircularProgressIndicator()
+      ],
+    ));
+  }
+
+  Widget _actionChipError(String error) {
+    if (error.contains('401') && error.contains('expired')) {
+      return ActionChip(
+          backgroundColor: ZxploreGrey,
+          padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
+          avatar: CircleAvatar(
+            backgroundColor: ZxploreGrey,
+            child: const Icon(
+              Icons.call_missed_outgoing,
+              color: ZxploreRedColor,
+            ),
+          ),
+          label: Text('Sign out',
+              style: TextStyle(
+                  fontStyle: FontStyle.normal, color: ZxploreRedColor)),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+            );
+          });
+    } else {
+      return ActionChip(
+          backgroundColor: ZxploreGrey,
+          padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
+          avatar: CircleAvatar(
+            backgroundColor: ZxploreGrey,
+            child: const Icon(
+              Icons.refresh,
+              color: ZxplorePrimaryColor,
+            ),
+          ),
+          label: Text('Try again',
+              style: TextStyle(
+                  fontStyle: FontStyle.normal, color: ZxplorePrimaryColor)),
+          onPressed: () {
+            _accountsBloc.getAccounts();
+          });
+    }
+  }
+
+  Widget _buildErrorWidget(String error) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.cloud_off,
+              color: Colors.black54,
+              size: 60,
+            ),
+            SizedBox(height: 20),
+            Text("$error",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontStyle: FontStyle.normal, fontSize: 14.0)),
+            SizedBox(height: 20),
+            Transform.scale(
+              scale: 1.2,
+              child: _actionChipError(error),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _accountsBloc.dispose();
+    super.dispose();
+  }
+
+  void _showModal() {
+    showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return ListView(
+            children: <Widget>[
+              SizedBox(height: 12.0),
+              new ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: Colors.amber,
+                    type: MaterialType.circle,
+                    child: new Container(
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+                  child: new Text(
+                    'Saved',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                subtitle: new Text(
+                    'This is for accounts that have been saved, but not completed.'),
+                onTap: () {
+//                _controller.animateTo(0);
+//                Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: Colors.blueAccent,
+                    type: MaterialType.circle,
+                    child: new Container(
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+                  child: new Text(
+                    'Pending',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                subtitle:
+                    new Text('This is for accounts that are still pending.'),
+                onTap: () {
+//                _controller.animateTo(0);
+//                Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: ZxploreCompletedGreen,
+                    type: MaterialType.circle,
+                    child: new Container(
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+                  child: new Text(
+                    'Completed',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                subtitle: new Text(
+                    'This is a status to show users that have completed their account creation.'),
+                onTap: () {
+//                _controller.animateTo(0);
+//                Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: ZxploreRejectedPink,
+                    type: MaterialType.circle,
+                    child: new Container(
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+                  child: new Text(
+                    'Rejected',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                subtitle: new Text(
+                    'These are accounts that have been rejected due to processing errors.'),
+                onTap: () {
+//                _controller.animateTo(0);
+//                Navigator.pop(context);
+                },
+              ),
+              SizedBox(
+                height: 4.0,
+              )
+            ],
+          );
+        });
+  }
+
+  Color getColor(String selector) {
+    if (selector == 'Completed') {
+      return ZxploreCompletedGreen;
+    } else if (selector == 'Saved') {
+      return Colors.amber;
+    } else if (selector == 'Pending') {
+      return Colors.blueAccent;
+    } else {
+      return ZxploreRejectedPink;
+    }
+  }
+
+  ListTile makeListTile(Datum form, BuildContext _context) => ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
+        leading: Container(
+          padding: EdgeInsets.only(left: 10.0),
+          child: new Material(
+            color: getColor(form.status),
+            type: MaterialType.circle,
+            child: new Container(
+              width: 24,
+              height: 24,
+            ),
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: new Text.rich(
+            TextSpan(
+              text: CryptoHelper.decrypt(form.accountName),
+              // default text style
+              style: TextStyle(
+                color: Colors.black,
+                background: Paint()
+                  ..color = Colors.transparent
+                  ..strokeWidth = 16.5
+                  ..style = PaintingStyle.stroke,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                    text: '\n\n',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(
+                    text: ' +234${CryptoHelper.decrypt(form.phoneNumber)} ',
+                    style: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        color: Colors.black54,
+                        fontSize: 14.0)),
+              ],
+            ),
+          ),
+        ),
+        subtitle: Row(
+          children: <Widget>[
+            ActionChip(
+                backgroundColor: ZxploreGrey,
+                padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
+                avatar: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: const Icon(
+                    Icons.refresh,
+                    color: Colors.black,
+                  ),
+                ),
+                label: Text('Verify Account'),
+                onPressed: () {
+                  final loadingSnackBar = SnackBar(
+                      content: Text(
+                          'Verifying account status for ${CryptoHelper.decrypt(form.accountName)}....'));
+
+                  _accountsBloc.verifyAccountByReferenceId(form.refId);
+
+                  Scaffold.of(_context).showSnackBar(loadingSnackBar);
+
+                  _accountsBloc.subjectVerifyAccountsResponse
+                      .listen((response) {
+                    Scaffold.of(_context).removeCurrentSnackBar();
+
+                    if (response.status) {
+                      if (response.data.accountNumber != null) {
+                        Scaffold.of(_context).showSnackBar(SnackBar(
+                          content: Text(
+                              '${response?.message} . Account number is: ${response.data.accountNumber}'),
+                          duration: Duration(seconds: 5),
+                        ));
+                      } else {
+                        Scaffold.of(_context).showSnackBar(SnackBar(
+                          content: Text('${response?.message}'),
+                          duration: Duration(seconds: 5),
+                        ));
+                      }
+                    } else {
+                      Scaffold.of(_context).showSnackBar(SnackBar(
+                        content: Text(response.message),
+                        duration: Duration(seconds: 5),
+                      ));
+                    }
+                  }).onError((error) {
+                    Scaffold.of(_context).removeCurrentSnackBar();
+
+                    Scaffold.of(_context).showSnackBar(SnackBar(
+                      content: Text('${error.toString()}'),
+                      duration: Duration(seconds: 5),
+                    ));
+                  });
+                }),
+            Expanded(
+                flex: 1,
+                child: Container(
+                  // tag: 'hero',
+                  child: ActionChip(
+                      backgroundColor: Colors.transparent,
+                      labelPadding:
+                          EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+                      padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
+                      avatar: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: const Icon(
+                          Icons.call_made,
+                          color: Colors.black,
+                        ),
+                      ),
+                      label: Text(
+                        'Edit Account',
+                      ),
+                      onPressed: () {
+                        print(
+                            "If you stand for nothing, Burr, what’ll you fall for?");
+                      }),
+                )),
+          ],
+        ),
+      );
+
+  Card makeCard(Datum form, BuildContext _context) => Card(
+        elevation: 0.0,
+        color: Colors.white,
+        margin: new EdgeInsets.symmetric(horizontal: 0.0, vertical: 6.0),
+        child: Container(
+          child: makeListTile(form, _context),
+        ),
+      );
+
+  Widget makeBody(AccountsResponse accountsResponse, BuildContext _context) =>
+      Container(
+        // decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, 1.0)),
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: accountsResponse.data.length,
+          itemBuilder: (BuildContext context, int index) {
+            return makeCard(accountsResponse.data[index], _context);
+          },
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+          title: const Text(
+        'ZXplore',
+        style: TextStyle(color: Colors.white),
+      )),
+      floatingActionButton: FloatingActionButton.extended(
+        elevation: 4.0,
+        backgroundColor: ZxploreRedColor,
+        icon: const Icon(Icons.add),
+        label: const Text('Create Account'),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => CategoryPage()),
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      body: StreamBuilder<AccountsResponse>(
+        stream: _accountsBloc.subjectAccountsResponse.stream,
+        builder: (context, AsyncSnapshot<AccountsResponse> snapshot) {
+          if (snapshot.hasData) {
+            if (!snapshot.data.status) {
+              //todo: make use of error.
+              return _buildErrorWidget(snapshot.data.message);
+            }
+            return makeBody(snapshot.data, context);
+          } else if (snapshot.hasError) {
+            return _buildErrorWidget(snapshot.error);
+          } else {
+            return _buildLoadingWidget();
+          }
+        },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: ZxplorePrimaryColor,
+        child: new Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+                icon: Icon(
+                  Icons.tune,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  _showModal();
+                }),
+            IconButton(
+                icon: Icon(Icons.exit_to_app, color: Colors.white),
+                onPressed: () {}),
+          ],
+        ),
+      ),
+    );
+  }
+}
