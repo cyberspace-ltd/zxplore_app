@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/data/entities/country_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 
 import '../../colors.dart';
@@ -411,68 +412,24 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                             textColor: ZxplorePrimaryColor,
                             color: Colors.transparent,
                             onPressed: () {
-
-
-                              var loadingBar = Flushbar(
-                                forwardAnimationCurve: Curves.decelerate,
-                                reverseAnimationCurve: Curves.easeOut,
-                                flushbarStyle: FlushbarStyle.GROUNDED,
-                                flushbarPosition: FlushbarPosition.TOP,
-                                progressIndicatorBackgroundColor: Colors.grey[800],
-                                showProgressIndicator: true,
-                                message: "verifying BVN PLease wait...",
-                              );
-
+                              var loadingBar = FlushbarHelper.createLoading(
+                                  message: "verifying BVN PLease wait...",
+                                  linearProgressIndicator: null);
                               loadingBar..show(context);
                               accountFormBloc.verifyBvn();
-
                               accountFormBloc.bvnVerificationResponse
                                   .listen((response) {
                                 loadingBar.dismiss();
+                                FlushbarHelper.createSuccess(
+                                    message: "BVN provided is correct.")
+                                  ..show(context);
                               }).onError((error) {
+                                FlushbarHelper.createError(
+                                        message:
+                                            "BVN provided could not be verified.")
+                                    .show(context);
                                 loadingBar.dismiss();
                               });
-
-//                              final loadingSnackBar = SnackBar(
-//                                  content: Text(
-//                                      'Verifying account status for ${CryptoHelper.decrypt(form.accountName)}....'));
-//
-//                              _accountsBloc.verifyAccountByReferenceId(form.refId);
-//
-//                              Scaffold.of(_context).showSnackBar(loadingSnackBar);
-//
-//                              _accountsBloc.subjectVerifyAccountsResponse
-//                                  .listen((response) {
-//                                Scaffold.of(_context).removeCurrentSnackBar();
-//
-//                                if (response.status) {
-//                                  if (response.data.accountNumber != null) {
-//                                    Scaffold.of(_context).showSnackBar(SnackBar(
-//                                      content: Text(
-//                                          '${response?.message} . Account number is: ${response.data.accountNumber}'),
-//                                      duration: Duration(seconds: 5),
-//                                    ));
-//                                  } else {
-//                                    Scaffold.of(_context).showSnackBar(SnackBar(
-//                                      content: Text('${response?.message}'),
-//                                      duration: Duration(seconds: 5),
-//                                    ));
-//                                  }
-//                                } else {
-//                                  Scaffold.of(_context).showSnackBar(SnackBar(
-//                                    content: Text(response.message),
-//                                    duration: Duration(seconds: 5),
-//                                  ));
-//                                }
-//                              }).onError((error) {
-//                                Scaffold.of(_context).removeCurrentSnackBar();
-//
-//                                Scaffold.of(_context).showSnackBar(SnackBar(
-//                                  content: Text('${error.toString()}'),
-//                                  duration: Duration(seconds: 5),
-//                                ));
-//                              });
-                              //
                             },
                           ),
                         ),
