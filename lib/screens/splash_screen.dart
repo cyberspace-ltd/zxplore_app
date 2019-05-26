@@ -36,12 +36,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
     SecureStorage.getEmployeeToken().then((token) {
       if (token == null) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
         );
       } else {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
         );

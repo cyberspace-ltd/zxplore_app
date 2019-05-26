@@ -265,7 +265,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ListTile makeListTile(Datum form, BuildContext _context) => ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
         leading: Container(
-          padding: EdgeInsets.only(left: 10.0),
+          padding: EdgeInsets.only(left: 16.0),
           child: new Material(
             color: getColor(form.status),
             type: MaterialType.circle,
@@ -360,29 +360,50 @@ class _MyHomePageState extends State<MyHomePage> {
                 flex: 1,
                 child: Container(
                   // tag: 'hero',
-                  child: ActionChip(
-                      backgroundColor: Colors.transparent,
-                      labelPadding:
-                          EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
-                      padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
-                      avatar: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: const Icon(
-                          Icons.call_made,
-                          color: Colors.black,
-                        ),
-                      ),
-                      label: Text(
-                        'Edit Account',
-                      ),
-                      onPressed: () {
-                        print(
-                            "If you stand for nothing, Burr, what’ll you fall for?");
-                      }),
+                  child: _statusWidget(form),
                 )),
           ],
         ),
       );
+
+  Widget _statusWidget(Datum form) {
+    if (form?.status?.toLowerCase() == 'completed') {
+      return Chip(
+          backgroundColor: Colors.transparent,
+          labelPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+          padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
+          avatar: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            child: const Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          ),
+          label: Text(
+            '${CryptoHelper.decrypt(form.accountNumber)}',
+          ));
+//          onPressed: () {});
+    } else {
+      return ActionChip(
+          backgroundColor: Colors.transparent,
+          labelPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+          padding: EdgeInsets.fromLTRB(4, 0, 8, 0),
+          avatar: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            child: const Icon(
+              Icons.call_made,
+              color: Colors.black,
+            ),
+          ),
+          label: Text(
+            'Edit Account',
+          ),
+          onPressed: () {
+          var bvn =  CryptoHelper.encrypt('22169009111');
+            print("BVN $bvn");
+          });
+    }
+  }
 
   Card makeCard(Datum form, BuildContext _context) => Card(
         elevation: 0.0,
@@ -459,11 +480,50 @@ class _MyHomePageState extends State<MyHomePage> {
                   _showModal();
                 }),
             IconButton(
-                icon: Icon(Icons.exit_to_app, color: Colors.white),
-                onPressed: () {}),
+                icon: Icon(Icons.power_settings_new, color: Colors.white),
+                onPressed: () {
+                  _showLogoutDialog();
+                }),
           ],
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Logging Out"),
+          content: new Text(
+              "Are you sure you want to logout. You might lose offline data. Proceed?"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            OutlineButton(
+              child: Text('Yes Logout'),
+              textColor: Colors.red,
+              color: Colors.transparent,
+              onPressed: () {
+                //todo: Logout not implemented
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => LoginPage()),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -5,8 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:zxplore_app/apis/endpoints.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
+import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/login_response.dart';
 import 'package:zxplore_app/models/occupation_model.dart';
+import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/state_model.dart';
 import 'package:zxplore_app/models/title_model.dart';
 import 'package:dio/dio.dart';
@@ -130,6 +132,78 @@ class ZenithBankApi {
       throw Exception('Failed to load cities');
     }
   }
+
+  Future<SaveAccountResponse> attemptSaveAccounts(
+      String encodedJson, String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      response = await dio.post("${Endpoints.getSaveAccountsUrl()}",
+          data: encodedJson);
+
+      print('Response: $response');
+
+      if (response.statusCode == 200) {
+        print('${response.data}');
+        return SaveAccountResponse.fromJson(response.data);
+      } else if (response.statusCode == 400) {
+        var value = SaveAccountResponse.fromJson(response.data);
+        throw Exception(value.message);
+      }
+      else{
+        return SaveAccountResponse.fromJson(response.data);
+      }
+    } catch (error, stacktrace) {
+      print(error);
+
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      if (error is DioError) {
+        print(error.response);
+
+        if (error.response?.statusCode == 400) {
+          var value = SaveAccountResponse.fromJson(error.response?.data);
+          throw Exception(value.message);
+        } else if (error.response?.statusCode == 502) {
+          var value = SaveAccountResponse.fromJson(error.response?.data);
+          throw Exception(value.message);
+        } else {
+          throw Exception(_handleError(error));
+        }
+      } else {
+        throw Exception(
+            'We are having issues sending the account to the server. Try again later. ');
+      }
+    }
+  }
+
+  Future<BvnResponse> verifyBvn(String encodedBvn, String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    response = await dio.post(Endpoints.getBvnUrl(),
+        data: {"BvnNew": encodedBvn});
+
+    print('$response');
+
+    if (response.statusCode == 200) {
+      print('${response.data}');
+
+      return BvnResponse.fromJson(response.data);
+    }
+    if (response.statusCode == 400) {
+      var value = LoginResponse.fromJson(response.data);
+      throw Exception(value.message);
+    } else {
+      throw Exception('login failed.');
+    }
+  }
+
 
   String _handleError(Error error) {
     String errorDescription = "";

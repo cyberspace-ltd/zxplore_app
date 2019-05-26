@@ -6,8 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/data/entities/country_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/utils/helper_functions.dart';
 
 import '../../colors.dart';
+import 'package:flushbar/flushbar.dart';
 
 class PersonalInformationStep extends StatefulWidget {
   @override
@@ -16,8 +18,6 @@ class PersonalInformationStep extends StatefulWidget {
 
 class _PersonalInformationState extends State<PersonalInformationStep>
     with AutomaticKeepAliveClientMixin<PersonalInformationStep> {
-  final TextEditingController _dateOfBirthController = TextEditingController();
-
   final _titles = [
     'Miss',
     'Dr.',
@@ -43,6 +43,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   StatesBloc statesBloc;
 
+  TextEditingController _bvnController;
+  TextEditingController _firstNameController;
+  TextEditingController _titleController;
+  TextEditingController _surnameController;
+  TextEditingController _otherNameController;
+  TextEditingController _mothersMaidenNameController;
+  TextEditingController _dateOfBirthController;
+  TextEditingController _stateOfOriginController;
+  TextEditingController _countryOfOriginController;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -52,12 +62,30 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     countriesBloc = CountriesBloc();
     statesBloc = StatesBloc();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
+    _bvnController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _titleController = TextEditingController();
+    _surnameController = TextEditingController();
+    _otherNameController = TextEditingController();
+    _mothersMaidenNameController = TextEditingController();
+    _dateOfBirthController = TextEditingController();
+    _stateOfOriginController = TextEditingController();
+    _countryOfOriginController = TextEditingController();
   }
 
   @override
   void dispose() {
     statesBloc.dispose();
     countriesBloc.dispose();
+    _firstNameController.dispose();
+    _bvnController.dispose();
+    _titleController.dispose();
+    _surnameController.dispose();
+    _otherNameController.dispose();
+    _mothersMaidenNameController.dispose();
+    _dateOfBirthController.dispose();
+    _stateOfOriginController.dispose();
+    _countryOfOriginController.dispose();
 
     super.dispose();
   }
@@ -98,13 +126,20 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     return StreamBuilder(
         stream: accountFormBloc.bvn,
         builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _bvnController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _bvnController.selection);
+          }
           return TextField(
-            obscureText: true,
+            controller: _bvnController,
+            obscureText: false,
             keyboardType: TextInputType.number,
             onChanged: accountFormBloc.changeBvn,
             decoration: InputDecoration(
               labelText: 'BVN',
-              helperText: 'Click the verify BVN button to populate account form.',
+              helperText:
+                  'Click the verify BVN button to populate account form.',
               errorText: snapshot.error,
             ),
           );
@@ -115,7 +150,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     return StreamBuilder(
       stream: accountFormBloc.surname,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _surnameController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _surnameController.selection);
+        }
         return TextField(
+          controller: _surnameController,
           textCapitalization: TextCapitalization.characters,
           onChanged: accountFormBloc.changeSurname,
           keyboardType: TextInputType.text,
@@ -132,11 +173,19 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
+  //Workaround for this issue on text TextFields: https://github.com/flutter/flutter/issues/11416
+
   Widget _firstNameField() {
     return StreamBuilder(
       stream: accountFormBloc.firstName,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _firstNameController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _firstNameController.selection);
+        }
         return TextField(
+          controller: _firstNameController,
           textCapitalization: TextCapitalization.characters,
           onChanged: accountFormBloc.changeFirstName,
           keyboardType: TextInputType.text,
@@ -155,8 +204,15 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _otherNameField() {
     return StreamBuilder(
+      stream: accountFormBloc.otherName,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _otherNameController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _otherNameController.selection);
+        }
         return TextField(
+          controller: _otherNameController,
           textCapitalization: TextCapitalization.characters,
           onChanged: accountFormBloc.changeOtherName,
           keyboardType: TextInputType.text,
@@ -176,7 +232,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     return StreamBuilder(
       stream: accountFormBloc.mothersMaidenName,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _mothersMaidenNameController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _mothersMaidenNameController.selection);
+        }
         return TextField(
+          controller: _mothersMaidenNameController,
           textCapitalization: TextCapitalization.characters,
           onChanged: accountFormBloc.changeMothersMaidenName,
           keyboardType: TextInputType.text,
@@ -197,6 +259,11 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     return StreamBuilder(
       stream: accountFormBloc.dateOfBirth,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _dateOfBirthController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _dateOfBirthController.selection);
+        }
         return GestureDetector(
             onTap: () async {
               DateTime picked = await showDatePicker(
@@ -206,9 +273,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   lastDate: new DateTime(DateTime.now().year - 19));
 
               if (picked != null) {
-
-                var dob =
-                    new DateFormat.yMMMd().format(picked);
+                var dob = new DateFormat.yMMMd().format(picked);
 
                 _dateOfBirthController.text = dob;
                 accountFormBloc.changeDateOfBirth(dob);
@@ -250,13 +315,18 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                         AsyncSnapshot<List<StateEntity>> shot) {
                       if (!shot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
-                        value: snapshot.data,
-                        items: shot.data.map((StateEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
+                        value: snapshot.hasData
+                            ? Helper.returnValidStateSelectedItem(snapshot.data,
+                                shot.data.map((x) => x.name).toList())
+                            : null,
+                        items: shot.data != null
+                            ? shot.data.map((StateEntity value) {
+                                return DropdownMenuItem<String>(
+                                  value: value.name,
+                                  child: Text(value.name),
+                                );
+                              }).toList()
+                            : null,
                         onChanged: accountFormBloc.changeStateOfOrigin,
 
                         isDense: true, //value: _currentUser,
@@ -274,6 +344,11 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     return StreamBuilder(
       stream: accountFormBloc.countryOfOrigin,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _stateOfOriginController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _stateOfOriginController.selection);
+        }
         return FormField<String>(
           builder: (FormFieldState<String> state) {
             return InputDecorator(
@@ -289,7 +364,8 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                         AsyncSnapshot<List<CountryEntity>> shot) {
                       if (!shot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
-                        value: snapshot.data,
+                        value:
+                            shot.data != null ? shot.data?.first?.name : null,
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.name,
@@ -334,7 +410,70 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                             child: Text('VERIFY BVN'),
                             textColor: ZxplorePrimaryColor,
                             color: Colors.transparent,
-                            onPressed: () {},
+                            onPressed: () {
+
+
+                              var loadingBar = Flushbar(
+                                forwardAnimationCurve: Curves.decelerate,
+                                reverseAnimationCurve: Curves.easeOut,
+                                flushbarStyle: FlushbarStyle.GROUNDED,
+                                flushbarPosition: FlushbarPosition.TOP,
+                                progressIndicatorBackgroundColor: Colors.grey[800],
+                                showProgressIndicator: true,
+                                message: "verifying BVN PLease wait...",
+                              );
+
+                              loadingBar..show(context);
+                              accountFormBloc.verifyBvn();
+
+                              accountFormBloc.bvnVerificationResponse
+                                  .listen((response) {
+                                loadingBar.dismiss();
+                              }).onError((error) {
+                                loadingBar.dismiss();
+                              });
+
+//                              final loadingSnackBar = SnackBar(
+//                                  content: Text(
+//                                      'Verifying account status for ${CryptoHelper.decrypt(form.accountName)}....'));
+//
+//                              _accountsBloc.verifyAccountByReferenceId(form.refId);
+//
+//                              Scaffold.of(_context).showSnackBar(loadingSnackBar);
+//
+//                              _accountsBloc.subjectVerifyAccountsResponse
+//                                  .listen((response) {
+//                                Scaffold.of(_context).removeCurrentSnackBar();
+//
+//                                if (response.status) {
+//                                  if (response.data.accountNumber != null) {
+//                                    Scaffold.of(_context).showSnackBar(SnackBar(
+//                                      content: Text(
+//                                          '${response?.message} . Account number is: ${response.data.accountNumber}'),
+//                                      duration: Duration(seconds: 5),
+//                                    ));
+//                                  } else {
+//                                    Scaffold.of(_context).showSnackBar(SnackBar(
+//                                      content: Text('${response?.message}'),
+//                                      duration: Duration(seconds: 5),
+//                                    ));
+//                                  }
+//                                } else {
+//                                  Scaffold.of(_context).showSnackBar(SnackBar(
+//                                    content: Text(response.message),
+//                                    duration: Duration(seconds: 5),
+//                                  ));
+//                                }
+//                              }).onError((error) {
+//                                Scaffold.of(_context).removeCurrentSnackBar();
+//
+//                                Scaffold.of(_context).showSnackBar(SnackBar(
+//                                  content: Text('${error.toString()}'),
+//                                  duration: Duration(seconds: 5),
+//                                ));
+//                              });
+                              //
+                            },
                           ),
                         ),
                       ],

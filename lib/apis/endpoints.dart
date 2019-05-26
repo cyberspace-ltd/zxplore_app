@@ -58,4 +58,9 @@ class Endpoints {
         'accounts/SaveAccount/';
   }
 
+  static String getBvnUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/VerifySingleBVN/';
+  }
+
 }

@@ -120,8 +120,8 @@ class _AccountFormPageState extends State<AccountFormPage>
                   left: 0.0,
                   right: 0.0,
                   child: Container(
-//                    color: Colors.grey[800].withOpacity(0.5),
-                    color: ZxplorePrimaryColor,
+                    color: Colors.grey[800].withOpacity(0.5),
+//                    color: ZxplorePrimaryColor,
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

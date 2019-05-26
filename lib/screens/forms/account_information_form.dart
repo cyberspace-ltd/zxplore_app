@@ -169,7 +169,7 @@ class _AccountInformationState extends State<AccountInformationStep>
                         value: snapshot.data,
                         items: shot.data.map((AccountClassEntity value) {
                           return DropdownMenuItem<String>(
-                            value: value.type,
+                            value: value.id.toString(),
                             child: Text(value.name),
                           );
                         }).toList(),

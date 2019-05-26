@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:zxplore_app/home.dart';
 
 class SignatoryStep extends StatefulWidget {
   @override
@@ -23,10 +24,11 @@ class _SignatoryStepState extends State<SignatoryStep>
   final _sign = GlobalKey<SignatureState>();
 
   AccountFormBloc accountFormBloc;
+
   @override
   void initState() {
     super.initState();
-    accountFormBloc =  BlocProvider.of<AccountFormBloc>(context);
+    accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
   }
 
   @override
@@ -51,8 +53,8 @@ class _SignatoryStepState extends State<SignatoryStep>
                       key: _sign,
                       onSign: () {
                         final sign = _sign.currentState;
-                        debugPrint(
-                            '${sign.points.length} points in the signature');
+                        // debugPrint(
+                        //     '${sign.points.length} points in the signature');
                       },
                       strokeWidth: strokeWidth,
                     ),
@@ -79,10 +81,11 @@ class _SignatoryStepState extends State<SignatoryStep>
                         var data = await image.toByteData(
                             format: ui.ImageByteFormat.png);
                         sign.clear();
-                        final encoded =
-                            base64.encode(data.buffer.asUint8List());
+                        final encoded = base64
+                            .encode(data.buffer.asUint8ClampedList())
+                            .toString();
 
-                          accountFormBloc.setSignature(encoded);
+                        accountFormBloc.setSignature(encoded);
 
                         setState(() {
                           _img = data;
@@ -127,10 +130,63 @@ class _SignatoryStepState extends State<SignatoryStep>
               textColor: Color.fromRGBO(255, 255, 255, 1),
               color: ZxplorePrimaryColor,
               elevation: 8.0,
-              onPressed: snapshot.hasData ? accountFormBloc.submit : null,
+              onPressed: snapshot.hasData
+                  ? () async {
+                      accountFormBloc.submit();
+                      final loadingSnackBar = SnackBar(
+                          content:
+                              Text('Attempting to submit created account....'));
+
+                      Scaffold.of(context).showSnackBar(loadingSnackBar);
+
+                      accountFormBloc.subjectSaveAccountResponse
+                          .listen((response) {
+                        Scaffold.of(context).removeCurrentSnackBar();
+
+                        _showSuccessDialog(
+                            'The created account was sent successfully, an account number will be generated shortly.');
+                      }).onError((error) {
+                        Scaffold.of(context).removeCurrentSnackBar();
+
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text(error.toString()),
+                          duration: Duration(seconds: 15),
+                        ));
+                      });
+                    }
+                  : null,
 //              onPressed: accountFormBloc.submit,
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showSuccessDialog(String message) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Account Creation Status"),
+          content: new Text(message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            OutlineButton(
+              child: Text('Done'),
+              textColor: Colors.green,
+              color: Colors.transparent,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => MyHomePage()),
+                );
+              },
+            ),
+          ],
         );
       },
     );

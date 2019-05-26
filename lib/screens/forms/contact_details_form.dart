@@ -9,6 +9,8 @@ import 'package:zxplore_app/data/entities/city_entity.dart';
 import 'package:zxplore_app/data/entities/country_entity.dart';
 import 'package:zxplore_app/data/entities/occupation_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/utils/helper_functions.dart';
+import 'package:flushbar/flushbar.dart';
 
 class ContactDetailsStep extends StatefulWidget {
   @override
@@ -26,26 +28,6 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-    _countriesBloc = CountriesBloc();
-    _occupationsBloc = OccupationsBloc();
-    statesBloc = StatesBloc();
-    _citiesBloc = CitiesBloc();
-    accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
-    _occupationsBloc.getOccupations();
-  }
-
-  @override
-  void dispose() {
-    statesBloc.dispose();
-    _countriesBloc.dispose();
-    _occupationsBloc.dispose();
-    _citiesBloc.dispose();
-    super.dispose();
-  }
-
   final TextEditingController _countryOfResidenceController =
       TextEditingController();
   final TextEditingController _stateOfResidenceController =
@@ -59,17 +41,57 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   final TextEditingController _maritalStatusController =
       TextEditingController();
 
-
   final _genders = ['MALE', 'FEMALE'];
 
   final _maritalStatus = ['SINGLE', 'MARRIED', 'SEPERATED', 'DIVORCED'];
+  TextEditingController _emailController;
+  TextEditingController _phoneController;
+  TextEditingController _nextOfKinController;
+  TextEditingController _address1Controller;
+  TextEditingController _address2Controller;
 
+  @override
+  void initState() {
+    super.initState();
+    _countriesBloc = CountriesBloc();
+    _occupationsBloc = OccupationsBloc();
+    statesBloc = StatesBloc();
+    _citiesBloc = CitiesBloc();
+    accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
+    _occupationsBloc.getOccupations();
+    _emailController = TextEditingController();
+    _phoneController = TextEditingController();
+    _nextOfKinController = TextEditingController();
+    _address1Controller = TextEditingController();
+    _address2Controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    statesBloc.dispose();
+    _countriesBloc.dispose();
+    _occupationsBloc.dispose();
+    _citiesBloc.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _nextOfKinController.dispose();
+    _address1Controller.dispose();
+    _address2Controller.dispose();
+    super.dispose();
+  }
 
   Widget _emailTextField() {
     return StreamBuilder(
         stream: accountFormBloc.email,
         builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _emailController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _emailController.selection);
+          }
+
           return TextField(
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             onChanged: accountFormBloc.changeEmail,
             maxLength: 40,
@@ -87,7 +109,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return StreamBuilder(
         stream: accountFormBloc.phoneNumber,
         builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _phoneController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _phoneController.selection);
+          }
           return TextField(
+            controller: _phoneController,
             keyboardType: TextInputType.phone,
             onChanged: accountFormBloc.changePhone,
             decoration: InputDecoration(
@@ -104,7 +132,14 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return StreamBuilder(
         stream: accountFormBloc.nextOfKin,
         builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _nextOfKinController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _nextOfKinController.selection);
+          }
+
           return TextField(
+            controller: _nextOfKinController,
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.text,
             onChanged: accountFormBloc.changeNextOfKin,
@@ -124,7 +159,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return StreamBuilder(
         stream: accountFormBloc.address1,
         builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _address1Controller.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _address1Controller.selection);
+          }
           return TextField(
+            controller: _address1Controller,
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.multiline,
             onChanged: accountFormBloc.changeAddress1,
@@ -142,7 +183,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _address2TextField() {
     return StreamBuilder(builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        _address2Controller.value = TextEditingValue(
+            text: snapshot.data.toString(),
+            selection: _address2Controller.selection);
+      }
       return TextField(
+        controller: _address2Controller,
         textCapitalization: TextCapitalization.characters,
         keyboardType: TextInputType.multiline,
         onChanged: accountFormBloc.changeAddress2,
@@ -175,7 +222,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         AsyncSnapshot<List<CountryEntity>> shot) {
                       if (!shot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
-                        value: snapshot.data,
+                        value: shot.data != null ? shot.data?.first?.name : null,
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.name,
@@ -214,7 +261,10 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         AsyncSnapshot<List<StateEntity>> shot) {
                       if (!shot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
-                        value: snapshot.data,
+                        value: snapshot.hasData
+                            ? Helper.returnValidStateSelectedItem(snapshot.data,
+                            shot.data.map((x) => x.name).toList())
+                            : null,
                         items: shot.data.map((StateEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.name,
@@ -261,7 +311,6 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                           );
                         }).toList(),
                         onChanged: accountFormBloc.changeCityOfResidence,
-
                         isDense: true,
                       );
                     }),
@@ -272,9 +321,6 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       },
     );
   }
-
-
-
 
   Widget _genderTextField() {
     return StreamBuilder(
@@ -290,7 +336,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data,
+                  value: snapshot.hasData
+                      ? Helper.returnValidGenderSelectedItem(snapshot.data,
+                      _genders): null,
                   isDense: true,
                   onChanged: accountFormBloc.changeGender,
                   items: _genders.map((String value) {
@@ -361,7 +409,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data,
+                  value: snapshot.hasData
+                      ? Helper.returnValidMaritalStatusSelectedItem(snapshot.data,
+                      _maritalStatus): null,
                   isDense: true,
                   onChanged: accountFormBloc.changeMaritalStatus,
                   items: _maritalStatus.map((String value) {

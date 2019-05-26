@@ -49,7 +49,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                           case ConnectionState.none:
                           case ConnectionState.waiting:
                             return const Text(
-                              'Click either the gallery or camera icon to add an id card',
+                              'Click either the gallery or camera icon to add an ID card',
                               textAlign: TextAlign.center,
                             );
                           case ConnectionState.done:
@@ -62,7 +62,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                               );
                             } else {
                               const Text(
-                                'Click either the gallery or camera icon to add an id card',
+                                'Click either the gallery or camera icon to add an ID card',
                                 textAlign: TextAlign.center,
                               );
                             }
@@ -134,7 +134,7 @@ class _UploadIdStepState extends State<UploadIdStep>
       );
     } else {
       return const Text(
-        'Click either the gallery or camera icon to upload a passport',
+        'Click either the gallery or camera icon to upload an ID card',
         textAlign: TextAlign.center,
       );
     }

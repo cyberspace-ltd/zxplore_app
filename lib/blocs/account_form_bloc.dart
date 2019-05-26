@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/form_model.dart';
+import 'package:zxplore_app/models/save_account_response.dart';
+import 'package:zxplore_app/repositories/accounts_repository.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 import 'package:zxplore_app/utils/zxplore_crypto_helper.dart';
 
@@ -10,6 +13,7 @@ import 'package:rxdart/rxdart.dart';
 
 class AccountFormBloc extends BlocBase with Validators {
   //Account Information
+  final AccountsRepository _accountsRepository = AccountsRepository();
 
   final _accountTypeController = BehaviorSubject<String>();
 
@@ -92,7 +96,13 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final _uploadSignatureController = BehaviorSubject<String>();
 
+  final PublishSubject<SaveAccountResponse> _subjectSaveAccountResponse =
+      PublishSubject<SaveAccountResponse>();
+
   // Add data to stream
+
+  final PublishSubject<BvnResponse> bvnVerificationResponse =
+  PublishSubject<BvnResponse>();
 
   Stream<String> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
@@ -115,6 +125,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get firstName =>
       _firstNameController.stream.transform(validateFirstName);
+
+  Stream<String> get otherName => _otherNameController.stream;
 
   Stream<String> get mothersMaidenName =>
       _mothersMaidenNameController.stream.transform(validateMothersMaidenName);
@@ -538,29 +550,25 @@ class AccountFormBloc extends BlocBase with Validators {
 
     if (validUploadIdImageInBase64 != null) {
       _idCardAttachment = new Attachment(
-          encodedImage: CryptoHelper.encrypt(validUploadIdImageInBase64),
-          type: 'IdentityCard');
+          encodedImage: validUploadIdImageInBase64, type: 'IdentityCard');
       _attachments.add(_idCardAttachment);
     }
 
     if (validUploadPassportInBase64 != null) {
       _passportAttachment = new Attachment(
-          encodedImage: CryptoHelper.encrypt(validUploadPassportInBase64),
-          type: 'PassportPhoto');
+          encodedImage: validUploadPassportInBase64, type: 'PassportPhoto');
       _attachments.add(_passportAttachment);
     }
 
     if (validUploadUtilityBillInBase64 != null) {
       _utilityBillAttachment = new Attachment(
-          encodedImage: CryptoHelper.encrypt(validUploadUtilityBillInBase64),
-          type: 'UtilityBill');
+          encodedImage: validUploadUtilityBillInBase64, type: 'UtilityBill');
       _attachments.add(_utilityBillAttachment);
     }
 
     if (validUploadSignatureInBase64 != null) {
       _signatoryAttachment = new Attachment(
-          encodedImage: CryptoHelper.encrypt(validUploadSignatureInBase64),
-          type: 'Signatory');
+          encodedImage: validUploadSignatureInBase64, type: 'Signatory');
       _attachments.add(_signatoryAttachment);
     }
 
@@ -609,7 +617,7 @@ class AccountFormBloc extends BlocBase with Validators {
         accountHolderType: validAccountHolderType,
         classCode: validAccountCategory,
         branchNumber: validBranchNumber,
-        phoneNumber: validPhone,
+        phoneNumber: CryptoHelper.encrypt(validPhone),
         rsmId: employeeId,
         accountName: encryptedAccountName,
         sex: validSexAcronym,
@@ -620,7 +628,7 @@ class AccountFormBloc extends BlocBase with Validators {
         sector: '',
         industry: '',
         riskRank: validAccountRiskRank,
-        addressLine1: validAddress1,
+        addressLine1: CryptoHelper.encrypt(validAddress1),
         city: validCityOfResidence,
         state: validStateOfResidence,
         countryOfOrigin: validCountryOfOrigin,
@@ -635,15 +643,91 @@ class AccountFormBloc extends BlocBase with Validators {
 
     String json = jsonEncode(_accountForm);
 
-    print('Final Object: $json');
+    sendAccountsToApi(json);
+//    print('Final Object: $json');
 
 //    print(
 //        'Account type is $validAccountType, and Account Holder is $validAccountHolderType, '
 //        'valid Risk rank $validAccountRiskRank, valid category  = $validAccountCategory, upload id (base 64) - $validUploadIdImageInBase64');
   }
 
+  PublishSubject<SaveAccountResponse> get subjectSaveAccountResponse =>
+      _subjectSaveAccountResponse;
+
+  sendAccountsToApi(String encodedAccount) async {
+    try {
+      SaveAccountResponse response =
+          await _accountsRepository.attemptSubmitAccountToApi(encodedAccount);
+      _subjectSaveAccountResponse.sink.add(response);
+    } catch (error) {
+      _subjectSaveAccountResponse.sink.addError(error);
+    }
+  }
+
+  verifyBvn() async {
+    var encodedBVN = CryptoHelper.encrypt(_bvnController.value);
+
+    await _accountsRepository.verifyBvn(encodedBVN).then((bvnResponse) {
+      bvnVerificationResponse.add(bvnResponse);
+
+      if (bvnResponse?.responseCode == '00') {
+        if (bvnResponse.lastName != null && bvnResponse.lastName.isNotEmpty)
+          _surnameController.add(CryptoHelper.decrypt(bvnResponse.lastName));
+        if (bvnResponse.firstName != null && bvnResponse.firstName.isNotEmpty)
+          _firstNameController.add(CryptoHelper.decrypt(bvnResponse.firstName));
+        if (bvnResponse.middleName != null && bvnResponse.middleName.isNotEmpty)
+          _otherNameController
+              .add(CryptoHelper.decrypt(bvnResponse.middleName));
+        if (bvnResponse.email != null && bvnResponse.email.isNotEmpty)
+          _emailController.add(CryptoHelper.decrypt(bvnResponse.email));
+
+        if (bvnResponse.title != null && bvnResponse.title.isNotEmpty)
+          _titleController.add(bvnResponse.title);
+
+        if (bvnResponse.dateOfBirth != null &&
+            bvnResponse.dateOfBirth.isNotEmpty)
+          _dateOfBirthController
+              .add(CryptoHelper.decrypt(bvnResponse.dateOfBirth));
+
+        if (bvnResponse.gender != null && bvnResponse.gender.isNotEmpty)
+          _genderController.add(bvnResponse.gender);
+
+        if (bvnResponse.phoneNumber != null &&
+            bvnResponse.phoneNumber.isNotEmpty) {
+          var decryptedPhone = CryptoHelper.decrypt(bvnResponse.phoneNumber);
+          if (decryptedPhone != null && decryptedPhone.startsWith('0')) {
+            decryptedPhone = decryptedPhone.replaceFirst('0', '');
+            _phoneNumberController.add(decryptedPhone);
+          }
+        }
+        if (bvnResponse.stateOfOrigin != null &&
+            bvnResponse.stateOfOrigin.isNotEmpty)
+          _stateOfOriginController.add(bvnResponse.stateOfOrigin.toUpperCase());
+
+        if (bvnResponse.maritalStatus != null &&
+            bvnResponse.maritalStatus.isNotEmpty)
+          _maritalStatusController.add(bvnResponse.maritalStatus);
+
+        if (bvnResponse.residentialAddress != null &&
+            bvnResponse.residentialAddress.isNotEmpty)
+          _address1Controller
+              .add(CryptoHelper.decrypt(bvnResponse.residentialAddress));
+
+        if (bvnResponse.stateOfResidence != null &&
+            bvnResponse.stateOfResidence.isNotEmpty)
+          _stateOfResidenceController.add(bvnResponse.stateOfResidence);
+      } else {
+        bvnVerificationResponse
+            .addError('Could not verify the BVN provided. ');
+      }
+    }).catchError((error) {
+      bvnVerificationResponse.addError(error);
+    });
+  }
+
   @override
   dispose() {
+    _subjectSaveAccountResponse.close();
     _accountTypeController.close();
     _accountHolderTypeController.close();
     _riskRankController.close();
@@ -682,6 +766,7 @@ class AccountFormBloc extends BlocBase with Validators {
     _uploadPassportController.close();
     _uploadUtilityBillController.close();
     _uploadSignatureController.close();
+    bvnVerificationResponse.close();
   }
 }
 

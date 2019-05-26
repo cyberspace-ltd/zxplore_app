@@ -111,7 +111,10 @@ class Validators {
 
   final validateEmail =
       StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
-    if (email.contains('@')) {
+    if (email.length < 1) {
+      sink.add(
+          email); //unique to this application, as email field isn't compulsory
+    } else if (email.contains('@')) {
       sink.add(email);
     } else {
       sink.addError('Enter a valid email');
@@ -133,10 +136,10 @@ class Validators {
 
   final validatePhoneNumber =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length == 10) {
+    if (arg.length >= 7) {
       sink.add(arg);
     } else {
-      sink.addError('Mobile Number must be of 10 digit');
+      sink.addError('Mobile Number must be a valid phone number');
     }
   });
 
