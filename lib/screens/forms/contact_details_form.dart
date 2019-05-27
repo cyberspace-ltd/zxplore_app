@@ -182,25 +182,27 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _address2TextField() {
-    return StreamBuilder(builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        _address2Controller.value = TextEditingValue(
-            text: snapshot.data.toString(),
-            selection: _address2Controller.selection);
-      }
-      return TextField(
-        controller: _address2Controller,
-        textCapitalization: TextCapitalization.characters,
-        keyboardType: TextInputType.multiline,
-        onChanged: accountFormBloc.changeAddress2,
-        maxLength: 40,
-        maxLengthEnforced: true,
-        decoration: InputDecoration(
-          labelText: 'Address 2',
-          errorText: snapshot.error,
-        ),
-      );
-    });
+    return StreamBuilder(
+        stream: accountFormBloc.address2,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _address2Controller.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _address2Controller.selection);
+          }
+          return TextField(
+            controller: _address2Controller,
+            textCapitalization: TextCapitalization.characters,
+            keyboardType: TextInputType.multiline,
+            onChanged: accountFormBloc.changeAddress2,
+            maxLength: 40,
+            maxLengthEnforced: true,
+            decoration: InputDecoration(
+              labelText: 'Address 2',
+              errorText: snapshot.error,
+            ),
+          );
+        });
   }
 
   Widget _countryOfResidenceTextField() {
@@ -222,7 +224,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         AsyncSnapshot<List<CountryEntity>> shot) {
                       if (!shot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
-                        value: shot.data != null ? shot.data?.first?.name : null,
+                        value: shot.data != null
+                            ? shot.data?.first?.name
+                            : 'NIGERIA',
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.name,
@@ -263,7 +267,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                       return DropdownButton<String>(
                         value: snapshot.hasData
                             ? Helper.returnValidStateSelectedItem(snapshot.data,
-                            shot.data.map((x) => x.name).toList())
+                                shot.data.map((x) => x.name).toList())
                             : null,
                         items: shot.data.map((StateEntity value) {
                           return DropdownMenuItem<String>(
@@ -337,8 +341,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.hasData
-                      ? Helper.returnValidGenderSelectedItem(snapshot.data,
-                      _genders): null,
+                      ? Helper.returnValidGenderSelectedItem(
+                          snapshot.data, _genders)
+                      : null,
                   isDense: true,
                   onChanged: accountFormBloc.changeGender,
                   items: _genders.map((String value) {
@@ -410,8 +415,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.hasData
-                      ? Helper.returnValidMaritalStatusSelectedItem(snapshot.data,
-                      _maritalStatus): null,
+                      ? Helper.returnValidMaritalStatusSelectedItem(
+                          snapshot.data, _maritalStatus)
+                      : null,
                   isDense: true,
                   onChanged: accountFormBloc.changeMaritalStatus,
                   items: _maritalStatus.map((String value) {

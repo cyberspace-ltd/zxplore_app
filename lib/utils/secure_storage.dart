@@ -43,4 +43,10 @@ class SecureStorage {
     final storage = new FlutterSecureStorage();
     return await storage.read(key: BRANCH_NUMBER_KEY);
   }
+
+  static Future clearSecureInformation() async {
+    final storage = new FlutterSecureStorage();
+
+    await storage.deleteAll();
+  }
 }

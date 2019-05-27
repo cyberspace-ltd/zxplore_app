@@ -1,4 +1,5 @@
 import 'package:zxplore_app/apis/zenithbank_api.dart';
+import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
@@ -13,6 +14,19 @@ class AccountsRepository {
       var token = await SecureStorage.getEmployeeToken();
 
       return _api.getAllAccountsByRsmId(rsmId, token);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
+
+
+  Future<AccountDetailsResponse> getAccountsDetailsByReference(String referenceId) async {
+    try {
+      var token = await SecureStorage.getEmployeeToken();
+
+      return _api.getAccountsDetailsByReference(referenceId, token);
     } catch (error) {
       rethrow;
     }

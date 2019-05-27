@@ -22,7 +22,9 @@ import 'account_form.dart';
 /// While it is named CategoryRoute, a more apt name would be CategoryScreen,
 /// because it is responsible for the UI at the route's destination.
 class CategoryPage extends StatefulWidget {
-  const CategoryPage();
+  final String accountReferenceId;
+
+  const CategoryPage({this.accountReferenceId});
 
   @override
   _CategoryRouteState createState() => _CategoryRouteState();
@@ -31,12 +33,25 @@ class CategoryPage extends StatefulWidget {
 class _CategoryRouteState extends State<CategoryPage> {
   Category _defaultCategory;
   Category _currentCategory;
+  String accountReferenceId;
 
   // Widgets are supposed to be deeply immutable objects. We can update and edit
   // _categories as we build our app, and when we pass it into a widget's
   // `children` property, we call .toList() on it.
   // For more details, see https://github.com/dart-lang/sdk/issues/27755
   final _categories = <Category>[];
+
+  @override
+  void initState() {
+    super.initState();
+    _setDefaults();
+  }
+
+  void _setDefaults() {
+    setState(() {
+      accountReferenceId = widget.accountReferenceId;
+    });
+  }
 
   _getCategories() {
     var categoryIndex = 0;
@@ -112,7 +127,6 @@ class _CategoryRouteState extends State<CategoryPage> {
           );
         },
         itemCount: _categories.length,
-
       );
     } else {
       return GridView.count(
@@ -145,15 +159,15 @@ class _CategoryRouteState extends State<CategoryPage> {
       ),
       child: _buildCategoryWidgets(MediaQuery.of(context).orientation),
     );
-    return  Backdrop(
-        currentCategory:
-            _currentCategory == null ? _defaultCategory : _currentCategory,
-        frontPanel: _currentCategory == null
-            ? AccountFormPage(category: _defaultCategory)
-            : AccountFormPage(category: _currentCategory),
-        backPanel: listView,
-        frontTitle: Text('Create Account'),
-        backTitle: Text('Select a Category'),
-      );
+    return Backdrop(
+      currentCategory:
+          _currentCategory == null ? _defaultCategory : _currentCategory,
+      frontPanel: _currentCategory == null
+          ? AccountFormPage(category: _defaultCategory,accountReferenceId: accountReferenceId)
+          : AccountFormPage(category: _currentCategory,accountReferenceId: accountReferenceId),
+      backPanel: listView,
+      frontTitle: Text('Create Account'),
+      backTitle: Text('Select a Category'),
+    );
   }
 }

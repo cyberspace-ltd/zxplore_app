@@ -4,6 +4,7 @@ import 'package:http/http.dart' show BaseClient, IOClient;
 import 'package:http/http.dart' as http;
 import 'package:zxplore_app/apis/endpoints.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
+import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/login_response.dart';
@@ -79,21 +80,40 @@ class ZenithBankApi {
     Response response;
     Dio dio = new Dio();
 
-    response = await dio.post(Endpoints.getLoginUrl(),
-        data: {"UserName": username, "Password": password});
+    try {
+      response = await dio.post(Endpoints.getLoginUrl(),
+          data: {"UserName": username, "Password": password});
 
-    print('$response');
+      print('$response');
 
-    if (response.statusCode == 200) {
-      print('${response.data}');
+      if (response.statusCode == 200) {
+        print('${response.data}');
 
-      return LoginResponse.fromJson(response.data);
-    }
-    if (response.statusCode == 400) {
-      var value = LoginResponse.fromJson(response.data);
-      throw Exception(value.message);
-    } else {
-      throw Exception('login failed.');
+        return LoginResponse.fromJson(response.data);
+      }
+      if (response.statusCode == 400) {
+        var value = LoginResponse.fromJson(response.data);
+        throw Exception(value.data.responseMessage);
+      } else {
+        throw Exception('login failed.');
+      }
+    } catch (error) {
+      if (error is DioError) {
+        print(error.response);
+
+        if (error.response?.statusCode == 400) {
+          var value = LoginResponse.fromJson(error.response?.data);
+          throw Exception(value.message);
+        } else if (error.response?.statusCode == 502) {
+          var value = LoginResponse.fromJson(error.response?.data);
+          throw Exception(value.message);
+        } else {
+          throw Exception(_handleError(error));
+        }
+      } else {
+        throw Exception(
+            'We are having issues sending the account to the server. Try again later. ');
+      }
     }
   }
 
@@ -110,6 +130,25 @@ class ZenithBankApi {
           await dio.get("${Endpoints.getAccountsByRsmIdUrl()}$rsmId/All");
 
       return AccountsResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      throw Exception(_handleError(error));
+    }
+  }
+
+  Future<AccountDetailsResponse> getAccountsDetailsByReference(
+      String referenceId, String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      response =
+          await dio.get("${Endpoints.getAccountDetailsUrl()}$referenceId");
+
+      return AccountDetailsResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       throw Exception(_handleError(error));
@@ -153,8 +192,7 @@ class ZenithBankApi {
       } else if (response.statusCode == 400) {
         var value = SaveAccountResponse.fromJson(response.data);
         throw Exception(value.message);
-      }
-      else{
+      } else {
         return SaveAccountResponse.fromJson(response.data);
       }
     } catch (error, stacktrace) {
@@ -186,8 +224,8 @@ class ZenithBankApi {
     dio.options.headers = {
       'Authorization': 'Bearer $token',
     };
-    response = await dio.post(Endpoints.getBvnUrl(),
-        data: {"BvnNew": encodedBvn});
+    response =
+        await dio.post(Endpoints.getBvnUrl(), data: {"BvnNew": encodedBvn});
 
     print('$response');
 
@@ -203,7 +241,6 @@ class ZenithBankApi {
       throw Exception('login failed.');
     }
   }
-
 
   String _handleError(Error error) {
     String errorDescription = "";
@@ -240,4 +277,11 @@ class ZenithBankApi {
     }
     return errorDescription;
   }
+
+
 }
+
+
+
+
+

@@ -27,14 +27,13 @@ class LoginBloc extends Object with Validators {
 
   Function(String) get changePassword => _passwordController.sink.add;
 
-  final BehaviorSubject<LoginResponse> _subjectLoginResponse =
-      BehaviorSubject<LoginResponse>();
+  final PublishSubject<LoginResponse> _subjectLoginResponse =
+      PublishSubject<LoginResponse>();
 
-  BehaviorSubject<LoginResponse> get subjectLoginResponse =>
+  PublishSubject<LoginResponse> get subjectLoginResponse =>
       _subjectLoginResponse;
 
   submit() {
-
     final validUserName = _userNameController.value;
     final validPassword = _passwordController.value;
 
@@ -45,11 +44,22 @@ class LoginBloc extends Object with Validators {
   }
 
   attemptLogin(String userName, String password) async {
+    await _loginRepository
+        .attemptLogin(userName, password)
+        .then((response) async {
+      if (response.status) {
+        await SecureStorage.saveAgentInformation(
+            response?.data?.user?.token,
+            response?.data?.user?.employeeId?.toString(),
+            response?.data?.user?.branchNumber.toString());
 
-    LoginResponse loginResponse =
-        await _loginRepository.attemptLogin(userName, password);
-    _subjectLoginResponse.sink.add(loginResponse);
-
+        _subjectLoginResponse.sink.add(response);
+      } else {
+        _subjectLoginResponse.sink.addError(response?.data?.responseMessage);
+      }
+    }).catchError((error) {
+      _subjectLoginResponse.sink.addError(error);
+    });
   }
 
   dispose() {

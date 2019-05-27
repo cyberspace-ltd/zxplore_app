@@ -10,7 +10,6 @@ import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 
 import '../../colors.dart';
-import 'package:flushbar/flushbar.dart';
 
 class PersonalInformationStep extends StatefulWidget {
   @override
@@ -274,7 +273,8 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   lastDate: new DateTime(DateTime.now().year - 19));
 
               if (picked != null) {
-                var dob = new DateFormat.yMMMd().format(picked);
+                var formatter = new DateFormat('dd-MMM-yy');
+                var dob = formatter.format(picked);
 
                 _dateOfBirthController.text = dob;
                 accountFormBloc.changeDateOfBirth(dob);
@@ -346,9 +346,9 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc.countryOfOrigin,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _stateOfOriginController.value = TextEditingValue(
+          _countryOfOriginController.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _stateOfOriginController.selection);
+              selection: _countryOfOriginController.selection);
         }
         return FormField<String>(
           builder: (FormFieldState<String> state) {
@@ -366,7 +366,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                       if (!shot.hasData) return CircularProgressIndicator();
                       return DropdownButton<String>(
                         value:
-                            shot.data != null ? shot.data?.first?.name : null,
+                            shot.data != null ? shot.data?.first?.name : 'NIGERIA',
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.name,
@@ -424,6 +424,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                                     message: "BVN provided is correct.")
                                   ..show(context);
                               }).onError((error) {
+                                loadingBar.dismiss();
                                 FlushbarHelper.createError(
                                         message:
                                             "BVN provided could not be verified.")

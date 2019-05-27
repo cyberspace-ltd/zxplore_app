@@ -7,6 +7,10 @@ class LoginRepository{
   ZenithBankApi _api = ZenithBankApi();
 
   Future<LoginResponse> attemptLogin(String username, String password){
-    return _api.attemptLogin(username, password);
+    try {
+      return _api.attemptLogin(username, password);
+    } catch (error) {
+      rethrow;
+    }
   }
 }

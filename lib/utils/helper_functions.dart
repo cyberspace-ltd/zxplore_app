@@ -1,6 +1,11 @@
 
+import 'package:zxplore_app/utils/secure_storage.dart';
+
 class Helper {
 
+  static logout() async {
+    await SecureStorage.clearSecureInformation();
+  }
 
   static String returnValidStateSelectedItem(String sourceValue, List<String> matchingList) {
     sourceValue = sourceValue.toUpperCase();

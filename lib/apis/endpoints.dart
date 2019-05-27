@@ -63,4 +63,10 @@ class Endpoints {
         'accounts/VerifySingleBVN/';
   }
 
+  static String getAccountDetailsUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/GetAccountByRefID/';
+  }
+
+
 }

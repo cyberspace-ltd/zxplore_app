@@ -23,7 +23,17 @@ class _MeansOfIdentificationStepStepState
   final TextEditingController _idIssueDateController = TextEditingController();
   final TextEditingController _idExpiryDateController = TextEditingController();
 
-  final _idTypes = ['DRIVER\'S LICENSE', 'INT\'L PASSPORT', 'NATIONAL ID', 'OTHERS', 'VOTER\'S ID CARD', 'STUDENT ID'];
+  final TextEditingController _idIssuerController = TextEditingController();
+  final TextEditingController _idNumberController = TextEditingController();
+
+  final _idTypes = [
+    'DRIVER\'S LICENSE',
+    'INT\'L PASSPORT',
+    'NATIONAL ID',
+    'OTHERS',
+    'VOTER\'S ID CARD',
+    'STUDENT ID'
+  ];
 
   AccountFormBloc accountFormBloc;
 
@@ -34,7 +44,6 @@ class _MeansOfIdentificationStepStepState
     super.initState();
     statesBloc = StatesBloc();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
-
   }
 
   Widget _idTypeTextField() {
@@ -73,7 +82,13 @@ class _MeansOfIdentificationStepStepState
     return StreamBuilder(
       stream: accountFormBloc.idIssuer,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _idIssuerController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _idIssuerController.selection);
+        }
         return TextField(
+          controller: _idIssuerController,
           textCapitalization: TextCapitalization.characters,
           onChanged: accountFormBloc.changeIdIssuer,
           keyboardType: TextInputType.text,
@@ -94,7 +109,13 @@ class _MeansOfIdentificationStepStepState
     return StreamBuilder(
       stream: accountFormBloc.idNumber,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _idNumberController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _idNumberController.selection);
+        }
         return TextField(
+          controller: _idNumberController,
           textCapitalization: TextCapitalization.characters,
           onChanged: accountFormBloc.changeIdNumber,
           keyboardType: TextInputType.text,
@@ -110,8 +131,6 @@ class _MeansOfIdentificationStepStepState
       },
     );
   }
-
-
 
   Widget _idPlaceOfIssue() {
     return StreamBuilder(
@@ -156,23 +175,21 @@ class _MeansOfIdentificationStepStepState
     return StreamBuilder(
         stream: accountFormBloc.isSendEmail,
         builder: (context, snapshot) {
-
-      return CheckboxListTile(
-        onChanged: accountFormBloc.changeIsSendEmail,
-        title: new Text('Send statement to email'),
-        controlAffinity: ListTileControlAffinity.leading,
-        activeColor: Colors.red,
-        dense: true,
-        value: snapshot.hasData ? snapshot.data : false,
-      );
-    });
+          return CheckboxListTile(
+            onChanged: accountFormBloc.changeIsSendEmail,
+            title: new Text('Send statement to email'),
+            controlAffinity: ListTileControlAffinity.leading,
+            activeColor: Colors.red,
+            dense: true,
+            value: snapshot.hasData ? snapshot.data : false,
+          );
+        });
   }
 
   Widget _receiveSmsCheckBox() {
     return StreamBuilder(
         stream: accountFormBloc.isReceiveSmsAlert,
         builder: (context, snapshot) {
-
           return CheckboxListTile(
             onChanged: accountFormBloc.changeIsReceiveSms,
             title: new Text('Receive SMS alert'),
@@ -180,18 +197,14 @@ class _MeansOfIdentificationStepStepState
             activeColor: Colors.red,
             dense: true,
             value: snapshot.hasData ? snapshot.data : false,
-
           );
         });
   }
-
-
 
   Widget _requestHardwareTokenCheckBox() {
     return StreamBuilder(
         stream: accountFormBloc.isRequestHardwareToken,
         builder: (context, snapshot) {
-
           return CheckboxListTile(
             onChanged: accountFormBloc.changeIsRequestHardwareToken,
             title: new Text('Request hardware token'),
@@ -203,12 +216,10 @@ class _MeansOfIdentificationStepStepState
         });
   }
 
-
   Widget _requestInternetBankingCheckBox() {
     return StreamBuilder(
         stream: accountFormBloc.isRequestInternetBanking,
         builder: (context, snapshot) {
-
           return CheckboxListTile(
             onChanged: accountFormBloc.changeIsRequestInternetBanking,
             title: new Text('Request internet banking'),
@@ -226,6 +237,8 @@ class _MeansOfIdentificationStepStepState
     _idPlaceOfIssueController.dispose();
     _idIssueDateController.dispose();
     _idExpiryDateController.dispose();
+    _idNumberController.dispose();
+    _idIssuerController.dispose();
     statesBloc.dispose();
     super.dispose();
   }
@@ -234,6 +247,11 @@ class _MeansOfIdentificationStepStepState
     return StreamBuilder(
       stream: accountFormBloc.idIssueDate,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _idIssueDateController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _idIssueDateController.selection);
+        }
         return GestureDetector(
             onTap: () async {
               DateTime picked = await showDatePicker(
@@ -243,12 +261,12 @@ class _MeansOfIdentificationStepStepState
                   lastDate: new DateTime(DateTime.now().year + 25));
 
               if (picked != null) {
-                var date =
-                new DateFormat.yMMMd().format(picked);
+                var formatter = new DateFormat('dd-MMM-yy');
+
+                var date = formatter.format(picked);
 
                 _idIssueDateController.text = date;
                 accountFormBloc.changeIssueDate(date);
-
               }
             },
             child: AbsorbPointer(
@@ -272,6 +290,11 @@ class _MeansOfIdentificationStepStepState
     return StreamBuilder(
       stream: accountFormBloc.idExpiryDate,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _idExpiryDateController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _idExpiryDateController.selection);
+        }
         return GestureDetector(
             onTap: () async {
               DateTime picked = await showDatePicker(
@@ -281,13 +304,12 @@ class _MeansOfIdentificationStepStepState
                   lastDate: new DateTime(DateTime.now().year + 25));
 
               if (picked != null) {
-                var date =
-                new DateFormat.yMMMd().format(picked);
+                var formatter = new DateFormat('dd-MMM-yy');
+
+                var date = formatter.format(picked);
 
                 _idExpiryDateController.text = date;
                 accountFormBloc.changeExpiryDate(date);
-
-
               }
             },
             child: AbsorbPointer(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/all_accounts_bloc.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/screens/category_screen.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
+import 'package:zxplore_app/utils/helper_functions.dart';
 
 import 'colors.dart';
 import 'login.dart';
@@ -316,44 +318,40 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 label: Text('Verify Account'),
                 onPressed: () {
-                  final loadingSnackBar = SnackBar(
-                      content: Text(
-                          'Verifying account status for ${CryptoHelper.decrypt(form.accountName)}....'));
-
+                  var loadingBar = FlushbarHelper.createLoading(
+                      message:
+                          "'Verifying account status for ${CryptoHelper.decrypt(form.accountName)}....",
+                      linearProgressIndicator: null);
+                  loadingBar..show(context);
                   _accountsBloc.verifyAccountByReferenceId(form.refId);
-
-                  Scaffold.of(_context).showSnackBar(loadingSnackBar);
-
                   _accountsBloc.subjectVerifyAccountsResponse
                       .listen((response) {
-                    Scaffold.of(_context).removeCurrentSnackBar();
+                    loadingBar.dismiss();
 
                     if (response.status) {
                       if (response.data.accountNumber != null) {
-                        Scaffold.of(_context).showSnackBar(SnackBar(
-                          content: Text(
-                              '${response?.message} . Account number is: ${response.data.accountNumber}'),
-                          duration: Duration(seconds: 5),
-                        ));
+                        FlushbarHelper.createSuccess(
+                            message:
+                                '${response?.message} . Account number is: ${response.data.accountNumber}')
+                          ..show(context);
                       } else {
-                        Scaffold.of(_context).showSnackBar(SnackBar(
-                          content: Text('${response?.message}'),
-                          duration: Duration(seconds: 5),
-                        ));
+                        FlushbarHelper.createInformation(
+                                message: '${response?.message}')
+                            .show(context);
+                        loadingBar.dismiss();
                       }
                     } else {
-                      Scaffold.of(_context).showSnackBar(SnackBar(
-                        content: Text(response.message),
-                        duration: Duration(seconds: 5),
-                      ));
+                      FlushbarHelper.createInformation(
+                              message: '${response.message}')
+                          .show(context);
+                      loadingBar.dismiss();
                     }
                   }).onError((error) {
-                    Scaffold.of(_context).removeCurrentSnackBar();
-
-                    Scaffold.of(_context).showSnackBar(SnackBar(
-                      content: Text('${error.toString()}'),
-                      duration: Duration(seconds: 5),
-                    ));
+                    loadingBar.dismiss();
+                    FlushbarHelper.createError(
+                            message: "'${error.toString()}'.")
+                        .show(context);
+                    loadingBar.dismiss();
                   });
                 }),
             Expanded(
@@ -399,8 +397,12 @@ class _MyHomePageState extends State<MyHomePage> {
             'Edit Account',
           ),
           onPressed: () {
-          var bvn =  CryptoHelper.encrypt('22169009111');
-            print("BVN $bvn");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      CategoryPage(accountReferenceId: form?.refId)),
+            );
           });
     }
   }
@@ -431,10 +433,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
+        centerTitle: true,
           title: const Text(
-        'ZXplore',
+        'Zxplore inc.',
         style: TextStyle(color: Colors.white),
-      )),
+      ),actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.refresh, color: Colors.white),
+            onPressed: () {
+              FlushbarHelper.createLoading(message: 'Getting latest accounts...',duration: new Duration(seconds: 5))..show(context);
+              _accountsBloc.getAccounts();
+            }),
+        IconButton(
+            icon: Icon(Icons.cloud_off, color: Colors.white),
+            onPressed: () {
+
+            }),
+      ],),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 4.0,
         backgroundColor: ZxploreRedColor,
@@ -512,8 +527,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('Yes Logout'),
               textColor: Colors.red,
               color: Colors.transparent,
-              onPressed: () {
-                //todo: Logout not implemented
+              onPressed: () async {
+                await Helper.logout();
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

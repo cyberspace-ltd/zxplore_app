@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/libs/Signature.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 import '../../colors.dart';
 import '../../login.dart';
@@ -29,6 +30,14 @@ class _SignatoryStepState extends State<SignatoryStep>
   void initState() {
     super.initState();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
+
+    accountFormBloc.uploadSignatureController.listen((base64Signature){
+      var imageData = base64Decode(base64Signature);
+      setState(() {
+        _img = imageData.buffer.asByteData();
+      });
+    });
+
   }
 
   @override
@@ -110,6 +119,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                 ),
                 SizedBox(height: 16.0),
                 submitButton(),
+                SizedBox(height: 40.0),
               ],
             )
           ],
@@ -132,26 +142,30 @@ class _SignatoryStepState extends State<SignatoryStep>
               elevation: 8.0,
               onPressed: snapshot.hasData
                   ? () async {
-                      accountFormBloc.submit();
-                      final loadingSnackBar = SnackBar(
-                          content:
-                              Text('Attempting to submit created account....'));
+                var loadingBar = FlushbarHelper.createLoading(
+                  message: "Attempting to submit account form....",
+                  linearProgressIndicator: null,);
 
-                      Scaffold.of(context).showSnackBar(loadingSnackBar);
+
+                loadingBar..show(context);
+                      accountFormBloc.submit();
+
+
 
                       accountFormBloc.subjectSaveAccountResponse
                           .listen((response) {
-                        Scaffold.of(context).removeCurrentSnackBar();
+                        loadingBar.dismiss(context);
 
                         _showSuccessDialog(
                             'The created account was sent successfully, an account number will be generated shortly.');
                       }).onError((error) {
-                        Scaffold.of(context).removeCurrentSnackBar();
+                        loadingBar.dismiss(context);
 
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text(error.toString()),
-                          duration: Duration(seconds: 15),
-                        ));
+                        var errorSnackBar = FlushbarHelper.createError(
+                            message: error);
+
+                        errorSnackBar..show(context);
+
                       });
                     }
                   : null,
@@ -162,6 +176,8 @@ class _SignatoryStepState extends State<SignatoryStep>
       },
     );
   }
+
+
 
   void _showSuccessDialog(String message) {
     // flutter defined function

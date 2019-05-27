@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
@@ -14,6 +15,9 @@ import 'package:rxdart/rxdart.dart';
 class AccountFormBloc extends BlocBase with Validators {
   //Account Information
   final AccountsRepository _accountsRepository = AccountsRepository();
+
+  final _referenceIdController =
+      BehaviorSubject<String>(); // used in the case of updating accounts.
 
   final _accountTypeController = BehaviorSubject<String>();
 
@@ -97,12 +101,16 @@ class AccountFormBloc extends BlocBase with Validators {
   final _uploadSignatureController = BehaviorSubject<String>();
 
   final PublishSubject<SaveAccountResponse> _subjectSaveAccountResponse =
-      PublishSubject<SaveAccountResponse>();
+  PublishSubject<SaveAccountResponse>();
+
+  final PublishSubject<AccountDetailsResponse> _subjectAccountsDetailsResponse =
+      PublishSubject<AccountDetailsResponse>();
 
   // Add data to stream
 
   final PublishSubject<BvnResponse> bvnVerificationResponse =
-  PublishSubject<BvnResponse>();
+      PublishSubject<BvnResponse>();
+
 
   Stream<String> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
@@ -150,6 +158,9 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get address1 =>
       _address1Controller.stream.transform(validateAddress1);
+
+  Stream<String> get address2 =>
+      _address2Controller.stream;
 
   Stream<String> get countryOfResidence => _countryOfResidenceController.stream
       .transform(validateCountryOfResidence);
@@ -202,6 +213,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get passport => _uploadPassportController.stream;
 
   Stream<String> get signature => _uploadSignatureController.stream;
+
 
 //  Stream<bool> get submitValid => Observable.combineLatest4(
 //      accountType,
@@ -294,6 +306,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeSignature => _uploadSignatureController.sink.add;
 
+
+
   setAccountType(String value) {
     _accountTypeController.sink.add(value);
   }
@@ -337,6 +351,8 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   submit() async {
+    var validRefenceId = _referenceIdController.value;
+
     var validAccountType = _accountTypeController.value;
     final validAccountHolderType = _accountHolderTypeController.value;
     final validAccountRiskRank = _riskRankController.value;
@@ -350,14 +366,15 @@ class AccountFormBloc extends BlocBase with Validators {
     final validMothersMaidenName = _mothersMaidenNameController.value;
     final validDateOfBirth = _dateOfBirthController.value;
     final validStateOfOrigin = _stateOfOriginController.value;
-    final validCountryOfOrigin = _countryOfOriginController.value;
+    final validCountryOfOrigin = _countryOfOriginController.value == null ? 'NIGERIA': _countryOfOriginController.value;//workaround for bug
 
     var validEmail = _emailController.value;
     final validPhone = _phoneNumberController.value;
     final validNextOfKin = _nextOfKinController.value;
     final validAddress1 = _address1Controller.value;
     var validAddress2 = _address2Controller.value;
-    final validCountryOfResidence = _countryOfResidenceController.value;
+    final validCountryOfResidence = _countryOfResidenceController.value == null ? 'NIGERIA': _countryOfResidenceController.value;//workaround for bug
+
     final validStateOfResidence = _stateOfResidenceController.value;
     final validCityOfResidence = _cityOfResidenceController.value;
     final validGender = _genderController.value;
@@ -384,133 +401,169 @@ class AccountFormBloc extends BlocBase with Validators {
 
     if (validAccountType == null) {
       _accountTypeController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected an account type.");
       return;
     }
 
     if (validAccountHolderType == null) {
       _accountHolderTypeController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid account holder type.");
       return;
     }
 
     if (validAccountRiskRank == null) {
       _riskRankController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a risk rank.");
       return;
     }
 
     if (validAccountCategory == null) {
       _accountCategoryController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected an account category.");
       return;
     }
 
     if (validTitle == null) {
       _titleController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid title");
+
       return;
     }
 
     if (validSurname == null) {
       _surnameController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled in a surname");
+
       return;
     }
     if (validFirstName == null) {
       _firstNameController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled in a valid firstname");
+
       return;
     }
 
     if (validMothersMaidenName == null) {
       _mothersMaidenNameController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled in the mother\'s maiden name");
+
       return;
     }
 
     if (validDateOfBirth == null) {
       _dateOfBirthController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid date of birth");
+
       return;
     }
 
     if (validStateOfOrigin == null) {
       _stateOfOriginController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid state of origin");
+
       return;
     }
 
     if (validCountryOfOrigin == null) {
       _countryOfOriginController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid country of origin");
+
       return;
     }
 
     if (validPhone == null) {
       _phoneNumberController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid phone number");
+
       return;
     }
 
     if (validNextOfKin == null) {
       _nextOfKinController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled in a next of kin");
+
       return;
     }
 
     if (validAddress1 == null) {
       _address1Controller.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled a valid main address");
+
       return;
     }
 
     if (validCountryOfResidence == null) {
       _countryOfResidenceController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid country of residence");
+
       return;
     }
     if (validStateOfResidence == null) {
       _stateOfResidenceController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a state of residence");
       return;
     }
 
     if (validCityOfResidence == null) {
       _cityOfResidenceController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid city of residence");
       return;
     }
 
     if (validGender == null) {
       _genderController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not chosen a valid gender");
       return;
     }
 
     if (validOccupation == null) {
       occupationController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid occupation");
       return;
     }
 
     if (validMaritalStatus == null) {
       _maritalStatusController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a marital status");
+
       return;
     }
     if (validIdType == null) {
       _idTypeController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid ID type");
       return;
     }
 
     if (validIdIssuer == null) {
       _idIssuerController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled a valid ID Issuer");
       return;
     }
 
     if (validIdNumber == null) {
       _idNumberController.addError("Field is required");
-      return;
-    }
+      _subjectSaveAccountResponse.addError("You have not selected a valid ID number");
 
-    if (validIdNumber == null) {
-      _idNumberController.addError("Field is required");
       return;
     }
 
     if (validIdPlaceOfIssue == null) {
       _idPlaceOfIssueController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid id place of issue");
       return;
     }
 
     if (validIdIssueDate == null) {
       _idIssueDateController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid issue date");
+
       return;
     }
 
     if (validIdExpiryDate == null) {
       _idExpiryDateController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not selected a valid expiry date");
+
       return;
     }
 
@@ -534,7 +587,13 @@ class AccountFormBloc extends BlocBase with Validators {
 
     var currentTimeStamp = new DateTime.now().millisecondsSinceEpoch;
 
-    var referenceId = '$employeeId${currentTimeStamp.toString().substring(7)}';
+    var referenceId;
+
+    if (validRefenceId != null) {
+      referenceId = validRefenceId; //for updating accounts.
+    } else {
+      referenceId = '$employeeId${currentTimeStamp.toString().substring(7)}';
+    }
 
     var isAlertRequest = validIsReceiveSms == true ? "Y" : "N";
     var isTokenRequest = validIsRequestHardwareToken == true ? "Y" : "N";
@@ -654,6 +713,12 @@ class AccountFormBloc extends BlocBase with Validators {
   PublishSubject<SaveAccountResponse> get subjectSaveAccountResponse =>
       _subjectSaveAccountResponse;
 
+  PublishSubject<AccountDetailsResponse> get subjectAccountsDetailsResponse =>
+      _subjectAccountsDetailsResponse;
+
+  BehaviorSubject<String> get uploadSignatureController => _uploadSignatureController;
+
+
   sendAccountsToApi(String encodedAccount) async {
     try {
       SaveAccountResponse response =
@@ -717,8 +782,7 @@ class AccountFormBloc extends BlocBase with Validators {
             bvnResponse.stateOfResidence.isNotEmpty)
           _stateOfResidenceController.add(bvnResponse.stateOfResidence);
       } else {
-        bvnVerificationResponse
-            .addError('Could not verify the BVN provided. ');
+        bvnVerificationResponse.addError('Could not verify the BVN provided. ');
       }
     }).catchError((error) {
       bvnVerificationResponse.addError(error);
@@ -767,6 +831,285 @@ class AccountFormBloc extends BlocBase with Validators {
     _uploadUtilityBillController.close();
     _uploadSignatureController.close();
     bvnVerificationResponse.close();
+    _subjectAccountsDetailsResponse.close();
+    _referenceIdController.close();
+    uploadSignatureController.close();
+  }
+
+  getAccountsDetailsByReferenceId(String referenceId) async {
+    _referenceIdController.add(referenceId);
+
+    await _accountsRepository
+        .getAccountsDetailsByReference(referenceId)
+        .then((accountResponse) {
+      subjectAccountsDetailsResponse.add(accountResponse);
+      if (accountResponse.status) {
+//        if (accountResponse.data.refId != null &&
+//            accountResponse.data.refId.isNotEmpty) {
+//          _referenceIdController.add(accountResponse.data.refId);
+//        }
+
+        if (accountResponse.data.accountType != null &&
+            accountResponse.data.accountType.isNotEmpty) {
+          if (accountResponse.data.accountType == 'SA') {
+            _accountTypeController.add('SAVINGS ACCOUNT');
+          } else {
+            _accountTypeController.add('CURRENT ACCOUNT');
+          }
+        }
+        _accountHolderTypeController.add('INDIVIDUAL');
+        if (accountResponse.data.riskRank != null &&
+            accountResponse.data.riskRank.isNotEmpty) {
+          _riskRankController.add(accountResponse.data.riskRank);
+        }
+
+        if (accountResponse.data.classCode != null &&
+            accountResponse.data.classCode.isNotEmpty) {
+          _accountCategoryController.add(accountResponse.data.classCode);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.bvn != null &&
+            accountResponse.data.signatoryDetails.first.bvn.isNotEmpty) {
+          _bvnController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.bvn));
+        }
+        if (accountResponse.data.title != null &&
+            accountResponse.data.title.isNotEmpty) {
+          _titleController.add(accountResponse.data.title);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.lastName != null &&
+            accountResponse.data.signatoryDetails.first.lastName.isNotEmpty) {
+          _surnameController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.lastName));
+        }
+        if (accountResponse.data.signatoryDetails?.first?.firstName != null &&
+            accountResponse.data.signatoryDetails.first.firstName.isNotEmpty) {
+          _firstNameController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.firstName));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.middleName != null &&
+            accountResponse.data.signatoryDetails.first.middleName.isNotEmpty) {
+          _otherNameController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.middleName));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.middleName != null &&
+            accountResponse.data.signatoryDetails.first.middleName.isNotEmpty) {
+          _otherNameController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.middleName));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.motherMaidenName !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.motherMaidenName.isNotEmpty) {
+          _mothersMaidenNameController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.motherMaidenName));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.dateOfBirth != null &&
+            accountResponse
+                .data.signatoryDetails.first.dateOfBirth.isNotEmpty) {
+          _dateOfBirthController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.dateOfBirth));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.dateOfBirth != null &&
+            accountResponse
+                .data.signatoryDetails.first.dateOfBirth.isNotEmpty) {
+          _dateOfBirthController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.dateOfBirth));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.stateOfOrigin !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.stateOfOrigin.isNotEmpty) {
+          _stateOfOriginController
+              .add(accountResponse.data.signatoryDetails.first.stateOfOrigin);
+        }
+        _countryOfOriginController.add('NIGERIA');
+
+        if (accountResponse.data.signatoryDetails?.first?.emailAddress !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.emailAddress.isNotEmpty) {
+          _emailController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.emailAddress));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.phoneNumber != null &&
+            accountResponse
+                .data.signatoryDetails.first.phoneNumber.isNotEmpty) {
+          _phoneNumberController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.phoneNumber));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.nextOfKin != null &&
+            accountResponse.data.signatoryDetails.first.nextOfKin.isNotEmpty) {
+          _nextOfKinController.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.nextOfKin));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.addressLine1 !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.addressLine1.isNotEmpty) {
+          _address1Controller.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.addressLine1));
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.addressLine2 !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.addressLine2.isNotEmpty) {
+          _address2Controller.add(CryptoHelper.decrypt(
+              accountResponse.data.signatoryDetails.first.addressLine2));
+        }
+        _countryOfResidenceController.add('NIGERIA');
+
+        if (accountResponse.data.signatoryDetails?.first?.state != null &&
+            accountResponse.data.signatoryDetails.first.state.isNotEmpty) {
+          _stateOfResidenceController
+              .add(accountResponse.data.signatoryDetails.first.state);
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.city != null &&
+            accountResponse.data.signatoryDetails.first.city.isNotEmpty) {
+          _cityOfResidenceController
+              .add(accountResponse.data.signatoryDetails.first.city);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.sex != null &&
+            accountResponse.data.signatoryDetails.first.sex.isNotEmpty) {
+          if (accountResponse.data.signatoryDetails.first.sex == 'M') {
+            _genderController.add('MALE');
+          } else {
+            _genderController.add('FEMALE');
+          }
+        }
+        if (accountResponse.data.signatoryDetails?.first?.occupation != null &&
+            accountResponse.data.signatoryDetails.first.occupation.isNotEmpty) {
+          occupationController
+              .add(accountResponse.data.signatoryDetails.first.occupation);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.maritalStatus !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.maritalStatus.isNotEmpty) {
+          _maritalStatusController
+              .add(accountResponse.data.signatoryDetails.first.maritalStatus);
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.meansOfId != null &&
+            accountResponse.data.signatoryDetails.first.meansOfId.isNotEmpty) {
+          _idTypeController
+              .add(accountResponse.data.signatoryDetails.first.meansOfId);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.idIssuer != null &&
+            accountResponse.data.signatoryDetails.first.idIssuer.isNotEmpty) {
+          _idIssuerController
+              .add(accountResponse.data.signatoryDetails.first.idIssuer);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.idNumber != null &&
+            accountResponse.data.signatoryDetails.first.idNumber.isNotEmpty) {
+          _idNumberController
+              .add(accountResponse.data.signatoryDetails.first.idNumber);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.idPlaceOfIssue !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.idPlaceOfIssue.isNotEmpty) {
+          _idPlaceOfIssueController
+              .add(accountResponse.data.signatoryDetails.first.idPlaceOfIssue);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.idIssueDate != null &&
+            accountResponse
+                .data.signatoryDetails.first.idIssueDate.isNotEmpty) {
+          _idIssueDateController
+              .add(accountResponse.data.signatoryDetails.first.idIssueDate);
+        }
+        if (accountResponse.data.signatoryDetails?.first?.idExpiryDate !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.idExpiryDate.isNotEmpty) {
+          _idExpiryDateController
+              .add(accountResponse.data.signatoryDetails.first.idExpiryDate);
+        }
+        if (accountResponse
+                    .data.signatoryDetails?.first?.useEmailForStatement !=
+                null &&
+            accountResponse
+                .data.signatoryDetails.first.useEmailForStatement.isNotEmpty) {
+          if (accountResponse
+                  .data.signatoryDetails.first.useEmailForStatement ==
+              "Y") {
+            _isSendEmailController.add(true);
+          }
+        }
+
+        if (accountResponse.data?.alertZRequest != null &&
+            accountResponse.data.alertZRequest.isNotEmpty) {
+          if (accountResponse.data.alertZRequest == "Y") {
+            _isReceiveSmsController.add(true);
+          }
+        }
+        if (accountResponse.data?.tokenRequest != null &&
+            accountResponse.data.tokenRequest.isNotEmpty) {
+          if (accountResponse.data.tokenRequest == "Y") {
+            _isRequestHardwareTokenController.add(true);
+          }
+        }
+        if (accountResponse.data?.ibankRequest != null &&
+            accountResponse.data.ibankRequest.isNotEmpty) {
+          if (accountResponse.data.ibankRequest == "Y") {
+            _isRequestInternetBankingController.add(true);
+          }
+        }
+
+        if (accountResponse.data.signatoryDetails?.first?.attachments != null) {
+          var _idCardAttachment = accountResponse
+              .data.signatoryDetails.first.attachments
+              .where((i) => i.type == 'IdentityCard')
+              .toList();
+
+          var _passportAttachment = accountResponse
+              .data.signatoryDetails.first.attachments
+              .where((i) => i.type == 'PassportPhoto')
+              .toList();
+
+          var _utilityBillAttachment = accountResponse
+              .data.signatoryDetails.first.attachments
+              .where((i) => i.type == 'UtilityBill')
+              .toList();
+
+          var _signatoryAttachment = accountResponse
+              .data.signatoryDetails.first.attachments
+              .where((i) => i.type == 'Signatory')
+              .toList();
+
+          if (_idCardAttachment.length != 0 && _idCardAttachment.first != null) {
+            _uploadIdImageController
+                .add(_signatoryAttachment.first.encodedImage);
+          }
+
+          if ( _passportAttachment.length != 0 && _passportAttachment.first != null) {
+            _uploadPassportController.add(_signatoryAttachment.first.encodedImage);
+          }
+
+          if (_passportAttachment.length != 0 && _utilityBillAttachment.first != null) {
+            _uploadUtilityBillController.add(_signatoryAttachment.first.encodedImage);
+          }
+
+          if ( _signatoryAttachment.length != 0 && _signatoryAttachment.first != null) {
+            _uploadSignatureController.add(_signatoryAttachment.first.encodedImage);
+          }
+        }
+      } else {
+        _subjectAccountsDetailsResponse.addError(accountResponse?.message);
+      }
+    }).catchError((error) {
+      _subjectAccountsDetailsResponse.addError(error);
+    });
   }
 }
 

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
 import 'blocs/login_bloc.dart';
 import 'colors.dart';
 import 'home.dart';
+import 'libs/top_wave.dart';
+import 'libs/wavy_header_image.dart';
 import 'models/login_response.dart';
 
 class LoginPage extends StatefulWidget {
@@ -66,45 +69,31 @@ class _LoginPageState extends State<LoginPage> {
           textColor: Color.fromRGBO(255, 255, 255, 1),
           color: ZxplorePrimaryColor,
           elevation: 8.0,
-//          onPressed: snapshot.hasData ? _loginBloc.submit : null,
-
           onPressed: snapshot.hasData
               ? () async {
+                  var loadingBar = FlushbarHelper.createLoading(
+                      message: "Attempting to login....",
+                      linearProgressIndicator: null);
+                  loadingBar..show(context);
+
                   _loginBloc.submit();
-                  final loadingSnackBar = SnackBar(content: Text('Attempting to login....'));
 
-                  Scaffold.of(context).showSnackBar(loadingSnackBar);
+                  _loginBloc.subjectLoginResponse.listen((loginResponse) async {
+                    loadingBar.dismiss();
 
-                  _loginBloc.subjectLoginResponse.first.then((loginResponse) async {
-                    if (loginResponse.status) {
-                      Scaffold.of(context).removeCurrentSnackBar();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => MyHomePage()),
+                    );
+                  }).onError((error) {
+                    loadingBar.dismiss();
 
-                      await SecureStorage.saveAgentInformation(
-                          loginResponse?.data?.user?.token,
-                          loginResponse?.data?.user?.employeeId?.toString(),
-                          loginResponse?.data?.user?.branchNumber.toString());
-
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MyHomePage()),
-                      );
-
-                    } else {
-                      Scaffold.of(context).removeCurrentSnackBar();
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text(loginResponse.message),
-                        duration: Duration(seconds: 15),
-                      ));
-                    }
-                  }).catchError((error) {
-                    Scaffold.of(context).removeCurrentSnackBar();
-
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text(error),
-                      duration: Duration(seconds: 15),
-                    ));
+                    loadingBar.dismiss();
+                    FlushbarHelper.createError(
+                            message: "'${error.toString()}'.")
+                        .show(context);
+                    loadingBar.dismiss();
                   });
                 }
               : null,
@@ -135,52 +124,58 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+
       body: SafeArea(
-        child: Center(
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(children: <Widget>[
+//          WavyHeaderImage(),
+//          Card( child:Image.asset('assets/images/zenithheader.jpg') ,),
+          SizedBox(height: 60.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 80.0),
-              Column(
-                children: <Widget>[
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Welcome to Z-xplore',
-                    style: Theme.of(context).textTheme.headline,
-                    textAlign: TextAlign.center,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Center(
-                      child: Text(
-                        'Enter your Zenith bamk active directory credentials below. This helps identify the employee that wants to access the application.',
-                        style: Theme.of(context).textTheme.caption,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 60.0),
-              userNameField(),
-              SizedBox(height: 12.0),
-              passwordField(),
-              ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                      child: Text('Clear'),
-                      shape: BeveledRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                      ),
-                      onPressed: () {}),
-                  submitButton(),
-                ],
+              SizedBox(height: 40.0, child:Image.asset('assets/images/logo.png') ,),
+
+              Text(
+                'Zxplore inc.',
+                style: Theme.of(context).textTheme.headline,
+                textAlign: TextAlign.center,
               ),
             ],
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Text(
+                'Enter your Zenith bamk active directory credentials below. This helps identify the employee that wants to access the application.',
+                style: Theme.of(context).textTheme.caption,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+            child: userNameField(),
+          ),
+          SizedBox(height: 12.0),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+            child: passwordField(),
+          ),
+          ButtonBar(
+            children: <Widget>[
+              FlatButton(
+                  child: Text('Clear'),
+                  shape: BeveledRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  ),
+                  onPressed: () {}),
+              submitButton(),
+            ],
+          ),
+          Expanded(child: WavyFooter())
+        ]),
       ),
     );
   }

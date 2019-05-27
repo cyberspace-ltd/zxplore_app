@@ -10,8 +10,8 @@ class AccountsBloc extends BlocBase {
   final BehaviorSubject<AccountsResponse> _subjectAccountsResponse =
       BehaviorSubject<AccountsResponse>();
 
-  final BehaviorSubject<VerifyAccountResponse> _subjectVerifyAccountsResponse =
-      BehaviorSubject<VerifyAccountResponse>();
+  final PublishSubject<VerifyAccountResponse> _subjectVerifyAccountsResponse =
+      PublishSubject<VerifyAccountResponse>();
 
   getAccounts() async {
     try {
@@ -44,6 +44,6 @@ class AccountsBloc extends BlocBase {
   BehaviorSubject<AccountsResponse> get subjectAccountsResponse =>
       _subjectAccountsResponse;
 
-  BehaviorSubject<VerifyAccountResponse> get subjectVerifyAccountsResponse =>
+  PublishSubject<VerifyAccountResponse> get subjectVerifyAccountsResponse =>
       _subjectVerifyAccountsResponse;
 }

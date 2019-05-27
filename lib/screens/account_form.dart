@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 import '../category.dart';
 import '../colors.dart';
@@ -18,9 +19,10 @@ import 'forms/upload_utility_bill.form.dart';
 class AccountFormPage extends StatefulWidget {
   final Category category;
 
-  const AccountFormPage({
-    @required this.category,
-  }) : assert(category != null);
+  final String accountReferenceId;
+
+  const AccountFormPage({@required this.category, this.accountReferenceId})
+      : assert(category != null);
 
   @override
   _AccountFormPageState createState() => _AccountFormPageState();
@@ -32,6 +34,8 @@ class _AccountFormPageState extends State<AccountFormPage>
   AccountFormBloc accountFormBloc;
 
   Category category;
+  String accountReferenceId;
+
   static const _kDuration = const Duration(milliseconds: 300);
 
   static const _kCurve = Curves.ease;
@@ -39,6 +43,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   final _kArrowColor = Colors.black.withOpacity(0.8);
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
 
   final List<Widget> _pages = <Widget>[
     Container(
@@ -71,11 +76,63 @@ class _AccountFormPageState extends State<AccountFormPage>
 
     accountFormBloc = AccountFormBloc();
     _setDefaults();
+
+    if (accountReferenceId != null) {
+      _getAccountDetailsByReferenceId(accountReferenceId);
+    }
   }
 
   void _setDefaults() {
     setState(() {
       category = widget.category;
+      accountReferenceId = widget.accountReferenceId;
+    });
+  }
+
+  _getAccountDetailsByReferenceId(String referenceId) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      var backButton = FlatButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text(
+          "GO BACK",
+          style: TextStyle(color: Colors.red),
+        ),
+      );
+
+      var loadingBar = FlushbarHelper.createLoading(
+          message: "Retrieving Account. Please wait...",
+          linearProgressIndicator: null,
+         );
+
+      accountFormBloc.getAccountsDetailsByReferenceId(referenceId);
+
+      loadingBar..show(context);
+
+      accountFormBloc.subjectAccountsDetailsResponse.listen((response) {
+        if (response.status) {
+          loadingBar.dismiss();
+          FlushbarHelper.createSuccess(
+              message: 'Account retreived successfully.')
+            ..show(context);
+        } else {
+          loadingBar..dismiss(context);
+
+          var errorButton = FlushbarHelper.createErrorAction(
+              message: 'Retreival of account details failed, try again later.',
+              button: backButton);
+
+          errorButton..show(context);
+        }
+      }).onError((error) {
+        loadingBar..dismiss(context);
+
+        var errorSnackBar = FlushbarHelper.createErrorAction(
+            message: error, button: backButton);
+
+        errorSnackBar..show(context);
+      });
     });
   }
 
@@ -98,7 +155,6 @@ class _AccountFormPageState extends State<AccountFormPage>
     super.build(context);
 
     return BlocProvider<AccountFormBloc>(
-
       child: Form(
         key: this._formKey,
         child: Scaffold(
@@ -107,7 +163,8 @@ class _AccountFormPageState extends State<AccountFormPage>
             child: Stack(
               children: <Widget>[
                 PageView.builder(
-                  itemCount: _pages.length,//remove if you want infinite scrolling.
+                  itemCount: _pages.length,
+                  //remove if you want infinite scrolling.
 //                  physics: NeverScrollableScrollPhysics(),
                   physics: AlwaysScrollableScrollPhysics(),
                   controller: _controller,
@@ -127,8 +184,12 @@ class _AccountFormPageState extends State<AccountFormPage>
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         IconButton(
-                            icon: Icon(Icons.navigate_before, color: Colors.white),
-                            onPressed: () {}),
+                            icon: Icon(Icons.navigate_before,
+                                color: Colors.white),
+                            onPressed: () {
+                              _controller.previousPage(duration: _kDuration, curve: _kCurve);
+
+                            }),
                         Center(
                           child: DotsIndicator(
                             controller: _controller,
@@ -143,8 +204,12 @@ class _AccountFormPageState extends State<AccountFormPage>
                           ),
                         ),
                         IconButton(
-                            icon: Icon(Icons.navigate_next, color: Colors.white),
-                            onPressed: () {}),
+                            icon:
+                                Icon(Icons.navigate_next, color: Colors.white),
+                            onPressed: () {
+                                _controller.nextPage(duration: _kDuration, curve: _kCurve);
+
+                            }),
                       ],
                     ),
                   ),
@@ -153,7 +218,8 @@ class _AccountFormPageState extends State<AccountFormPage>
             ),
           ),
         ),
-      ), bloc: accountFormBloc,
+      ),
+      bloc: accountFormBloc,
     );
   }
 
@@ -207,13 +273,13 @@ class DotsIndicator extends AnimatedWidget {
       ),
     );
     double zoom = 1.0 + (_kMaxZoom - 1.0) * selectedness;
-    return  Container(
+    return Container(
       width: _kDotSpacing,
       child: Center(
         child: new Material(
           color: color,
           type: MaterialType.circle,
-          child: new  Container(
+          child: new Container(
             width: _kDotSize * zoom,
             height: _kDotSize * zoom,
             child: new InkWell(

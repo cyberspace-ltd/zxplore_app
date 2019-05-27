@@ -30,12 +30,11 @@ class FlushbarHelper {
       flushbarStyle: FlushbarStyle.GROUNDED,
       flushbarPosition: FlushbarPosition.TOP,
       title: title,
-      message: message,
-      icon: Icon(
-        Icons.info_outline,
-        size: 28.0,
-        color: Colors.blue[300],
+      messageText: Text(
+        message,
+        style: TextStyle( color: Colors.black),
       ),
+      backgroundColor: Colors.white,
       leftBarIndicatorColor: Colors.blue[300],
       duration: duration,
     );
@@ -71,15 +70,36 @@ class FlushbarHelper {
       message: message,
       duration: duration,
       mainButton: button,
+
     );
   }
+
+  static Flushbar createErrorAction(
+      {@required String message,
+        @required FlatButton button,
+        String title,Duration duration = const Duration(seconds: 25)}) {
+    return Flushbar(
+      flushbarStyle: FlushbarStyle.GROUNDED,
+      flushbarPosition: FlushbarPosition.TOP,
+      title: title,
+      messageText: Text(
+        message,
+        style: TextStyle( color: Colors.black),
+      ),
+      mainButton: button,
+      backgroundColor: Colors.white,
+      leftBarIndicatorColor: Colors.red[300],
+      duration: duration,
+    );
+  }
+
 
   // Get a flushbar that shows the progress of a async computation.
   static Flushbar createLoading(
       {@required String message,
-        @required LinearProgressIndicator linearProgressIndicator,
+        LinearProgressIndicator linearProgressIndicator,
         String title,
-        Duration duration = const Duration(seconds: 3),
+        Duration duration = const Duration(seconds: 25),
         AnimationController progressIndicatorController,
         Color progressIndicatorBackgroundColor}) {
     return Flushbar(
@@ -91,9 +111,10 @@ class FlushbarHelper {
         style: TextStyle( color: Colors.black),
       ),
       backgroundColor: Colors.white,
-      duration: duration,
-      showProgressIndicator: true,
+      leftBarIndicatorColor: Colors.amber,
+      showProgressIndicator: false,
       progressIndicatorController: progressIndicatorController,
+      duration: duration,
       progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
     );
   }
