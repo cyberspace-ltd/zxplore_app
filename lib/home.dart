@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/all_accounts_bloc.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/screens/category_screen.dart';
+import 'package:zxplore_app/screens/offline_home.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 
@@ -432,7 +433,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Don't show the leading button
         centerTitle: true,
           title: const Text(
         'Zxplore inc.',
@@ -443,12 +446,18 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               FlushbarHelper.createLoading(message: 'Getting latest accounts...',duration: new Duration(seconds: 5))..show(context);
               _accountsBloc.getAccounts();
+              _accountsBloc.fetchAccountClasses();
             }),
         IconButton(
             icon: Icon(Icons.cloud_off, color: Colors.white),
             onPressed: () {
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => OfflineHomePage()),
+              );
             }),
+            SizedBox(width: 16,)
       ],),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 4.0,

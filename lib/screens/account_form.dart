@@ -20,8 +20,9 @@ class AccountFormPage extends StatefulWidget {
   final Category category;
 
   final String accountReferenceId;
+  final AccountFormBloc accountFormBloc;
 
-  const AccountFormPage({@required this.category, this.accountReferenceId})
+  const AccountFormPage({@required this.category,@required this.accountFormBloc , this.accountReferenceId})
       : assert(category != null);
 
   @override
@@ -31,11 +32,10 @@ class AccountFormPage extends StatefulWidget {
 class _AccountFormPageState extends State<AccountFormPage>
     with AutomaticKeepAliveClientMixin<AccountFormPage> {
   PageController _controller = PageController();
-  AccountFormBloc accountFormBloc;
 
   Category category;
   String accountReferenceId;
-
+  AccountFormBloc accountFormBloc;
   static const _kDuration = const Duration(milliseconds: 300);
 
   static const _kCurve = Curves.ease;
@@ -74,7 +74,6 @@ class _AccountFormPageState extends State<AccountFormPage>
   void initState() {
     super.initState();
 
-    accountFormBloc = AccountFormBloc();
     _setDefaults();
 
     if (accountReferenceId != null) {
@@ -84,6 +83,7 @@ class _AccountFormPageState extends State<AccountFormPage>
 
   void _setDefaults() {
     setState(() {
+      accountFormBloc = widget.accountFormBloc;
       category = widget.category;
       accountReferenceId = widget.accountReferenceId;
     });

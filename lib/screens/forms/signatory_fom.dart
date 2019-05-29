@@ -119,7 +119,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                 ),
                 SizedBox(height: 16.0),
                 submitButton(),
-                SizedBox(height: 40.0),
+                SizedBox(height: 60.0),
               ],
             )
           ],

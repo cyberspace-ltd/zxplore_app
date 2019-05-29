@@ -34,6 +34,7 @@ class _CategoryRouteState extends State<CategoryPage> {
   Category _defaultCategory;
   Category _currentCategory;
   String accountReferenceId;
+  AccountFormBloc accountFormBloc;
 
   // Widgets are supposed to be deeply immutable objects. We can update and edit
   // _categories as we build our app, and when we pass it into a widget's
@@ -44,6 +45,8 @@ class _CategoryRouteState extends State<CategoryPage> {
   @override
   void initState() {
     super.initState();
+    accountFormBloc = new AccountFormBloc();
+
     _setDefaults();
   }
 
@@ -160,11 +163,12 @@ class _CategoryRouteState extends State<CategoryPage> {
       child: _buildCategoryWidgets(MediaQuery.of(context).orientation),
     );
     return Backdrop(
+      accountFormBloc: accountFormBloc,
       currentCategory:
           _currentCategory == null ? _defaultCategory : _currentCategory,
       frontPanel: _currentCategory == null
-          ? AccountFormPage(category: _defaultCategory,accountReferenceId: accountReferenceId)
-          : AccountFormPage(category: _currentCategory,accountReferenceId: accountReferenceId),
+          ? AccountFormPage(category: _defaultCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId)
+          : AccountFormPage(category: _currentCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId),
       backPanel: listView,
       frontTitle: Text('Create Account'),
       backTitle: Text('Select a Category'),

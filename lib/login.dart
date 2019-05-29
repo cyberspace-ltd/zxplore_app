@@ -16,7 +16,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   LoginBloc _loginBloc;
-
+  Offset _offset = Offset.zero;
+  final _perspective = 0.003;
+  final _zeroAngle = 0.0001;
   @override
   void initState() {
     _loginBloc = LoginBloc();
@@ -128,9 +130,9 @@ class _LoginPageState extends State<LoginPage> {
 
       body: SafeArea(
         child: Column(children: <Widget>[
-//          WavyHeaderImage(),
+
 //          Card( child:Image.asset('assets/images/zenithheader.jpg') ,),
-          SizedBox(height: 60.0),
+          SizedBox(height: 120.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

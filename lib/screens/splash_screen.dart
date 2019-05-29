@@ -13,6 +13,7 @@ import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/home.dart';
 import 'package:zxplore_app/models/occupation_model.dart';
 import 'package:zxplore_app/navigation/zexplore_navigator.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
 import '../login.dart';
@@ -30,35 +31,6 @@ class _SplashScreenState extends State<SplashScreen> {
   CitiesBloc _citiesBloc;
   AccountClassBloc _accountClassBloc;
 
-  @override
-  void initState() {
-    super.initState();
-
-    SecureStorage.getEmployeeToken().then((token) {
-      if (token == null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
-        );
-      }
-    }).catchError((error) {
-      print('employee token error: $error');
-    });
-
-    SecureStorage.getInitialDataLoaded().then((data) {
-      if (data == null) {
-        _loadInitialData();
-      }
-    }).catchError((error) {
-      print('initial data load error: $error');
-    });
-  }
-
   void _loadInitialData() {
     _occupationsBloc = OccupationsBloc();
     _countriesBloc = CountriesBloc();
@@ -66,64 +38,117 @@ class _SplashScreenState extends State<SplashScreen> {
     _citiesBloc = CitiesBloc();
     _accountClassBloc = AccountClassBloc();
 
-    DBProvider.db.getStates().then((result) {
+    Future.wait([
+      _fetchStates(),
+      _fetchOccupations(),
+      _fetchCountries(),
+      _fetchCities(),
+      _fetchAccountClasses(),
+    ]).whenComplete(() {
+      SecureStorage.getEmployeeToken().then((token) {
+        if (token == null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
+          );
+        }
+      }).catchError((error) {
+        print('employee token error: $error');
+      });
+    }).catchError((error) {
+      FlushbarHelper.createLoading(message: error)..show(context);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    SecureStorage.getInitialDataLoaded().then((data) {
+      if (data == null) {
+        _loadInitialData();
+      }
+    }).catchError((error) {
+      throw Exception(error.toString());
+    });
+  }
+
+  Future _fetchStates() async {
+    await DBProvider.db.getStates().then((result) async {
       if (result.isEmpty) {
-        ZenithBankApi().fetchStates().then((result) {
+        await ZenithBankApi().fetchStates().then((result) {
           statesBloc.inAddStates.add(result.menu);
         }).catchError((error) {
-          print('error: $error');
+          throw Exception(error.toString());
         });
       } else {
         //data exists continue
+        return;
       }
     });
+  }
 
-    DBProvider.db.getOccupations().then((result) {
+  Future _fetchOccupations() async {
+    await DBProvider.db.getOccupations().then((result) async {
       if (result.isEmpty) {
-        ZenithBankApi().fetchOccupations().then((result) async {
-          print('occupation: ${result.menu}');
+        await ZenithBankApi().fetchOccupations().then((result) async {
           _occupationsBloc.inAddOccupations.add(result.menu);
-        }).catchError((error) {});
+        }).catchError((error) {
+          throw Exception(error.toString());
+        });
       } else {
         //data exists continue
+        return;
       }
     });
+  }
 
-    DBProvider.db.getCountries().then((result) {
+  Future _fetchCountries() async {
+    await DBProvider.db.getCountries().then((result) async {
       if (result.isEmpty) {
-        ZenithBankApi().fetchCountries().then((result) {
+        await ZenithBankApi().fetchCountries().then((result) {
           _countriesBloc.inAddCountries.add(result.menu);
         }).catchError((error) {
-          print('error: $error');
+          throw Exception(error.toString());
         });
-      } else {}
+      } else {
+        return;
+      }
     });
+  }
 
-    DBProvider.db.getCities().then((result) {
+  Future _fetchCities() async {
+    await DBProvider.db.getCities().then((result) async {
       if (result.isEmpty) {
-        ZenithBankApi().fetchCities().then((result) {
+        await ZenithBankApi().fetchCities().then((result) {
           _citiesBloc.inAddCities.add(result.menu);
-        }).catchError((error) {});
-      } else {}
+        }).catchError((error) {
+          throw Exception(error.toString());
+        });
+      } else {
+        return;
+      }
     });
+  }
 
-    DBProvider.db.getAccountClasses().then((result) {
+  Future _fetchAccountClasses() async {
+    DBProvider.db.getAccountClasses().then((result) async {
       if (result.isEmpty) {
-        ZenithBankApi().fetchAccountClasses().then((result) {
+        await ZenithBankApi().fetchAccountClasses().then((result) {
           _accountClassBloc.inAddAccountClasses.add(result.accountClassCodes);
         }).catchError((error) {
-          print('error: $error');
+          throw Exception(error.toString());
         });
       } else {
         //data exists continue
+        return;
       }
     });
-
-//    ZenithBankApi().fetchTitles().then((result) {
-//      print('titles: ${result.menu}');
-//    }).catchError((error) {
-//      print('error: $error');
-//    });
   }
 
   @override
@@ -163,12 +188,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
-                      child: LinearProgressIndicator(
-                        backgroundColor: ZxplorePrimaryColor,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          ZxploreRedColor,
-                        ),
-                      ),
+                      child: CircularProgressIndicator(),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),

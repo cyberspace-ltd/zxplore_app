@@ -8,6 +8,7 @@ import 'entities/account_class_entity.dart';
 import 'entities/city_entity.dart';
 import 'entities/country_entity.dart';
 import 'entities/occupation_entity.dart';
+import 'entities/offline_form_entity.dart';
 
 class DBProvider {
   // Create a singleton
@@ -30,9 +31,9 @@ class DBProvider {
     // and only our app, are stored. Files in this directory are deleted
     // when the app is deleted.
     Directory documentsDir = await getApplicationDocumentsDirectory();
-    String path = join(documentsDir.path, 'zxplore_d.db');
+    String path = join(documentsDir.path, 'zxplore_data.db');
 
-    return await openDatabase(path, version: 3, onOpen: (db) async {},
+    return await openDatabase(path, version: 1, onOpen: (db) async {},
         onCreate: (Database db, int version) async {
       await db.execute(
           'CREATE TABLE $tableOccupation ($columnOccupationId INTEGER IDENTITY , $columnOccupationName TEXT PRIMARY KEY)');
@@ -51,7 +52,46 @@ class DBProvider {
 
       await db.execute(
           'CREATE TABLE $tableAccountClass ($columnAccountClassCode INTEGER PRIMARY KEY, $columnAccountClassDescription TEXT, $columnAccountClassType TEXT)');
+
+      await db.execute(
+          'CREATE TABLE $tableOfflineAccount (id INTEGER PRIMARY KEY , $columnOfflineReferenceId TEXT, accountType TEXT, accountHolderType TEXT, riskRank TEXT,accountCategory TEXT,bvn TEXT, $columnOfflineTitle TEXT, surname TEXT, firstName TEXT,otherName TEXT,mothersMaidenName TEXT,dateOfBirth TEXT,stateOfOrigin TEXT, countryOfOrigin TEXT, email TEXT, phone TEXT, nextOfKin TEXT, address1 TEXT,address2 TEXT, countryOfResidence TEXT, stateOfResidence TEXT, cityOfResidence TEXT, gender TEXT,occupation TEXT,maritalStatus TEXT, idType TEXT,idIssuer TEXT, idNumber TEXT,idPlaceOfIssue TEXT, idIssueDate TEXT,idExpiryDate TEXT, isSendEmail BOOLEAN NOT NULL,isReceiveAlert BOOLEAN NOT NULL,isRequestHardwareToken BOOLEAN NOT NULL,isRequestInternetBanking BOOLEAN NOT NULL,idCard TEXT, passport TEXT,utility TEXT, signature TEXT)');
     });
+
+
+  }
+
+  Future<OfflineAccountEntity> insertOfflineAccount(
+      OfflineAccountEntity account) async {
+    final db = await database;
+    account.id = await db.insert(tableOfflineAccount, account.toMap());
+    return account;
+  }
+
+  Future<List<OfflineAccountEntity>> getOfflineAccounts() async {
+    final db = await database;
+    var res = await db.query(tableOfflineAccount);
+    List<OfflineAccountEntity> list = res.isNotEmpty
+        ? res.map((c) => OfflineAccountEntity.fromMap(c)).toList()
+        : [];
+    return list;
+  }
+
+  Future<OfflineAccountEntity> getOfflineAccount(int id) async {
+    final db = await database;
+    List<Map> maps = await db.query(tableOfflineAccount,
+//        columns: [columnId, columnDone, columnTitle],
+        where: '$columnOfflineId = ?',
+        whereArgs: [id]);
+    if (maps.length > 0) {
+      return OfflineAccountEntity.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  Future<int> update(OfflineAccountEntity account) async {
+    final db = await database;
+    return await db.update(tableOfflineAccount, account.toMap(),
+        where: '$columnOfflineReferenceId = ?', whereArgs: [account.referenceId]);
   }
 
   void insertOccupations(List<String> occupations) async {
@@ -134,6 +174,4 @@ class DBProvider {
         : [];
     return list;
   }
-
-
 }

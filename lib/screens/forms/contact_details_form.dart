@@ -222,7 +222,10 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     stream: _countriesBloc.countries,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CountryEntity>> shot) {
-                      if (!shot.hasData) return CircularProgressIndicator();
+                      if (!shot.hasData)
+                        return SizedBox(
+                            height: 24.0,
+                            child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: shot.data != null
                             ? shot.data?.first?.name

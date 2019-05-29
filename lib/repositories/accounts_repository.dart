@@ -1,4 +1,7 @@
 import 'package:zxplore_app/apis/zenithbank_api.dart';
+import 'package:zxplore_app/data/database.dart';
+import 'package:zxplore_app/data/entities/offline_form_entity.dart';
+import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
@@ -19,10 +22,16 @@ class AccountsRepository {
     }
   }
 
+  Future<AccountClass> getAccountClasses() async {
+    try {
+      return _api.fetchAccountClasses();
+    } catch (error) {
+      rethrow;
+    }
+  }
 
-
-
-  Future<AccountDetailsResponse> getAccountsDetailsByReference(String referenceId) async {
+  Future<AccountDetailsResponse> getAccountsDetailsByReference(
+      String referenceId) async {
     try {
       var token = await SecureStorage.getEmployeeToken();
 
@@ -63,4 +72,15 @@ class AccountsRepository {
       rethrow;
     }
   }
+
+  Future<String> saveAccountOffline(
+      OfflineAccountEntity offlineAccount) async {
+    try {
+     var updateOfflineAccount = DBProvider.db.insertOfflineAccount(offlineAccount);
+      return updateOfflineAccount.toString();//number of rows updated
+    } catch (error) {
+      rethrow;
+    }
+  }
+
 }

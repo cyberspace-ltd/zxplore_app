@@ -3,6 +3,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:zxplore_app/blocs/account_form_bloc.dart';
+import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/screens/offline_home.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 import 'category.dart';
 import 'colors.dart';
@@ -118,18 +122,20 @@ class Backdrop extends StatefulWidget {
   final Widget backPanel;
   final Widget frontTitle;
   final Widget backTitle;
-
+  final AccountFormBloc accountFormBloc;
   const Backdrop({
     @required this.currentCategory,
     @required this.frontPanel,
     @required this.backPanel,
     @required this.frontTitle,
     @required this.backTitle,
+    @required this.accountFormBloc,
   })  : assert(currentCategory != null),
         assert(frontPanel != null),
         assert(backPanel != null),
         assert(frontTitle != null),
-        assert(backTitle != null);
+        assert(accountFormBloc != null),
+      assert(backTitle != null);
 
   @override
   _BackdropState createState() => _BackdropState();
@@ -139,10 +145,11 @@ class _BackdropState extends State<Backdrop>
     with SingleTickerProviderStateMixin {
   final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
   AnimationController _controller;
-
+  AccountFormBloc _accountFormBloc;
   @override
   void initState() {
     super.initState();
+    _accountFormBloc = widget.accountFormBloc;
     // This creates an [AnimationController] that can allows for animation for
     // the BackdropPanel. 0.00 means that the front panel is in "tab" (hidden)
     // mode, while 1.0 means that the front panel is open.
@@ -273,7 +280,33 @@ class _BackdropState extends State<Backdrop>
 //            onPressed: (){},
 //          ),
           new IconButton(icon: new Icon(Icons.save_alt,color: Colors.white,),
-            onPressed: (){},
+            onPressed: (){
+
+              var loadingBar = FlushbarHelper.createLoading(
+                message: "Saving account offline...",
+                linearProgressIndicator: null,);
+
+              loadingBar..show(context);
+
+
+              _accountFormBloc.saveOffline();
+
+            _accountFormBloc.subjectSaveOfflineAccountResponse.listen((result){
+              loadingBar.dismiss(context);
+
+              _showSuccessDialog(
+                  '$result');
+
+            }).onError((error) {
+              loadingBar.dismiss(context);
+
+              var errorSnackBar = FlushbarHelper.createError(
+                  message: error);
+
+              errorSnackBar..show(context);
+
+            });
+            },
           ),
 
         ],
@@ -289,4 +322,34 @@ class _BackdropState extends State<Backdrop>
       ),
     );
   }
+
+  void _showSuccessDialog(String message) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Offline Account"),
+          content: new Text(message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            OutlineButton(
+              child: Text('Done'),
+              textColor: Colors.green,
+              color: Colors.transparent,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => OfflineHomePage()),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

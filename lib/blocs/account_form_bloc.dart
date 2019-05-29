@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/data/database.dart';
+import 'package:zxplore_app/data/entities/offline_form_entity.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/form_model.dart';
@@ -101,16 +103,18 @@ class AccountFormBloc extends BlocBase with Validators {
   final _uploadSignatureController = BehaviorSubject<String>();
 
   final PublishSubject<SaveAccountResponse> _subjectSaveAccountResponse =
-  PublishSubject<SaveAccountResponse>();
+      PublishSubject<SaveAccountResponse>();
 
   final PublishSubject<AccountDetailsResponse> _subjectAccountsDetailsResponse =
       PublishSubject<AccountDetailsResponse>();
+
+  final PublishSubject<String> _subjectSaveOfflineAccountResponse =
+      PublishSubject<String>();
 
   // Add data to stream
 
   final PublishSubject<BvnResponse> bvnVerificationResponse =
       PublishSubject<BvnResponse>();
-
 
   Stream<String> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
@@ -159,8 +163,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get address1 =>
       _address1Controller.stream.transform(validateAddress1);
 
-  Stream<String> get address2 =>
-      _address2Controller.stream;
+  Stream<String> get address2 => _address2Controller.stream;
 
   Stream<String> get countryOfResidence => _countryOfResidenceController.stream
       .transform(validateCountryOfResidence);
@@ -213,7 +216,6 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get passport => _uploadPassportController.stream;
 
   Stream<String> get signature => _uploadSignatureController.stream;
-
 
 //  Stream<bool> get submitValid => Observable.combineLatest4(
 //      accountType,
@@ -306,8 +308,6 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeSignature => _uploadSignatureController.sink.add;
 
-
-
   setAccountType(String value) {
     _accountTypeController.sink.add(value);
   }
@@ -350,6 +350,129 @@ class AccountFormBloc extends BlocBase with Validators {
     changeOccupation;
   }
 
+  saveOffline() async {
+    var validRefenceId = _referenceIdController.value;
+
+    var validAccountType = _accountTypeController.value;
+    final validAccountHolderType = _accountHolderTypeController.value;
+    final validAccountRiskRank = _riskRankController.value;
+    final validAccountCategory = _accountCategoryController.value;
+
+    var validBvn = _bvnController.value;
+    final validTitle = _titleController.value;
+    final validSurname = _surnameController.value;
+    final validFirstName = _firstNameController.value;
+    var validOtherName = _otherNameController.value;
+    final validMothersMaidenName = _mothersMaidenNameController.value;
+    final validDateOfBirth = _dateOfBirthController.value;
+    final validStateOfOrigin = _stateOfOriginController.value;
+    final validCountryOfOrigin = _countryOfOriginController.value == null
+        ? 'NIGERIA'
+        : _countryOfOriginController.value; //workaround for bug
+
+    var validEmail = _emailController.value;
+    final validPhone = _phoneNumberController.value;
+    final validNextOfKin = _nextOfKinController.value;
+    final validAddress1 = _address1Controller.value;
+    var validAddress2 = _address2Controller.value;
+    final validCountryOfResidence = _countryOfResidenceController.value == null
+        ? 'NIGERIA'
+        : _countryOfResidenceController.value; //workaround for bug
+
+    final validStateOfResidence = _stateOfResidenceController.value;
+    final validCityOfResidence = _cityOfResidenceController.value;
+    final validGender = _genderController.value;
+    final validOccupation = occupationController.value;
+    final validMaritalStatus = _maritalStatusController.value;
+
+    final validIdType = _idTypeController.value;
+    final validIdIssuer = _idIssuerController.value;
+    final validIdNumber = _idNumberController.value;
+    final validIdPlaceOfIssue = _idPlaceOfIssueController.value;
+    final validIdIssueDate = _idIssueDateController.value;
+    final validIdExpiryDate = _idExpiryDateController.value;
+    final validIsSendEmail =
+        _isSendEmailController.value == null ? false : true;
+    final validIsReceiveSms =
+        _isReceiveSmsController.value == null ? false : true;
+    final validIsRequestHardwareToken =
+        _isRequestHardwareTokenController.value == null ? false : true;
+    final validIsRequestInternetBanking =
+        _isRequestInternetBankingController.value == null ? false : true;
+
+    final validUploadIdImageInBase64 = _uploadIdImageController.value;
+    final validUploadPassportInBase64 = _uploadPassportController.value;
+    final validUploadUtilityBillInBase64 = _uploadUtilityBillController.value;
+
+    final validUploadSignatureInBase64 = _uploadSignatureController.value;
+
+    var currentTimeStamp = new DateTime.now().millisecondsSinceEpoch;
+
+    var employeeId = await SecureStorage.getEmployeeId();
+
+    var referenceId;
+
+    if (validRefenceId != null) {
+      referenceId = validRefenceId; //for updating accounts.
+    } else {
+      referenceId = '$employeeId${currentTimeStamp.toString().substring(7)}';
+    }
+
+    OfflineAccountEntity _offlineAccount = OfflineAccountEntity(
+        referenceId: referenceId,
+        accountType: validAccountType,
+        accountHolderType: validAccountHolderType,
+        riskRank: validAccountRiskRank,
+        accountCategory: validAccountCategory,
+        bvn: validBvn,
+        title: validTitle,
+        surname: validSurname,
+        firstName: validFirstName,
+        otherName: validOtherName,
+        mothersMaidenName: validMothersMaidenName,
+        dateOfBirth: validDateOfBirth,
+        stateOfOrigin: validStateOfOrigin,
+        countryOfOrigin: validCountryOfOrigin,
+        email: validEmail,
+        phone: validPhone,
+        nextOfKin: validNextOfKin,
+        address1: validAddress1,
+        address2: validAddress2,
+        countryOfResidence: validCountryOfResidence,
+        stateOfResidence: validStateOfResidence,
+        cityOfResidence: validCityOfResidence,
+        gender: validGender,
+        occupation: validOccupation,
+        maritalStatus: validMaritalStatus,
+        idType: validIdType,
+        idIssuer: validIdIssuer,
+        idNumber: validIdNumber,
+        idPlaceOfIssue: validIdPlaceOfIssue,
+        idIssueDate: validIdIssueDate,
+        idExpiryDate: validIdExpiryDate,
+        isSendEmail: validIsSendEmail,
+        isReceiveAlert: validIsReceiveSms,
+        isRequestHardwareToken: validIsRequestHardwareToken,
+        isRequestInternetBanking: validIsRequestInternetBanking,
+        idCard: validUploadIdImageInBase64,
+        passport: validUploadPassportInBase64,
+        utility: validUploadUtilityBillInBase64,
+        signature: validUploadSignatureInBase64);
+
+    insertFormOffline(_offlineAccount);
+  }
+
+  insertFormOffline(OfflineAccountEntity offlineForm) async {
+    try {
+      await _accountsRepository.saveAccountOffline(offlineForm);
+
+      _subjectSaveOfflineAccountResponse.sink
+          .add('Account has been saved offline successfully');
+    } catch (error) {
+      _subjectSaveOfflineAccountResponse.sink.addError(error);
+    }
+  }
+
   submit() async {
     var validRefenceId = _referenceIdController.value;
 
@@ -366,14 +489,18 @@ class AccountFormBloc extends BlocBase with Validators {
     final validMothersMaidenName = _mothersMaidenNameController.value;
     final validDateOfBirth = _dateOfBirthController.value;
     final validStateOfOrigin = _stateOfOriginController.value;
-    final validCountryOfOrigin = _countryOfOriginController.value == null ? 'NIGERIA': _countryOfOriginController.value;//workaround for bug
+    final validCountryOfOrigin = _countryOfOriginController.value == null
+        ? 'NIGERIA'
+        : _countryOfOriginController.value; //workaround for bug
 
     var validEmail = _emailController.value;
     final validPhone = _phoneNumberController.value;
     final validNextOfKin = _nextOfKinController.value;
     final validAddress1 = _address1Controller.value;
     var validAddress2 = _address2Controller.value;
-    final validCountryOfResidence = _countryOfResidenceController.value == null ? 'NIGERIA': _countryOfResidenceController.value;//workaround for bug
+    final validCountryOfResidence = _countryOfResidenceController.value == null
+        ? 'NIGERIA'
+        : _countryOfResidenceController.value; //workaround for bug
 
     final validStateOfResidence = _stateOfResidenceController.value;
     final validCityOfResidence = _cityOfResidenceController.value;
@@ -401,31 +528,36 @@ class AccountFormBloc extends BlocBase with Validators {
 
     if (validAccountType == null) {
       _accountTypeController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected an account type.");
+      _subjectSaveAccountResponse
+          .addError("You have not selected an account type.");
       return;
     }
 
     if (validAccountHolderType == null) {
       _accountHolderTypeController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid account holder type.");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid account holder type.");
       return;
     }
 
     if (validAccountRiskRank == null) {
       _riskRankController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a risk rank.");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a risk rank.");
       return;
     }
 
     if (validAccountCategory == null) {
       _accountCategoryController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected an account category.");
+      _subjectSaveAccountResponse
+          .addError("You have not selected an account category.");
       return;
     }
 
     if (validTitle == null) {
       _titleController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid title");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid title");
 
       return;
     }
@@ -438,131 +570,151 @@ class AccountFormBloc extends BlocBase with Validators {
     }
     if (validFirstName == null) {
       _firstNameController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not filled in a valid firstname");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a valid firstname");
 
       return;
     }
 
     if (validMothersMaidenName == null) {
       _mothersMaidenNameController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not filled in the mother\'s maiden name");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in the mother\'s maiden name");
 
       return;
     }
 
     if (validDateOfBirth == null) {
       _dateOfBirthController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid date of birth");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid date of birth");
 
       return;
     }
 
     if (validStateOfOrigin == null) {
       _stateOfOriginController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid state of origin");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid state of origin");
 
       return;
     }
 
     if (validCountryOfOrigin == null) {
       _countryOfOriginController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid country of origin");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid country of origin");
 
       return;
     }
 
     if (validPhone == null) {
       _phoneNumberController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid phone number");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid phone number");
 
       return;
     }
 
     if (validNextOfKin == null) {
       _nextOfKinController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not filled in a next of kin");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin");
 
       return;
     }
 
     if (validAddress1 == null) {
       _address1Controller.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not filled a valid main address");
+      _subjectSaveAccountResponse
+          .addError("You have not filled a valid main address");
 
       return;
     }
 
     if (validCountryOfResidence == null) {
       _countryOfResidenceController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid country of residence");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid country of residence");
 
       return;
     }
     if (validStateOfResidence == null) {
       _stateOfResidenceController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a state of residence");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a state of residence");
       return;
     }
 
     if (validCityOfResidence == null) {
       _cityOfResidenceController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid city of residence");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid city of residence");
       return;
     }
 
     if (validGender == null) {
       _genderController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not chosen a valid gender");
+      _subjectSaveAccountResponse
+          .addError("You have not chosen a valid gender");
       return;
     }
 
     if (validOccupation == null) {
       occupationController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid occupation");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid occupation");
       return;
     }
 
     if (validMaritalStatus == null) {
       _maritalStatusController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a marital status");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a marital status");
 
       return;
     }
     if (validIdType == null) {
       _idTypeController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid ID type");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid ID type");
       return;
     }
 
     if (validIdIssuer == null) {
       _idIssuerController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not filled a valid ID Issuer");
+      _subjectSaveAccountResponse
+          .addError("You have not filled a valid ID Issuer");
       return;
     }
 
     if (validIdNumber == null) {
       _idNumberController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid ID number");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid ID number");
 
       return;
     }
 
     if (validIdPlaceOfIssue == null) {
       _idPlaceOfIssueController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid id place of issue");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid id place of issue");
       return;
     }
 
     if (validIdIssueDate == null) {
       _idIssueDateController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid issue date");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid issue date");
 
       return;
     }
 
     if (validIdExpiryDate == null) {
       _idExpiryDateController.addError("Field is required");
-      _subjectSaveAccountResponse.addError("You have not selected a valid expiry date");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid expiry date");
 
       return;
     }
@@ -713,11 +865,14 @@ class AccountFormBloc extends BlocBase with Validators {
   PublishSubject<SaveAccountResponse> get subjectSaveAccountResponse =>
       _subjectSaveAccountResponse;
 
+  PublishSubject<String> get subjectSaveOfflineAccountResponse =>
+      _subjectSaveOfflineAccountResponse;
+
   PublishSubject<AccountDetailsResponse> get subjectAccountsDetailsResponse =>
       _subjectAccountsDetailsResponse;
 
-  BehaviorSubject<String> get uploadSignatureController => _uploadSignatureController;
-
+  BehaviorSubject<String> get uploadSignatureController =>
+      _uploadSignatureController;
 
   sendAccountsToApi(String encodedAccount) async {
     try {
@@ -791,6 +946,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
   @override
   dispose() {
+    _subjectSaveOfflineAccountResponse.close();
     _subjectSaveAccountResponse.close();
     _accountTypeController.close();
     _accountHolderTypeController.close();
@@ -1087,21 +1243,28 @@ class AccountFormBloc extends BlocBase with Validators {
               .where((i) => i.type == 'Signatory')
               .toList();
 
-          if (_idCardAttachment.length != 0 && _idCardAttachment.first != null) {
+          if (_idCardAttachment.length != 0 &&
+              _idCardAttachment.first != null) {
             _uploadIdImageController
                 .add(_signatoryAttachment.first.encodedImage);
           }
 
-          if ( _passportAttachment.length != 0 && _passportAttachment.first != null) {
-            _uploadPassportController.add(_signatoryAttachment.first.encodedImage);
+          if (_passportAttachment.length != 0 &&
+              _passportAttachment.first != null) {
+            _uploadPassportController
+                .add(_signatoryAttachment.first.encodedImage);
           }
 
-          if (_passportAttachment.length != 0 && _utilityBillAttachment.first != null) {
-            _uploadUtilityBillController.add(_signatoryAttachment.first.encodedImage);
+          if (_passportAttachment.length != 0 &&
+              _utilityBillAttachment.first != null) {
+            _uploadUtilityBillController
+                .add(_signatoryAttachment.first.encodedImage);
           }
 
-          if ( _signatoryAttachment.length != 0 && _signatoryAttachment.first != null) {
-            _uploadSignatureController.add(_signatoryAttachment.first.encodedImage);
+          if (_signatoryAttachment.length != 0 &&
+              _signatoryAttachment.first != null) {
+            _uploadSignatureController
+                .add(_signatoryAttachment.first.encodedImage);
           }
         }
       } else {

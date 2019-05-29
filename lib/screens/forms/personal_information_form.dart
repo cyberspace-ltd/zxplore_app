@@ -341,15 +341,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
+
+
+
   Widget _countryOfOriginTextField() {
     return StreamBuilder(
       stream: accountFormBloc.countryOfOrigin,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _countryOfOriginController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _countryOfOriginController.selection);
-        }
         return FormField<String>(
           builder: (FormFieldState<String> state) {
             return InputDecorator(
@@ -357,22 +355,23 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   labelText: 'Country of Origin',
                   helperText: "* Required",
                   errorText: snapshot.error),
-              isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: StreamBuilder<List<CountryEntity>>(
                     stream: countriesBloc.countries,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CountryEntity>> shot) {
-                      if (!shot.hasData) return CircularProgressIndicator();
+                      if (!shot.hasData)  return SizedBox(
+                          height: 24.0,
+                          child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value:
                             shot.data != null ? shot.data?.first?.name : 'NIGERIA',
-                        items: shot.data.map((CountryEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
+                          items: shot.data.map((CountryEntity value) {
+                            return DropdownMenuItem<String>(
+                              value: value.name,
+                              child: Text(value.name),
+                            );
+                          }).toList(),
                         onChanged: accountFormBloc.changeCountryOfOrigin,
 
                         isDense: true, //value: _currentUser,
