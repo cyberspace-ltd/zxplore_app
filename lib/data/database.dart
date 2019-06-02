@@ -56,8 +56,6 @@ class DBProvider {
       await db.execute(
           'CREATE TABLE $tableOfflineAccount (id INTEGER PRIMARY KEY , $columnOfflineReferenceId TEXT, accountType TEXT, accountHolderType TEXT, riskRank TEXT,accountCategory TEXT,bvn TEXT, $columnOfflineTitle TEXT, surname TEXT, firstName TEXT,otherName TEXT,mothersMaidenName TEXT,dateOfBirth TEXT,stateOfOrigin TEXT, countryOfOrigin TEXT, email TEXT, phone TEXT, nextOfKin TEXT, address1 TEXT,address2 TEXT, countryOfResidence TEXT, stateOfResidence TEXT, cityOfResidence TEXT, gender TEXT,occupation TEXT,maritalStatus TEXT, idType TEXT,idIssuer TEXT, idNumber TEXT,idPlaceOfIssue TEXT, idIssueDate TEXT,idExpiryDate TEXT, isSendEmail BOOLEAN NOT NULL,isReceiveAlert BOOLEAN NOT NULL,isRequestHardwareToken BOOLEAN NOT NULL,isRequestInternetBanking BOOLEAN NOT NULL,idCard TEXT, passport TEXT,utility TEXT, signature TEXT)');
     });
-
-
   }
 
   Future<OfflineAccountEntity> insertOfflineAccount(
@@ -76,22 +74,30 @@ class DBProvider {
     return list;
   }
 
-  Future<OfflineAccountEntity> getOfflineAccount(int id) async {
+  Future<OfflineAccountEntity> getOfflineAccount(String refId) async {
     final db = await database;
     List<Map> maps = await db.query(tableOfflineAccount,
-//        columns: [columnId, columnDone, columnTitle],
-        where: '$columnOfflineId = ?',
-        whereArgs: [id]);
+//        columns: [columnOfflineTitle, columnOfflineSurname, columnOfflineBVN],
+        where: '$columnOfflineReferenceId = ?',
+        whereArgs: [refId]);
     if (maps.length > 0) {
       return OfflineAccountEntity.fromMap(maps.first);
     }
     return null;
   }
 
-  Future<int> update(OfflineAccountEntity account) async {
+  Future<int> updateOfflineAccount(OfflineAccountEntity account) async {
     final db = await database;
-    return await db.update(tableOfflineAccount, account.toMap(),
-        where: '$columnOfflineReferenceId = ?', whereArgs: [account.referenceId]);
+    var result = await db.update(tableOfflineAccount, account.toMap(),
+        where: '$columnOfflineId = ?',
+        whereArgs: [account.id]);
+
+    return result;
+  }
+
+  Future<int> deleteOfflineAccount(int id) async {
+    var db = await database;
+    return await db.delete(tableOfflineAccount, where: '$columnOfflineId = ?', whereArgs: [id]);
   }
 
   void insertOccupations(List<String> occupations) async {

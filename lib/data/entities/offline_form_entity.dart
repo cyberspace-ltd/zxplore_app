@@ -172,7 +172,7 @@ class OfflineAccountEntity {
   factory OfflineAccountEntity.fromMap(Map<String, dynamic> json) =>
       new OfflineAccountEntity(
           id: json[columnOfflineId],
-          referenceId: columnOfflineReferenceId,
+          referenceId: json[columnOfflineReferenceId],
           accountType: json[columnOfflineAccountType],
           accountHolderType: json[columnOfflineAccountHolderType],
           riskRank: json[columnOfflineRiskRank],
@@ -210,10 +210,5 @@ class OfflineAccountEntity {
           utility: json[columnOfflineUtility],
           signature: json[columnOfflineSignature]);
 
-  returnBooleanFromDb(int boolValue) {
-    if (boolValue == 0)
-      return false;
-    else
-      return true;
-  }
+
 }

@@ -21,6 +21,9 @@ class AccountFormBloc extends BlocBase with Validators {
   final _referenceIdController =
       BehaviorSubject<String>(); // used in the case of updating accounts.
 
+  final _idController = BehaviorSubject<int>();
+  final _isEditModeController = BehaviorSubject<bool>();
+
   final _accountTypeController = BehaviorSubject<String>();
 
   final _accountHolderTypeController = BehaviorSubject<String>();
@@ -110,6 +113,10 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final PublishSubject<String> _subjectSaveOfflineAccountResponse =
       PublishSubject<String>();
+
+  final PublishSubject<String> _subjectDeleteOfflineAccountResponse =
+  PublishSubject<String>();
+
 
   // Add data to stream
 
@@ -351,6 +358,7 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   saveOffline() async {
+    var validId = _idController.value;
     var validRefenceId = _referenceIdController.value;
 
     var validAccountType = _accountTypeController.value;
@@ -419,6 +427,7 @@ class AccountFormBloc extends BlocBase with Validators {
     }
 
     OfflineAccountEntity _offlineAccount = OfflineAccountEntity(
+        id:validId ,
         referenceId: referenceId,
         accountType: validAccountType,
         accountHolderType: validAccountHolderType,
@@ -463,8 +472,13 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   insertFormOffline(OfflineAccountEntity offlineForm) async {
+    var isEditMode = _isEditModeController.value ==  null ? false : _isEditModeController.value;
     try {
-      await _accountsRepository.saveAccountOffline(offlineForm);
+      if (isEditMode) {
+        await _accountsRepository.updateAccountOffline(offlineForm);
+      } else {
+        await _accountsRepository.saveAccountOffline(offlineForm);
+      }
 
       _subjectSaveOfflineAccountResponse.sink
           .add('Account has been saved offline successfully');
@@ -472,6 +486,19 @@ class AccountFormBloc extends BlocBase with Validators {
       _subjectSaveOfflineAccountResponse.sink.addError(error);
     }
   }
+
+  deleteFormOffline(int id) async {
+    try {
+      await _accountsRepository.deleteOfflineAccount(id);
+
+      _subjectDeleteOfflineAccountResponse.sink
+          .add('Account has been deleted');
+    } catch (error) {
+      _subjectDeleteOfflineAccountResponse.sink.addError(error);
+    }
+  }
+
+
 
   submit() async {
     var validRefenceId = _referenceIdController.value;
@@ -868,8 +895,17 @@ class AccountFormBloc extends BlocBase with Validators {
   PublishSubject<String> get subjectSaveOfflineAccountResponse =>
       _subjectSaveOfflineAccountResponse;
 
+  PublishSubject<String> get subjectDeleteOfflineAccountResponse =>
+      _subjectDeleteOfflineAccountResponse;
+
+
+
   PublishSubject<AccountDetailsResponse> get subjectAccountsDetailsResponse =>
       _subjectAccountsDetailsResponse;
+
+  BehaviorSubject<String> get uploadIdImageController =>
+      _uploadIdImageController;
+
 
   BehaviorSubject<String> get uploadSignatureController =>
       _uploadSignatureController;
@@ -990,6 +1026,190 @@ class AccountFormBloc extends BlocBase with Validators {
     _subjectAccountsDetailsResponse.close();
     _referenceIdController.close();
     uploadSignatureController.close();
+    _subjectOfflineDetailsResponse.close();
+    _isEditModeController.close();
+    _idController.close();
+    _subjectDeleteOfflineAccountResponse.close();
+  }
+
+  final PublishSubject<String> _subjectOfflineDetailsResponse =
+      PublishSubject<String>();
+
+  PublishSubject<String> get subjectOfflineDetailsResponse =>
+      _subjectOfflineDetailsResponse;
+
+  getOfflineAccountDetailsByRefId(String referenceId) async {
+    _isEditModeController.add(true);
+
+    await _accountsRepository
+        .getOfflineAccountByRefId(referenceId)
+        .then((offlineAccount) {
+      if (offlineAccount != null) {
+        _idController.add(offlineAccount.id);
+        _subjectOfflineDetailsResponse.add("Account retrieved successfully.");
+        if (offlineAccount.accountType == 'SA') {
+          _accountTypeController.add('SAVINGS ACCOUNT');
+        } else {
+          _accountTypeController.add('CURRENT ACCOUNT');
+        }
+
+        _accountHolderTypeController.add('INDIVIDUAL');
+
+        if (offlineAccount.riskRank != null &&
+            offlineAccount.riskRank.isNotEmpty) {
+          _riskRankController.add(offlineAccount.riskRank);
+        }
+
+        if (offlineAccount.accountCategory != null &&
+            offlineAccount.accountCategory.isNotEmpty) {
+          _accountCategoryController.add(offlineAccount.accountCategory);
+        }
+
+        if (offlineAccount.bvn != null && offlineAccount.bvn.isNotEmpty) {
+          _bvnController.add(offlineAccount.bvn);
+        }
+
+        if (offlineAccount.title != null && offlineAccount.title.isNotEmpty) {
+          _titleController.add(offlineAccount.title);
+        }
+
+        if (offlineAccount.surname != null &&
+            offlineAccount.surname.isNotEmpty) {
+          _surnameController.add(offlineAccount.surname);
+        }
+        if (offlineAccount.firstName != null &&
+            offlineAccount.firstName.isNotEmpty) {
+          _firstNameController.add(offlineAccount.firstName);
+        }
+
+        if (offlineAccount.otherName != null &&
+            offlineAccount.otherName.isNotEmpty) {
+          _otherNameController.add(offlineAccount.otherName);
+        }
+
+        if (offlineAccount.mothersMaidenName != null &&
+            offlineAccount.mothersMaidenName.isNotEmpty) {
+          _mothersMaidenNameController.add(offlineAccount.mothersMaidenName);
+        }
+
+        if (offlineAccount.dateOfBirth != null &&
+            offlineAccount.dateOfBirth.isNotEmpty) {
+          _dateOfBirthController.add(offlineAccount.dateOfBirth);
+        }
+
+        if (offlineAccount.stateOfOrigin != null &&
+            offlineAccount.stateOfOrigin.isNotEmpty) {
+          _stateOfOriginController.add(offlineAccount.stateOfOrigin);
+        }
+        _countryOfOriginController.add('NIGERIA');
+
+        if (offlineAccount.email != null && offlineAccount.email.isNotEmpty) {
+          _emailController.add(offlineAccount.email);
+        }
+
+        if (offlineAccount.phone != null && offlineAccount.phone.isNotEmpty) {
+          _phoneNumberController.add(offlineAccount.phone);
+        }
+
+        if (offlineAccount.nextOfKin != null &&
+            offlineAccount.nextOfKin.isNotEmpty) {
+          _nextOfKinController.add(offlineAccount.nextOfKin);
+        }
+
+        if (offlineAccount.address1 != null &&
+            offlineAccount.address1.isNotEmpty) {
+          _address1Controller.add(offlineAccount.address1);
+        }
+
+        if (offlineAccount.address2 != null &&
+            offlineAccount.address2.isNotEmpty) {
+          _address2Controller.add(offlineAccount.address2);
+        }
+
+        if (offlineAccount.stateOfResidence != null &&
+            offlineAccount.stateOfResidence.isNotEmpty) {
+          _stateOfResidenceController.add(offlineAccount.stateOfResidence);
+        }
+        if (offlineAccount.cityOfResidence != null &&
+            offlineAccount.cityOfResidence.isNotEmpty) {
+          _cityOfResidenceController.add(offlineAccount.cityOfResidence);
+        }
+
+        if (offlineAccount.gender != null && offlineAccount.gender.isNotEmpty) {
+          if (offlineAccount.gender == 'M') {
+            _genderController.add('MALE');
+          } else {
+            _genderController.add('FEMALE');
+          }
+        }
+
+        if (offlineAccount.occupation != null &&
+            offlineAccount.occupation.isNotEmpty) {
+          _cityOfResidenceController.add(offlineAccount.occupation);
+        }
+
+        if (offlineAccount.maritalStatus != null &&
+            offlineAccount.maritalStatus.isNotEmpty) {
+          _maritalStatusController.add(offlineAccount.maritalStatus);
+        }
+
+        if (offlineAccount.idType != null && offlineAccount.idType.isNotEmpty) {
+          _idTypeController.add(offlineAccount.idType);
+        }
+
+        if (offlineAccount.idIssuer != null &&
+            offlineAccount.idIssuer.isNotEmpty) {
+          _idIssuerController.add(offlineAccount.idIssuer);
+        }
+
+        if (offlineAccount.idNumber != null &&
+            offlineAccount.idNumber.isNotEmpty) {
+          _idNumberController.add(offlineAccount.idNumber);
+        }
+        if (offlineAccount.idPlaceOfIssue != null &&
+            offlineAccount.idPlaceOfIssue.isNotEmpty) {
+          _idPlaceOfIssueController.add(offlineAccount.idPlaceOfIssue);
+        }
+
+        if (offlineAccount.idIssueDate != null &&
+            offlineAccount.idIssueDate.isNotEmpty) {
+          _idIssueDateController.add(offlineAccount.idIssueDate);
+        }
+        if (offlineAccount.idExpiryDate != null &&
+            offlineAccount.idExpiryDate.isNotEmpty) {
+          _idExpiryDateController.add(offlineAccount.idExpiryDate);
+        }
+
+        _isSendEmailController.add(offlineAccount.isSendEmail);
+        _isReceiveSmsController.add(offlineAccount.isReceiveAlert);
+        _isRequestHardwareTokenController
+            .add(offlineAccount.isRequestHardwareToken);
+        _isRequestInternetBankingController
+            .add(offlineAccount.isRequestInternetBanking);
+
+        if (offlineAccount.idCard != null && offlineAccount.idCard.isNotEmpty) {
+          _uploadIdImageController.add(offlineAccount.idCard);
+        }
+
+        if (offlineAccount.passport != null &&
+            offlineAccount.passport.isNotEmpty) {
+          _uploadPassportController.add(offlineAccount.passport);
+        }
+        if (offlineAccount.utility != null &&
+            offlineAccount.utility.isNotEmpty) {
+          _uploadUtilityBillController.add(offlineAccount.utility);
+        }
+        if (offlineAccount.signature != null &&
+            offlineAccount.signature.isNotEmpty) {
+          _uploadSignatureController.add(offlineAccount.signature);
+        }
+      } else {
+        _subjectOfflineDetailsResponse
+            .addError('Unable to retrieve account, try again later');
+      }
+    }).catchError((error) {
+      _subjectOfflineDetailsResponse.addError('$error');
+    });
   }
 
   getAccountsDetailsByReferenceId(String referenceId) async {
@@ -1028,6 +1248,7 @@ class AccountFormBloc extends BlocBase with Validators {
           _bvnController.add(CryptoHelper.decrypt(
               accountResponse.data.signatoryDetails.first.bvn));
         }
+
         if (accountResponse.data.title != null &&
             accountResponse.data.title.isNotEmpty) {
           _titleController.add(accountResponse.data.title);
@@ -1049,11 +1270,11 @@ class AccountFormBloc extends BlocBase with Validators {
               accountResponse.data.signatoryDetails.first.middleName));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.middleName != null &&
-            accountResponse.data.signatoryDetails.first.middleName.isNotEmpty) {
-          _otherNameController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.middleName));
-        }
+//        if (accountResponse.data.signatoryDetails?.first?.middleName != null &&
+//            accountResponse.data.signatoryDetails.first.middleName.isNotEmpty) {
+//          _otherNameController.add(CryptoHelper.decrypt(
+//              accountResponse.data.signatoryDetails.first.middleName));
+//        }
 
         if (accountResponse.data.signatoryDetails?.first?.motherMaidenName !=
                 null &&
@@ -1070,12 +1291,12 @@ class AccountFormBloc extends BlocBase with Validators {
               accountResponse.data.signatoryDetails.first.dateOfBirth));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.dateOfBirth != null &&
-            accountResponse
-                .data.signatoryDetails.first.dateOfBirth.isNotEmpty) {
-          _dateOfBirthController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.dateOfBirth));
-        }
+//        if (accountResponse.data.signatoryDetails?.first?.dateOfBirth != null &&
+//            accountResponse
+//                .data.signatoryDetails.first.dateOfBirth.isNotEmpty) {
+//          _dateOfBirthController.add(CryptoHelper.decrypt(
+//              accountResponse.data.signatoryDetails.first.dateOfBirth));
+//        }
 
         if (accountResponse.data.signatoryDetails?.first?.stateOfOrigin !=
                 null &&

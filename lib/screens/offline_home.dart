@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/all_accounts_bloc.dart';
 import 'package:zxplore_app/data/entities/offline_form_entity.dart';
+import 'package:zxplore_app/home.dart';
+import 'package:zxplore_app/screens/category_screen.dart';
 
 import '../colors.dart';
 
@@ -73,20 +75,15 @@ class _OfflineHomeState extends State<OfflineHomePage> {
         contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
         leading: Container(
           padding: EdgeInsets.only(left: 16.0),
-          child: new Material(
-            color: Colors.white30,
-            type: MaterialType.circle,
-            child: new Container(
-              width: 24,
-              height: 24,
-            ),
+          child: IconButton(icon: const Icon(Icons.remove,color: Colors.red), onPressed: null),
           ),
-        ),
+
         title: Padding(
           padding: const EdgeInsets.all(8.0),
           child: new Text.rich(
             TextSpan(
-              text: '${form.firstName} ${form.surname}',
+              text:
+                  '${form.firstName != null ? form.firstName : ""} ${form.surname != null ? form.surname : ""}',
               // default text style
               style: TextStyle(
                 color: Colors.black,
@@ -100,7 +97,8 @@ class _OfflineHomeState extends State<OfflineHomePage> {
                     text: '\n\n',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(
-                    text: ' +234${form.phone}',
+                    text:
+                        ' +234${form.phone != null ? form.phone : " No phone number provided"}',
                     style: TextStyle(
                         fontStyle: FontStyle.normal,
                         color: Colors.black54,
@@ -149,12 +147,14 @@ class _OfflineHomeState extends State<OfflineHomePage> {
           'Edit Account',
         ),
         onPressed: () {
-//            Navigator.push(
-//              context,
-//              MaterialPageRoute(
-//                  builder: (BuildContext context) =>
-//                      CategoryPage(accountReferenceId: form?.refId)),
-//            );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => CategoryPage(
+                      accountReferenceId: form?.referenceId,
+                      isEditAccount: true,
+                    )),
+          );
         });
   }
 
@@ -184,6 +184,15 @@ class _OfflineHomeState extends State<OfflineHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+//              Navigator.popUntil(context, ModalRoute.withName('/home'));
+            }),
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),

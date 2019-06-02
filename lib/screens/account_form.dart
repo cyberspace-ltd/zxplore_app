@@ -21,8 +21,9 @@ class AccountFormPage extends StatefulWidget {
 
   final String accountReferenceId;
   final AccountFormBloc accountFormBloc;
+  final bool isEditAccount;
 
-  const AccountFormPage({@required this.category,@required this.accountFormBloc , this.accountReferenceId})
+  const AccountFormPage({@required this.category,@required this.accountFormBloc , this.accountReferenceId, this.isEditAccount = false})
       : assert(category != null);
 
   @override
@@ -36,6 +37,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   Category category;
   String accountReferenceId;
   AccountFormBloc accountFormBloc;
+  bool _isEditAccount;
   static const _kDuration = const Duration(milliseconds: 300);
 
   static const _kCurve = Curves.ease;
@@ -76,9 +78,15 @@ class _AccountFormPageState extends State<AccountFormPage>
 
     _setDefaults();
 
-    if (accountReferenceId != null) {
-      _getAccountDetailsByReferenceId(accountReferenceId);
+    if(_isEditAccount && accountReferenceId != null){
+      _getAccountDetailsFromDatabase(accountReferenceId);
     }
+    else {
+      if (accountReferenceId != null) {
+        _getAccountDetailsByReferenceId(accountReferenceId);
+      }
+    }
+
   }
 
   void _setDefaults() {
@@ -86,6 +94,29 @@ class _AccountFormPageState extends State<AccountFormPage>
       accountFormBloc = widget.accountFormBloc;
       category = widget.category;
       accountReferenceId = widget.accountReferenceId;
+      _isEditAccount = widget.isEditAccount;
+    });
+  }
+
+  _getAccountDetailsFromDatabase(String referenceId){
+    var backButton = FlatButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      child: Text(
+        "GO BACK",
+        style: TextStyle(color: Colors.red),
+      ),
+    );
+
+    accountFormBloc.getOfflineAccountDetailsByRefId(referenceId);
+    accountFormBloc.subjectOfflineDetailsResponse.listen((message){
+
+    }).onError((error){
+      var errorSnackBar = FlushbarHelper.createErrorAction(
+          message: error.toString(), button: backButton);
+
+      errorSnackBar..show(context);
     });
   }
 
@@ -129,7 +160,7 @@ class _AccountFormPageState extends State<AccountFormPage>
         loadingBar..dismiss(context);
 
         var errorSnackBar = FlushbarHelper.createErrorAction(
-            message: error, button: backButton);
+            message: error.toString(), button: backButton);
 
         errorSnackBar..show(context);
       });
@@ -166,7 +197,7 @@ class _AccountFormPageState extends State<AccountFormPage>
                   itemCount: _pages.length,
                   //remove if you want infinite scrolling.
 //                  physics: NeverScrollableScrollPhysics(),
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _controller,
                   itemBuilder: (BuildContext context, int index) {
                     return _pages[index % _pages.length];
@@ -179,7 +210,7 @@ class _AccountFormPageState extends State<AccountFormPage>
                   child: Container(
                     color: Colors.grey[800].withOpacity(0.5),
 //                    color: ZxplorePrimaryColor,
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[

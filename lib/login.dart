@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
 
       body: SafeArea(
-        child: Column(children: <Widget>[
+        child: ListView(children: <Widget>[
 
 //          Card( child:Image.asset('assets/images/zenithheader.jpg') ,),
           SizedBox(height: 120.0),
@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
               submitButton(),
             ],
           ),
-          Expanded(child: WavyFooter())
+//          Expanded(child: WavyFooter())
         ]),
       ),
     );

@@ -30,11 +30,15 @@ class _UploadIdStepState extends State<UploadIdStep>
     super.initState();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
 
-    accountFormBloc.idCard.listen((base64Signature){
-      var imageData = base64Decode(base64Signature);
-      setState(() {
-        _imageFile.writeAsBytesSync(imageData.buffer.asUint8List());
-      });
+
+    accountFormBloc.uploadIdImageController.listen((base64Signature){
+      if(_imageFile == null){
+        var imageData = base64Decode(base64Signature);
+        setState(() {
+          _imageFile.writeAsBytesSync(imageData.buffer.asUint8List());
+        });
+      }
+
     });
   }
 

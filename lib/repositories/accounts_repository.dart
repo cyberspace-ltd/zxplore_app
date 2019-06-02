@@ -73,14 +73,42 @@ class AccountsRepository {
     }
   }
 
-  Future<String> saveAccountOffline(
-      OfflineAccountEntity offlineAccount) async {
+  Future<String> saveAccountOffline(OfflineAccountEntity offlineAccount) async {
     try {
-     var updateOfflineAccount = DBProvider.db.insertOfflineAccount(offlineAccount);
-      return updateOfflineAccount.toString();//number of rows updated
+      var updateOfflineAccount =
+          DBProvider.db.insertOfflineAccount(offlineAccount);
+      return updateOfflineAccount.toString(); //number of rows updated
     } catch (error) {
       rethrow;
     }
   }
 
+  Future<String> updateAccountOffline(
+      OfflineAccountEntity offlineAccount) async {
+    try {
+      var updateOfflineAccount =
+          DBProvider.db.updateOfflineAccount(offlineAccount);
+      return updateOfflineAccount.toString(); //number of rows updated
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<int> deleteOfflineAccount(int id) async {
+    try {
+      var deletedAccountNum = DBProvider.db.deleteOfflineAccount(id);
+      return deletedAccountNum;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<OfflineAccountEntity> getOfflineAccountByRefId(
+      String referenceId) async {
+    try {
+      return DBProvider.db.getOfflineAccount(referenceId);
+    } catch (error) {
+      rethrow;
+    }
+  }
 }

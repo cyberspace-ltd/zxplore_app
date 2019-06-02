@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/home.dart';
 import 'package:zxplore_app/screens/offline_home.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 
@@ -301,7 +302,7 @@ class _BackdropState extends State<Backdrop>
               loadingBar.dismiss(context);
 
               var errorSnackBar = FlushbarHelper.createError(
-                  message: error);
+                  message: error.toString());
 
               errorSnackBar..show(context);
 
@@ -342,7 +343,7 @@ class _BackdropState extends State<Backdrop>
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => OfflineHomePage()),
+                      builder: (BuildContext context) => MyHomePage()),
                 );
               },
             ),

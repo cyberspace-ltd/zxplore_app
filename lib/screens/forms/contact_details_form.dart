@@ -266,7 +266,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     stream: statesBloc.states,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<StateEntity>> shot) {
-                      if (!shot.hasData) return CircularProgressIndicator();
+                      if (!shot.hasData)  return SizedBox(
+                          height: 24.0,
+                          child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.hasData
                             ? Helper.returnValidStateSelectedItem(snapshot.data,
@@ -308,7 +310,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     stream: _citiesBloc.cities,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CityEntity>> shot) {
-                      if (!shot.hasData) return CircularProgressIndicator();
+                      if (!shot.hasData)  return SizedBox(
+                          height: 24.0,
+                          child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.data,
                         items: shot.data.map((CityEntity value) {
@@ -381,7 +385,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     stream: _occupationsBloc.occupations,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<OccupationEntity>> shot) {
-                      if (!shot.hasData) return CircularProgressIndicator();
+                      if (!shot.hasData)  return SizedBox(
+                          height: 24.0,
+                          child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.data,
                         items: shot.data.map((OccupationEntity value) {

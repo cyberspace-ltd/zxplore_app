@@ -170,7 +170,7 @@ class _AccountInformationState extends State<AccountInformationStep>
                         items: shot.data.map((AccountClassEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.id.toString(),
-                            child: Text(value.name),
+                            child: Text(value.name,style: TextStyle(fontSize: 14.0),),
                           );
                         }).toList(),
                         onChanged: accountFormBloc.changeAccountCategory,

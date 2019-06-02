@@ -23,8 +23,8 @@ import 'account_form.dart';
 /// because it is responsible for the UI at the route's destination.
 class CategoryPage extends StatefulWidget {
   final String accountReferenceId;
-
-  const CategoryPage({this.accountReferenceId});
+  final bool isEditAccount;
+  const CategoryPage({this.accountReferenceId, this.isEditAccount = false});
 
   @override
   _CategoryRouteState createState() => _CategoryRouteState();
@@ -35,7 +35,7 @@ class _CategoryRouteState extends State<CategoryPage> {
   Category _currentCategory;
   String accountReferenceId;
   AccountFormBloc accountFormBloc;
-
+  bool _isEditAccount;
   // Widgets are supposed to be deeply immutable objects. We can update and edit
   // _categories as we build our app, and when we pass it into a widget's
   // `children` property, we call .toList() on it.
@@ -53,6 +53,8 @@ class _CategoryRouteState extends State<CategoryPage> {
   void _setDefaults() {
     setState(() {
       accountReferenceId = widget.accountReferenceId;
+      _isEditAccount = widget.isEditAccount;
+
     });
   }
 
@@ -167,8 +169,8 @@ class _CategoryRouteState extends State<CategoryPage> {
       currentCategory:
           _currentCategory == null ? _defaultCategory : _currentCategory,
       frontPanel: _currentCategory == null
-          ? AccountFormPage(category: _defaultCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId)
-          : AccountFormPage(category: _currentCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId),
+          ? AccountFormPage(category: _defaultCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId,isEditAccount: _isEditAccount,)
+          : AccountFormPage(category: _currentCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId,isEditAccount: _isEditAccount),
       backPanel: listView,
       frontTitle: Text('Create Account'),
       backTitle: Text('Select a Category'),

@@ -314,7 +314,10 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                     stream: statesBloc.states,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<StateEntity>> shot) {
-                      if (!shot.hasData) return CircularProgressIndicator();
+                      if (!shot.hasData)
+                        return SizedBox(
+                            height: 24.0,
+                            child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.hasData
                             ? Helper.returnValidStateSelectedItem(snapshot.data,
@@ -341,9 +344,6 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-
-
-
   Widget _countryOfOriginTextField() {
     return StreamBuilder(
       stream: accountFormBloc.countryOfOrigin,
@@ -360,18 +360,20 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                     stream: countriesBloc.countries,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CountryEntity>> shot) {
-                      if (!shot.hasData)  return SizedBox(
-                          height: 24.0,
-                          child: Center(child: CircularProgressIndicator()));
+                      if (!shot.hasData)
+                        return SizedBox(
+                            height: 24.0,
+                            child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
-                        value:
-                            shot.data != null ? shot.data?.first?.name : 'NIGERIA',
-                          items: shot.data.map((CountryEntity value) {
-                            return DropdownMenuItem<String>(
-                              value: value.name,
-                              child: Text(value.name),
-                            );
-                          }).toList(),
+                        value: shot.data != null
+                            ? shot.data?.first?.name
+                            : 'NIGERIA',
+                        items: shot.data.map((CountryEntity value) {
+                          return DropdownMenuItem<String>(
+                            value: value.name,
+                            child: Text(value.name),
+                          );
+                        }).toList(),
                         onChanged: accountFormBloc.changeCountryOfOrigin,
 
                         isDense: true, //value: _currentUser,
