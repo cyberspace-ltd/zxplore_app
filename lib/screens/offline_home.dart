@@ -75,7 +75,14 @@ class _OfflineHomeState extends State<OfflineHomePage> {
         contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
         leading: Container(
           padding: EdgeInsets.only(left: 16.0),
-          child: IconButton(icon: const Icon(Icons.remove,color: Colors.red), onPressed: null),
+          child: IconButton(icon: const Icon(Icons.remove,color: Colors.red), onPressed: (){
+            _accountsBloc.deleteOfflineAccount(form.id);
+            _accountsBloc.getOfflineAccounts();
+
+            setState(() {
+
+            });
+          }),
           ),
 
         title: Padding(

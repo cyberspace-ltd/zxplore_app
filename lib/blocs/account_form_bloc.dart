@@ -115,8 +115,7 @@ class AccountFormBloc extends BlocBase with Validators {
       PublishSubject<String>();
 
   final PublishSubject<String> _subjectDeleteOfflineAccountResponse =
-  PublishSubject<String>();
-
+      PublishSubject<String>();
 
   // Add data to stream
 
@@ -427,7 +426,7 @@ class AccountFormBloc extends BlocBase with Validators {
     }
 
     OfflineAccountEntity _offlineAccount = OfflineAccountEntity(
-        id:validId ,
+        id: validId,
         referenceId: referenceId,
         accountType: validAccountType,
         accountHolderType: validAccountHolderType,
@@ -472,7 +471,9 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   insertFormOffline(OfflineAccountEntity offlineForm) async {
-    var isEditMode = _isEditModeController.value ==  null ? false : _isEditModeController.value;
+    var isEditMode = _isEditModeController.value == null
+        ? false
+        : _isEditModeController.value;
     try {
       if (isEditMode) {
         await _accountsRepository.updateAccountOffline(offlineForm);
@@ -491,14 +492,11 @@ class AccountFormBloc extends BlocBase with Validators {
     try {
       await _accountsRepository.deleteOfflineAccount(id);
 
-      _subjectDeleteOfflineAccountResponse.sink
-          .add('Account has been deleted');
+      _subjectDeleteOfflineAccountResponse.sink.add('Account has been deleted');
     } catch (error) {
       _subjectDeleteOfflineAccountResponse.sink.addError(error);
     }
   }
-
-
 
   submit() async {
     var validRefenceId = _referenceIdController.value;
@@ -898,8 +896,6 @@ class AccountFormBloc extends BlocBase with Validators {
   PublishSubject<String> get subjectDeleteOfflineAccountResponse =>
       _subjectDeleteOfflineAccountResponse;
 
-
-
   PublishSubject<AccountDetailsResponse> get subjectAccountsDetailsResponse =>
       _subjectAccountsDetailsResponse;
 
@@ -919,11 +915,20 @@ class AccountFormBloc extends BlocBase with Validators {
     try {
       SaveAccountResponse response =
           await _accountsRepository.attemptSubmitAccountToApi(encodedAccount);
+
+      var offlineId = _idController.value;
+      if (offlineId != null) {
+        await _accountsRepository.deleteOfflineAccount(offlineId);
+      }
       _subjectSaveAccountResponse.sink.add(response);
+
+
     } catch (error) {
       _subjectSaveAccountResponse.sink.addError(error);
     }
   }
+
+
 
   verifyBvn() async {
     var encodedBVN = CryptoHelper.encrypt(_bvnController.value);
@@ -1471,8 +1476,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
           if (_idCardAttachment.length != 0 &&
               _idCardAttachment.first != null) {
-            _uploadIdImageController
-                .add(_idCardAttachment.first.encodedImage);
+            _uploadIdImageController.add(_idCardAttachment.first.encodedImage);
           }
 
           if (_passportAttachment.length != 0 &&

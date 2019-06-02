@@ -17,15 +17,14 @@ class AccountsBloc extends BlocBase {
   final PublishSubject<VerifyAccountResponse> _subjectVerifyAccountsResponse =
       PublishSubject<VerifyAccountResponse>();
 
+  final _offlineAccountsController =
+      StreamController<List<OfflineAccountEntity>>.broadcast();
 
-  final _offlineAccountsController = StreamController<List<OfflineAccountEntity>>.broadcast();
-
-
-  Stream<List<OfflineAccountEntity>> get offlineAccounts => _offlineAccountsController.stream;
+  Stream<List<OfflineAccountEntity>> get offlineAccounts =>
+      _offlineAccountsController.stream;
 
   StreamSink<List<OfflineAccountEntity>> get _OfflineAccounts =>
       _offlineAccountsController.sink;
-
 
   getAccounts() async {
     try {
@@ -40,8 +39,13 @@ class AccountsBloc extends BlocBase {
   }
 
   getOfflineAccounts() async {
-    List<OfflineAccountEntity> offlineAcccounts = await DBProvider.db.getOfflineAccounts();
+    List<OfflineAccountEntity> offlineAcccounts =
+        await DBProvider.db.getOfflineAccounts();
     _OfflineAccounts.add(offlineAcccounts);
+  }
+
+  deleteOfflineAccount(int id) async {
+    await _accountsRepository.deleteOfflineAccount(id);
   }
 
   verifyAccountByReferenceId(String referenceId) async {
@@ -54,15 +58,13 @@ class AccountsBloc extends BlocBase {
     }
   }
 
-  fetchAccountClasses(){
-
-    _accountsRepository.getAccountClasses().then((result){
-
-    }).catchError((error){
-
+  fetchAccountClasses() {
+    _accountsRepository
+        .getAccountClasses()
+        .then((result) {})
+        .catchError((error) {
       //todo: fetch account classes
     });
-
   }
 
   @override

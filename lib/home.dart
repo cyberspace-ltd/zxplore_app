@@ -444,7 +444,7 @@ class _MyHomePageState extends State<MyHomePage> {
         IconButton(
             icon: Icon(Icons.refresh, color: Colors.white),
             onPressed: () {
-              FlushbarHelper.createLoading(message: 'Getting latest accounts...',duration: new Duration(seconds: 5))..show(context);
+              FlushbarHelper.createLoading(message: 'Getting latest accounts...')..show(context);
               _accountsBloc.getAccounts();
               _accountsBloc.fetchAccountClasses();
             }),
