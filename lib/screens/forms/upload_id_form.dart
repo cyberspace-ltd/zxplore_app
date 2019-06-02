@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class _UploadIdStepState extends State<UploadIdStep>
   String _retrieveDataError;
   dynamic _pickImageError;
   AccountFormBloc accountFormBloc;
+  ByteData _img = ByteData(0);
 
 
   @override
@@ -32,11 +34,13 @@ class _UploadIdStepState extends State<UploadIdStep>
 
 
     accountFormBloc.uploadIdImageController.listen((base64Signature){
-      if(_imageFile == null){
+      if(_img.lengthInBytes == 0){
         var imageData = base64Decode(base64Signature);
+
         setState(() {
-          _imageFile.writeAsBytesSync(imageData.buffer.asUint8List());
+          _img = imageData.buffer.asByteData();
         });
+
       }
 
     });
@@ -64,7 +68,11 @@ class _UploadIdStepState extends State<UploadIdStep>
                               textAlign: TextAlign.center,
                             );
                           case ConnectionState.done:
-                            return (LimitedBox(maxHeight: 600.0, child: _previewImage()));
+                            return (_img.buffer.lengthInBytes == 0
+                                ? const Text(
+                              'Click either the gallery or camera icon to upload an ID card',
+                              textAlign: TextAlign.center,
+                            ) : LimitedBox(maxHeight: 600.0, child: Image.memory(_img.buffer.asUint8List())));
                           default:
                             if (snapshot.hasError) {
                               return Text(
@@ -80,7 +88,11 @@ class _UploadIdStepState extends State<UploadIdStep>
                         }
                       },
                     )
-                  : (LimitedBox(maxHeight: 600.0, child:  _previewImage())),
+                  : (_img.buffer.lengthInBytes == 0
+                  ? const Text(
+                'Click either the gallery or camera icon to upload an ID card',
+                textAlign: TextAlign.center,
+              ) :LimitedBox(maxHeight: 600.0, child: Image.memory(_img.buffer.asUint8List()))),
             ),
             SizedBox(height: 30.0),
             Row(
@@ -115,41 +127,16 @@ class _UploadIdStepState extends State<UploadIdStep>
   Future _convertImagesToByte () async {
      List<int> imageBytes = await _imageFile.readAsBytes();
 
+    var imgBytes = new Uint8List.fromList(imageBytes);
+
      String base64Image =  base64Encode(imageBytes);
 
+     _img = imgBytes.buffer.asByteData();
+
      accountFormBloc.setUploadIdForm(base64Image);
-     print(base64Image);
+//     print(base64Image);
   }
 
-  Text _getRetrieveErrorWidget() {
-    if (_retrieveDataError != null) {
-      final Text result = Text(_retrieveDataError);
-      _retrieveDataError = null;
-      return result;
-    }
-    return null;
-  }
-
- Widget _previewImage()  {
-    final Text retrieveError = _getRetrieveErrorWidget();
-    if (retrieveError != null) {
-      return retrieveError;
-    }
-    if (_imageFile != null) {
-      _convertImagesToByte();
-      return Image.file(_imageFile);
-    } else if (_pickImageError != null) {
-      return Text(
-        'Pick image error: $_pickImageError',
-        textAlign: TextAlign.center,
-      );
-    } else {
-      return const Text(
-        'Click either the gallery or camera icon to upload an ID card',
-        textAlign: TextAlign.center,
-      );
-    }
-  }
 
   Future<void> retrieveLostData() async {
     final LostDataResponse response = await ImagePicker.retrieveLostData();
@@ -159,6 +146,7 @@ class _UploadIdStepState extends State<UploadIdStep>
     if (response.file != null) {
       setState(() {
         _imageFile = response.file;
+        _convertImagesToByte();
       });
     } else {
       _retrieveDataError = response.exception.code;
@@ -168,9 +156,11 @@ class _UploadIdStepState extends State<UploadIdStep>
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 300);
+      _convertImagesToByte ();
     } catch (e) {
       _pickImageError = e;
     }
+
     setState(() {});
   }
 

@@ -99,7 +99,7 @@ class FlushbarHelper {
       {@required String message,
         LinearProgressIndicator linearProgressIndicator,
         String title,
-        Duration duration = const Duration(seconds: 25),
+//        Duration duration = const Duration(seconds: 25),
         AnimationController progressIndicatorController,
         Color progressIndicatorBackgroundColor}) {
     return Flushbar(
@@ -114,7 +114,7 @@ class FlushbarHelper {
       leftBarIndicatorColor: Colors.amber,
       showProgressIndicator: false,
       progressIndicatorController: progressIndicatorController,
-      duration: duration,
+//      duration: duration,
       progressIndicatorBackgroundColor: progressIndicatorBackgroundColor,
     );
   }

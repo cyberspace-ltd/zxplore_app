@@ -906,6 +906,11 @@ class AccountFormBloc extends BlocBase with Validators {
   BehaviorSubject<String> get uploadIdImageController =>
       _uploadIdImageController;
 
+  BehaviorSubject<String> get uploadUtilityBillController =>
+      _uploadUtilityBillController;
+
+  BehaviorSubject<String> get uploadPassportController =>
+      _uploadPassportController;
 
   BehaviorSubject<String> get uploadSignatureController =>
       _uploadSignatureController;
@@ -1467,19 +1472,19 @@ class AccountFormBloc extends BlocBase with Validators {
           if (_idCardAttachment.length != 0 &&
               _idCardAttachment.first != null) {
             _uploadIdImageController
-                .add(_signatoryAttachment.first.encodedImage);
+                .add(_idCardAttachment.first.encodedImage);
           }
 
           if (_passportAttachment.length != 0 &&
               _passportAttachment.first != null) {
             _uploadPassportController
-                .add(_signatoryAttachment.first.encodedImage);
+                .add(_passportAttachment.first.encodedImage);
           }
 
-          if (_passportAttachment.length != 0 &&
+          if (_utilityBillAttachment.length != 0 &&
               _utilityBillAttachment.first != null) {
             _uploadUtilityBillController
-                .add(_signatoryAttachment.first.encodedImage);
+                .add(_utilityBillAttachment.first.encodedImage);
           }
 
           if (_signatoryAttachment.length != 0 &&

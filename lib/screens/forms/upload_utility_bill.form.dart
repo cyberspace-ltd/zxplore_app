@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,7 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
   String _retrieveDataError;
   dynamic _pickImageError;
   AccountFormBloc accountFormBloc;
+  ByteData _img = ByteData(0);
 
 
 
@@ -29,6 +31,17 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
   void initState() {
     super.initState();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
+    accountFormBloc.uploadUtilityBillController.listen((base64Signature){
+      if(_img.lengthInBytes == 0){
+        var imageData = base64Decode(base64Signature);
+
+        setState(() {
+          _img = imageData.buffer.asByteData();
+        });
+
+      }
+
+    });
   }
 
   @override
@@ -53,7 +66,11 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
                               textAlign: TextAlign.center,
                             );
                           case ConnectionState.done:
-                            return  _previewImage();
+                            return  (_img.buffer.lengthInBytes == 0
+                                ? const Text(
+                              'Click either the gallery or camera icon to upload a picture of your utility Bill',
+                              textAlign: TextAlign.center,
+                            ) : LimitedBox(maxHeight: 600.0, child: Image.memory(_img.buffer.asUint8List())));
                           default:
                             if (snapshot.hasError) {
                               return Text(
@@ -69,7 +86,11 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
                         }
                       },
                     )
-                  :  _previewImage(),
+                  :  (_img.buffer.lengthInBytes == 0
+                  ? const Text(
+                'Click either the gallery or camera icon to upload a picture of your utility Bill',
+                textAlign: TextAlign.center,
+              ) : LimitedBox(maxHeight: 600.0, child: Image.memory(_img.buffer.asUint8List()))),
             ),
             SizedBox(height: 30.0),
             Row(
@@ -104,44 +125,46 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
     );
   }
 
-  Text _getRetrieveErrorWidget() {
-    if (_retrieveDataError != null) {
-      final Text result = Text(_retrieveDataError);
-      _retrieveDataError = null;
-      return result;
-    }
-    return null;
-  }
+//  Text _getRetrieveErrorWidget() {
+//    if (_retrieveDataError != null) {
+//      final Text result = Text(_retrieveDataError);
+//      _retrieveDataError = null;
+//      return result;
+//    }
+//    return null;
+//  }
 
-  Widget _previewImage() {
-    final Text retrieveError = _getRetrieveErrorWidget();
-    if (retrieveError != null) {
-      return retrieveError;
-    }
-    if (_imageFile != null) {
-      _convertImagesToByte();
-      return Image.file(_imageFile);
-    } else if (_pickImageError != null) {
-      return Text(
-        'Pick image error: $_pickImageError',
-        textAlign: TextAlign.center,
-      );
-    } else {
-      return const Text(
-        'Click either the gallery or camera icon to upload a picture of your utility Bill',
-        textAlign: TextAlign.center,
-      );
-    }
-  }
+//  Widget _previewImage() {
+//    final Text retrieveError = _getRetrieveErrorWidget();
+//    if (retrieveError != null) {
+//      return retrieveError;
+//    }
+//    if (_imageFile != null) {
+//      _convertImagesToByte();
+//      return Image.file(_imageFile);
+//    } else if (_pickImageError != null) {
+//      return Text(
+//        'Pick image error: $_pickImageError',
+//        textAlign: TextAlign.center,
+//      );
+//    } else {
+//      return const Text(
+//        'Click either the gallery or camera icon to upload a picture of your utility Bill',
+//        textAlign: TextAlign.center,
+//      );
+//    }
+//  }
 
 
   Future _convertImagesToByte() async {
     List<int> imageBytes = await _imageFile.readAsBytes();
+    var imgBytes = new Uint8List.fromList(imageBytes);
 
     String base64Image = base64Encode(imageBytes);
+    _img = imgBytes.buffer.asByteData();
 
     accountFormBloc.setUploadUtilityBillForm(base64Image);
-    print(base64Image);
+//    print(base64Image);
   }
 
   Future<void> retrieveLostData() async {
@@ -152,6 +175,7 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
     if (response.file != null) {
       setState(() {
         _imageFile = response.file;
+        _convertImagesToByte();
       });
     } else {
       _retrieveDataError = response.exception.code;
@@ -161,6 +185,7 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await ImagePicker.pickImage(source: source);
+      _convertImagesToByte();
     } catch (e) {
       _pickImageError = e;
     }
