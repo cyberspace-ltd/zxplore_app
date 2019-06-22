@@ -34,7 +34,8 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     'Alhaja',
     'Mr & Mrs',
     'Dr. & Mrs.',
-    'Hon Just.'
+    'Hon Just.',
+    'Hon'
   ];
 
   AccountFormBloc accountFormBloc;

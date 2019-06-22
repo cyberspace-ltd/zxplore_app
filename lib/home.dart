@@ -437,16 +437,27 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false, // Don't show the leading button
         centerTitle: true,
+          leading: Container(),
           title: const Text(
-        'Zxplore inc.',
+        'Zxplore',
         style: TextStyle(color: Colors.white),
+
       ),actions: <Widget>[
         IconButton(
             icon: Icon(Icons.refresh, color: Colors.white),
             onPressed: () {
-              FlushbarHelper.createLoading(message: 'Getting latest accounts...')..show(context);
+             var loading = FlushbarHelper.createLoading(message: 'Getting latest accounts...')..show(context);
               _accountsBloc.getAccounts();
               _accountsBloc.fetchAccountClasses();
+
+              Future.delayed(new Duration(seconds: 10),
+
+                  () => loading.dismiss(context)
+              );
+
+              setState(() {
+
+              });
             }),
         IconButton(
             icon: Icon(Icons.cloud_off, color: Colors.white),
@@ -503,6 +514,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   _showModal();
                 }),
+
             IconButton(
                 icon: Icon(Icons.power_settings_new, color: Colors.white),
                 onPressed: () {

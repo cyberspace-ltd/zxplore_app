@@ -132,6 +132,7 @@ class _MeansOfIdentificationStepStepState
     );
   }
 
+
   Widget _idPlaceOfIssue() {
     return StreamBuilder(
       stream: accountFormBloc.idPlaceOfIssue,

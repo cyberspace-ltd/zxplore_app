@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 40.0, child:Image.asset('assets/images/logo.png') ,),
 
               Text(
-                'Zxplore inc.',
+                'Zxplore',
                 style: Theme.of(context).textTheme.headline,
                 textAlign: TextAlign.center,
               ),

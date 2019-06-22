@@ -31,13 +31,12 @@ class _SignatoryStepState extends State<SignatoryStep>
     super.initState();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
 
-    accountFormBloc.uploadSignatureController.listen((base64Signature){
+    accountFormBloc.uploadSignatureController.listen((base64Signature) {
       var imageData = base64Decode(base64Signature);
       setState(() {
         _img = imageData.buffer.asByteData();
       });
     });
-
   }
 
   @override
@@ -142,15 +141,10 @@ class _SignatoryStepState extends State<SignatoryStep>
               elevation: 8.0,
               onPressed: snapshot.hasData
                   ? () async {
-                var loadingBar = FlushbarHelper.createLoading(
-                  message: "Attempting to submit account form....",
-                  linearProgressIndicator: null,);
-
-
-                loadingBar..show(context);
+                      var loadingBar = FlushbarHelper.createLoading(
+                          message: "Attempting to submit account form....")
+                        ..show(context);
                       accountFormBloc.submit();
-
-
 
                       accountFormBloc.subjectSaveAccountResponse
                           .listen((response) {
@@ -159,13 +153,9 @@ class _SignatoryStepState extends State<SignatoryStep>
                         _showSuccessDialog(
                             'The created account was sent successfully, an account number will be generated shortly.');
                       }).onError((error) {
-                        loadingBar.dismiss(context);
+//                        loadingBar.dismiss(context);
 
-                        var errorSnackBar = FlushbarHelper.createError(
-                            message: error);
-
-                        errorSnackBar..show(context);
-
+                            FlushbarHelper.createError(message: error)..show(context);
                       });
                     }
                   : null,
@@ -176,8 +166,6 @@ class _SignatoryStepState extends State<SignatoryStep>
       },
     );
   }
-
-
 
   void _showSuccessDialog(String message) {
     // flutter defined function

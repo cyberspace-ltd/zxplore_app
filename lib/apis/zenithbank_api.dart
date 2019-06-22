@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' show BaseClient, IOClient;
 
 import 'package:http/http.dart' as http;
@@ -12,7 +13,6 @@ import 'package:zxplore_app/models/occupation_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/state_model.dart';
 import 'package:zxplore_app/models/title_model.dart';
-import 'package:dio/dio.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
 
 class ZenithBankApi {
@@ -97,7 +97,7 @@ class ZenithBankApi {
       } else {
         throw Exception('login failed.');
       }
-    } catch (error) {
+    } on DioError catch (error) {
       if (error is DioError) {
         print(error.response);
 
@@ -242,7 +242,7 @@ class ZenithBankApi {
     }
   }
 
-  String _handleError(Error error) {
+  String _handleError(DioError error) {
     String errorDescription = "";
     if (error is DioError) {
       switch (error.type) {
