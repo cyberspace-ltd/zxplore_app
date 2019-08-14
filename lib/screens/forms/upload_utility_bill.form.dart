@@ -184,7 +184,7 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
 
   void _onImageButtonPressed(ImageSource source) async {
     try {
-      _imageFile = await ImagePicker.pickImage(source: source);
+      _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte();
     } catch (e) {
       _pickImageError = e;

@@ -22,7 +22,7 @@ class ZenithBankApi {
     if (response.statusCode == 200) {
       return Occupation.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load occupations');
+      throw CleanerException('Failed to load occupations');
     }
   }
 
@@ -32,7 +32,7 @@ class ZenithBankApi {
     if (response.statusCode == 200) {
       return AccountClass.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load account classes');
+      throw CleanerException('Failed to load account classes');
     }
   }
 
@@ -42,7 +42,7 @@ class ZenithBankApi {
     if (response.statusCode == 200) {
       return Title.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load titles');
+      throw CleanerException('Failed to load titles');
     }
   }
 
@@ -52,7 +52,7 @@ class ZenithBankApi {
     if (response.statusCode == 200) {
       return State.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load states');
+      throw CleanerException('Failed to load states');
     }
   }
 
@@ -62,7 +62,7 @@ class ZenithBankApi {
     if (response.statusCode == 200) {
       return State.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load cities');
+      throw CleanerException('Failed to load cities');
     }
   }
 
@@ -72,7 +72,7 @@ class ZenithBankApi {
     if (response.statusCode == 200) {
       return State.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load countries');
+      throw CleanerException('Failed to load countries');
     }
   }
 
@@ -93,25 +93,24 @@ class ZenithBankApi {
       }
       if (response.statusCode == 400) {
         var value = LoginResponse.fromJson(response.data);
-        throw Exception(value.data.responseMessage);
+        throw CleanerException(value.data.responseMessage);
       } else {
-        throw Exception('login failed.');
+        throw CleanerException('login failed.');
       }
     } on DioError catch (error) {
       if (error is DioError) {
         print(error.response);
 
         if (error.response?.statusCode == 400) {
-          var value = LoginResponse.fromJson(error.response?.data);
-          throw Exception(value.message);
+          throw CleanerException("Invalid login details. Try again");
         } else if (error.response?.statusCode == 502) {
           var value = LoginResponse.fromJson(error.response?.data);
-          throw Exception(value.message);
+          throw CleanerException(value.message);
         } else {
-          throw Exception(_handleError(error));
+          throw CleanerException(_handleError(error));
         }
       } else {
-        throw Exception(
+        throw CleanerException(
             'We are having issues sending the account to the server. Try again later. ');
       }
     }
@@ -132,7 +131,7 @@ class ZenithBankApi {
       return AccountsResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      throw Exception(_handleError(error));
+      throw CleanerException(_handleError(error));
     }
   }
 
@@ -151,7 +150,7 @@ class ZenithBankApi {
       return AccountDetailsResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      throw Exception(_handleError(error));
+      throw CleanerException(_handleError(error));
     }
   }
 
@@ -166,9 +165,9 @@ class ZenithBankApi {
     } else if (response.statusCode == 400) {
       var errorResponse =
           VerifyAccountResponse().fromErrorJson(json.decode(response.body));
-      throw Exception(errorResponse.message);
+      throw CleanerException(errorResponse.message);
     } else {
-      throw Exception('Failed to load cities');
+      throw CleanerException('Failed to load cities');
     }
   }
 
@@ -191,7 +190,7 @@ class ZenithBankApi {
         return SaveAccountResponse.fromJson(response.data);
       } else if (response.statusCode == 400) {
         var value = SaveAccountResponse.fromJson(response.data);
-        throw Exception(value.message);
+        throw CleanerException(value.message);
       } else {
         return SaveAccountResponse.fromJson(response.data);
       }
@@ -204,15 +203,15 @@ class ZenithBankApi {
 
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw Exception(value.message);
+          throw CleanerException(value.message);
         } else if (error.response?.statusCode == 502) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw Exception(value.message);
+          throw CleanerException(value.message);
         } else {
-          throw Exception(_handleError(error));
+          throw CleanerException(_handleError(error));
         }
       } else {
-        throw Exception(
+        throw CleanerException(
             'We are having issues sending the account to the server. Try again later. ');
       }
     }
@@ -224,22 +223,43 @@ class ZenithBankApi {
     dio.options.headers = {
       'Authorization': 'Bearer $token',
     };
-    response =
-        await dio.post(Endpoints.getBvnUrl(), data: {"BvnNew": encodedBvn});
+    try {
+      response =
+      await dio.post(Endpoints.getBvnUrl(), data: {"BvnNew": encodedBvn});
 
-    print('$response');
+      print('$response');
 
-    if (response.statusCode == 200) {
-      print('${response.data}');
+      if (response.statusCode == 200) {
+        print('${response.data}');
 
-      return BvnResponse.fromJson(response.data);
+        return BvnResponse.fromJson(response.data);
+      }
+      if (response.statusCode == 400) {
+        var value = LoginResponse.fromJson(response.data);
+        throw CleanerException(value.message);
+      } else {
+        throw CleanerException('BVN Verification failed in connecting to the server.');
+      }
     }
-    if (response.statusCode == 400) {
-      var value = LoginResponse.fromJson(response.data);
-      throw Exception(value.message);
-    } else {
-      throw Exception('login failed.');
+    catch (error){
+      if (error is DioError) {
+        print(error.response);
+
+        if (error.response?.statusCode == 400) {
+          var value = SaveAccountResponse.fromJson(error.response?.data);
+          throw CleanerException(value.message);
+        } else if (error.response?.statusCode == 502) {
+          var value = SaveAccountResponse.fromJson(error.response?.data);
+          throw CleanerException(value.message);
+        } else {
+          throw CleanerException(_handleError(error));
+        }
+      } else {
+        throw CleanerException(
+            'We are having issues sending the account to the server. Try again later. ');
+      }
     }
+
   }
 
   String _handleError(DioError error) {
@@ -261,7 +281,7 @@ class ZenithBankApi {
           break;
         case DioErrorType.RESPONSE:
           if (error.response?.statusCode == 401) {
-            errorDescription = "401. Session expired. Kindly login again.";
+            errorDescription = "Session expired. Kindly login again.";
           } else {
             errorDescription =
                 "Received invalid status code: ${error.response.statusCode}";
@@ -280,6 +300,18 @@ class ZenithBankApi {
 
 
 }
+
+class CleanerException implements Exception {
+  String cause;
+  CleanerException(this.cause);
+
+  @override
+  String toString() {
+    return cause;
+  }
+}
+
+
 
 
 

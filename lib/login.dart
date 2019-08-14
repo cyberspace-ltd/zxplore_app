@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
 
                     loadingBar.dismiss();
                     FlushbarHelper.createError(
-                            message: "'${error.toString()}'.")
+                            message: "${error.toString()}.")
                         .show(context);
                     loadingBar.dismiss();
                   });
@@ -139,8 +139,8 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 40.0, child:Image.asset('assets/images/logo.png') ,),
 
               Text(
-                'Zxplore',
-                style: Theme.of(context).textTheme.headline,
+                'XPLORE',
+                style: Theme.of(context).textTheme.display1,
                 textAlign: TextAlign.center,
               ),
             ],
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(16.0),
             child: Center(
               child: Text(
-                'Enter your Zenith bamk active directory credentials below. This helps identify the employee that wants to access the application.',
+                'Enter your Zenith bank active directory credentials below. This helps identify the employee that wants to access the application.',
                 style: Theme.of(context).textTheme.caption,
                 textAlign: TextAlign.center,
               ),
@@ -167,12 +167,14 @@ class _LoginPageState extends State<LoginPage> {
           ),
           ButtonBar(
             children: <Widget>[
-              FlatButton(
-                  child: Text('Clear'),
-                  shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                  ),
-                  onPressed: () {}),
+//              FlatButton(
+//                  child: Text('Clear'),
+//                  shape: BeveledRectangleBorder(
+//                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+//                  ),
+//                  onPressed: () {
+//
+//                  }),
               submitButton(),
             ],
           ),

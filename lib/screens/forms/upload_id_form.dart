@@ -155,7 +155,7 @@ class _UploadIdStepState extends State<UploadIdStep>
 
   void _onImageButtonPressed(ImageSource source) async {
     try {
-      _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 300);
+      _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte ();
     } catch (e) {
       _pickImageError = e;
