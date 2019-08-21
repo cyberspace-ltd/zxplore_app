@@ -39,11 +39,11 @@ class _SplashScreenState extends State<SplashScreen> {
     _accountClassBloc = AccountClassBloc();
 
     Future.wait([
+      _fetchAccountClasses(),
       _fetchStates(),
       _fetchOccupations(),
       _fetchCountries(),
       _fetchCities(),
-      _fetchAccountClasses(),
     ]).whenComplete(() {
       SecureStorage.getEmployeeToken().then((token) {
         if (token == null) {

@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
@@ -25,6 +26,7 @@ class _SignatoryStepState extends State<SignatoryStep>
   final _sign = GlobalKey<SignatureState>();
 
   AccountFormBloc accountFormBloc;
+  var loadingBar;
 
   @override
   void initState() {
@@ -153,7 +155,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                         _showSuccessDialog(
                             'The created account was sent successfully, an account number will be generated shortly.');
                       }).onError((error) {
-//                        loadingBar.dismiss(context);
+                        loadingBar.dismiss(context);
 
                             FlushbarHelper.createError(message: error)..show(context);
                       });

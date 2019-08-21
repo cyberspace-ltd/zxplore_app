@@ -105,8 +105,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final _uploadSignatureController = BehaviorSubject<String>();
 
-  final PublishSubject<SaveAccountResponse> _subjectSaveAccountResponse =
-      PublishSubject<SaveAccountResponse>();
+  final BehaviorSubject<SaveAccountResponse> _subjectSaveAccountResponse =
+      BehaviorSubject<SaveAccountResponse>();
 
   final PublishSubject<AccountDetailsResponse> _subjectAccountsDetailsResponse =
       PublishSubject<AccountDetailsResponse>();
@@ -887,7 +887,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //        'valid Risk rank $validAccountRiskRank, valid category  = $validAccountCategory, upload id (base 64) - $validUploadIdImageInBase64');
   }
 
-  PublishSubject<SaveAccountResponse> get subjectSaveAccountResponse =>
+  BehaviorSubject<SaveAccountResponse> get subjectSaveAccountResponse =>
       _subjectSaveAccountResponse;
 
   PublishSubject<String> get subjectSaveOfflineAccountResponse =>

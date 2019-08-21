@@ -232,8 +232,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                             : 'NIGERIA',
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
+                            value: value.name != null ? value.name : 'NIGERIA',
+                            child: Text(value.name!= null ? value.name : 'NIGERIA'),
                           );
                         }).toList(),
                         onChanged: accountFormBloc.changeCountryOfResidence,
@@ -254,6 +254,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc.stateOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -298,6 +299,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc.cityOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> city) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -338,6 +340,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc.gender,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -373,6 +376,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc.occupation,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -414,6 +418,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc.maritalStatus,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(

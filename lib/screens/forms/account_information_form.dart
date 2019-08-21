@@ -53,6 +53,7 @@ class _AccountInformationState extends State<AccountInformationStep>
       stream: accountFormBloc.accountType,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -85,6 +86,7 @@ class _AccountInformationState extends State<AccountInformationStep>
       stream: accountFormBloc.accountHolderType,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -117,6 +119,7 @@ class _AccountInformationState extends State<AccountInformationStep>
       stream: accountFormBloc.riskRankType,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -149,6 +152,7 @@ class _AccountInformationState extends State<AccountInformationStep>
       stream: accountFormBloc.accountCategoryType,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(

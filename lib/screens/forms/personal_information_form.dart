@@ -96,6 +96,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc.title,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -303,6 +304,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc.stateOfOrigin,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -350,6 +352,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc.countryOfOrigin,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(

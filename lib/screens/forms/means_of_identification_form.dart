@@ -51,6 +51,7 @@ class _MeansOfIdentificationStepStepState
       stream: accountFormBloc.idType,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -138,6 +139,7 @@ class _MeansOfIdentificationStepStepState
       stream: accountFormBloc.idPlaceOfIssue,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(

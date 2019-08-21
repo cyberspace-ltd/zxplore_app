@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:zxplore_app/apis/zenithbank_api.dart';
+import 'package:zxplore_app/blocs/account_class_bloc.dart';
 import 'package:zxplore_app/blocs/all_accounts_bloc.dart';
+import 'package:zxplore_app/blocs/cities_bloc.dart';
+import 'package:zxplore_app/blocs/countries_bloc.dart';
+import 'package:zxplore_app/blocs/states_bloc.dart';
+import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/screens/category_screen.dart';
 import 'package:zxplore_app/screens/offline_home.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 
+import 'blocs/occupations_bloc.dart';
 import 'colors.dart';
 import 'login.dart';
 import 'models/accounts_response.dart';
@@ -33,8 +40,29 @@ class _MyHomePageState extends State<MyHomePage> {
   List accounts;
   AccountsBloc _accountsBloc;
 
+  Future<List<String>> occupations;
+  OccupationsBloc _occupationsBloc;
+  CountriesBloc _countriesBloc;
+  StatesBloc statesBloc;
+  CitiesBloc _citiesBloc;
+  AccountClassBloc _accountClassBloc;
+
   @override
   void initState() {
+
+    _occupationsBloc = OccupationsBloc();
+    _countriesBloc = CountriesBloc();
+    statesBloc = StatesBloc();
+    _citiesBloc = CitiesBloc();
+    _accountClassBloc = AccountClassBloc();
+
+    _fetchAccountClasses();
+    _fetchStates();
+    _fetchOccupations();
+    _fetchCities();
+    _fetchCountries();
+
+
     _accountsBloc = AccountsBloc();
     _accountsBloc.getAccounts();
     super.initState();
@@ -68,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                   fontStyle: FontStyle.normal, color: ZxploreRedColor)),
           onPressed: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
             );
@@ -88,6 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                   fontStyle: FontStyle.normal, color: ZxplorePrimaryColor)),
           onPressed: () {
+            _fetchAccountClasses();
+            _fetchStates();
+            _fetchOccupations();
+            _fetchCities();
+            _fetchCountries();
             _accountsBloc.getAccounts();
           });
     }
@@ -398,7 +431,7 @@ class _MyHomePageState extends State<MyHomePage> {
             'Edit Account',
           ),
           onPressed: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
@@ -462,7 +495,7 @@ class _MyHomePageState extends State<MyHomePage> {
         IconButton(
             icon: Icon(Icons.cloud_off, color: Colors.white),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => OfflineHomePage()),
@@ -561,5 +594,78 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  Future _fetchStates() async {
+    await DBProvider.db.getStates().then((result) async {
+      if (result.isEmpty) {
+        await ZenithBankApi().fetchStates().then((result) {
+          statesBloc.inAddStates.add(result.menu);
+        }).catchError((error) {
+          throw Exception(error.toString());
+        });
+      } else {
+        //data exists continue
+        return;
+      }
+    });
+  }
+
+  Future _fetchOccupations() async {
+    await DBProvider.db.getOccupations().then((result) async {
+      if (result.isEmpty) {
+        await ZenithBankApi().fetchOccupations().then((result) async {
+          _occupationsBloc.inAddOccupations.add(result.menu);
+        }).catchError((error) {
+          throw Exception(error.toString());
+        });
+      } else {
+        //data exists continue
+        return;
+      }
+    });
+  }
+
+  Future _fetchCountries() async {
+    await DBProvider.db.getCountries().then((result) async {
+      if (result.isEmpty) {
+        await ZenithBankApi().fetchCountries().then((result) {
+          _countriesBloc.inAddCountries.add(result.menu);
+        }).catchError((error) {
+          throw Exception(error.toString());
+        });
+      } else {
+        return;
+      }
+    });
+  }
+
+  Future _fetchCities() async {
+    await DBProvider.db.getCities().then((result) async {
+      if (result.isEmpty) {
+        await ZenithBankApi().fetchCities().then((result) {
+          _citiesBloc.inAddCities.add(result.menu);
+        }).catchError((error) {
+          throw Exception(error.toString());
+        });
+      } else {
+        return;
+      }
+    });
+  }
+
+  Future _fetchAccountClasses() async {
+    DBProvider.db.getAccountClasses().then((result) async {
+      if (result.isEmpty) {
+        await ZenithBankApi().fetchAccountClasses().then((result) {
+          _accountClassBloc.inAddAccountClasses.add(result.accountClassCodes);
+        }).catchError((error) {
+          throw Exception(error.toString());
+        });
+      } else {
+        //data exists continue
+        return;
+      }
+    });
   }
 }

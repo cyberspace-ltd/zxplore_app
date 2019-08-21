@@ -30,7 +30,7 @@ class Validators {
 
   final validateAccountCategory =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty &&arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('Account Category is required');
@@ -39,7 +39,7 @@ class Validators {
 
   final validateBvn =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length >= 11) {
+    if (arg.isNotEmpty && arg.length >= 11) {
       sink.add(arg);
     } else {
       sink.addError('A valid BVN is required');
@@ -48,7 +48,7 @@ class Validators {
 
   final validateTitle =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('Title is required');
@@ -57,7 +57,7 @@ class Validators {
 
   final validateSurname =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('Surname is required');
@@ -66,7 +66,7 @@ class Validators {
 
   final validateFirstName =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('First name is required');
@@ -75,7 +75,7 @@ class Validators {
 
   final validateMothersMaidenName =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('Mother\'s maiden name is required');
@@ -84,7 +84,7 @@ class Validators {
 
   final validateDateOfBirth =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('Date of birth is required');
@@ -93,7 +93,7 @@ class Validators {
 
   final validateStateOfOrigin =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('State of origin is required');
@@ -102,7 +102,7 @@ class Validators {
 
   final validateCountryOfOrigin =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('Country of origin is required');
@@ -111,7 +111,7 @@ class Validators {
 
   final validateEmail =
       StreamTransformer<String, String>.fromHandlers(handleData: (email, sink) {
-    if (email.length < 1) {
+    if (email.isNotEmpty && email.length < 1) {
       sink.add(
           email); //unique to this application, as email field isn't compulsory
     } else if (email.contains('@')) {
@@ -123,10 +123,10 @@ class Validators {
 
   final validateUsername = StreamTransformer<String, String>.fromHandlers(
       handleData: (username, sink) {
-    if (username.contains('@')) {
+    if (username.isNotEmpty && username.contains('@')) {
       sink.addError(
           'Ensure your username is in the format of firstname.lastname');
-    } else if (!username.contains('.')) {
+    } else if (username.isNotEmpty && !username.contains('.')) {
       sink.addError(
           'Ensure your username is in the format of firstname.lastname');
     } else {

@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   _loginBloc.subjectLoginResponse.listen((loginResponse) async {
                     loadingBar.dismiss();
 
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) => MyHomePage()),
