@@ -431,7 +431,7 @@ class _MyHomePageState extends State<MyHomePage> {
             'Edit Account',
           ),
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
@@ -495,7 +495,7 @@ class _MyHomePageState extends State<MyHomePage> {
         IconButton(
             icon: Icon(Icons.cloud_off, color: Colors.white),
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => OfflineHomePage()),

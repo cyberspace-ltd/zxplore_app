@@ -1155,7 +1155,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
         if (offlineAccount.occupation != null &&
             offlineAccount.occupation.isNotEmpty) {
-          _cityOfResidenceController.add(offlineAccount.occupation);
+          occupationController.add(offlineAccount.occupation);
         }
 
         if (offlineAccount.maritalStatus != null &&

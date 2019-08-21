@@ -154,7 +154,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
           'Edit Account',
         ),
         onPressed: () {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => CategoryPage(
