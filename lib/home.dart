@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _actionChipError(String error) {
-    if (error.contains('401') && error.contains('expired')) {
+    if (error.contains('expired')) {
       return ActionChip(
           backgroundColor: ZxploreGrey,
           padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
