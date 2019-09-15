@@ -31,7 +31,7 @@ class CryptoHelper {
 
       return encrypter.encrypt(value, iv: iv).base64;
     } catch (error) {
-      print(error);
+//      print(error);
       return '';
     }
   }
@@ -47,7 +47,7 @@ class CryptoHelper {
 
       return encrypter.decrypt64(secret, iv: iv);
     } catch (error) {
-      print(error);
+//      print(error);
       return '';
     }
   }

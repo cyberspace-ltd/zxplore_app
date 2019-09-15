@@ -139,7 +139,7 @@ class _UploadPassportState extends State<UploadPassportStep>
     _img = imgBytes.buffer.asByteData();
 
     accountFormBloc.setUploadPassportForm(base64Image);
-    print(base64Image);
+//    print(base64Image);
   }
 
   Future<void> retrieveLostData() async {

@@ -100,7 +100,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                         setState(() {
                           _img = data;
                         });
-                        debugPrint("onPressed " + encoded);
+//                        debugPrint("onPressed " + encoded);
                       },
                     ),
                     FlatButton(

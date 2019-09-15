@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
           );
         }
       }).catchError((error) {
-        print('employee token error: $error');
+//        print('employee token error: $error');
       });
     }).catchError((error) {
       FlushbarHelper.createLoading(message: error)..show(context);

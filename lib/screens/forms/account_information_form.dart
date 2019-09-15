@@ -15,6 +15,9 @@ class _AccountInformationState extends State<AccountInformationStep>
     with AutomaticKeepAliveClientMixin<AccountInformationStep> {
   AccountFormBloc accountFormBloc;
   AccountClassBloc _accountClassBloc;
+  String current = "CURRENT";
+  String savings = "SAV";
+  String accountTypeValue = "";
 
   @override
   bool get wantKeepAlive => true;
@@ -71,7 +74,13 @@ class _AccountInformationState extends State<AccountInformationStep>
                       child: Text(value),
                     );
                   }).toList(),
-                  onChanged: accountFormBloc.changeAccountType,
+                  hint: Text(accountTypeValue),
+                  onChanged: (String value) {
+                    setState(() {
+                      accountFormBloc.changeAccountType;
+                      accountTypeValue = value;
+                    });
+                  },
                 ),
               ),
             );
@@ -171,12 +180,41 @@ class _AccountInformationState extends State<AccountInformationStep>
                             child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.data,
-                        items: shot.data.map((AccountClassEntity value) {
+                        items:accountTypeValue == "" ? shot.data.map((AccountClassEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.id.toString(),
-                            child: Text(value.name,style: TextStyle(fontSize: 14.0),),
+                            child: Text(
+                              value.name,
+                              style: TextStyle(fontSize: 14.0),
+                            ),
                           );
-                        }).toList(),
+                        }).toList(): (accountTypeValue == 'SAVINGS ACCOUNT' ? shot.data.where((string) =>
+                            string.name.contains("SAV")).map((AccountClassEntity value) {
+                          return DropdownMenuItem<String>(
+                            value: value.id.toString(),
+                            child: Text(
+                              value.name,
+                              style: TextStyle(fontSize: 14.0),
+                            ),
+                          );
+                        }).toList(): (accountTypeValue == 'CURRENT ACCOUNT') ? shot.data.where((string) =>
+                            string.name.contains("CURRENT")).map((AccountClassEntity value) {
+                          return DropdownMenuItem<String>(
+                            value: value.id.toString(),
+                            child: Text(
+                              value.name,
+                              style: TextStyle(fontSize: 14.0),
+                            ),
+                          );
+                        }).toList(): shot.data.map((AccountClassEntity value) {
+                          return DropdownMenuItem<String>(
+                            value: value.id.toString(),
+                            child: Text(
+                              value.name,
+                              style: TextStyle(fontSize: 14.0),
+                            ),
+                          );
+                        }).toList()),
                         onChanged: accountFormBloc.changeAccountCategory,
                         isDense: true, //value: _currentUser,
                       );

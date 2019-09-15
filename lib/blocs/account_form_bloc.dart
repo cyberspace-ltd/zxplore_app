@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/data/database.dart';
+import 'package:zxplore_app/data/entities/account_class_entity.dart';
 import 'package:zxplore_app/data/entities/offline_form_entity.dart';
+import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/form_model.dart';
@@ -19,7 +21,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final AccountsRepository _accountsRepository = AccountsRepository();
 
   final _referenceIdController =
-      BehaviorSubject<String>(); // used in the case of updating accounts.
+  BehaviorSubject<String>(); // used in the case of updating accounts.
 
   final _idController = BehaviorSubject<int>();
   final _isEditModeController = BehaviorSubject<bool>();
@@ -106,21 +108,23 @@ class AccountFormBloc extends BlocBase with Validators {
   final _uploadSignatureController = BehaviorSubject<String>();
 
   final BehaviorSubject<SaveAccountResponse> _subjectSaveAccountResponse =
-      BehaviorSubject<SaveAccountResponse>();
+  BehaviorSubject<SaveAccountResponse>();
 
   final PublishSubject<AccountDetailsResponse> _subjectAccountsDetailsResponse =
-      PublishSubject<AccountDetailsResponse>();
+  PublishSubject<AccountDetailsResponse>();
 
   final PublishSubject<String> _subjectSaveOfflineAccountResponse =
-      PublishSubject<String>();
+  PublishSubject<String>();
 
   final PublishSubject<String> _subjectDeleteOfflineAccountResponse =
-      PublishSubject<String>();
+  PublishSubject<String>();
 
   // Add data to stream
 
   final PublishSubject<BvnResponse> bvnVerificationResponse =
-      PublishSubject<BvnResponse>();
+  PublishSubject<BvnResponse>();
+
+  String easy_classic = "344";
 
   Stream<String> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
@@ -171,8 +175,9 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get address2 => _address2Controller.stream;
 
-  Stream<String> get countryOfResidence => _countryOfResidenceController.stream
-      .transform(validateCountryOfResidence);
+  Stream<String> get countryOfResidence =>
+      _countryOfResidenceController.stream
+          .transform(validateCountryOfResidence);
 
   Stream<String> get stateOfResidence =>
       _stateOfResidenceController.stream.transform(validateStateOfResidence);
@@ -190,22 +195,34 @@ class AccountFormBloc extends BlocBase with Validators {
       _maritalStatusController.stream.transform(validateMaritalStatus);
 
   Stream<String> get idType =>
-      _idTypeController.stream.transform(validateIdType);
+      _accountCategoryController.value == easy_classic ?
+      _idTypeController.stream : _idTypeController.stream.transform(
+          validateIdType);
 
   Stream<String> get idIssuer =>
-      _idIssuerController.stream.transform(validateIdIssuer);
+      _accountCategoryController.value == easy_classic ?
+      _idIssuerController.stream : _idIssuerController.stream.transform(
+          validateIdIssuer);
 
   Stream<String> get idNumber =>
-      _idNumberController.stream.transform(validateIdNumber);
+      _accountCategoryController.value == easy_classic ?
+      _idNumberController.stream : _idNumberController.stream.transform(
+          validateIdNumber);
 
   Stream<String> get idPlaceOfIssue =>
-      _idPlaceOfIssueController.stream.transform(validateIdPlaceOfIssue);
+      _accountCategoryController.value == easy_classic ?
+      _idPlaceOfIssueController.stream : _idPlaceOfIssueController.stream
+          .transform(validateIdPlaceOfIssue);
 
   Stream<String> get idIssueDate =>
-      _idIssueDateController.stream.transform(validateIdIssueDate);
+      _accountCategoryController.value == easy_classic ?
+      _idIssueDateController.stream : _idIssueDateController.stream.transform(
+          validateIdIssueDate);
 
   Stream<String> get idExpiryDate =>
-      _idExpiryDateController.stream.transform(validateIdExpiryDate);
+      _accountCategoryController.value == easy_classic ?
+      _idExpiryDateController.stream : _idExpiryDateController.stream.transform(
+          validateIdExpiryDate);
 
   Stream<bool> get isSendEmail => _isSendEmailController.stream;
 
@@ -533,12 +550,12 @@ class AccountFormBloc extends BlocBase with Validators {
     final validOccupation = occupationController.value;
     final validMaritalStatus = _maritalStatusController.value;
 
-    final validIdType = _idTypeController.value;
-    final validIdIssuer = _idIssuerController.value;
-    final validIdNumber = _idNumberController.value;
-    final validIdPlaceOfIssue = _idPlaceOfIssueController.value;
-    final validIdIssueDate = _idIssueDateController.value;
-    final validIdExpiryDate = _idExpiryDateController.value;
+    var validIdType = _idTypeController.value;
+    var validIdIssuer = _idIssuerController.value;
+    var validIdNumber = _idNumberController.value;
+    var validIdPlaceOfIssue = _idPlaceOfIssueController.value;
+    var validIdIssueDate = _idIssueDateController.value;
+    var validIdExpiryDate = _idExpiryDateController.value;
     final validIsSendEmail = _isSendEmailController.value;
     final validIsReceiveSms = _isReceiveSmsController.value;
     final validIsRequestHardwareToken = _isRequestHardwareTokenController.value;
@@ -699,49 +716,61 @@ class AccountFormBloc extends BlocBase with Validators {
 
       return;
     }
-    if (validIdType == null) {
+    if (validIdType == null && _accountCategoryController.value != easy_classic) {
       _idTypeController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid ID type");
       return;
+    } else if (validIdType == null && _accountCategoryController.value == easy_classic){
+      validIdType = "";
     }
 
-    if (validIdIssuer == null) {
+    if (validIdIssuer == null && _accountCategoryController.value != easy_classic) {
       _idIssuerController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not filled a valid ID Issuer");
       return;
+    } else if (validIdIssuer == null && _accountCategoryController.value == easy_classic){
+      validIdIssuer = "";
     }
 
-    if (validIdNumber == null) {
+    if (validIdNumber == null && _accountCategoryController.value != easy_classic) {
       _idNumberController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid ID number");
 
       return;
+    } else if (validIdNumber == null && _accountCategoryController.value == easy_classic){
+      validIdNumber = "";
     }
 
-    if (validIdPlaceOfIssue == null) {
+    if (validIdPlaceOfIssue == null && _accountCategoryController.value != easy_classic) {
       _idPlaceOfIssueController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid id place of issue");
       return;
+    } else if (validIdPlaceOfIssue == null && _accountCategoryController.value == easy_classic){
+      validIdPlaceOfIssue = "";
     }
 
-    if (validIdIssueDate == null) {
+    if (validIdIssueDate == null && _accountCategoryController.value != easy_classic) {
       _idIssueDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid issue date");
 
       return;
+    } else if (validIdIssueDate == null && _accountCategoryController.value == easy_classic){
+      validIdIssueDate = "";
     }
 
-    if (validIdExpiryDate == null) {
+    if (validIdExpiryDate == null && _accountCategoryController.value != easy_classic) {
       _idExpiryDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid expiry date");
 
       return;
+    } else if(validIdExpiryDate == null && _accountCategoryController.value == easy_classic){
+      validIdExpiryDate = "";
     }
 
     validAccountType = validAccountType.startsWith('S') ? "SA" : "CA";

@@ -84,10 +84,10 @@ class ZenithBankApi {
       response = await dio.post(Endpoints.getLoginUrl(),
           data: {"UserName": username, "Password": password});
 
-      print('$response');
+//      print('$response');
 
       if (response.statusCode == 200) {
-        print('${response.data}');
+//        print('${response.data}');
 
         return LoginResponse.fromJson(response.data);
       }
@@ -99,7 +99,7 @@ class ZenithBankApi {
       }
     } on DioError catch (error) {
       if (error is DioError) {
-        print(error.response);
+//        print(error.response);
 
         if (error.response?.statusCode == 400) {
           throw CleanerException("Invalid login details. Try again");
@@ -130,7 +130,7 @@ class ZenithBankApi {
 
       return AccountsResponse.fromJson(response.data);
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+//      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
@@ -149,7 +149,7 @@ class ZenithBankApi {
 
       return AccountDetailsResponse.fromJson(response.data);
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+//      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
@@ -183,10 +183,10 @@ class ZenithBankApi {
       response = await dio.post("${Endpoints.getSaveAccountsUrl()}",
           data: encodedJson);
 
-      print('Response: $response');
+//      print('Response: $response');
 
       if (response.statusCode == 200) {
-        print('${response.data}');
+//        print('${response.data}');
         return SaveAccountResponse.fromJson(response.data);
       } else if (response.statusCode == 400) {
         var value = SaveAccountResponse.fromJson(response.data);
@@ -195,11 +195,11 @@ class ZenithBankApi {
         return SaveAccountResponse.fromJson(response.data);
       }
     } catch (error, stacktrace) {
-      print(error);
+//      print(error);
 
 //      print("Exception occured: $error stackTrace: $stacktrace");
       if (error is DioError) {
-        print(error.response);
+//        print(error.response);
 
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
@@ -227,10 +227,10 @@ class ZenithBankApi {
       response =
       await dio.post(Endpoints.getBvnUrl(), data: {"BvnNew": encodedBvn});
 
-      print('$response');
+//      print('$response');
 
       if (response.statusCode == 200) {
-        print('${response.data}');
+//        print('${response.data}');
 
         return BvnResponse.fromJson(response.data);
       }
@@ -243,7 +243,7 @@ class ZenithBankApi {
     }
     catch (error){
       if (error is DioError) {
-        print(error.response);
+//        print(error.response);
 
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);

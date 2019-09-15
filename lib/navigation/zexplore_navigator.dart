@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class ZxploreNavigator {
   static void goToHome(BuildContext context) {
-    Navigator.pushNamed(context, "/home");
+    Navigator.pushReplacementNamed(context, "/home");
   }
 
   static void goToLogin(BuildContext context) {
-    Navigator.pushNamed(context, "/login");
+    Navigator.pushReplacementNamed(context, "/login");
   }
 }
