@@ -534,8 +534,11 @@ class AccountFormBloc extends BlocBase with Validators {
     var validAccountType = _accountTypeController.value;
     final validAccountHolderType = _accountHolderTypeController.value;
     final validAccountRiskRank = _riskRankController.value;
-    final validAccountCategory = _accountCategoryController.value;
+    var validAccountCategory = _accountCategoryController.value;
 
+    List<AccountClassEntity> accountClasses = await DBProvider.db.getAccountClasses();
+
+    validAccountCategory = accountClasses.firstWhere((x) =>  x.name == validAccountCategory).id.toString(); //hotfix: to solve issue of account category filter from account type
     var validBvn = _bvnController.value;
     final validTitle = _titleController.value;
     final validSurname = _surnameController.value;

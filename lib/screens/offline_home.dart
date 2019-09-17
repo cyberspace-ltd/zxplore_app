@@ -221,6 +221,9 @@ class _OfflineHomeState extends State<OfflineHomePage> {
           } else if (snapshot.hasError) {
             return _buildErrorWidget(snapshot.error);
           }
+          else {
+            return Container();
+          }
         },
       ),
     );

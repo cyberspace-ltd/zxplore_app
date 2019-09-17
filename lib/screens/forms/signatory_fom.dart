@@ -157,7 +157,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                       }).onError((error) {
                         loadingBar.dismiss(context);
 
-                            FlushbarHelper.createError(message: error)..show(context);
+                            FlushbarHelper.createError(message: error.toString())..show(context);
                       });
                     }
                   : null,
