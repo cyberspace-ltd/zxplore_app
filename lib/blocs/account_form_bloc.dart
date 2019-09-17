@@ -487,6 +487,11 @@ class AccountFormBloc extends BlocBase with Validators {
     insertFormOffline(_offlineAccount);
   }
 
+  resetAccountTypeCategory() {
+    _accountCategoryController.sink.add(null);
+    _accountCategoryController.sink.addError("Field is required");
+  }
+
   insertFormOffline(OfflineAccountEntity offlineForm) async {
     var isEditMode = _isEditModeController.value == null
         ? false

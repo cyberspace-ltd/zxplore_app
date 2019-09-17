@@ -1,9 +1,11 @@
+import 'package:equatable/equatable.dart';
+
 final String tableAccountClass = 'AccountClass';
 final String columnAccountClassCode = 'id';
 final String columnAccountClassType = 'type';
 final String columnAccountClassDescription = 'name';
 
-class AccountClassEntity {
+class AccountClassEntity extends Equatable{
   //database fields
   int id;
   String name;
@@ -24,4 +26,6 @@ class AccountClassEntity {
           id: json[columnAccountClassCode],
           name: json[columnAccountClassDescription],
           type: json[columnAccountClassType]);
+
+
 }
