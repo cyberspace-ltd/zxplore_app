@@ -21,7 +21,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final AccountsRepository _accountsRepository = AccountsRepository();
 
   final _referenceIdController =
-  BehaviorSubject<String>(); // used in the case of updating accounts.
+      BehaviorSubject<String>(); // used in the case of updating accounts.
 
   final _idController = BehaviorSubject<int>();
   final _isEditModeController = BehaviorSubject<bool>();
@@ -108,21 +108,21 @@ class AccountFormBloc extends BlocBase with Validators {
   final _uploadSignatureController = BehaviorSubject<String>();
 
   final BehaviorSubject<SaveAccountResponse> _subjectSaveAccountResponse =
-  BehaviorSubject<SaveAccountResponse>();
+      BehaviorSubject<SaveAccountResponse>();
 
   final PublishSubject<AccountDetailsResponse> _subjectAccountsDetailsResponse =
-  PublishSubject<AccountDetailsResponse>();
+      PublishSubject<AccountDetailsResponse>();
 
   final PublishSubject<String> _subjectSaveOfflineAccountResponse =
-  PublishSubject<String>();
+      PublishSubject<String>();
 
   final PublishSubject<String> _subjectDeleteOfflineAccountResponse =
-  PublishSubject<String>();
+      PublishSubject<String>();
 
   // Add data to stream
 
   final PublishSubject<BvnResponse> bvnVerificationResponse =
-  PublishSubject<BvnResponse>();
+      PublishSubject<BvnResponse>();
 
   String easy_classic = "344";
 
@@ -175,9 +175,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get address2 => _address2Controller.stream;
 
-  Stream<String> get countryOfResidence =>
-      _countryOfResidenceController.stream
-          .transform(validateCountryOfResidence);
+  Stream<String> get countryOfResidence => _countryOfResidenceController.stream
+      .transform(validateCountryOfResidence);
 
   Stream<String> get stateOfResidence =>
       _stateOfResidenceController.stream.transform(validateStateOfResidence);
@@ -194,35 +193,34 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get maritalStatus =>
       _maritalStatusController.stream.transform(validateMaritalStatus);
 
-  Stream<String> get idType =>
-      _accountCategoryController.value == easy_classic ?
-      _idTypeController.stream : _idTypeController.stream.transform(
-          validateIdType);
+  Stream<String> get idType => _accountCategoryController.value == easy_classic
+      ? _idTypeController.stream
+      : _idTypeController.stream.transform(validateIdType);
 
   Stream<String> get idIssuer =>
-      _accountCategoryController.value == easy_classic ?
-      _idIssuerController.stream : _idIssuerController.stream.transform(
-          validateIdIssuer);
+      _accountCategoryController.value == easy_classic
+          ? _idIssuerController.stream
+          : _idIssuerController.stream.transform(validateIdIssuer);
 
   Stream<String> get idNumber =>
-      _accountCategoryController.value == easy_classic ?
-      _idNumberController.stream : _idNumberController.stream.transform(
-          validateIdNumber);
+      _accountCategoryController.value == easy_classic
+          ? _idNumberController.stream
+          : _idNumberController.stream.transform(validateIdNumber);
 
   Stream<String> get idPlaceOfIssue =>
-      _accountCategoryController.value == easy_classic ?
-      _idPlaceOfIssueController.stream : _idPlaceOfIssueController.stream
-          .transform(validateIdPlaceOfIssue);
+      _accountCategoryController.value == easy_classic
+          ? _idPlaceOfIssueController.stream
+          : _idPlaceOfIssueController.stream.transform(validateIdPlaceOfIssue);
 
   Stream<String> get idIssueDate =>
-      _accountCategoryController.value == easy_classic ?
-      _idIssueDateController.stream : _idIssueDateController.stream.transform(
-          validateIdIssueDate);
+      _accountCategoryController.value == easy_classic
+          ? _idIssueDateController.stream
+          : _idIssueDateController.stream.transform(validateIdIssueDate);
 
   Stream<String> get idExpiryDate =>
-      _accountCategoryController.value == easy_classic ?
-      _idExpiryDateController.stream : _idExpiryDateController.stream.transform(
-          validateIdExpiryDate);
+      _accountCategoryController.value == easy_classic
+          ? _idExpiryDateController.stream
+          : _idExpiryDateController.stream.transform(validateIdExpiryDate);
 
   Stream<bool> get isSendEmail => _isSendEmailController.stream;
 
@@ -487,16 +485,14 @@ class AccountFormBloc extends BlocBase with Validators {
     insertFormOffline(_offlineAccount);
   }
 
-
-  updateAccountCategoryType(String value){
+  updateAccountCategoryType(String value) {
     _accountCategoryController.sink.add(value);
-    if(value == null){
+    if (value == null) {
       _accountCategoryController.sink.addError("Field is required");
     }
   }
 
-
-  updateAccountType(String value){
+  updateAccountType(String value) {
     _accountTypeController.sink.add(value);
   }
 
@@ -536,9 +532,13 @@ class AccountFormBloc extends BlocBase with Validators {
     final validAccountRiskRank = _riskRankController.value;
     var validAccountCategory = _accountCategoryController.value;
 
-    List<AccountClassEntity> accountClasses = await DBProvider.db.getAccountClasses();
+    List<AccountClassEntity> accountClasses =
+        await DBProvider.db.getAccountClasses();
 
-    validAccountCategory = accountClasses.firstWhere((x) =>  x.name == validAccountCategory).id.toString(); //hotfix: to solve issue of account category filter from account type
+    validAccountCategory = accountClasses
+        .firstWhere((x) => x.name == validAccountCategory)
+        .id
+        .toString(); //hotfix: to solve issue of account category filter from account type
     var validBvn = _bvnController.value;
     final validTitle = _titleController.value;
     final validSurname = _surnameController.value;
@@ -732,60 +732,72 @@ class AccountFormBloc extends BlocBase with Validators {
 
       return;
     }
-    if (validIdType == null && _accountCategoryController.value != easy_classic) {
+    if (validIdType == null &&
+        _accountCategoryController.value != easy_classic) {
       _idTypeController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid ID type");
       return;
-    } else if (validIdType == null && _accountCategoryController.value == easy_classic){
+    } else if (validIdType == null &&
+        _accountCategoryController.value == easy_classic) {
       validIdType = "";
     }
 
-    if (validIdIssuer == null && _accountCategoryController.value != easy_classic) {
+    if (validIdIssuer == null &&
+        _accountCategoryController.value != easy_classic) {
       _idIssuerController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not filled a valid ID Issuer");
       return;
-    } else if (validIdIssuer == null && _accountCategoryController.value == easy_classic){
+    } else if (validIdIssuer == null &&
+        _accountCategoryController.value == easy_classic) {
       validIdIssuer = "";
     }
 
-    if (validIdNumber == null && _accountCategoryController.value != easy_classic) {
+    if (validIdNumber == null &&
+        _accountCategoryController.value != easy_classic) {
       _idNumberController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid ID number");
 
       return;
-    } else if (validIdNumber == null && _accountCategoryController.value == easy_classic){
+    } else if (validIdNumber == null &&
+        _accountCategoryController.value == easy_classic) {
       validIdNumber = "";
     }
 
-    if (validIdPlaceOfIssue == null && _accountCategoryController.value != easy_classic) {
+    if (validIdPlaceOfIssue == null &&
+        _accountCategoryController.value != easy_classic) {
       _idPlaceOfIssueController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid id place of issue");
       return;
-    } else if (validIdPlaceOfIssue == null && _accountCategoryController.value == easy_classic){
+    } else if (validIdPlaceOfIssue == null &&
+        _accountCategoryController.value == easy_classic) {
       validIdPlaceOfIssue = "";
     }
 
-    if (validIdIssueDate == null && _accountCategoryController.value != easy_classic) {
+    if (validIdIssueDate == null &&
+        _accountCategoryController.value != easy_classic) {
       _idIssueDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid issue date");
 
       return;
-    } else if (validIdIssueDate == null && _accountCategoryController.value == easy_classic){
+    } else if (validIdIssueDate == null &&
+        _accountCategoryController.value == easy_classic) {
       validIdIssueDate = "";
     }
 
-    if (validIdExpiryDate == null && _accountCategoryController.value != easy_classic) {
+    if (validIdExpiryDate == null &&
+        _accountCategoryController.value != easy_classic) {
       _idExpiryDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid expiry date");
 
       return;
-    } else if(validIdExpiryDate == null && _accountCategoryController.value == easy_classic){
+    } else if (validIdExpiryDate == null &&
+        _accountCategoryController.value == easy_classic) {
       validIdExpiryDate = "";
     }
 
@@ -966,14 +978,10 @@ class AccountFormBloc extends BlocBase with Validators {
         await _accountsRepository.deleteOfflineAccount(offlineId);
       }
       _subjectSaveAccountResponse.sink.add(response);
-
-
     } catch (error) {
       _subjectSaveAccountResponse.sink.addError(error);
     }
   }
-
-
 
   verifyBvn() async {
     var encodedBVN = CryptoHelper.encrypt(_bvnController.value);
@@ -1272,7 +1280,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
     await _accountsRepository
         .getAccountsDetailsByReference(referenceId)
-        .then((accountResponse) {
+        .then((accountResponse) async {
       subjectAccountsDetailsResponse.add(accountResponse);
       if (accountResponse.status) {
 //        if (accountResponse.data.refId != null &&
@@ -1296,7 +1304,23 @@ class AccountFormBloc extends BlocBase with Validators {
 
         if (accountResponse.data.classCode != null &&
             accountResponse.data.classCode.isNotEmpty) {
-          _accountCategoryController.add(accountResponse.data.classCode);
+          print('log class code ${accountResponse.data.classCode}');
+
+          try {
+            List<AccountClassEntity> accountClasses =
+                await DBProvider.db.getAccountClasses();
+
+            var accountCategory = accountClasses
+                .firstWhere(
+                    (x) => x.id.toString() == accountResponse.data.classCode)
+                .name
+                .toString(); //hotfix: to solve issue of account category filter from account type on edit
+
+            if (accountCategory != null)
+              _accountCategoryController.add(accountCategory);
+          } catch (err) {
+            _accountCategoryController.add(accountResponse.data.classCode);
+          }
         }
         if (accountResponse.data.signatoryDetails?.first?.bvn != null &&
             accountResponse.data.signatoryDetails.first.bvn.isNotEmpty) {
