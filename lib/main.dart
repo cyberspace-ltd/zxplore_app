@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 
 import 'app.dart';
+import 'package:catcher/catcher_plugin.dart';
 
-void main() => runApp(ZxploreApp());
+main() {
+  CatcherOptions debugOptions =
+  CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
+  CatcherOptions releaseOptions = CatcherOptions(DialogReportMode(), [
+    EmailManualHandler(["mobileunit@cyberspace.net.ng"])
+  ]);
+
+  Catcher(ZxploreApp(), debugConfig: debugOptions, releaseConfig: releaseOptions);
+}
+
+//void main() => runApp(ZxploreApp());
 
 
 
