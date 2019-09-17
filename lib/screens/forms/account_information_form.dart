@@ -92,8 +92,9 @@ class _AccountInformationState extends State<AccountInformationStep>
                         _selectedAccFilter = "";
                       }
                     });
-                    accountFormBloc.changeAccountType;
-                    accountFormBloc.resetAccountTypeCategory();
+//                    accountFormBloc.changeAccountType;
+                    accountFormBloc.updateAccountType(value);
+                    accountFormBloc.updateAccountCategoryType(null);
                   },
                 ),
               ),
@@ -200,7 +201,9 @@ class _AccountInformationState extends State<AccountInformationStep>
                                 );
                               }).toList()
                             : null,
-                        onChanged: accountFormBloc.changeAccountCategory,
+                        onChanged: (value) {
+                          accountFormBloc.updateAccountCategoryType(value);
+                        },
                       ),
                     ),
                   );
@@ -213,9 +216,11 @@ class _AccountInformationState extends State<AccountInformationStep>
 
   String _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<AccountClassEntity>> listSnapshot) {
-    var  data = (listSnapshot.hasData && listSnapshot.data.length > 0 &&
+    var data = (listSnapshot.hasData &&
+            listSnapshot.data.length > 0 &&
             listSnapshot.data.firstWhere(
-                    (x) => x.name == itemSnapshot.data.toString(), orElse: () => null) !=
+                    (x) => x.name == itemSnapshot.data.toString(),
+                    orElse: () => null) !=
                 null)
         ? itemSnapshot.data.toString()
         : null;

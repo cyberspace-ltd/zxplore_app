@@ -487,9 +487,17 @@ class AccountFormBloc extends BlocBase with Validators {
     insertFormOffline(_offlineAccount);
   }
 
-  resetAccountTypeCategory() {
-    _accountCategoryController.sink.add(null);
-    _accountCategoryController.sink.addError("Field is required");
+
+  updateAccountCategoryType(String value){
+    _accountCategoryController.sink.add(value);
+    if(value == null){
+      _accountCategoryController.sink.addError("Field is required");
+    }
+  }
+
+
+  updateAccountType(String value){
+    _accountTypeController.sink.add(value);
   }
 
   insertFormOffline(OfflineAccountEntity offlineForm) async {
