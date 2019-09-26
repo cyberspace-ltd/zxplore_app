@@ -30,7 +30,7 @@ class Validators {
 
   final validateAccountCategory =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.isNotEmpty &&arg.length > 2) {
+    if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
       sink.addError('Account Category is required');
@@ -57,28 +57,52 @@ class Validators {
 
   final validateSurname =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.isNotEmpty && arg.length > 2) {
+        Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
+        RegExp regex = new RegExp(pattern);
+    if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
       sink.add(arg);
-    } else {
+    } else if(arg.isEmpty){
       sink.addError('Surname is required');
+    } else {
+      sink.addError('Enter a valid surname');
     }
   });
 
   final validateFirstName =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.isNotEmpty && arg.length > 2) {
+        Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
+        RegExp regex = new RegExp(pattern);
+    if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
       sink.add(arg);
-    } else {
+    } else if(arg.isEmpty) {
       sink.addError('First name is required');
+    } else{
+      sink.addError('Enter a valid first name ');
+
     }
   });
 
+  final validateOtherName =
+      StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink){
+        Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
+        RegExp regex = new RegExp(pattern);
+        if(!regex.hasMatch(arg)){
+          sink.add(arg);
+        } else {
+          sink.addError('Enter a valid Othername');
+        }
+      });
+
   final validateMothersMaidenName =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.isNotEmpty && arg.length > 2) {
+        Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
+        RegExp regex = new RegExp(pattern);
+    if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
       sink.add(arg);
-    } else {
+    } else if(arg.isEmpty)  {
       sink.addError('Mother\'s maiden name is required');
+    } else {
+      sink.addError('Enter a valid mother\'s maiden name');
     }
   });
 
@@ -145,11 +169,15 @@ class Validators {
 
   final validateNextOfKin =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length > 2) {
-      sink.add(arg);
-    } else {
-      sink.addError('Next of kin is required');
-    }
+        Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
+        RegExp regex = new RegExp(pattern);
+        if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
+          sink.add(arg);
+        } else if(arg.isEmpty)  {
+          sink.addError('Next of kin is required');
+        } else {
+          sink.addError('Enter a valid Next of kin name');
+        }
   });
 
   final validateAddress1 =

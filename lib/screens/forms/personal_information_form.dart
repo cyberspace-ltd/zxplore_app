@@ -163,6 +163,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           onChanged: accountFormBloc.changeSurname,
           keyboardType: TextInputType.text,
           maxLength: 40,
+          enabled: accountFormBloc.bvnlastNameValue,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
@@ -192,6 +193,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           onChanged: accountFormBloc.changeFirstName,
           keyboardType: TextInputType.text,
           maxLength: 40,
+          enabled: accountFormBloc.bvnFirstName,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
@@ -219,6 +221,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           onChanged: accountFormBloc.changeOtherName,
           keyboardType: TextInputType.text,
           maxLength: 40,
+          enabled: accountFormBloc.bvnOtherName,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
@@ -257,6 +260,34 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
+  Widget _dateOfBirthTextField() {
+    return StreamBuilder(
+      stream: accountFormBloc.dateOfBirth,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _dateOfBirthController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _dateOfBirthController.selection);
+        }
+        return TextField(
+          controller: _dateOfBirthController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changeDateOfBirth,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          enabled: accountFormBloc.bvnDateOfBirths,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+            labelText: 'Date of Birth',
+            helperText: '* Required',
+            errorText: snapshot.error,
+          ),
+        );
+      },
+    );
+  }
+
   Widget _dateOfBirthField() {
     return StreamBuilder(
       stream: accountFormBloc.dateOfBirth,
@@ -270,9 +301,9 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             onTap: () async {
               DateTime picked = await showDatePicker(
                   context: context,
-                  initialDate: new DateTime(DateTime.now().year - 19),
+                  initialDate: new DateTime(DateTime.now().year - 13),
                   firstDate: new DateTime(1900),
-                  lastDate: new DateTime(DateTime.now().year - 19));
+                  lastDate: new DateTime(DateTime.now().year - 13));
 
               if (picked != null) {
                 var formatter = new DateFormat('dd-MMM-yy');
@@ -295,6 +326,34 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                 ),
               ),
             ));
+      },
+    );
+  }
+
+  Widget _stateOfOriginField() {
+    return StreamBuilder(
+      stream: accountFormBloc.stateOfOrigin,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _stateOfOriginController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _stateOfOriginController.selection);
+        }
+        return TextField(
+          controller: _stateOfOriginController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changeStateOfOrigin,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          enabled: accountFormBloc.bvnState,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+            labelText: 'Date of Birth',
+            helperText: '* Required',
+            errorText: snapshot.error,
+          ),
+        );
       },
     );
   }
@@ -391,6 +450,34 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
+  Widget _buildDateOfBirth() {
+    return StreamBuilder(
+        stream: accountFormBloc.bvnDateOfBirth,
+        builder: (context, snapShot) {
+          if (!snapShot.hasData) {
+            return _dateOfBirthField();
+          }
+          if (snapShot.data) {
+            return _dateOfBirthField();
+          } else
+            return _dateOfBirthTextField();
+        });
+  }
+
+  Widget _buildStateOfOrigin() {
+    return StreamBuilder(
+        stream: accountFormBloc.bvnStateOfOrigin,
+        builder: (context, snapShot) {
+          if (!snapShot.hasData) {
+            return _stateOfOriginTextField();
+          }
+          if (snapShot.data) {
+            return _stateOfOriginTextField();
+          } else
+            return _stateOfOriginField();
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -453,7 +540,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   SizedBox(height: 30.0),
                   _mothersMaidenNameField(),
                   SizedBox(height: 30.0),
-                  _dateOfBirthField(),
+                  _buildDateOfBirth(),
                   SizedBox(height: 30.0),
                   _stateOfOriginTextField(),
                   SizedBox(height: 30.0),

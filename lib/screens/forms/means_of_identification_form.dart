@@ -262,8 +262,8 @@ class _MeansOfIdentificationStepStepState
               DateTime picked = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: new DateTime(1900),
-                  lastDate: new DateTime(DateTime.now().year + 25));
+                  firstDate: new DateTime(DateTime.now().year - 25),
+                  lastDate: new DateTime.now());
 
               if (picked != null) {
                 var formatter = new DateFormat('dd-MMM-yy');
@@ -305,7 +305,7 @@ class _MeansOfIdentificationStepStepState
               DateTime picked = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: new DateTime(1900),
+                  firstDate: new DateTime.now(),
                   lastDate: new DateTime(DateTime.now().year + 25));
 
               if (picked != null) {

@@ -95,6 +95,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             keyboardType: TextInputType.emailAddress,
             onChanged: accountFormBloc.changeEmail,
             maxLength: 40,
+//            enabled: accountFormBloc.bvnEmail,
             maxLines: null,
             maxLengthEnforced: true,
             decoration: InputDecoration(
@@ -118,6 +119,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             controller: _phoneController,
             keyboardType: TextInputType.phone,
             onChanged: accountFormBloc.changePhone,
+//            enabled: accountFormBloc.bvnPhone,
             decoration: InputDecoration(
               labelText: 'Phone',
               prefixText: '+234',
@@ -233,7 +235,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.name != null ? value.name : 'NIGERIA',
-                            child: Text(value.name!= null ? value.name : 'NIGERIA'),
+                            child: Text(
+                                value.name != null ? value.name : 'NIGERIA'),
                           );
                         }).toList(),
                         onChanged: accountFormBloc.changeCountryOfResidence,
@@ -244,6 +247,48 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  Widget _buildStateOfResidence() {
+    return StreamBuilder(
+        stream: accountFormBloc.bvnStateOfResidences,
+        builder: (context, snapshot) {
+          if(!snapshot.hasData){
+            return _stateOfResidenceTextField();
+          }
+          if (snapshot.data) {
+            return _stateOfResidenceTextField();
+          } else
+            return _stateOfResidenceField();
+        });
+  }
+
+  Widget _stateOfResidenceField() {
+    return StreamBuilder(
+      stream: accountFormBloc.stateOfResidence,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _stateOfResidenceController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _stateOfResidenceController.selection);
+        }
+        return TextField(
+          controller: _stateOfResidenceController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changeStateOfResidence,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          enabled: accountFormBloc.bvnStateOfResidence,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+            labelText: 'State Of Residence',
+            helperText: '* Required',
+            errorText: snapshot.error,
+          ),
         );
       },
     );
@@ -267,9 +312,10 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     stream: statesBloc.states,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<StateEntity>> shot) {
-                      if (!shot.hasData)  return SizedBox(
-                          height: 24.0,
-                          child: Center(child: CircularProgressIndicator()));
+                      if (!shot.hasData)
+                        return SizedBox(
+                            height: 24.0,
+                            child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.hasData
                             ? Helper.returnValidStateSelectedItem(snapshot.data,
@@ -312,9 +358,10 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     stream: _citiesBloc.cities,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<CityEntity>> shot) {
-                      if (!shot.hasData)  return SizedBox(
-                          height: 24.0,
-                          child: Center(child: CircularProgressIndicator()));
+                      if (!shot.hasData)
+                        return SizedBox(
+                            height: 24.0,
+                            child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.data,
                         items: shot.data.map((CityEntity value) {
@@ -330,6 +377,49 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  Widget _buildGender() {
+    return StreamBuilder(
+        stream: accountFormBloc.bvnGenders,
+        builder: (context, snapshot) {
+          if(!snapshot.hasData){
+            return _genderTextField();
+          }
+          if (snapshot.data) {
+            return _genderTextField();
+          } else {
+            return _genderField();
+          }
+        });
+  }
+
+  Widget _genderField() {
+    return StreamBuilder(
+      stream: accountFormBloc.gender,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _genderController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _genderController.selection);
+        }
+        return TextField(
+          controller: _genderController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changeGender,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          enabled: accountFormBloc.bvnGender,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+            labelText: 'Gender',
+            helperText: '* Required',
+            errorText: snapshot.error,
+          ),
         );
       },
     );
@@ -389,9 +479,10 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     stream: _occupationsBloc.occupations,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<OccupationEntity>> shot) {
-                      if (!shot.hasData)  return SizedBox(
-                          height: 24.0,
-                          child: Center(child: CircularProgressIndicator()));
+                      if (!shot.hasData)
+                        return SizedBox(
+                            height: 24.0,
+                            child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.data,
                         items: shot.data.map((OccupationEntity value) {
@@ -408,6 +499,49 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  Widget _buildMaritalStatus() {
+    return StreamBuilder(
+        stream: accountFormBloc.bvnMaritalStatuses,
+        builder: (context, snapshot) {
+          if(!snapshot.hasData){
+            return _maritalStatusField();
+          }
+          if (snapshot.data) {
+            return _maritalStatusField();
+          } else
+            return _maritalStatusTextField();
+
+        });
+  }
+
+  Widget _maritalStatusTextField() {
+    return StreamBuilder(
+      stream: accountFormBloc.maritalStatus,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _maritalStatusController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _maritalStatusController.selection);
+        }
+        return TextField(
+          controller: _maritalStatusController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changeMaritalStatus,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          enabled: accountFormBloc.bvnMaritalStatus,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+            labelText: 'Marital Status',
+            helperText: '* Required',
+            errorText: snapshot.error,
+          ),
         );
       },
     );
@@ -479,7 +613,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                   SizedBox(height: 30.0),
                   _cityOfResidenceTextField(),
                   SizedBox(height: 30.0),
-                  _genderTextField(),
+                  _buildGender(),
                   SizedBox(height: 30.0),
                   _occupationField(),
                   SizedBox(height: 30.0),

@@ -17,11 +17,19 @@ import 'validators.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AccountFormBloc extends BlocBase with Validators {
+
+  Pattern pattern = r'[!₦$/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
   //Account Information
   final AccountsRepository _accountsRepository = AccountsRepository();
 
   final _referenceIdController =
       BehaviorSubject<String>(); // used in the case of updating accounts.
+
+  final _isDateOfBirthChangeController = BehaviorSubject<bool>();
+  final _isStateOfOriginChangeController = BehaviorSubject<bool>();
+  final _isStateOfResidenceChangeController = BehaviorSubject<bool>();
+  final _isGenderChangeController = BehaviorSubject<bool>();
+  final _isMaritalStatusChangeController = BehaviorSubject<bool>();
 
   final _idController = BehaviorSubject<int>();
   final _isEditModeController = BehaviorSubject<bool>();
@@ -123,8 +131,28 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final PublishSubject<BvnResponse> bvnVerificationResponse =
       PublishSubject<BvnResponse>();
+  Stream<bool> get bvnStateOfOrigin => _isStateOfOriginChangeController.stream;
+  Stream<bool> get bvnDateOfBirth => _isDateOfBirthChangeController.stream;
+  Stream<bool> get bvnStateOfResidences => _isStateOfResidenceChangeController.stream;
+  Stream<bool> get bvnGenders => _isGenderChangeController.stream;
+  Stream<bool> get bvnMaritalStatuses => _isMaritalStatusChangeController.stream;
 
   String easy_classic = "344";
+  bool bvnlastNameValue = true;
+  bool bvnFirstName = true;
+  bool bvnStateOfResidence = true;
+
+  bool bvnResidentialAddress = true;
+  bool bvnMaritalStatus = true;
+  bool bvnPhone = true;
+  bool bvnGender = true;
+  bool bvnState = true;
+
+  bool bvnDateOfBirths = true;
+
+  bool bvnTitle = true;
+  bool bvnEmail = true;
+  bool bvnOtherName = true;
 
   Stream<String> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
@@ -148,7 +176,8 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get firstName =>
       _firstNameController.stream.transform(validateFirstName);
 
-  Stream<String> get otherName => _otherNameController.stream;
+  Stream<String> get otherName =>
+      _otherNameController.stream.transform(validateOtherName);
 
   Stream<String> get mothersMaidenName =>
       _mothersMaidenNameController.stream.transform(validateMothersMaidenName);
@@ -320,6 +349,9 @@ class AccountFormBloc extends BlocBase with Validators {
   Function(bool) get changeIsSendEmail => _isSendEmailController.sink.add;
 
   Function(bool) get changeIsReceiveSms => _isReceiveSmsController.sink.add;
+
+  Function(bool) get changeMaritalStatusValue => _isMaritalStatusChangeController.sink.add;
+
 
   Function(bool) get changeIsRequestHardwareToken =>
       _isRequestHardwareTokenController.sink.add;
@@ -626,6 +658,14 @@ class AccountFormBloc extends BlocBase with Validators {
 
       return;
     }
+    RegExp regex = new RegExp(pattern);
+
+    if(validSurname != null &&  regex.hasMatch(validSurname)){
+      _surnameController.addError("Enter a valid surname");
+      _subjectSaveAccountResponse.addError("You have not entered a valid surname");
+      return;
+    }
+
     if (validFirstName == null) {
       _firstNameController.addError("Field is required");
       _subjectSaveAccountResponse
@@ -634,10 +674,25 @@ class AccountFormBloc extends BlocBase with Validators {
       return;
     }
 
+    if(validFirstName != null && regex.hasMatch(validFirstName)){
+      _firstNameController.addError("Enter a valid first name");
+      _subjectSaveAccountResponse.addError("You have not entered in a valid firstname");
+
+      return;
+    }
+
     if (validMothersMaidenName == null) {
       _mothersMaidenNameController.addError("Field is required");
       _subjectSaveAccountResponse
-          .addError("You have not filled in the mother\'s maiden name");
+          .addError("You have not filled in a valid the mother\'s maiden name");
+
+      return;
+    }
+
+    if(validMothersMaidenName != null && regex.hasMatch(validMothersMaidenName)){
+      _mothersMaidenNameController.addError("Enter a valid mother\'s maiden name");
+      _subjectSaveAccountResponse
+          .addError("You have not entered in a valid the mother\'s maiden name");
 
       return;
     }
@@ -678,6 +733,14 @@ class AccountFormBloc extends BlocBase with Validators {
       _nextOfKinController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not filled in a next of kin");
+
+      return;
+    }
+
+    if(validNextOfKin != null && regex.hasMatch(validNextOfKin)){
+      _nextOfKinController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a valid next of kin");
 
       return;
     }
@@ -732,72 +795,63 @@ class AccountFormBloc extends BlocBase with Validators {
 
       return;
     }
-    if (validIdType == null &&
-        _accountCategoryController.value != easy_classic) {
+    if (validIdType == null && validAccountCategory != easy_classic) {
       _idTypeController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid ID type");
       return;
-    } else if (validIdType == null &&
-        _accountCategoryController.value == easy_classic) {
+    } else if (validIdType == null && validAccountCategory == easy_classic) {
       validIdType = "";
     }
 
-    if (validIdIssuer == null &&
-        _accountCategoryController.value != easy_classic) {
+    if (validIdIssuer == null && validAccountCategory != easy_classic) {
       _idIssuerController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not filled a valid ID Issuer");
       return;
-    } else if (validIdIssuer == null &&
-        _accountCategoryController.value == easy_classic) {
+    } else if (validIdIssuer == null && validAccountCategory == easy_classic) {
       validIdIssuer = "";
     }
 
-    if (validIdNumber == null &&
-        _accountCategoryController.value != easy_classic) {
+    if (validIdNumber == null && validAccountCategory != easy_classic) {
       _idNumberController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid ID number");
 
       return;
-    } else if (validIdNumber == null &&
-        _accountCategoryController.value == easy_classic) {
+    } else if (validIdNumber == null && validAccountCategory == easy_classic) {
       validIdNumber = "";
     }
 
-    if (validIdPlaceOfIssue == null &&
-        _accountCategoryController.value != easy_classic) {
+    if (validIdPlaceOfIssue == null && validAccountCategory != easy_classic) {
       _idPlaceOfIssueController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid id place of issue");
       return;
     } else if (validIdPlaceOfIssue == null &&
-        _accountCategoryController.value == easy_classic) {
+        validAccountCategory == easy_classic) {
       validIdPlaceOfIssue = "";
     }
 
-    if (validIdIssueDate == null &&
-        _accountCategoryController.value != easy_classic) {
+    if (validIdIssueDate == null && validAccountCategory != easy_classic) {
       _idIssueDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid issue date");
 
       return;
     } else if (validIdIssueDate == null &&
-        _accountCategoryController.value == easy_classic) {
+        validAccountCategory == easy_classic) {
       validIdIssueDate = "";
     }
 
-    if (validIdExpiryDate == null &&
-        _accountCategoryController.value != easy_classic) {
+    if (validIdExpiryDate == null && validAccountCategory != easy_classic) {
       _idExpiryDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid expiry date");
 
       return;
     } else if (validIdExpiryDate == null &&
-        _accountCategoryController.value == easy_classic) {
+        validAccountCategory == easy_classic) {
       validIdExpiryDate = "";
     }
 
@@ -990,51 +1044,77 @@ class AccountFormBloc extends BlocBase with Validators {
       bvnVerificationResponse.add(bvnResponse);
 
       if (bvnResponse?.responseCode == '00') {
-        if (bvnResponse.lastName != null && bvnResponse.lastName.isNotEmpty)
+        if (bvnResponse.lastName != null && bvnResponse.lastName.isNotEmpty) {
           _surnameController.add(CryptoHelper.decrypt(bvnResponse.lastName));
-        if (bvnResponse.firstName != null && bvnResponse.firstName.isNotEmpty)
+          bvnlastNameValue = bvnResponse.lastName != null ? false : true;
+        }
+        if (bvnResponse.firstName != null && bvnResponse.firstName.isNotEmpty) {
           _firstNameController.add(CryptoHelper.decrypt(bvnResponse.firstName));
-        if (bvnResponse.middleName != null && bvnResponse.middleName.isNotEmpty)
+          bvnFirstName = bvnResponse.firstName.isNotEmpty ? false : true;
+        }
+        if (bvnResponse.middleName != null &&
+            bvnResponse.middleName.isNotEmpty) {
           _otherNameController
               .add(CryptoHelper.decrypt(bvnResponse.middleName));
-        if (bvnResponse.email != null && bvnResponse.email.isNotEmpty)
+          bvnOtherName = bvnResponse.email.isNotEmpty ? false : true;
+        }
+        if (bvnResponse.email != null && bvnResponse.email.isNotEmpty) {
           _emailController.add(CryptoHelper.decrypt(bvnResponse.email));
-
-        if (bvnResponse.title != null && bvnResponse.title.isNotEmpty)
+          bvnEmail = bvnResponse.email.isNotEmpty ? false : true;
+        }
+        if (bvnResponse.title != null && bvnResponse.title.isNotEmpty) {
           _titleController.add(bvnResponse.title);
-
+          bvnTitle = bvnResponse.title.isNotEmpty ? false : true;
+        }
         if (bvnResponse.dateOfBirth != null &&
-            bvnResponse.dateOfBirth.isNotEmpty)
+            bvnResponse.dateOfBirth.isNotEmpty) {
           _dateOfBirthController
               .add(CryptoHelper.decrypt(bvnResponse.dateOfBirth));
 
-        if (bvnResponse.gender != null && bvnResponse.gender.isNotEmpty)
+          bvnDateOfBirths = bvnResponse.dateOfBirth.isNotEmpty ? false : true;
+          _isDateOfBirthChangeController.add(bvnDateOfBirths);
+        }
+        if (bvnResponse.gender != null && bvnResponse.gender.isNotEmpty) {
           _genderController.add(bvnResponse.gender);
-
+          bvnGender = bvnResponse.gender.isNotEmpty ? false : true;
+          _isGenderChangeController.add(bvnGender);
+        }
         if (bvnResponse.phoneNumber != null &&
             bvnResponse.phoneNumber.isNotEmpty) {
           var decryptedPhone = CryptoHelper.decrypt(bvnResponse.phoneNumber);
           if (decryptedPhone != null && decryptedPhone.startsWith('0')) {
             decryptedPhone = decryptedPhone.replaceFirst('0', '');
             _phoneNumberController.add(decryptedPhone);
+            bvnPhone = bvnResponse.phoneNumber.isNotEmpty ? false : true;
           }
         }
         if (bvnResponse.stateOfOrigin != null &&
-            bvnResponse.stateOfOrigin.isNotEmpty)
+            bvnResponse.stateOfOrigin.isNotEmpty) {
           _stateOfOriginController.add(bvnResponse.stateOfOrigin.toUpperCase());
-
+          bvnState = bvnResponse.phoneNumber.isNotEmpty ? false : true;
+          _isStateOfOriginChangeController.add(bvnState);
+        }
         if (bvnResponse.maritalStatus != null &&
-            bvnResponse.maritalStatus.isNotEmpty)
+            bvnResponse.maritalStatus.isNotEmpty) {
           _maritalStatusController.add(bvnResponse.maritalStatus);
-
+          bvnMaritalStatus =
+              bvnResponse.maritalStatus.isNotEmpty ? false : true;
+          _isMaritalStatusChangeController.add(bvnMaritalStatus);
+        }
         if (bvnResponse.residentialAddress != null &&
-            bvnResponse.residentialAddress.isNotEmpty)
+            bvnResponse.residentialAddress.isNotEmpty) {
           _address1Controller
               .add(CryptoHelper.decrypt(bvnResponse.residentialAddress));
-
+          bvnResidentialAddress =
+              bvnResponse.residentialAddress.isNotEmpty ? false : true;
+        }
         if (bvnResponse.stateOfResidence != null &&
-            bvnResponse.stateOfResidence.isNotEmpty)
+            bvnResponse.stateOfResidence.isNotEmpty) {
           _stateOfResidenceController.add(bvnResponse.stateOfResidence);
+          bvnStateOfResidence =
+              bvnResponse.stateOfResidence.isNotEmpty ? false : true;
+          _isStateOfResidenceChangeController.add(bvnStateOfResidence);
+        }
       } else {
         bvnVerificationResponse.addError('Could not verify the BVN provided. ');
       }
