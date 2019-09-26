@@ -53,3 +53,4 @@ flutter:
     - assets/images/view_offline.png
     - assets/images/accept_signature.png
     - assets/images/create_account.png
+    - assets/server_certificate.crt

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' show BaseClient, IOClient;
 
 import 'package:http/http.dart' as http;
@@ -17,60 +19,90 @@ import 'package:zxplore_app/models/verify_account_response.dart';
 
 class ZenithBankApi {
   Future<Occupation> fetchOccupations() async {
-    final response = await http.get(Endpoints.getOccupationUrl());
-
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request =
+        await client.getUrl(Uri.parse(Endpoints.getOccupationUrl()));
+    HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
-      return Occupation.fromJson(json.decode(response.body));
+      String reply = await response.transform(utf8.decoder).join();
+      return Occupation.fromJson(json.decode(reply));
     } else {
       throw CleanerException('Failed to load occupations');
     }
   }
 
   Future<AccountClass> fetchAccountClasses() async {
-    final response = await http.get(Endpoints.getAccountClassesUrl());
-
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request =
+        await client.getUrl(Uri.parse(Endpoints.getAccountClassesUrl()));
+    HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
-      return AccountClass.fromJson(json.decode(response.body));
+      String reply = await response.transform(utf8.decoder).join();
+      return AccountClass.fromJson(json.decode(reply));
     } else {
       throw CleanerException('Failed to load account classes');
     }
   }
 
   Future<Title> fetchTitles() async {
-    final response = await http.get(Endpoints.getTitlesUrl());
-
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request =
+        await client.getUrl(Uri.parse(Endpoints.getTitlesUrl()));
+    HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
-      return Title.fromJson(json.decode(response.body));
+      String reply = await response.transform(utf8.decoder).join();
+      return Title.fromJson(json.decode(reply));
     } else {
       throw CleanerException('Failed to load titles');
     }
   }
 
   Future<State> fetchStates() async {
-    final response = await http.get(Endpoints.getStatesUrl());
-
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request =
+        await client.getUrl(Uri.parse(Endpoints.getStatesUrl()));
+    HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
-      return State.fromJson(json.decode(response.body));
+      String reply = await response.transform(utf8.decoder).join();
+      return State.fromJson(json.decode(reply));
     } else {
       throw CleanerException('Failed to load states');
     }
   }
 
   Future<State> fetchCities() async {
-    final response = await http.get(Endpoints.getCitiesUrl());
-
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request =
+        await client.getUrl(Uri.parse(Endpoints.getCitiesUrl()));
+    HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
-      return State.fromJson(json.decode(response.body));
+      String reply = await response.transform(utf8.decoder).join();
+      return State.fromJson(json.decode(reply));
     } else {
       throw CleanerException('Failed to load cities');
     }
   }
 
   Future<State> fetchCountries() async {
-    final response = await http.get(Endpoints.getCountriesUrl());
-
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request =
+        await client.getUrl(Uri.parse(Endpoints.getCountriesUrl()));
+    HttpClientResponse response = await request.close();
     if (response.statusCode == 200) {
-      return State.fromJson(json.decode(response.body));
+      String reply = await response.transform(utf8.decoder).join();
+      return State.fromJson(json.decode(reply));
     } else {
       throw CleanerException('Failed to load countries');
     }
@@ -81,14 +113,18 @@ class ZenithBankApi {
     Dio dio = new Dio();
 
     try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+
       response = await dio.post(Endpoints.getLoginUrl(),
           data: {"UserName": username, "Password": password});
 
-//      print('$response');
-
       if (response.statusCode == 200) {
-//        print('${response.data}');
-
         return LoginResponse.fromJson(response.data);
       }
       if (response.statusCode == 400) {
@@ -99,8 +135,6 @@ class ZenithBankApi {
       }
     } on DioError catch (error) {
       if (error is DioError) {
-//        print(error.response);
-
         if (error.response?.statusCode == 400) {
           throw CleanerException("Invalid login details. Try again");
         } else if (error.response?.statusCode == 502) {
@@ -123,11 +157,16 @@ class ZenithBankApi {
     dio.options.headers = {
       'Authorization': 'Bearer $token',
     };
-
     try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
       response =
           await dio.get("${Endpoints.getAccountsByRsmIdUrl()}$rsmId/All");
-
       return AccountsResponse.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
@@ -144,27 +183,36 @@ class ZenithBankApi {
     };
 
     try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
       response =
           await dio.get("${Endpoints.getAccountDetailsUrl()}$referenceId");
-
       return AccountDetailsResponse.fromJson(response.data);
     } catch (error, stacktrace) {
-//      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
 
   Future<VerifyAccountResponse> verifyAccountsByRefId(
       String referenceId, String token) async {
-    final response = await http.get(
-        "${Endpoints.getVerifyAccountsByRefIdUrl()}$referenceId",
-        headers: {'Authorization': 'Bearer $token'});
-
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    HttpClientRequest request = await client.getUrl(
+        Uri.parse("${Endpoints.getVerifyAccountsByRefIdUrl()}$referenceId"));
+    HttpClientResponse response = await request.close();
+    request.headers.set('Authorization', 'Bearer $token');
+    String reply = await response.transform(utf8.decoder).join();
     if (response.statusCode == 200) {
-      return VerifyAccountResponse.fromJson(json.decode(response.body));
+      return VerifyAccountResponse.fromJson(json.decode(reply));
     } else if (response.statusCode == 400) {
       var errorResponse =
-          VerifyAccountResponse().fromErrorJson(json.decode(response.body));
+          VerifyAccountResponse().fromErrorJson(json.decode(reply));
       throw CleanerException(errorResponse.message);
     } else {
       throw CleanerException('Failed to load cities');
@@ -180,13 +228,17 @@ class ZenithBankApi {
     };
 
     try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+
       response = await dio.post("${Endpoints.getSaveAccountsUrl()}",
           data: encodedJson);
-
-//      print('Response: $response');
-
       if (response.statusCode == 200) {
-//        print('${response.data}');
         return SaveAccountResponse.fromJson(response.data);
       } else if (response.statusCode == 400) {
         var value = SaveAccountResponse.fromJson(response.data);
@@ -195,12 +247,7 @@ class ZenithBankApi {
         return SaveAccountResponse.fromJson(response.data);
       }
     } catch (error, stacktrace) {
-//      print(error);
-
-//      print("Exception occured: $error stackTrace: $stacktrace");
       if (error is DioError) {
-//        print(error.response);
-
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
           throw CleanerException(value.message);
@@ -217,6 +264,10 @@ class ZenithBankApi {
     }
   }
 
+  Future<String> loadCertificateAsset() async {
+    return await rootBundle.loadString('assets/server_certificate.crt');
+  }
+
   Future<BvnResponse> verifyBvn(String encodedBvn, String token) async {
     Response response;
     Dio dio = new Dio();
@@ -224,27 +275,29 @@ class ZenithBankApi {
       'Authorization': 'Bearer $token',
     };
     try {
-      response =
-      await dio.post(Endpoints.getBvnUrl(), data: {"BvnNew": encodedBvn});
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
 
-//      print('$response');
+      response =
+          await dio.post(Endpoints.getBvnUrl(), data: {"BvnNew": encodedBvn});
 
       if (response.statusCode == 200) {
-//        print('${response.data}');
-
         return BvnResponse.fromJson(response.data);
       }
       if (response.statusCode == 400) {
         var value = LoginResponse.fromJson(response.data);
         throw CleanerException(value.message);
       } else {
-        throw CleanerException('BVN Verification failed in connecting to the server.');
+        throw CleanerException(
+            'BVN Verification failed in connecting to the server.');
       }
-    }
-    catch (error){
+    } catch (error) {
       if (error is DioError) {
-//        print(error.response);
-
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
           throw CleanerException(value.message);
@@ -259,7 +312,6 @@ class ZenithBankApi {
             'We are having issues sending the account to the server. Try again later. ');
       }
     }
-
   }
 
   String _handleError(DioError error) {
@@ -297,12 +349,11 @@ class ZenithBankApi {
     }
     return errorDescription;
   }
-
-
 }
 
 class CleanerException implements Exception {
   String cause;
+
   CleanerException(this.cause);
 
   @override
@@ -310,10 +361,3 @@ class CleanerException implements Exception {
     return cause;
   }
 }
-
-
-
-
-
-
-
