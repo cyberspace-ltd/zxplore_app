@@ -205,8 +205,8 @@ class ZenithBankApi {
         ((X509Certificate cert, String host, int port) => true);
     HttpClientRequest request = await client.getUrl(
         Uri.parse("${Endpoints.getVerifyAccountsByRefIdUrl()}$referenceId"));
-    HttpClientResponse response = await request.close();
     request.headers.set('Authorization', 'Bearer $token');
+    HttpClientResponse response = await request.close();
     String reply = await response.transform(utf8.decoder).join();
     if (response.statusCode == 200) {
       return VerifyAccountResponse.fromJson(json.decode(reply));
