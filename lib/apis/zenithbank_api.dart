@@ -209,6 +209,7 @@ class ZenithBankApi {
     HttpClientResponse response = await request.close();
     String reply = await response.transform(utf8.decoder).join();
     if (response.statusCode == 200) {
+      print(json.decode(reply));
       return VerifyAccountResponse.fromJson(json.decode(reply));
     } else if (response.statusCode == 400) {
       var errorResponse =
