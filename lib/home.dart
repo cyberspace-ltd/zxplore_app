@@ -82,6 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _actionChipError(String error) {
     if (error.contains('expired')) {
+//      new Future.delayed(const Duration(milliseconds: 200), ()
+//      {
+//
+//        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+//            builder: ( BuildContext context) => LoginPage()
+//        ), ModalRoute.withName('/'));
+//
+//      });
+
       return ActionChip(
           backgroundColor: ZxploreGrey,
           padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -96,10 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                   fontStyle: FontStyle.normal, color: ZxploreRedColor)),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-            );
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: ( BuildContext context) => LoginPage()
+            ), ModalRoute.withName('/'));
+
           });
     } else {
       return ActionChip(
@@ -583,11 +592,15 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.transparent,
               onPressed: () async {
                 await Helper.logout();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => LoginPage()),
-                );
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                    builder: ( BuildContext context) => LoginPage()
+                ), ModalRoute.withName('/'));
+
+//                Navigator.pushReplacement(
+//                  context,
+//                  MaterialPageRoute(
+//                      builder: (BuildContext context) => LoginPage()),
+//                );
               },
             ),
           ],

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
@@ -126,47 +128,49 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () => _exitApp(context),
+      child: Scaffold(
 
-      body: SafeArea(
-        child: ListView(children: <Widget>[
+        body: SafeArea(
+          child: ListView(children: <Widget>[
 
 //          Card( child:Image.asset('assets/images/zenithheader.jpg') ,),
-          SizedBox(height: 120.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 40.0, child:Image.asset('assets/images/logo.png') ,),
+            SizedBox(height: 120.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 40.0, child:Image.asset('assets/images/logo.png') ,),
 
-              Text(
-                'XPLORE',
-                style: Theme.of(context).textTheme.display1,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Text(
-                'Enter your Zenith bank active directory credentials below. This helps identify the employee that wants to access the application.',
-                style: Theme.of(context).textTheme.caption,
-                textAlign: TextAlign.center,
+                Text(
+                  'XPLORE',
+                  style: Theme.of(context).textTheme.display1,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                child: Text(
+                  'Enter your Zenith bank active directory credentials below. This helps identify the employee that wants to access the application.',
+                  style: Theme.of(context).textTheme.caption,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 16.0),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-            child: userNameField(),
-          ),
-          SizedBox(height: 12.0),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-            child: passwordField(),
-          ),
-          ButtonBar(
-            children: <Widget>[
+            SizedBox(height: 16.0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: userNameField(),
+            ),
+            SizedBox(height: 12.0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: passwordField(),
+            ),
+            ButtonBar(
+              children: <Widget>[
 //              FlatButton(
 //                  child: Text('Clear'),
 //                  shape: BeveledRectangleBorder(
@@ -175,11 +179,12 @@ class _LoginPageState extends State<LoginPage> {
 //                  onPressed: () {
 //
 //                  }),
-              submitButton(),
-            ],
-          ),
+                submitButton(),
+              ],
+            ),
 //          Expanded(child: WavyFooter())
-        ]),
+          ]),
+        ),
       ),
     );
   }
@@ -189,6 +194,27 @@ class _LoginPageState extends State<LoginPage> {
     _loginBloc?.dispose();
     super.dispose();
   }
+}
+
+Future<bool> _exitApp(BuildContext context) {
+  return showDialog(
+    context: context,
+    child: new AlertDialog(
+      title: new Text('Do you want to exit this application?'),
+      content: new Text('We hate to see you leave...'),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: new Text('No'),
+        ),
+        new FlatButton(
+          onPressed: () => exit(0),
+          child: new Text('Yes'),
+        ),
+      ],
+    ),
+  ) ??
+      false;
 }
 
 class AccentColorOverride extends StatelessWidget {
