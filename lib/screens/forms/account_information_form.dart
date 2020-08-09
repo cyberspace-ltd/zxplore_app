@@ -25,6 +25,8 @@ class _AccountInformationState extends State<AccountInformationStep>
   final _accountTypes = [
     SAVINGS_ACCOUNT,
     CURRENT_ACCOUNT,
+    ASPIRE_ACCOUNT,
+    PLATINUM_ACCOUNT
   ];
 
   String _selectedAccountType;
@@ -143,6 +145,7 @@ class _AccountInformationState extends State<AccountInformationStep>
       stream: accountFormBloc.riskRankType,
       builder: (context, snapshot) {
         return FormField<String>(
+
           autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
@@ -246,9 +249,13 @@ class _AccountInformationState extends State<AccountInformationStep>
                   SizedBox(height: 30.0),
                   accountHolderTypeField(),
                   SizedBox(height: 30.0),
-                  riskRankField(),
+                  Visibility(child: riskRankField(),
+                    visible: false,
+                  ),
                   SizedBox(height: 30.0),
-                  _accountCategoryField()
+                  Visibility(child: _accountCategoryField(),
+                    visible: false,
+                  ),
                 ],
               ),
               SizedBox(height: 60.0),

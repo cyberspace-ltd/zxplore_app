@@ -139,9 +139,9 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             keyboardType: TextInputType.number,
             onChanged: accountFormBloc.changeBvn,
             decoration: InputDecoration(
-              labelText: 'BVN',
+              labelText: 'TIN (Tax Identification Number)',
               helperText:
-                  'Click the verify BVN button to populate account form.',
+                  'Click the verify TIN button to populate account form.',
               errorText: snapshot.error,
             ),
           );
@@ -367,7 +367,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
-                  labelText: 'State of Origin',
+                  labelText: 'Place of Birth',
                   helperText: "* Required",
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',
@@ -430,11 +430,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                       return DropdownButton<String>(
                         value: shot.data != null
                             ? shot.data?.first?.name
-                            : 'NIGERIA',
+                            : 'GHANA',
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
                             value: value.name,
-                            child: Text(value.name),
+//                            child: Text(value.name),
+                            child: Text("GHANA"), //TODO: HAND CODED COUNTRY, GHANA
+
                           );
                         }).toList(),
                         onChanged: accountFormBloc.changeCountryOfOrigin,
@@ -500,12 +502,12 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                           alignment: Alignment(1.0, 0.0),
                           height: 60.0,
                           child: OutlineButton(
-                            child: Text('VERIFY BVN'),
+                            child: Text('VERIFY TIN'),
                             textColor: ZxplorePrimaryColor,
                             color: Colors.transparent,
                             onPressed: () {
                               var loadingBar = FlushbarHelper.createLoading(
-                                  message: "verifying BVN PLease wait...",
+                                  message: "verifying TIN PLease wait...",
                                   linearProgressIndicator: null);
                               loadingBar..show(context);
                               accountFormBloc.verifyBvn();
@@ -513,13 +515,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                                   .listen((response) {
                                 loadingBar.dismiss();
                                 FlushbarHelper.createSuccess(
-                                    message: "BVN provided is correct.")
+                                    message: "TIN provided is correct.")
                                   ..show(context);
                               }).onError((error) {
                                 loadingBar.dismiss();
                                 FlushbarHelper.createError(
                                         message:
-                                            "BVN provided could not be verified.")
+                                            "TIN provided could not be verified.")
                                     .show(context);
                                 loadingBar.dismiss();
                               });

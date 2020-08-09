@@ -107,6 +107,20 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final _isRequestInternetBankingController = BehaviorSubject<bool>();
 
+  //TODO: GHANA SPECIFIC SERVICES STREAM
+  final _isScanToPayController = BehaviorSubject<bool>();
+
+  final _isZMobileController = BehaviorSubject<bool>();
+
+  final _isZPromptController = BehaviorSubject<bool>();
+
+  final _isStatementViaEmailController = BehaviorSubject<bool>();
+
+  final _isUssdController = BehaviorSubject<bool>();
+
+  final _isBankToWalletController = BehaviorSubject<bool>();
+
+
   final _uploadIdImageController = BehaviorSubject<String>();
 
   final _uploadPassportController = BehaviorSubject<String>();
@@ -261,6 +275,27 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<bool> get isRequestInternetBanking =>
       _isRequestInternetBankingController.stream;
 
+  //TODO: GHANA SPECIFIC SERVICES STREAM BOOL
+
+  Stream<bool> get isScanToPay =>
+      _isScanToPayController.stream;
+
+  Stream<bool> get isZMobile =>
+      _isZMobileController.stream;
+
+  Stream<bool> get isZPrompt =>
+      _isZPromptController.stream;
+
+  Stream<bool> get isStatementViaEmail =>
+      _isStatementViaEmailController.stream;
+
+  Stream<bool> get isUssd =>
+      _isUssdController.stream;
+
+  Stream<bool> get isBankToWallet =>
+      _isBankToWalletController.stream;
+
+
   Stream<String> get idCard => _uploadIdImageController.stream;
 
   Stream<String> get passport => _uploadPassportController.stream;
@@ -349,6 +384,20 @@ class AccountFormBloc extends BlocBase with Validators {
   Function(bool) get changeIsSendEmail => _isSendEmailController.sink.add;
 
   Function(bool) get changeIsReceiveSms => _isReceiveSmsController.sink.add;
+
+  //TODO: Newly added GHANA change functions
+  Function(bool) get changeIsScanToPay => _isScanToPayController.sink.add;
+
+  Function(bool) get changeIsZMobile => _isZMobileController.sink.add;
+
+  Function(bool) get changeIsZPrompt => _isZPromptController.sink.add;
+
+  Function(bool) get changeIsStatementViaEmail => _isStatementViaEmailController.sink.add;
+
+  Function(bool) get changeIsUssd  => _isUssdController.sink.add;
+
+  Function(bool) get changeIsBankToWallet  => _isBankToWalletController.sink.add;
+
 
   Function(bool) get changeMaritalStatusValue => _isMaritalStatusChangeController.sink.add;
 

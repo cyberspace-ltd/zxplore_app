@@ -122,7 +122,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 //            enabled: accountFormBloc.bvnPhone,
             decoration: InputDecoration(
               labelText: 'Phone',
-              prefixText: '+234',
+              prefixText: '+233',
               helperText: "* Required",
               errorText: snapshot.error,
             ),
@@ -228,15 +228,19 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         return SizedBox(
                             height: 24.0,
                             child: Center(child: CircularProgressIndicator()));
+
+                      //TODO: HAND CODED COUNTRY OF RESIDENCE GHANA
                       return DropdownButton<String>(
                         value: shot.data != null
                             ? shot.data?.first?.name
-                            : 'NIGERIA',
+                            : 'GHANA',
                         items: shot.data.map((CountryEntity value) {
                           return DropdownMenuItem<String>(
-                            value: value.name != null ? value.name : 'NIGERIA',
+                            value: value.name != null ? value.name : 'GHANA',
+//                            child: Text(
+//                                value.name != null ? value.name : 'GHANA'),
                             child: Text(
-                                value.name != null ? value.name : 'NIGERIA'),
+                                'GHANA'),
                           );
                         }).toList(),
                         onChanged: accountFormBloc.changeCountryOfResidence,

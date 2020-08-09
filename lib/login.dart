@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   Offset _offset = Offset.zero;
   final _perspective = 0.003;
   final _zeroAngle = 0.0001;
+
   @override
   void initState() {
     _loginBloc = LoginBloc();
@@ -68,39 +69,42 @@ class _LoginPageState extends State<LoginPage> {
     return StreamBuilder(
       stream: _loginBloc.submitValid,
       builder: (context, snapshot) {
-        return RaisedButton(
-          child: Text('Login'),
-          textColor: Color.fromRGBO(255, 255, 255, 1),
-          color: ZxplorePrimaryColor,
-          elevation: 8.0,
-          onPressed: snapshot.hasData
-              ? () async {
-                  var loadingBar = FlushbarHelper.createLoading(
-                      message: "Attempting to login....",
-                      linearProgressIndicator: null);
-                  loadingBar..show(context);
+        return ButtonTheme(
+          height: 60.0,
+          child: RaisedButton(
 
-                  _loginBloc.submit();
+            child: Text('Login'),
+            textColor: Color.fromRGBO(255, 255, 255, 1),
+            color: ZxplorePrimaryColor,
+            elevation: 8.0,
+            onPressed: snapshot.hasData
+                ? () async {
+                    var loadingBar = FlushbarHelper.createLoading(
+                        message: "Attempting to login....",
+                        linearProgressIndicator: null);
+                    loadingBar..show(context);
 
-                  _loginBloc.subjectLoginResponse.listen((loginResponse) async {
-                    loadingBar.dismiss();
+                    _loginBloc.submit();
 
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => MyHomePage()),
-                    );
-                  }).onError((error) {
-                    loadingBar.dismiss();
+                    _loginBloc.subjectLoginResponse.listen((loginResponse) async {
+                      loadingBar.dismiss();
 
-                    loadingBar.dismiss();
-                    FlushbarHelper.createError(
-                            message: "${error.toString()}.")
-                        .show(context);
-                    loadingBar.dismiss();
-                  });
-                }
-              : null,
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MyHomePage()),
+                      );
+                    }).onError((error) {
+                      loadingBar.dismiss();
+
+                      loadingBar.dismiss();
+                      FlushbarHelper.createError(message: "${error.toString()}.")
+                          .show(context);
+                      loadingBar.dismiss();
+                    });
+                  }
+                : null,
+          ),
         );
       },
     );
@@ -131,24 +135,31 @@ class _LoginPageState extends State<LoginPage> {
     return WillPopScope(
       onWillPop: () => _exitApp(context),
       child: Scaffold(
-
         body: SafeArea(
           child: ListView(children: <Widget>[
-
-//          Card( child:Image.asset('assets/images/zenithheader.jpg') ,),
-            SizedBox(height: 120.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: 40.0, child:Image.asset('assets/images/logo.png') ,),
-
-                Text(
-                  'XPLORE',
-                  style: Theme.of(context).textTheme.display1,
-                  textAlign: TextAlign.center,
+            Container(
+              color: ZxplorePrimaryColor,
+              height: 0.5 * MediaQuery.of(context).size.height,
+              child:
+              Center(
+                child: Container(
+                  height: 120,
+                  width: 120,
+                  color: Colors.white,
+                  child: Center(
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
                 ),
-              ],
+              ),
             ),
+            SizedBox(height: 16.0),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Center(
@@ -169,18 +180,10 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: passwordField(),
             ),
-            ButtonBar(
-              children: <Widget>[
-//              FlatButton(
-//                  child: Text('Clear'),
-//                  shape: BeveledRectangleBorder(
-//                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
-//                  ),
-//                  onPressed: () {
-//
-//                  }),
-                submitButton(),
-              ],
+            SizedBox(height: 12.0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              child: submitButton(),
             ),
 //          Expanded(child: WavyFooter())
           ]),
@@ -198,22 +201,22 @@ class _LoginPageState extends State<LoginPage> {
 
 Future<bool> _exitApp(BuildContext context) {
   return showDialog(
-    context: context,
-    child: new AlertDialog(
-      title: new Text('Do you want to exit this application?'),
-      content: new Text('We hate to see you leave...'),
-      actions: <Widget>[
-        new FlatButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: new Text('No'),
+        context: context,
+        child: new AlertDialog(
+          title: new Text('Do you want to exit this application?'),
+          content: new Text('We hate to see you leave...'),
+          actions: <Widget>[
+            new FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: new Text('No'),
+            ),
+            new FlatButton(
+              onPressed: () => exit(0),
+              child: new Text('Yes'),
+            ),
+          ],
         ),
-        new FlatButton(
-          onPressed: () => exit(0),
-          child: new Text('Yes'),
-        ),
-      ],
-    ),
-  ) ??
+      ) ??
       false;
 }
 
