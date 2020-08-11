@@ -176,36 +176,6 @@ class _MeansOfIdentificationStepStepState
     );
   }
 
-  Widget _sendEmailCheckBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isSendEmail,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsSendEmail,
-            title: new Text('Send statement to email'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
-  }
-
-  Widget _receiveSmsCheckBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isReceiveSmsAlert,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsReceiveSms,
-            title: new Text('Receive SMS alert'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
-  }
-
   Widget _scan_to_pay_checkBox() {
     return StreamBuilder(
         stream: accountFormBloc.isScanToPay,

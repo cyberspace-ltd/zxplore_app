@@ -553,24 +553,24 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//      body: StreamBuilder<AccountsResponse>(
-//        stream: _accountsBloc.subjectAccountsResponse.stream,
-//        builder: (context, AsyncSnapshot<AccountsResponse> snapshot) {
-//          if (snapshot.hasData) {
-//            if (!snapshot.data.status) {
-//              //todo: make use of error.
-//              return _buildErrorWidget(snapshot.data.message);
-//            }
-//            return makeBody(snapshot.data, context);
-//          } else if (snapshot.hasError) {
-//            return _buildErrorWidget(snapshot.error);
-//          } else {
-//            return _buildLoadingWidget();
-//          }
-//        },
-//      ),
-    body:
-    _buildDummyWidget(),
+      body: StreamBuilder<AccountsResponse>(
+        stream: _accountsBloc.subjectAccountsResponse.stream,
+        builder: (context, AsyncSnapshot<AccountsResponse> snapshot) {
+          if (snapshot.hasData) {
+            if (!snapshot.data.status) {
+              //todo: make use of error.
+              return _buildErrorWidget(snapshot.data.message);
+            }
+            return makeBody(snapshot.data, context);
+          } else if (snapshot.hasError) {
+            return _buildErrorWidget(snapshot.error);
+          } else {
+            return _buildLoadingWidget();
+          }
+        },
+      ),
+//    body:
+//    _buildDummyWidget(),
       bottomNavigationBar: BottomAppBar(
         color: ZxplorePrimaryColor,
         child: new Row(

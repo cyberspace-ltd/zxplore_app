@@ -42,6 +42,11 @@ class AccountForm {
   String verveCardRequest;
   String tokenRequest;
   String ibankRequest;
+  String zMobileRequest;
+  String zPromptRequest;
+  String statementByEmailRequest;
+  String uSSDRequest;
+  String bankWalletRequest;
 
   AccountForm({
     @required this.accountType,
@@ -74,6 +79,11 @@ class AccountForm {
     @required this.verveCardRequest,
     @required this.tokenRequest,
     @required this.ibankRequest,
+    @required this.zMobileRequest,
+    @required this.zPromptRequest,
+    @required this.statementByEmailRequest,
+    @required this.uSSDRequest,
+    @required this.bankWalletRequest,
   });
 
   factory AccountForm.fromJson(Map<String, dynamic> json) => new AccountForm(
@@ -108,6 +118,11 @@ class AccountForm {
         verveCardRequest: json["VerveCardRequest"],
         tokenRequest: json["TokenRequest"],
         ibankRequest: json["IbankRequest"],
+        zMobileRequest: json["ZMobileRequest"],
+        zPromptRequest: json["ZPromptRequest"],
+        statementByEmailRequest: json["StatementByEmailRequest"],
+        uSSDRequest: json["USSDRequest"],
+        bankWalletRequest: json["BankWalletRequest"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -142,6 +157,11 @@ class AccountForm {
         "VerveCardRequest": verveCardRequest,
         "TokenRequest": tokenRequest,
         "IbankRequest": ibankRequest,
+        "ZMobileRequest": zMobileRequest,
+        "ZPromptRequest": zPromptRequest,
+        "StatementByEmailRequest": statementByEmailRequest,
+        "USSDRequest": uSSDRequest,
+        "BankWalletRequest": bankWalletRequest,
       };
 }
 

@@ -35,6 +35,12 @@ final String columnOfflineIsSendEmail = "isSendEmail";
 final String columnOfflineIsReceiveAlert = "isReceiveAlert";
 final String columnOfflineIsRequestHardwareToken = "isRequestHardwareToken";
 final String columnOfflineIsRequestInternetBanking = "isRequestInternetBanking";
+final String columnOfflineIsScanToPay = "isScanToPay";
+final String columnOfflineIsZMobile = "isZMobile";
+final String columnOfflineIsZPrompt = "isZPrompt";
+final String columnOfflineIsStatementViaEmail = "isStatementViaEmail";
+final String columnOfflineIsUSSD = "isUSSD";
+final String columnOfflineIsBankToWallet = "isBankToWallet";
 final String columnOfflineIdCard = "idCard";
 final String columnOfflinePassport = "passport";
 final String columnOfflineUtility = "utility";
@@ -78,6 +84,12 @@ class OfflineAccountEntity {
   bool isReceiveAlert;
   bool isRequestHardwareToken;
   bool isRequestInternetBanking;
+  bool isScanToPay;
+  bool isZMobile;
+  bool isZPrompt;
+  bool isStatementViaEmail;
+  bool isUSSD;
+  bool isBankToWallet;
   String idCard;
   String passport;
   String utility;
@@ -120,6 +132,12 @@ class OfflineAccountEntity {
       this.isReceiveAlert,
       this.isRequestHardwareToken,
       this.isRequestInternetBanking,
+      this.isScanToPay,
+      this.isZMobile,
+      this.isZPrompt,
+      this.isStatementViaEmail,
+      this.isUSSD,
+      this.isBankToWallet,
       this.idCard,
       this.passport,
       this.utility,
@@ -161,6 +179,12 @@ class OfflineAccountEntity {
     map[columnOfflineIsReceiveAlert] = isReceiveAlert;
     map[columnOfflineIsRequestHardwareToken] = isRequestHardwareToken;
     map[columnOfflineIsRequestInternetBanking] = isRequestInternetBanking;
+    map[columnOfflineIsScanToPay] = isScanToPay;
+    map[columnOfflineIsZMobile] = isZMobile;
+    map[columnOfflineIsZPrompt] = isZPrompt;
+    map[columnOfflineIsStatementViaEmail] = isStatementViaEmail;
+    map[columnOfflineIsUSSD] = isUSSD;
+    map[columnOfflineIsBankToWallet] = isBankToWallet;
     map[columnOfflineIdCard] = idCard;
     map[columnOfflinePassport] = passport;
     map[columnOfflineUtility] = utility;
@@ -205,6 +229,13 @@ class OfflineAccountEntity {
           isReceiveAlert: json[columnOfflineIsReceiveAlert] == 0 ? false : true,
           isRequestHardwareToken: json[columnOfflineIsRequestHardwareToken] == 0 ? false : true,
           isRequestInternetBanking: json[columnOfflineIsRequestInternetBanking] == 0 ? false : true,
+          isScanToPay: json[columnOfflineIsScanToPay] == 0 ? false : true,
+          isZMobile: json[columnOfflineIsZMobile] == 0 ? false : true,
+          isZPrompt: json[columnOfflineIsZPrompt] == 0 ? false : true,
+          isStatementViaEmail:
+              json[columnOfflineIsStatementViaEmail] == 0 ? false : true,
+          isUSSD: json[columnOfflineIsUSSD] == 0 ? false : true,
+          isBankToWallet: json[columnOfflineIsBankToWallet] == 0 ? false : true,
           idCard: json[columnOfflineIdCard],
           passport: json[columnOfflinePassport],
           utility: json[columnOfflineUtility],
