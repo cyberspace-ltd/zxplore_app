@@ -11,12 +11,14 @@ import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
+import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/login_response.dart';
 import 'package:zxplore_app/models/occupation_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/state_model.dart';
 import 'package:zxplore_app/models/title_model.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
+import 'package:zxplore_app/models/voters_response.dart';
 
 class ZenithBankApi {
   Future<Occupation> fetchOccupations() async {
@@ -297,6 +299,62 @@ class ZenithBankApi {
       } else {
         throw CleanerException(
             'BVN Verification failed in connecting to the server.');
+      }
+    } catch (error) {
+      if (error is DioError) {
+        if (error.response?.statusCode == 400) {
+          var value = SaveAccountResponse.fromJson(error.response?.data);
+          throw CleanerException(value.message);
+        } else if (error.response?.statusCode == 502) {
+          var value = SaveAccountResponse.fromJson(error.response?.data);
+          throw CleanerException(value.message);
+        } else {
+          throw CleanerException(_handleError(error));
+        }
+      } else {
+        throw CleanerException(
+            'We are having issues sending the account to the server. Try again later. ');
+      }
+    }
+  }
+
+  Future<DriverLicenseResponse> verifyIdentity(
+      String identityNumber, int idType, String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+
+      if (idType == 0) {
+        response = await dio.post(Endpoints.getVerifyDriverLicenceUrl(),
+            data: {"Id": identityNumber});
+      } else if (idType == 1) {
+        response = await dio
+            .post(Endpoints.getVerifyVotersUrl(), data: {"Id": identityNumber});
+
+      } else if (idType == 2) {
+        response = await dio.post(Endpoints.getVerifyPassportUrl(),
+            data: {"Id": identityNumber});
+      }
+
+      if (response.statusCode == 200) {
+        return DriverLicenseResponse.fromJson(response.data);
+      }
+      if (response.statusCode == 400) {
+        var value = LoginResponse.fromJson(response.data);
+        throw CleanerException(value.message);
+      } else {
+        throw CleanerException(
+            'Drivers License Verification failed in connecting to the server.');
       }
     } catch (error) {
       if (error is DioError) {

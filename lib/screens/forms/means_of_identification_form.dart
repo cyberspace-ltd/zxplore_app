@@ -4,9 +4,12 @@ import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/utils/const.dart';
 
 import '../../colors.dart';
 import '../../login.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
+
 
 class MeansOfIdentificationStep extends StatefulWidget {
   @override
@@ -34,6 +37,9 @@ class _MeansOfIdentificationStepStepState
     'VOTER\'S ID CARD',
     'STUDENT ID'
   ];
+  String _selectedIdentityType;
+  int _selectedIdFilter = 99;
+
 
   AccountFormBloc accountFormBloc;
 
@@ -63,7 +69,21 @@ class _MeansOfIdentificationStepStepState
                 child: DropdownButton<String>(
                   value: snapshot.data,
                   isDense: true,
-                  onChanged: accountFormBloc.changeIdType,
+                  onChanged: (value){
+                    _selectedIdentityType = value;
+                    if(value == DRIVERS_LICENSE){
+                      _selectedIdFilter= 0;
+                    } else if(value == VOTERS_CARD){
+                      _selectedIdFilter= 1;
+
+                    }else if(value == INT_PASSPORT){
+                      _selectedIdFilter= 2;
+
+                    }else {
+                      _selectedIdFilter= 3;
+                    }
+                    accountFormBloc.updateIdentityType(value);
+                  },
                   items: _idTypes.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -384,7 +404,45 @@ class _MeansOfIdentificationStepStepState
                   SizedBox(height: 30.0),
                   _idIssuerTextField(),
                   SizedBox(height: 30.0),
-                  _idNumberTextField(),
+                  IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        _idNumberTextField(),
+                        Container(
+                          alignment: Alignment(1.0, 0.0),
+                          height: 60.0,
+                          child: OutlineButton(
+                            child: Text('VERIFY NUMBER'),
+                            textColor: ZxplorePrimaryColor,
+                            color: Colors.transparent,
+                            onPressed: () {
+                              var loadingBar = FlushbarHelper.createLoading(
+                                  message: "verifying NUMBER PLease wait...",
+                                  linearProgressIndicator: null);
+                              loadingBar..show(context);
+                              accountFormBloc.verifyNumber(_selectedIdFilter);
+                              accountFormBloc.driverLicenseVerificationResponse
+                                  .listen((response) {
+                                loadingBar.dismiss();
+                                FlushbarHelper.createSuccess(
+                                    message: "Driver Liscence provided is correct.")
+                                  ..show(context);
+                              }).onError((error) {
+                                loadingBar.dismiss();
+                                FlushbarHelper.createError(
+                                    message:
+                                    "Driver Liscence provided could not be verified.")
+                                    .show(context);
+                                loadingBar.dismiss();
+                              });
+                            },
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+
                   SizedBox(height: 30.0),
                   _idPlaceOfIssue(),
                   SizedBox(height: 30.0),

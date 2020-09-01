@@ -7,6 +7,7 @@ import 'package:zxplore_app/data/entities/offline_form_entity.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
+import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/repositories/accounts_repository.dart';
@@ -145,6 +146,9 @@ class AccountFormBloc extends BlocBase with Validators {
   final PublishSubject<BvnResponse> bvnVerificationResponse =
       PublishSubject<BvnResponse>();
 
+  final PublishSubject<DriverLicenseResponse> driverLicenseVerificationResponse =
+      PublishSubject<DriverLicenseResponse>();
+
   Stream<bool> get bvnStateOfOrigin => _isStateOfOriginChangeController.stream;
 
   Stream<bool> get bvnDateOfBirth => _isDateOfBirthChangeController.stream;
@@ -173,6 +177,12 @@ class AccountFormBloc extends BlocBase with Validators {
   bool bvnTitle = true;
   bool bvnEmail = true;
   bool bvnOtherName = true;
+
+  bool processCenter = true;
+  bool country = true;
+  bool lsIssueDate = true;
+  bool expiryDate = true;
+
 
   Stream<String> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
@@ -579,6 +589,10 @@ class AccountFormBloc extends BlocBase with Validators {
 
   updateAccountType(String value) {
     _accountTypeController.sink.add(value);
+  }
+
+  updateIdentityType(String value) {
+    _idTypeController.sink.add(value);
   }
 
   insertFormOffline(OfflineAccountEntity offlineForm) async {
@@ -1194,6 +1208,76 @@ class AccountFormBloc extends BlocBase with Validators {
       }
     }).catchError((error) {
       bvnVerificationResponse.addError(error);
+    });
+  }
+  verifyNumber(int idType) async {
+    var encodedBVN = CryptoHelper.encrypt(_idNumberController.value);
+    var identity = _idNumberController.value;
+
+    await _accountsRepository.verifyIdentity(identity, idType).then((identityResponse) {
+      driverLicenseVerificationResponse.add(identityResponse);
+
+      if (identityResponse?.responseCode == '200') {
+        if (identityResponse.name != null && identityResponse.name.isNotEmpty) {
+          _surnameController.add(CryptoHelper.decrypt(identityResponse.name));
+          bvnlastNameValue = identityResponse.name != null ? false : true;
+        }
+//        if (bvnResponse.firstName != null && bvnResponse.firstName.isNotEmpty) {
+//          _firstNameController.add(CryptoHelper.decrypt(bvnResponse.firstName));
+//          bvnFirstName = bvnResponse.firstName.isNotEmpty ? false : true;
+//        }
+//        if (bvnResponse.middleName != null &&
+//            bvnResponse.middleName.isNotEmpty) {
+//          _otherNameController
+//              .add(CryptoHelper.decrypt(bvnResponse.middleName));
+//          bvnOtherName = bvnResponse.email.isNotEmpty ? false : true;
+//        }
+        if (identityResponse.processingCenter != null && identityResponse.processingCenter.isNotEmpty) {
+          _idIssuerController.add(CryptoHelper.decrypt(identityResponse.processingCenter));
+          processCenter = identityResponse.processingCenter.isNotEmpty ? false : true;
+        }
+        if (identityResponse.nationality != null && identityResponse.nationality.isNotEmpty) {
+          _countryOfOriginController.add(CryptoHelper.decrypt(identityResponse.nationality));
+          _countryOfResidenceController.add(CryptoHelper.decrypt(identityResponse.nationality));
+          country = identityResponse.nationality.isNotEmpty ? false : true;
+        }
+        if (identityResponse.dateOfBirth != null &&
+            identityResponse.dateOfBirth.isNotEmpty) {
+          _dateOfBirthController
+              .add(CryptoHelper.decrypt(identityResponse.dateOfBirth));
+          bvnDateOfBirths = identityResponse.dateOfBirth.isNotEmpty ? false : true;
+        }
+        if (identityResponse.dateOfIssue != null && identityResponse.dateOfIssue.isNotEmpty) {
+          _idIssueDateController.add(CryptoHelper.decrypt(identityResponse.dateOfIssue));
+          lsIssueDate = identityResponse.dateOfIssue.isNotEmpty ? false : true;
+        }
+//        if (bvnResponse.expiryDate != null &&
+//            bvnResponse.expiryDate.isNotEmpty) {
+//          var decryptedPhone = CryptoHelper.decrypt(bvnResponse.expiryDate);
+//          if (decryptedPhone != null && decryptedPhone.startsWith('0')) {
+//            decryptedPhone = decryptedPhone.replaceFirst('0', '');
+//            _phoneNumberController.add(decryptedPhone);
+//            bvnPhone = bvnResponse.phoneNumber.isNotEmpty ? false : true;
+//          }
+//        }
+        if (identityResponse.expiryDate != null &&
+            identityResponse.expiryDate.isNotEmpty) {
+          _idExpiryDateController.add(CryptoHelper.decrypt(identityResponse.expiryDate));
+          expiryDate = identityResponse.expiryDate.isNotEmpty ? false : true;
+        }
+//        if (bvnResponse.maritalStatus != null &&
+//            bvnResponse.maritalStatus.isNotEmpty) {
+//          _maritalStatusController.add(bvnResponse.maritalStatus);
+//          bvnMaritalStatus =
+//              bvnResponse.maritalStatus.isNotEmpty ? false : true;
+//          _isMaritalStatusChangeController.add(bvnMaritalStatus);
+//        }
+
+      } else {
+        driverLicenseVerificationResponse.addError('Could not verify the Driver License provided. ');
+      }
+    }).catchError((error) {
+      driverLicenseVerificationResponse.addError(error);
     });
   }
 

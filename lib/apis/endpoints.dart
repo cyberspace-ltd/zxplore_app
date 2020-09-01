@@ -65,6 +65,21 @@ class Endpoints {
         'accounts/VerifySingleBVN/';
   }
 
+  static String getVerifyDriverLicenceUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/VerifyDriverLicense/';
+  }
+
+  static String getVerifyPassportUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/VerifyPassport/';
+  }
+
+  static String getVerifyVotersUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/VerifyVoter/';
+  }
+
   static String getAccountDetailsUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/GetAccountByRefID/';

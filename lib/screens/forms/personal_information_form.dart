@@ -498,36 +498,36 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                     child: Column(
                       children: <Widget>[
                         _bvnField(),
-                        Container(
-                          alignment: Alignment(1.0, 0.0),
-                          height: 60.0,
-                          child: OutlineButton(
-                            child: Text('VERIFY TIN'),
-                            textColor: ZxplorePrimaryColor,
-                            color: Colors.transparent,
-                            onPressed: () {
-                              var loadingBar = FlushbarHelper.createLoading(
-                                  message: "verifying TIN PLease wait...",
-                                  linearProgressIndicator: null);
-                              loadingBar..show(context);
-                              accountFormBloc.verifyBvn();
-                              accountFormBloc.bvnVerificationResponse
-                                  .listen((response) {
-                                loadingBar.dismiss();
-                                FlushbarHelper.createSuccess(
-                                    message: "TIN provided is correct.")
-                                  ..show(context);
-                              }).onError((error) {
-                                loadingBar.dismiss();
-                                FlushbarHelper.createError(
-                                        message:
-                                            "TIN provided could not be verified.")
-                                    .show(context);
-                                loadingBar.dismiss();
-                              });
-                            },
-                          ),
-                        ),
+//                        Container(
+//                          alignment: Alignment(1.0, 0.0),
+//                          height: 60.0,
+//                          child: OutlineButton(
+//                            child: Text('VERIFY TIN'),
+//                            textColor: ZxplorePrimaryColor,
+//                            color: Colors.transparent,
+//                            onPressed: () {
+//                              var loadingBar = FlushbarHelper.createLoading(
+//                                  message: "verifying TIN PLease wait...",
+//                                  linearProgressIndicator: null);
+//                              loadingBar..show(context);
+//                              accountFormBloc.verifyBvn();
+//                              accountFormBloc.bvnVerificationResponse
+//                                  .listen((response) {
+//                                loadingBar.dismiss();
+//                                FlushbarHelper.createSuccess(
+//                                    message: "TIN provided is correct.")
+//                                  ..show(context);
+//                              }).onError((error) {
+//                                loadingBar.dismiss();
+//                                FlushbarHelper.createError(
+//                                        message:
+//                                            "TIN provided could not be verified.")
+//                                    .show(context);
+//                                loadingBar.dismiss();
+//                              });
+//                            },
+//                          ),
+//                        ),
                       ],
                     ),
                   ),

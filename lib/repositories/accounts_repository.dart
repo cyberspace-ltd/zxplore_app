@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/zenithbank_api.dart';
 import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/data/entities/offline_form_entity.dart';
@@ -5,6 +6,7 @@ import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
+import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
@@ -68,6 +70,15 @@ class AccountsRepository {
       var token = await SecureStorage.getEmployeeToken();
 
       return _api.verifyBvn(encodedBvn, token);
+    } catch (error) {
+      rethrow;
+    }
+  }
+  Future<DriverLicenseResponse> verifyIdentity(String identityNumber, int idType) async {
+    try {
+      var token = await SecureStorage.getEmployeeToken();
+
+      return _api.verifyIdentity(identityNumber, idType, token);
     } catch (error) {
       rethrow;
     }
