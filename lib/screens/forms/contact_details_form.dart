@@ -119,6 +119,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             controller: _phoneController,
             keyboardType: TextInputType.phone,
             onChanged: accountFormBloc.changePhone,
+            maxLength: 11,
 //            enabled: accountFormBloc.bvnPhone,
             decoration: InputDecoration(
               labelText: 'Phone',
@@ -239,8 +240,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                             value: value.name != null ? value.name : 'GHANA',
 //                            child: Text(
 //                                value.name != null ? value.name : 'GHANA'),
-                            child: Text(
-                                'GHANA'),
+                            child: Text('GHANA'),
                           );
                         }).toList(),
                         onChanged: accountFormBloc.changeCountryOfResidence,
@@ -260,7 +260,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return StreamBuilder(
         stream: accountFormBloc.bvnStateOfResidences,
         builder: (context, snapshot) {
-          if(!snapshot.hasData){
+          if (!snapshot.hasData) {
             return _stateOfResidenceTextField();
           }
           if (snapshot.data) {
@@ -390,7 +390,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return StreamBuilder(
         stream: accountFormBloc.bvnGenders,
         builder: (context, snapshot) {
-          if(!snapshot.hasData){
+          if (!snapshot.hasData) {
             return _genderTextField();
           }
           if (snapshot.data) {
@@ -512,14 +512,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return StreamBuilder(
         stream: accountFormBloc.bvnMaritalStatuses,
         builder: (context, snapshot) {
-          if(!snapshot.hasData){
+          if (!snapshot.hasData) {
             return _maritalStatusField();
           }
           if (snapshot.data) {
             return _maritalStatusField();
           } else
             return _maritalStatusTextField();
-
         });
   }
 

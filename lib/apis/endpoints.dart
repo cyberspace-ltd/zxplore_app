@@ -4,38 +4,38 @@ class Endpoints {
 
   static const String ZENITH_API_BASE_URL = "https://webservicestest.zenithbank.com:8443/ZenithAccountService/api/";
 
-  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
+//  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
 
-//  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45:8444/api/"; //Staging Environment
+  static const String GATEWAY_BASE_API_URL = "https://196.216.180.130/ZxploreGhanaAPI/api/"; //Staging Environment
   static String getOccupationUrl() {
-    return '$ZENITH_API_BASE_URL'
+    return '$GATEWAY_BASE_API_URL'
         'accounts/Occupations';
   }
 
 
   static String getAccountClassesUrl() {
-    return '$ZENITH_API_BASE_URL'
+    return '$GATEWAY_BASE_API_URL'
         'accounts/AccountClass';
   }
 
   static String getTitlesUrl() {
-    return '$ZENITH_API_BASE_URL'
+    return '$GATEWAY_BASE_API_URL'
         'accounts/Titles';
   }
 
   static String getStatesUrl() {
-    return '$ZENITH_API_BASE_URL'
+    return '$GATEWAY_BASE_API_URL'
         'accounts/States';
   }
 
 
   static String getCountriesUrl() {
-    return '$ZENITH_API_BASE_URL'
+    return '$GATEWAY_BASE_API_URL'
         'accounts/Countries';
   }
 
   static String getCitiesUrl() {
-    return '$ZENITH_API_BASE_URL'
+    return '$GATEWAY_BASE_API_URL'
         'accounts/Cities';
   }
 

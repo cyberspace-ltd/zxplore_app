@@ -21,94 +21,170 @@ import 'package:zxplore_app/models/verify_account_response.dart';
 import 'package:zxplore_app/models/voters_response.dart';
 
 class ZenithBankApi {
-  Future<Occupation> fetchOccupations() async {
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request =
-        await client.getUrl(Uri.parse(Endpoints.getOccupationUrl()));
-    HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
-      String reply = await response.transform(utf8.decoder).join();
-      return Occupation.fromJson(json.decode(reply));
-    } else {
-      throw CleanerException('Failed to load occupations');
+  Future<Occupation> fetchOccupations(String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response =
+      await dio.get("${Endpoints.getOccupationUrl()}");
+      return Occupation.fromJson(response.data);
+    } catch (error, stacktrace) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
     }
   }
 
-  Future<AccountClass> fetchAccountClasses() async {
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request =
-        await client.getUrl(Uri.parse(Endpoints.getAccountClassesUrl()));
-    HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
-      String reply = await response.transform(utf8.decoder).join();
-      return AccountClass.fromJson(json.decode(reply));
-    } else {
-      throw CleanerException('Failed to load account classes');
+  Future<AccountClass> fetchAccountClasses(String token) async {
+
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response =
+      await dio.get(Endpoints.getAccountClassesUrl());
+      return AccountClass.fromJson(response.data);
+    } catch (error, stacktrace) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
     }
+
   }
 
-  Future<Title> fetchTitles() async {
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request =
-        await client.getUrl(Uri.parse(Endpoints.getTitlesUrl()));
-    HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
-      String reply = await response.transform(utf8.decoder).join();
-      return Title.fromJson(json.decode(reply));
-    } else {
-      throw CleanerException('Failed to load titles');
+  Future<Title> fetchTitles(String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response =
+      await dio.get(Endpoints.getTitlesUrl());
+      return Title.fromJson(response.data);
+    } catch (error, stacktrace) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
     }
+
   }
 
-  Future<State> fetchStates() async {
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request =
-        await client.getUrl(Uri.parse(Endpoints.getStatesUrl()));
-    HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
-      String reply = await response.transform(utf8.decoder).join();
-      return State.fromJson(json.decode(reply));
-    } else {
-      throw CleanerException('Failed to load states');
+  Future<State> fetchStates(String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response =
+      await dio.get(Endpoints.getStatesUrl());
+      return State.fromJson(response.data);
+    } catch (error, stacktrace) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
     }
+
   }
 
-  Future<State> fetchCities() async {
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request =
-        await client.getUrl(Uri.parse(Endpoints.getCitiesUrl()));
-    HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
-      String reply = await response.transform(utf8.decoder).join();
-      return State.fromJson(json.decode(reply));
-    } else {
-      throw CleanerException('Failed to load cities');
+  Future<State> fetchCities(String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response =
+      await dio.get(Endpoints.getCitiesUrl());
+      return State.fromJson(response.data);
+    } catch (error, stacktrace) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
     }
+//    HttpClient client = new HttpClient();
+//    client.badCertificateCallback =
+//        ((X509Certificate cert, String host, int port) => true);
+//    HttpClientRequest request =
+//        await client.getUrl(Uri.parse(Endpoints.getCitiesUrl()));
+//    HttpClientResponse response = await request.close();
+//    if (response.statusCode == 200) {
+//      String reply = await response.transform(utf8.decoder).join();
+//      return State.fromJson(json.decode(reply));
+//    } else {
+//      throw CleanerException('Failed to load cities');
+//    }
   }
 
-  Future<State> fetchCountries() async {
-    HttpClient client = new HttpClient();
-    client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-    HttpClientRequest request =
-        await client.getUrl(Uri.parse(Endpoints.getCountriesUrl()));
-    HttpClientResponse response = await request.close();
-    if (response.statusCode == 200) {
-      String reply = await response.transform(utf8.decoder).join();
-      return State.fromJson(json.decode(reply));
-    } else {
-      throw CleanerException('Failed to load countries');
+  Future<State> fetchCountries(String token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response =
+      await dio.get(Endpoints.getCountriesUrl());
+      return State.fromJson(response.data);
+    } catch (error, stacktrace) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
     }
+//    HttpClient client = new HttpClient();
+//    client.badCertificateCallback =
+//        ((X509Certificate cert, String host, int port) => true);
+//    HttpClientRequest request =
+//        await client.getUrl(Uri.parse(Endpoints.getCountriesUrl()));
+//    HttpClientResponse response = await request.close();
+//    if (response.statusCode == 200) {
+//      String reply = await response.transform(utf8.decoder).join();
+//      return State.fromJson(json.decode(reply));
+//    } else {
+//      throw CleanerException('Failed to load countries');
+//    }
   }
 
   Future<LoginResponse> attemptLogin(String username, String password) async {
@@ -217,7 +293,7 @@ class ZenithBankApi {
     } else if (response.statusCode == 400) {
       var errorResponse =
           VerifyAccountResponse().fromErrorJson(json.decode(reply));
-      throw CleanerException(errorResponse.message);
+      throw CleanerException(errorResponse.message??"Account Number not generated yet");
     } else {
       throw CleanerException('Failed to load cities');
     }

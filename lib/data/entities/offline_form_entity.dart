@@ -43,6 +43,8 @@ final String columnOfflineIsUSSD = "isUSSD";
 final String columnOfflineIsBankToWallet = "isBankToWallet";
 final String columnOfflineIdCard = "idCard";
 final String columnOfflinePassport = "passport";
+final String columnOfflineLongitude = "Longitude";
+final String columnOfflineLatitude = "Latitude";
 final String columnOfflineUtility = "utility";
 final String columnOfflineSignature = "signature";
 
@@ -90,6 +92,8 @@ class OfflineAccountEntity {
   bool isStatementViaEmail;
   bool isUSSD;
   bool isBankToWallet;
+  double longitude;
+  double latitude;
   String idCard;
   String passport;
   String utility;
@@ -113,6 +117,8 @@ class OfflineAccountEntity {
       this.countryOfOrigin,
       this.email,
       this.phone,
+      this.latitude,
+      this.longitude,
       this.nextOfKin,
       this.address1,
       this.address2,
@@ -160,6 +166,8 @@ class OfflineAccountEntity {
     map[columnOfflineStateOfOrigin] = stateOfOrigin;
     map[columnOfflineCountryOfOrigin] = countryOfOrigin;
     map[columnOfflineEmail] = email;
+    map[columnOfflineLongitude] = longitude;
+    map[columnOfflineLatitude] = latitude;
     map[columnOfflinePhone] = phone;
     map[columnOfflineNextOfKin] = nextOfKin;
     map[columnOfflineAddress1] = address1;
@@ -221,14 +229,18 @@ class OfflineAccountEntity {
           occupation: json[columnOfflineOccupation],
           maritalStatus: json[columnOfflineMaritalStatus],
           idType: json[columnOfflineIdType],
+          longitude: json[columnOfflineLongitude],
+          latitude: json[columnOfflineLatitude],
           idNumber: json[columnOfflineIdNumber],
           idPlaceOfIssue: json[columnOfflineIdPlaceOfIssue],
           idIssueDate: json[columnOfflineIdIssueDate],
           idExpiryDate: json[columnOfflineIdExpiryDate],
           isSendEmail: json[columnOfflineIsSendEmail] == 0 ? false : true,
           isReceiveAlert: json[columnOfflineIsReceiveAlert] == 0 ? false : true,
-          isRequestHardwareToken: json[columnOfflineIsRequestHardwareToken] == 0 ? false : true,
-          isRequestInternetBanking: json[columnOfflineIsRequestInternetBanking] == 0 ? false : true,
+          isRequestHardwareToken:
+              json[columnOfflineIsRequestHardwareToken] == 0 ? false : true,
+          isRequestInternetBanking:
+              json[columnOfflineIsRequestInternetBanking] == 0 ? false : true,
           isScanToPay: json[columnOfflineIsScanToPay] == 0 ? false : true,
           isZMobile: json[columnOfflineIsZMobile] == 0 ? false : true,
           isZPrompt: json[columnOfflineIsZPrompt] == 0 ? false : true,
@@ -240,6 +252,4 @@ class OfflineAccountEntity {
           passport: json[columnOfflinePassport],
           utility: json[columnOfflineUtility],
           signature: json[columnOfflineSignature]);
-
-
 }

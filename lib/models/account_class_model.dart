@@ -36,7 +36,7 @@ class AccountClass {
 }
 
 class AccountClassCode {
-  int classCode;
+  String classCode;
   String description;
   String classType;
 

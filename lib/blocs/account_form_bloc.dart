@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:location/location.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/data/entities/account_class_entity.dart';
@@ -31,6 +32,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _isStateOfResidenceChangeController = BehaviorSubject<bool>();
   final _isGenderChangeController = BehaviorSubject<bool>();
   final _isMaritalStatusChangeController = BehaviorSubject<bool>();
+  final BehaviorSubject<LocationData> _subjectLocation = BehaviorSubject<LocationData>();
 
   final _idController = BehaviorSubject<int>();
   final _isEditModeController = BehaviorSubject<bool>();
@@ -66,6 +68,8 @@ class AccountFormBloc extends BlocBase with Validators {
   //Contact Details
 
   final _emailController = BehaviorSubject<String>();
+  final _latitudeController = BehaviorSubject<String>();
+  final _longitudeController = BehaviorSubject<String>();
 
   final _phoneNumberController = BehaviorSubject<String>();
 
@@ -146,7 +150,8 @@ class AccountFormBloc extends BlocBase with Validators {
   final PublishSubject<BvnResponse> bvnVerificationResponse =
       PublishSubject<BvnResponse>();
 
-  final PublishSubject<DriverLicenseResponse> driverLicenseVerificationResponse =
+  final PublishSubject<DriverLicenseResponse>
+      driverLicenseVerificationResponse =
       PublishSubject<DriverLicenseResponse>();
 
   Stream<bool> get bvnStateOfOrigin => _isStateOfOriginChangeController.stream;
@@ -182,7 +187,6 @@ class AccountFormBloc extends BlocBase with Validators {
   bool country = true;
   bool lsIssueDate = true;
   bool expiryDate = true;
-
 
   Stream<String> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
@@ -228,6 +232,13 @@ class AccountFormBloc extends BlocBase with Validators {
       _nextOfKinController.stream.transform(validateNextOfKin);
 
   Stream<String> get email => _emailController.stream.transform(validateEmail);
+
+  BehaviorSubject<LocationData> get subjectLocationResponse =>
+      _subjectLocation;
+
+  Stream<String> get latitude => _latitudeController.stream;
+
+  Stream<String> get longitude => _longitudeController.stream;
 
   Stream<String> get address1 =>
       _address1Controller.stream.transform(validateAddress1);
@@ -301,6 +312,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get signature => _uploadSignatureController.stream;
 
+  Stream<LocationData> get location => _subjectLocation.stream;
+
 //  Stream<bool> get submitValid => Observable.combineLatest4(
 //      accountType,
 //      accountHolderType,
@@ -314,6 +327,8 @@ class AccountFormBloc extends BlocBase with Validators {
   // change data
 
   Function(String) get changeAccountType => _accountTypeController.sink.add;
+  Function(String) get changeLatitude => _latitudeController.sink.add;
+  Function(String) get changeLongitude => _longitudeController.sink.add;
 
   Function(String) get changeHolderType =>
       _accountHolderTypeController.sink.add;
@@ -473,6 +488,8 @@ class AccountFormBloc extends BlocBase with Validators {
         : _countryOfOriginController.value; //workaround for bug
 
     var validEmail = _emailController.value;
+    var validLatitude = _latitudeController.value;
+    var validLongitude = _longitudeController.value;
     final validPhone = _phoneNumberController.value;
     final validNextOfKin = _nextOfKinController.value;
     final validAddress1 = _address1Controller.value;
@@ -554,6 +571,8 @@ class AccountFormBloc extends BlocBase with Validators {
         stateOfResidence: validStateOfResidence,
         cityOfResidence: validCityOfResidence,
         gender: validGender,
+        latitude: double.parse(validLatitude),
+        longitude: double.parse(validLongitude),
         occupation: validOccupation,
         maritalStatus: validMaritalStatus,
         idType: validIdType,
@@ -651,6 +670,8 @@ class AccountFormBloc extends BlocBase with Validators {
         : _countryOfOriginController.value; //workaround for bug
 
     var validEmail = _emailController.value;
+    double validLatitude = double.parse(_latitudeController.value);
+    double validLongitude = double.parse(_longitudeController.value);
     final validPhone = _phoneNumberController.value;
     final validNextOfKin = _nextOfKinController.value;
     final validAddress1 = _address1Controller.value;
@@ -1074,7 +1095,9 @@ class AccountFormBloc extends BlocBase with Validators {
         statementByEmailRequest: isIsStatementViaEmail,
         zMobileRequest: isZMobile,
         uSSDRequest: isUssD,
-        bankWalletRequest: isBankToWallet);
+        bankWalletRequest: isBankToWallet,
+        latitude: validLatitude,
+        longitude: validLongitude);
 
     String json = jsonEncode(_accountForm);
 
@@ -1210,11 +1233,58 @@ class AccountFormBloc extends BlocBase with Validators {
       bvnVerificationResponse.addError(error);
     });
   }
+
+  getCurrentLocation() async{
+    try {
+      final Location location = Location();
+
+      LocationData _location;
+      StreamSubscription<LocationData> _locationSubscription;
+      bool _serviceEnabled;
+      PermissionStatus _permissionGranted;
+
+      _serviceEnabled = await location.serviceEnabled();
+      if (!_serviceEnabled) {
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return null;
+        }
+      }
+
+      _permissionGranted = await location.hasPermission();
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          return null;
+        }
+      }
+
+      _location = await location.getLocation();
+
+      _locationSubscription =
+          location.onLocationChanged.handleError((dynamic err) {
+            _locationSubscription.cancel();
+          }).listen((LocationData currentLocation) {
+            _location = currentLocation;
+            return currentLocation;
+          });
+      _subjectLocation.sink.add(_location);
+      _latitudeController.sink.add(_location.latitude.toString());
+      _longitudeController.sink.add(_location.longitude.toString());
+
+    }catch(error){
+      _subjectLocation.sink.addError(error);
+
+    }
+  }
+
   verifyNumber(int idType) async {
     var encodedBVN = CryptoHelper.encrypt(_idNumberController.value);
     var identity = _idNumberController.value;
 
-    await _accountsRepository.verifyIdentity(identity, idType).then((identityResponse) {
+    await _accountsRepository
+        .verifyIdentity(identity, idType)
+        .then((identityResponse) {
       driverLicenseVerificationResponse.add(identityResponse);
 
       if (identityResponse?.responseCode == '200') {
@@ -1232,23 +1302,32 @@ class AccountFormBloc extends BlocBase with Validators {
 //              .add(CryptoHelper.decrypt(bvnResponse.middleName));
 //          bvnOtherName = bvnResponse.email.isNotEmpty ? false : true;
 //        }
-        if (identityResponse.processingCenter != null && identityResponse.processingCenter.isNotEmpty) {
-          _idIssuerController.add(CryptoHelper.decrypt(identityResponse.processingCenter));
-          processCenter = identityResponse.processingCenter.isNotEmpty ? false : true;
+        if (identityResponse.processingCenter != null &&
+            identityResponse.processingCenter.isNotEmpty) {
+          _idIssuerController
+              .add(CryptoHelper.decrypt(identityResponse.processingCenter));
+          processCenter =
+              identityResponse.processingCenter.isNotEmpty ? false : true;
         }
-        if (identityResponse.nationality != null && identityResponse.nationality.isNotEmpty) {
-          _countryOfOriginController.add(CryptoHelper.decrypt(identityResponse.nationality));
-          _countryOfResidenceController.add(CryptoHelper.decrypt(identityResponse.nationality));
+        if (identityResponse.nationality != null &&
+            identityResponse.nationality.isNotEmpty) {
+          _countryOfOriginController
+              .add(CryptoHelper.decrypt(identityResponse.nationality));
+          _countryOfResidenceController
+              .add(CryptoHelper.decrypt(identityResponse.nationality));
           country = identityResponse.nationality.isNotEmpty ? false : true;
         }
         if (identityResponse.dateOfBirth != null &&
             identityResponse.dateOfBirth.isNotEmpty) {
           _dateOfBirthController
               .add(CryptoHelper.decrypt(identityResponse.dateOfBirth));
-          bvnDateOfBirths = identityResponse.dateOfBirth.isNotEmpty ? false : true;
+          bvnDateOfBirths =
+              identityResponse.dateOfBirth.isNotEmpty ? false : true;
         }
-        if (identityResponse.dateOfIssue != null && identityResponse.dateOfIssue.isNotEmpty) {
-          _idIssueDateController.add(CryptoHelper.decrypt(identityResponse.dateOfIssue));
+        if (identityResponse.dateOfIssue != null &&
+            identityResponse.dateOfIssue.isNotEmpty) {
+          _idIssueDateController
+              .add(CryptoHelper.decrypt(identityResponse.dateOfIssue));
           lsIssueDate = identityResponse.dateOfIssue.isNotEmpty ? false : true;
         }
 //        if (bvnResponse.expiryDate != null &&
@@ -1262,7 +1341,8 @@ class AccountFormBloc extends BlocBase with Validators {
 //        }
         if (identityResponse.expiryDate != null &&
             identityResponse.expiryDate.isNotEmpty) {
-          _idExpiryDateController.add(CryptoHelper.decrypt(identityResponse.expiryDate));
+          _idExpiryDateController
+              .add(CryptoHelper.decrypt(identityResponse.expiryDate));
           expiryDate = identityResponse.expiryDate.isNotEmpty ? false : true;
         }
 //        if (bvnResponse.maritalStatus != null &&
@@ -1274,7 +1354,8 @@ class AccountFormBloc extends BlocBase with Validators {
 //        }
 
       } else {
-        driverLicenseVerificationResponse.addError('Could not verify the Driver License provided. ');
+        driverLicenseVerificationResponse
+            .addError('Could not verify the Driver License provided. ');
       }
     }).catchError((error) {
       driverLicenseVerificationResponse.addError(error);
@@ -1302,6 +1383,9 @@ class AccountFormBloc extends BlocBase with Validators {
     _phoneNumberController.close();
     _nextOfKinController.close();
     _address1Controller.close();
+    _subjectLocation.close();
+    _latitudeController.close();
+    _longitudeController.close();
     _address2Controller.close();
     _countryOfResidenceController.close();
     _stateOfResidenceController.close();

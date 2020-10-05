@@ -26,7 +26,9 @@ class AccountsRepository {
 
   Future<AccountClass> getAccountClasses() async {
     try {
-      return _api.fetchAccountClasses();
+      var token = await SecureStorage.getEmployeeToken();
+
+      return _api.fetchAccountClasses(token);
     } catch (error) {
       rethrow;
     }

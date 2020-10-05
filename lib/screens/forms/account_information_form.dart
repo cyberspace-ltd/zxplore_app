@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:zxplore_app/blocs/account_class_bloc.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
+import 'package:zxplore_app/blocs/all_accounts_bloc.dart';
 import 'package:zxplore_app/blocs/occupations_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/data/entities/account_class_entity.dart';
@@ -58,6 +59,7 @@ class _AccountInformationState extends State<AccountInformationStep>
     _accountClassBloc.accountClasses.listen((data) {
       accountClasses = data;
     });
+    accountFormBloc.getCurrentLocation();
   }
 
   Widget accountTypeField() {

@@ -47,6 +47,8 @@ class AccountForm {
   String statementByEmailRequest;
   String uSSDRequest;
   String bankWalletRequest;
+  double latitude;
+  double longitude;
 
   AccountForm({
     @required this.accountType,
@@ -84,6 +86,8 @@ class AccountForm {
     @required this.statementByEmailRequest,
     @required this.uSSDRequest,
     @required this.bankWalletRequest,
+    @required this.latitude,
+    @required this.longitude,
   });
 
   factory AccountForm.fromJson(Map<String, dynamic> json) => new AccountForm(
@@ -123,6 +127,8 @@ class AccountForm {
         statementByEmailRequest: json["StatementByEmailRequest"],
         uSSDRequest: json["USSDRequest"],
         bankWalletRequest: json["BankWalletRequest"],
+        latitude: json["Latitude"].toDouble(),
+        longitude: json["Longitude"].toDouble(),
       );
 
   Map<String, dynamic> toJson() => {

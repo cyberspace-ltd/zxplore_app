@@ -32,6 +32,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Kindly accept to view current location and track the process of account creation location</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Kindly accept to view current location</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

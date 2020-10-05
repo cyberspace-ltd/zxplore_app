@@ -11,6 +11,7 @@ import 'package:zxplore_app/screens/category_screen.dart';
 import 'package:zxplore_app/screens/offline_home.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
+import 'package:zxplore_app/utils/secure_storage.dart';
 
 import 'blocs/occupations_bloc.dart';
 import 'colors.dart';
@@ -39,6 +40,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List accounts;
   AccountsBloc _accountsBloc;
+  var token = "";
 
   Future<List<String>> occupations;
   OccupationsBloc _occupationsBloc;
@@ -49,19 +51,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-
     _occupationsBloc = OccupationsBloc();
     _countriesBloc = CountriesBloc();
     statesBloc = StatesBloc();
     _citiesBloc = CitiesBloc();
     _accountClassBloc = AccountClassBloc();
 
-    _fetchAccountClasses();
-    _fetchStates();
-    _fetchOccupations();
-    _fetchCities();
-    _fetchCountries();
-
+    SecureStorage.getEmployeeToken().then((data) {
+      if (data != null) {
+        _fetchAccountClasses(data);
+        _fetchStates(data);
+        _fetchOccupations(data);
+        _fetchCities(data);
+        _fetchCountries(data);
+      }
+    });
 
     _accountsBloc = AccountsBloc();
     _accountsBloc.getAccounts();
@@ -105,10 +109,11 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                   fontStyle: FontStyle.normal, color: ZxploreRedColor)),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                builder: ( BuildContext context) => LoginPage()
-            ), ModalRoute.withName('/'));
-
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage()),
+                ModalRoute.withName('/'));
           });
     } else {
       return ActionChip(
@@ -124,13 +129,18 @@ class _MyHomePageState extends State<MyHomePage> {
           label: Text('Try again',
               style: TextStyle(
                   fontStyle: FontStyle.normal, color: ZxplorePrimaryColor)),
-          onPressed: () {
-            _fetchAccountClasses();
-            _fetchStates();
-            _fetchOccupations();
-            _fetchCities();
-            _fetchCountries();
-            _accountsBloc.getAccounts();
+          onPressed: () async {
+            if (token.isEmpty) {
+              token = await SecureStorage.getEmployeeToken();
+            } else if(token.isNotEmpty){
+
+              _fetchAccountClasses(token);
+              _fetchStates(token);
+              _fetchOccupations(token);
+              _fetchCities(token);
+              _fetchCountries(token);
+              _accountsBloc.getAccounts();
+            }
           });
     }
   }
@@ -148,7 +158,8 @@ class _MyHomePageState extends State<MyHomePage> {
               size: 60,
             ),
             SizedBox(height: 20),
-            Text("Click the Create Account button below to begin the instant account creation process",
+            Text(
+                "Click the Create Account button below to begin the instant account creation process",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontStyle: FontStyle.normal, fontSize: 14.0)),
             SizedBox(height: 20),
@@ -502,43 +513,44 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Don't show the leading button
+        automaticallyImplyLeading: false,
+        // Don't show the leading button
         centerTitle: true,
-          leading: Container(),
-          title: const Text(
-        'Zxplore Ghana',
-        style: TextStyle(color: Colors.white),
+        leading: Container(),
+        title: const Text(
+          'Zxplore Ghana',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.refresh, color: Colors.white),
+              onPressed: () {
+                var loading = FlushbarHelper.createLoading(
+                    message: 'Getting latest accounts...')
+                  ..show(context);
+                _accountsBloc.getAccounts();
+                _accountsBloc.fetchAccountClasses();
 
-      ),actions: <Widget>[
-        IconButton(
-            icon: Icon(Icons.refresh, color: Colors.white),
-            onPressed: () {
-             var loading = FlushbarHelper.createLoading(message: 'Getting latest accounts...')..show(context);
-              _accountsBloc.getAccounts();
-              _accountsBloc.fetchAccountClasses();
+                Future.delayed(
+                    new Duration(seconds: 10), () => loading.dismiss(context));
 
-              Future.delayed(new Duration(seconds: 10),
-
-                  () => loading.dismiss(context)
-              );
-
-              setState(() {
-
-              });
-            }),
-        IconButton(
-            icon: Icon(Icons.cloud_off, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => OfflineHomePage()),
-              );
-            }),
-            SizedBox(width: 16,)
-      ],),
+                setState(() {});
+              }),
+          IconButton(
+              icon: Icon(Icons.cloud_off, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => OfflineHomePage()),
+                );
+              }),
+          SizedBox(
+            width: 16,
+          )
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         elevation: 4.0,
         backgroundColor: ZxploreRedColor,
@@ -585,7 +597,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   _showModal();
                 }),
-
             IconButton(
                 icon: Icon(Icons.power_settings_new, color: Colors.white),
                 onPressed: () {
@@ -621,9 +632,11 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.transparent,
               onPressed: () async {
                 await Helper.logout();
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                    builder: ( BuildContext context) => LoginPage()
-                ), ModalRoute.withName('/'));
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage()),
+                    ModalRoute.withName('/'));
 
 //                Navigator.pushReplacement(
 //                  context,
@@ -638,10 +651,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future _fetchStates() async {
+  Future _fetchStates(String token) async {
     await DBProvider.db.getStates().then((result) async {
       if (result.isEmpty) {
-        await ZenithBankApi().fetchStates().then((result) {
+        await ZenithBankApi().fetchStates(token).then((result) {
           statesBloc.inAddStates.add(result.menu);
         }).catchError((error) {
           throw Exception(error.toString());
@@ -653,10 +666,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchOccupations() async {
+  Future _fetchOccupations(String token) async {
     await DBProvider.db.getOccupations().then((result) async {
       if (result.isEmpty) {
-        await ZenithBankApi().fetchOccupations().then((result) async {
+        await ZenithBankApi().fetchOccupations(token).then((result) async {
           _occupationsBloc.inAddOccupations.add(result.menu);
         }).catchError((error) {
           throw Exception(error.toString());
@@ -668,10 +681,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchCountries() async {
+  Future _fetchCountries(String token) async {
     await DBProvider.db.getCountries().then((result) async {
       if (result.isEmpty) {
-        await ZenithBankApi().fetchCountries().then((result) {
+        await ZenithBankApi().fetchCountries(token).then((result) {
           _countriesBloc.inAddCountries.add(result.menu);
         }).catchError((error) {
           throw Exception(error.toString());
@@ -682,10 +695,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchCities() async {
+  Future _fetchCities(String token) async {
     await DBProvider.db.getCities().then((result) async {
       if (result.isEmpty) {
-        await ZenithBankApi().fetchCities().then((result) {
+        await ZenithBankApi().fetchCities(token).then((result) {
           _citiesBloc.inAddCities.add(result.menu);
         }).catchError((error) {
           throw Exception(error.toString());
@@ -696,10 +709,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchAccountClasses() async {
+  Future _fetchAccountClasses(String token) async {
     DBProvider.db.getAccountClasses().then((result) async {
       if (result.isEmpty) {
-        await ZenithBankApi().fetchAccountClasses().then((result) {
+        await ZenithBankApi().fetchAccountClasses(token).then((result) {
           _accountClassBloc.inAddAccountClasses.add(result.accountClassCodes);
         }).catchError((error) {
           throw Exception(error.toString());

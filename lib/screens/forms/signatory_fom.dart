@@ -86,6 +86,12 @@ class _SignatoryStepState extends State<SignatoryStep>
                       child: Text('Accept Signature.'),
                       onPressed: () async {
                         final sign = _sign.currentState;
+                        if (sign.points.length == 0) {
+                          FlushbarHelper.createError(
+                              message: "You have not signed this form")
+                            ..show(context);
+                          return;
+                        }
                         //retrieve image data, do whatever you want with it (send to server, save locally...)
                         final image = await sign.getData();
                         var data = await image.toByteData(
@@ -157,7 +163,8 @@ class _SignatoryStepState extends State<SignatoryStep>
                       }).onError((error) {
                         loadingBar.dismiss(context);
 
-                            FlushbarHelper.createError(message: error.toString())..show(context);
+                        FlushbarHelper.createError(message: error.toString())
+                          ..show(context);
                       });
                     }
                   : null,

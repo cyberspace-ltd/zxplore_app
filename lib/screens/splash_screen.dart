@@ -24,45 +24,61 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Future<List<String>> occupations;
-  OccupationsBloc _occupationsBloc;
-  CountriesBloc _countriesBloc;
-  StatesBloc statesBloc;
-  CitiesBloc _citiesBloc;
-  AccountClassBloc _accountClassBloc;
+//  Future<List<String>> occupations;
+//  OccupationsBloc _occupationsBloc;
+//  CountriesBloc _countriesBloc;
+//  StatesBloc statesBloc;
+//  CitiesBloc _citiesBloc;
+//  AccountClassBloc _accountClassBloc;
+//  var token = "";
 
-  void _loadInitialData() {
-    _occupationsBloc = OccupationsBloc();
-    _countriesBloc = CountriesBloc();
-    statesBloc = StatesBloc();
-    _citiesBloc = CitiesBloc();
-    _accountClassBloc = AccountClassBloc();
+  void _loadInitialData() async {
+//    _occupationsBloc = OccupationsBloc();
+//    _countriesBloc = CountriesBloc();
+//    statesBloc = StatesBloc();
+//    _citiesBloc = CitiesBloc();
+//    _accountClassBloc = AccountClassBloc();
 
-    Future.wait([
-      _fetchAccountClasses(),
-      _fetchStates(),
-      _fetchOccupations(),
-      _fetchCountries(),
-      _fetchCities(),
-    ]).whenComplete(() {
-      SecureStorage.getEmployeeToken().then((token) {
-        if (token == null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
-          );
-        }
-      }).catchError((error) {
-//        print('employee token error: $error');
-      });
+    SecureStorage.getEmployeeToken().then((token) {
+      if (token == null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
+        );
+      }
     }).catchError((error) {
-      FlushbarHelper.createLoading(message: error)..show(context);
+//        print('employee token error: $error');
     });
+//    Future.wait([
+////      _fetchAccountClasses(),
+////      _fetchStates(),
+////      _fetchOccupations(),
+////      _fetchCountries(),
+////      _fetchCities(),
+//    ]).whenComplete(() {
+//      SecureStorage.getEmployeeToken().then((token) {
+//        if (token == null) {
+//          Navigator.pushReplacement(
+//            context,
+//            MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+//          );
+//        } else {
+//          Navigator.pushReplacement(
+//            context,
+//            MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
+//          );
+//        }
+//      }).catchError((error) {
+////        print('employee token error: $error');
+//      });
+//    }).catchError((error) {
+//      FlushbarHelper.createLoading(message: error)..show(context);
+//    });
   }
 
   @override
@@ -78,78 +94,78 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  Future _fetchStates() async {
-    await DBProvider.db.getStates().then((result) async {
-      if (result.isEmpty) {
-        await ZenithBankApi().fetchStates().then((result) {
-          statesBloc.inAddStates.add(result.menu);
-        }).catchError((error) {
-          throw Exception(error.toString());
-        });
-      } else {
-        //data exists continue
-        return;
-      }
-    });
-  }
-
-  Future _fetchOccupations() async {
-    await DBProvider.db.getOccupations().then((result) async {
-      if (result.isEmpty) {
-        await ZenithBankApi().fetchOccupations().then((result) async {
-          _occupationsBloc.inAddOccupations.add(result.menu);
-        }).catchError((error) {
-          throw Exception(error.toString());
-        });
-      } else {
-        //data exists continue
-        return;
-      }
-    });
-  }
-
-  Future _fetchCountries() async {
-    await DBProvider.db.getCountries().then((result) async {
-      if (result.isEmpty) {
-        await ZenithBankApi().fetchCountries().then((result) {
-          _countriesBloc.inAddCountries.add(result.menu);
-        }).catchError((error) {
-          throw Exception(error.toString());
-        });
-      } else {
-        return;
-      }
-    });
-  }
-
-  Future _fetchCities() async {
-    await DBProvider.db.getCities().then((result) async {
-      if (result.isEmpty) {
-        await ZenithBankApi().fetchCities().then((result) {
-          _citiesBloc.inAddCities.add(result.menu);
-        }).catchError((error) {
-          throw Exception(error.toString());
-        });
-      } else {
-        return;
-      }
-    });
-  }
-
-  Future _fetchAccountClasses() async {
-    DBProvider.db.getAccountClasses().then((result) async {
-      if (result.isEmpty) {
-        await ZenithBankApi().fetchAccountClasses().then((result) {
-          _accountClassBloc.inAddAccountClasses.add(result.accountClassCodes);
-        }).catchError((error) {
-          throw Exception(error.toString());
-        });
-      } else {
-        //data exists continue
-        return;
-      }
-    });
-  }
+//  Future _fetchStates(String token) async {
+//    await DBProvider.db.getStates().then((result) async {
+//      if (result.isEmpty) {
+//        await ZenithBankApi().fetchStates(token).then((result) {
+//          statesBloc.inAddStates.add(result.menu);
+//        }).catchError((error) {
+//          throw Exception(error.toString());
+//        });
+//      } else {
+//        //data exists continue
+//        return;
+//      }
+//    });
+//  }
+//
+//  Future _fetchOccupations(String token) async {
+//    await DBProvider.db.getOccupations().then((result) async {
+//      if (result.isEmpty) {
+//        await ZenithBankApi().fetchOccupations(token).then((result) async {
+//          _occupationsBloc.inAddOccupations.add(result.menu);
+//        }).catchError((error) {
+//          throw Exception(error.toString());
+//        });
+//      } else {
+//        //data exists continue
+//        return;
+//      }
+//    });
+//  }
+//
+//  Future _fetchCountries(String token) async {
+//    await DBProvider.db.getCountries().then((result) async {
+//      if (result.isEmpty) {
+//        await ZenithBankApi().fetchCountries(token).then((result) {
+//          _countriesBloc.inAddCountries.add(result.menu);
+//        }).catchError((error) {
+//          throw Exception(error.toString());
+//        });
+//      } else {
+//        return;
+//      }
+//    });
+//  }
+//
+//  Future _fetchCities(String token) async {
+//    await DBProvider.db.getCities().then((result) async {
+//      if (result.isEmpty) {
+//        await ZenithBankApi().fetchCities(token).then((result) {
+//          _citiesBloc.inAddCities.add(result.menu);
+//        }).catchError((error) {
+//          throw Exception(error.toString());
+//        });
+//      } else {
+//        return;
+//      }
+//    });
+//  }
+//
+//  Future _fetchAccountClasses(String token) async {
+//    DBProvider.db.getAccountClasses().then((result) async {
+//      if (result.isEmpty) {
+//        await ZenithBankApi().fetchAccountClasses(token).then((result) {
+//          _accountClassBloc.inAddAccountClasses.add(result.accountClassCodes);
+//        }).catchError((error) {
+//          throw Exception(error.toString());
+//        });
+//      } else {
+//        //data exists continue
+//        return;
+//      }
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,11 +227,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void dispose() {
-    _occupationsBloc?.dispose();
-    _countriesBloc?.dispose();
-    statesBloc?.dispose();
-    _citiesBloc?.dispose();
-    _accountClassBloc?.dispose();
+//    _occupationsBloc?.dispose();
+//    _countriesBloc?.dispose();
+//    statesBloc?.dispose();
+//    _citiesBloc?.dispose();
+//    _accountClassBloc?.dispose();
     super.dispose();
   }
 }
