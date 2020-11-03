@@ -120,7 +120,7 @@ class Validators {
     if (arg.isNotEmpty && arg.length > 2) {
       sink.add(arg);
     } else {
-      sink.addError('State of origin is required');
+      sink.addError('Region of Residence is required');
     }
   });
 
@@ -203,7 +203,7 @@ class Validators {
     if (arg.length > 2) {
       sink.add(arg);
     } else {
-      sink.addError('State of residence is required');
+      sink.addError('Region of Residence is required');
     }
   });
 

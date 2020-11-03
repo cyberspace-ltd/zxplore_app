@@ -47,7 +47,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
   //Personal Information
 
-  final _bvnController = BehaviorSubject<String>();
+  final _tinController = BehaviorSubject<String>();
 
   final _titleController = BehaviorSubject<String>();
 
@@ -95,6 +95,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _idTypeController = BehaviorSubject<String>();
 
   final _idIssuerController = BehaviorSubject<String>();
+  final _idIssuerOthersController = BehaviorSubject<String>();
 
   final _idNumberController = BehaviorSubject<String>();
 
@@ -200,7 +201,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get accountCategoryType =>
       _accountCategoryController.stream.transform(validateAccountCategory);
 
-  Stream<String> get bvn => _bvnController.stream;
+  Stream<String> get tin => _tinController.stream;
 
   Stream<String> get title => _titleController.stream.transform(validateTitle);
 
@@ -272,6 +273,11 @@ class AccountFormBloc extends BlocBase with Validators {
           ? _idIssuerController.stream
           : _idIssuerController.stream.transform(validateIdIssuer);
 
+  Stream<String> get idOthersIssuer =>
+      _accountCategoryController.value == easy_classic
+          ? _idIssuerOthersController.stream
+          : _idIssuerOthersController.stream.transform(validateIdIssuer);
+
   Stream<String> get idNumber =>
       _accountCategoryController.value == easy_classic
           ? _idNumberController.stream
@@ -338,7 +344,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Function(String) get changeAccountCategory =>
       _accountCategoryController.sink.add;
 
-  Function(String) get changeBvn => _bvnController.sink.add;
+  Function(String) get changeTin => _tinController.sink.add;
 
   Function(String) get changeTitle => _titleController.sink.add;
 
@@ -386,6 +392,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Function(String) get changeIdType => _idTypeController.sink.add;
 
   Function(String) get changeIdIssuer => _idIssuerController.sink.add;
+  Function(String) get changeIdOtherIssuer => _idIssuerOthersController.sink.add;
 
   Function(String) get changeIdNumber => _idNumberController.sink.add;
 
@@ -475,7 +482,7 @@ class AccountFormBloc extends BlocBase with Validators {
     final validAccountRiskRank = _riskRankController.value;
     final validAccountCategory = _accountCategoryController.value;
 
-    var validBvn = _bvnController.value;
+    var validBvn = _tinController.value;
     final validTitle = _titleController.value;
     final validSurname = _surnameController.value;
     final validFirstName = _firstNameController.value;
@@ -506,6 +513,11 @@ class AccountFormBloc extends BlocBase with Validators {
 
     final validIdType = _idTypeController.value;
     final validIdIssuer = _idIssuerController.value;
+    var validOthersIdIssuer = "";
+    if(validIdIssuer == "OTHERS"){
+       validOthersIdIssuer = _idIssuerOthersController.value;
+
+    }
     final validIdNumber = _idNumberController.value;
     final validIdPlaceOfIssue = _idPlaceOfIssueController.value;
     final validIdIssueDate = _idIssueDateController.value;
@@ -606,6 +618,10 @@ class AccountFormBloc extends BlocBase with Validators {
     }
   }
 
+  updateIDIssuerType(String value) {
+    _idIssuerController.sink.add(value);
+  }
+
   updateAccountType(String value) {
     _accountTypeController.sink.add(value);
   }
@@ -657,7 +673,7 @@ class AccountFormBloc extends BlocBase with Validators {
         .firstWhere((x) => x.name == validAccountCategory)
         .id
         .toString(); //hotfix: to solve issue of account category filter from account type
-    var validBvn = _bvnController.value;
+    var validTIN = _tinController.value;
     final validTitle = _titleController.value;
     final validSurname = _surnameController.value;
     final validFirstName = _firstNameController.value;
@@ -688,6 +704,11 @@ class AccountFormBloc extends BlocBase with Validators {
 
     var validIdType = _idTypeController.value;
     var validIdIssuer = _idIssuerController.value;
+    var validOthersIdIssuer = "";
+    if(validIdIssuer == "OTHERS"){
+      validOthersIdIssuer = _idIssuerOthersController.value;
+
+    }
     var validIdNumber = _idNumberController.value;
     var validIdPlaceOfIssue = _idPlaceOfIssueController.value;
     var validIdIssueDate = _idIssueDateController.value;
@@ -806,7 +827,7 @@ class AccountFormBloc extends BlocBase with Validators {
     if (validStateOfOrigin == null) {
       _stateOfOriginController.addError("Field is required");
       _subjectSaveAccountResponse
-          .addError("You have not selected a valid state of origin");
+          .addError("You have not selected a valid Region of Residence");
 
       return;
     }
@@ -861,7 +882,7 @@ class AccountFormBloc extends BlocBase with Validators {
     if (validStateOfResidence == null) {
       _stateOfResidenceController.addError("Field is required");
       _subjectSaveAccountResponse
-          .addError("You have not selected a state of residence");
+          .addError("You have not selected a Region of Residence");
       return;
     }
 
@@ -961,7 +982,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
     validEmail = validEmail != null ? validEmail : "";
 
-    validBvn = validBvn != null ? validBvn : "";
+    validTIN = validTIN != null ? validTIN : "";
 
     var validSexAcronym = validGender.startsWith('M') ? "M" : "F";
 
@@ -1037,7 +1058,7 @@ class AccountFormBloc extends BlocBase with Validators {
         countryOfOrigin: validCountryOfOrigin,
         meansOfId: validIdType,
         idNumber: validIdNumber,
-        idIssuer: validIdIssuer,
+        idIssuer: validIdIssuer == "OTHERS"?validOthersIdIssuer: validIdIssuer,
         idPlaceOfIssue: validIdPlaceOfIssue,
         idIssueDate: validIdIssueDate,
         idExpiryDate: validIdExpiryDate,
@@ -1055,7 +1076,7 @@ class AccountFormBloc extends BlocBase with Validators {
         amlCustNatureBusiness: '4',
         amlCustNature: '14',
         useEmailForStatement: isEmailStatement,
-        bvn: (validBvn.isNotEmpty) ? CryptoHelper.encrypt(validBvn) : '',
+        bvn: (validTIN.isNotEmpty) ? CryptoHelper.encrypt(validTIN) : '',
         maritalStatus: validMaritalStatus,
         nextOfKin: CryptoHelper.encrypt(validNextOfKin),
         attachments: _attachments);
@@ -1149,7 +1170,7 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   verifyBvn() async {
-    var encodedBVN = CryptoHelper.encrypt(_bvnController.value);
+    var encodedBVN = CryptoHelper.encrypt(_tinController.value);
 
     await _accountsRepository.verifyBvn(encodedBVN).then((bvnResponse) {
       bvnVerificationResponse.add(bvnResponse);
@@ -1288,26 +1309,40 @@ class AccountFormBloc extends BlocBase with Validators {
       driverLicenseVerificationResponse.add(identityResponse);
 
       if (identityResponse?.responseCode == '200') {
+
+        print(CryptoHelper.decrypt("bNxR3JQR9SQLUZZydVzQuw=="));
+        print(CryptoHelper.decrypt("rOSmtmXdFkOWi1rRBsQ/aA=="));
+        print(CryptoHelper.decrypt("VW+vu5PSeRRqxIHk6Gkj5w=="));
+        print(CryptoHelper.decrypt("mowRSoiP3yiJ7vxaoRqUfQ=="));
+        print(CryptoHelper.decrypt("cAjVqZrxDJO01zjVe4SV6Q=="));
+        print(CryptoHelper.decrypt("m/p8hrMIVm76MoR7fpGSfqqKGnt2e7zOUt5EFdEJfoQ="));
+
         if (identityResponse.name != null && identityResponse.name.isNotEmpty) {
           _surnameController.add(CryptoHelper.decrypt(identityResponse.name));
           bvnlastNameValue = identityResponse.name != null ? false : true;
         }
-//        if (bvnResponse.firstName != null && bvnResponse.firstName.isNotEmpty) {
-//          _firstNameController.add(CryptoHelper.decrypt(bvnResponse.firstName));
-//          bvnFirstName = bvnResponse.firstName.isNotEmpty ? false : true;
-//        }
-//        if (bvnResponse.middleName != null &&
-//            bvnResponse.middleName.isNotEmpty) {
-//          _otherNameController
-//              .add(CryptoHelper.decrypt(bvnResponse.middleName));
-//          bvnOtherName = bvnResponse.email.isNotEmpty ? false : true;
-//        }
+
+        if (identityResponse.fullname != null && identityResponse.fullname.isNotEmpty) {
+          _surnameController.add(CryptoHelper.decrypt(identityResponse.fullname));
+          bvnlastNameValue = identityResponse.fullname != null ? false : true;
+        }
+
+        if (identityResponse.sex != null && identityResponse.sex.isNotEmpty) {
+          if (CryptoHelper.decrypt(identityResponse.sex) == 'M') {
+            _genderController.add('MALE');
+          } else {
+            _genderController.add('FEMALE');
+          }
+          bvnGender = identityResponse.sex != null ? false : true;
+        }
+
         if (identityResponse.processingCenter != null &&
             identityResponse.processingCenter.isNotEmpty) {
-          _idIssuerController
-              .add(CryptoHelper.decrypt(identityResponse.processingCenter));
-          processCenter =
-              identityResponse.processingCenter.isNotEmpty ? false : true;
+          print(CryptoHelper.decrypt(identityResponse.processingCenter));
+//          _idIssuerController
+//              .add(CryptoHelper.decrypt(identityResponse.processingCenter));
+//          processCenter =
+//              identityResponse.processingCenter.isNotEmpty ? false : true;
         }
         if (identityResponse.nationality != null &&
             identityResponse.nationality.isNotEmpty) {
@@ -1370,7 +1405,7 @@ class AccountFormBloc extends BlocBase with Validators {
     _accountHolderTypeController.close();
     _riskRankController.close();
     _accountCategoryController.close();
-    _bvnController.close();
+    _tinController.close();
     _titleController.close();
     _surnameController.close();
     _firstNameController.close();
@@ -1453,7 +1488,7 @@ class AccountFormBloc extends BlocBase with Validators {
         }
 
         if (offlineAccount.bvn != null && offlineAccount.bvn.isNotEmpty) {
-          _bvnController.add(offlineAccount.bvn);
+          _tinController.add(offlineAccount.bvn);
         }
 
         if (offlineAccount.title != null && offlineAccount.title.isNotEmpty) {
@@ -1646,10 +1681,10 @@ class AccountFormBloc extends BlocBase with Validators {
             _accountCategoryController.add(accountResponse.data.classCode);
           }
         }
-        if (accountResponse.data.signatoryDetails?.first?.bvn != null &&
-            accountResponse.data.signatoryDetails.first.bvn.isNotEmpty) {
-          _bvnController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.bvn));
+        if (accountResponse.data.tin != null &&
+            accountResponse.data.tin.isNotEmpty) {
+          _tinController.add(CryptoHelper.decrypt(
+              accountResponse.data.tin));
         }
 
         if (accountResponse.data.title != null &&

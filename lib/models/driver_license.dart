@@ -23,6 +23,13 @@ class DriverLicenseResponse {
     @required this.certificateOfCompetence,
     @required this.driverImage,
     @required this.pin,
+    @required this.pollingStation,
+    @required this.voterId,
+    @required this.age,
+    @required this.sex,
+    @required this.regDate,
+    @required this.fullname,
+    @required this.picture,
   });
 
   final String responseCode;
@@ -37,6 +44,14 @@ class DriverLicenseResponse {
   final String certificateOfCompetence;
   final String driverImage;
   final String pin;
+  final String pollingStation;
+  final String voterId;
+  final String age;
+  final String sex;
+  final String regDate;
+  final String fullname;
+  final String picture;
+
 
   factory DriverLicenseResponse.fromJson(Map<String, dynamic> json) => DriverLicenseResponse(
     responseCode: json["ResponseCode"] == null ? null : json["ResponseCode"],
@@ -51,6 +66,13 @@ class DriverLicenseResponse {
     certificateOfCompetence: json["CertificateOfCompetence"] == null ? null : json["CertificateOfCompetence"],
     driverImage: json["DriverImage"] == null ? null : json["DriverImage"],
     pin: json["PIN"] == null ? null : json["PIN"],
+    pollingStation: json["PollingStation"] == null ? null : json["PollingStation"],
+    voterId: json["VoterID"] == null ? null : json["VoterID"],
+    age: json["Age"] == null ? null : json["Age"],
+    sex: json["Sex"] == null ? null : json["Sex"],
+    regDate: json["RegDate"] == null ? null : json["RegDate"],
+    fullname: json["Fullname"] == null ? null : json["Fullname"],
+    picture: json["Picture"] == null ? null : json["Picture"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -66,5 +88,12 @@ class DriverLicenseResponse {
     "CertificateOfCompetence": certificateOfCompetence == null ? null : certificateOfCompetence,
     "DriverImage": driverImage == null ? null : driverImage,
     "PIN": pin == null ? null : pin,
+    "PollingStation": pollingStation == null ? null : pollingStation,
+    "VoterID": voterId == null ? null : voterId,
+    "Age": age == null ? null : age,
+    "Sex": sex == null ? null : sex,
+    "RegDate": regDate == null ? null : regDate,
+    "Fullname": fullname == null ? null : fullname,
+    "Picture": picture == null ? null : picture,
   };
 }

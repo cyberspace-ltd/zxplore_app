@@ -376,7 +376,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     text: '\n\n',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(
-                    text: ' +234${CryptoHelper.decrypt(form.phoneNumber)} ',
+                    text: ' +233${CryptoHelper.decrypt(form.phoneNumber)} ',
                     style: TextStyle(
                         fontStyle: FontStyle.normal,
                         color: Colors.black54,

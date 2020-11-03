@@ -210,7 +210,6 @@ class AccountDetailsSignatoryDetail {
   dynamic passportUrl;
   dynamic signatureUrl;
   dynamic utilityUrl;
-  String bvn;
   String maritalStatus;
   String nextOfKin;
   List<AccountDetailsAttachment> attachments;
@@ -261,7 +260,6 @@ class AccountDetailsSignatoryDetail {
     this.passportUrl,
     this.signatureUrl,
     this.utilityUrl,
-    this.bvn,
     this.maritalStatus,
     this.nextOfKin,
     this.attachments,
@@ -313,7 +311,6 @@ class AccountDetailsSignatoryDetail {
     passportUrl: json["PassportUrl"],
     signatureUrl: json["SignatureUrl"],
     utilityUrl: json["UtilityUrl"],
-    bvn: json["Bvn"],
     maritalStatus: json["MaritalStatus"],
     nextOfKin: json["NextOfKin"],
     attachments: new List<AccountDetailsAttachment>.from(json["Attachments"].map((x) => AccountDetailsAttachment.fromJson(x))),
@@ -365,7 +362,6 @@ class AccountDetailsSignatoryDetail {
     "PassportUrl": passportUrl,
     "SignatureUrl": signatureUrl,
     "UtilityUrl": utilityUrl,
-    "Bvn": bvn,
     "MaritalStatus": maritalStatus,
     "NextOfKin": nextOfKin,
     "Attachments": new List<dynamic>.from(attachments.map((x) => x.toJson())),

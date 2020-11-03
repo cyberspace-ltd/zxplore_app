@@ -23,11 +23,8 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     'Dr.',
     'Prof.',
     'Rev.',
-    'Chief',
     'Mr.',
-    'Barrister',
     'Pastor',
-    'Otunba',
     'Mrs',
     'Engr',
     'Alhaji',
@@ -124,9 +121,9 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-  Widget _bvnField() {
+  Widget _tinField() {
     return StreamBuilder(
-        stream: accountFormBloc.bvn,
+        stream: accountFormBloc.tin,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _bvnController.value = TextEditingValue(
@@ -136,8 +133,8 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           return TextField(
             controller: _bvnController,
             obscureText: false,
-            keyboardType: TextInputType.number,
-            onChanged: accountFormBloc.changeBvn,
+            keyboardType: TextInputType.text,
+            onChanged: accountFormBloc.changeTin,
             decoration: InputDecoration(
               labelText: 'TIN (Tax Identification Number)',
               helperText:
@@ -163,7 +160,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           onChanged: accountFormBloc.changeSurname,
           keyboardType: TextInputType.text,
           maxLength: 40,
-          enabled: accountFormBloc.bvnlastNameValue,
+//          enabled: accountFormBloc.bvnlastNameValue,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
@@ -497,7 +494,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   IntrinsicHeight(
                     child: Column(
                       children: <Widget>[
-                        _bvnField(),
+                        _tinField(),
 //                        Container(
 //                          alignment: Alignment(1.0, 0.0),
 //                          height: 60.0,

@@ -289,7 +289,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
-            labelText: 'State Of Residence',
+            labelText: 'Region of Residence',
             helperText: '* Required',
             errorText: snapshot.error,
           ),
@@ -307,7 +307,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
-                  labelText: 'State Of Residence',
+                  labelText: 'Region of Residence',
                   helperText: "* Required",
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',

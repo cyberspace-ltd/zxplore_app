@@ -10,7 +10,6 @@ import '../../colors.dart';
 import '../../login.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 
-
 class MeansOfIdentificationStep extends StatefulWidget {
   @override
   _MeansOfIdentificationStepStepState createState() =>
@@ -27,19 +26,31 @@ class _MeansOfIdentificationStepStepState
   final TextEditingController _idExpiryDateController = TextEditingController();
 
   final TextEditingController _idIssuerController = TextEditingController();
+  final TextEditingController _idIssuerOthersController =
+      TextEditingController();
   final TextEditingController _idNumberController = TextEditingController();
 
   final _idTypes = [
     'DRIVER\'S LICENSE',
     'INT\'L PASSPORT',
     'NATIONAL ID',
-    'OTHERS',
     'VOTER\'S ID CARD',
-    'STUDENT ID'
+    'STUDENT ID',
+    'OTHERS'
+  ];
+
+  final _idIssuer = [
+    'ELECTORAL COMMISSION',
+    'DVLA',
+    'MINISTRY OF FOREIGN AFFAIRS',
+    'NIA',
+    'BA1',
+    'OTHERS'
   ];
   String _selectedIdentityType;
+  String _selectedIdentityIssuer;
   int _selectedIdFilter = 99;
-
+  bool others = false;
 
   AccountFormBloc accountFormBloc;
 
@@ -69,18 +80,16 @@ class _MeansOfIdentificationStepStepState
                 child: DropdownButton<String>(
                   value: snapshot.data,
                   isDense: true,
-                  onChanged: (value){
+                  onChanged: (value) {
                     _selectedIdentityType = value;
-                    if(value == DRIVERS_LICENSE){
-                      _selectedIdFilter= 0;
-                    } else if(value == VOTERS_CARD){
-                      _selectedIdFilter= 1;
-
-                    }else if(value == INT_PASSPORT){
-                      _selectedIdFilter= 2;
-
-                    }else {
-                      _selectedIdFilter= 3;
+                    if (value == DRIVERS_LICENSE) {
+                      _selectedIdFilter = 0;
+                    } else if (value == VOTERS_CARD) {
+                      _selectedIdFilter = 1;
+                    } else if (value == INT_PASSPORT) {
+                      _selectedIdFilter = 2;
+                    } else {
+                      _selectedIdFilter = 3;
                     }
                     accountFormBloc.updateIdentityType(value);
                   },
@@ -108,16 +117,66 @@ class _MeansOfIdentificationStepStepState
               text: snapshot.data.toString(),
               selection: _idIssuerController.selection);
         }
+        return FormField<String>(
+          autovalidate: true,
+          builder: (FormFieldState<String> state) {
+            return InputDecorator(
+              decoration: InputDecoration(
+                labelText: 'ID Issuer',
+                helperText: '* Required',
+                errorText: snapshot.error,
+              ),
+              isEmpty: snapshot.data == '',
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: snapshot.data,
+                  isDense: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedIdentityIssuer = value;
+                      if (value == OTHERS) {
+                        others = true;
+                      } else {
+                        others = false;
+                      }
+                    });
+
+                    accountFormBloc.updateIDIssuerType(value);
+                  },
+                  items: _idIssuer.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _otherIdIssuerTextField() {
+    return StreamBuilder(
+      stream: accountFormBloc.idOthersIssuer,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _idIssuerOthersController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _idIssuerOthersController.selection);
+        }
         return TextField(
-          controller: _idIssuerController,
+          controller: _idIssuerOthersController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeIdIssuer,
+          onChanged: accountFormBloc.changeIdOtherIssuer,
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
-            labelText: 'ID Issuer',
+            labelText: 'ID Other Issuer',
             helperText: '* Required',
             errorText: snapshot.error,
           ),
@@ -153,7 +212,6 @@ class _MeansOfIdentificationStepStepState
     );
   }
 
-
   Widget _idPlaceOfIssue() {
     return StreamBuilder(
       stream: accountFormBloc.idPlaceOfIssue,
@@ -172,9 +230,10 @@ class _MeansOfIdentificationStepStepState
                     stream: statesBloc.states,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<StateEntity>> shot) {
-                      if (!shot.hasData) return SizedBox(
-                          height: 24.0,
-                          child: Center(child: CircularProgressIndicator()));
+                      if (!shot.hasData)
+                        return SizedBox(
+                            height: 24.0,
+                            child: Center(child: CircularProgressIndicator()));
                       return DropdownButton<String>(
                         value: snapshot.data,
                         items: shot.data.map((StateEntity value) {
@@ -226,7 +285,6 @@ class _MeansOfIdentificationStepStepState
         });
   }
 
-
   Widget _z_prompt_checkBox() {
     return StreamBuilder(
         stream: accountFormBloc.isZPrompt,
@@ -256,7 +314,6 @@ class _MeansOfIdentificationStepStepState
           );
         });
   }
-
 
   Widget _ussd_checkBox() {
     return StreamBuilder(
@@ -404,6 +461,8 @@ class _MeansOfIdentificationStepStepState
                   SizedBox(height: 30.0),
                   _idIssuerTextField(),
                   SizedBox(height: 30.0),
+                  Visibility(visible: others, child: _otherIdIssuerTextField()),
+                  SizedBox(height: 30.0),
                   IntrinsicHeight(
                     child: Column(
                       children: [
@@ -424,25 +483,56 @@ class _MeansOfIdentificationStepStepState
                               accountFormBloc.driverLicenseVerificationResponse
                                   .listen((response) {
                                 loadingBar.dismiss();
-                                FlushbarHelper.createSuccess(
-                                    message: "Driver Liscence provided is correct.")
-                                  ..show(context);
+                                if (_selectedIdFilter == 0) {
+                                  FlushbarHelper.createSuccess(
+                                      message:
+                                          "Driver Liscence provided is correct.")
+                                    ..show(context);
+                                } else if (_selectedIdFilter == 1) {
+                                  FlushbarHelper.createSuccess(
+                                      message:
+                                          "Voters Card provided is correct.")
+                                    ..show(context);
+                                } else if (_selectedIdFilter == 2) {
+                                  FlushbarHelper.createSuccess(
+                                      message: "Passport provided is correct.")
+                                    ..show(context);
+                                } else {
+                                  FlushbarHelper.createSuccess(
+                                      message: "Identity provided is correct.")
+                                    ..show(context);
+                                }
                               }).onError((error) {
                                 loadingBar.dismiss();
-                                FlushbarHelper.createError(
-                                    message:
-                                    "Driver Liscence provided could not be verified.")
-                                    .show(context);
+                                if (_selectedIdFilter == 0) {
+                                  FlushbarHelper.createError(
+                                      message:
+                                          "Driver Liscence provided could not be verified.")
+                                    ..show(context);
+                                } else if (_selectedIdFilter == 1) {
+                                  FlushbarHelper.createError(
+                                      message:
+                                          "Voters Card provided could not be verified.")
+                                    ..show(context);
+                                } else if (_selectedIdFilter == 2) {
+                                  FlushbarHelper.createError(
+                                      message:
+                                          "Passport provided provided could not be verified.")
+                                    ..show(context);
+                                } else {
+                                  FlushbarHelper.createError(
+                                      message:
+                                          "Identity provided provided could not be verified.")
+                                    ..show(context);
+                                }
                                 loadingBar.dismiss();
                               });
                             },
                           ),
                         ),
-
                       ],
                     ),
                   ),
-
                   SizedBox(height: 30.0),
                   _idPlaceOfIssue(),
                   SizedBox(height: 30.0),
@@ -460,7 +550,6 @@ class _MeansOfIdentificationStepStepState
                   ),
                   _scan_to_pay_checkBox(),
                   _z_mobile_checkBox(),
-
                   _z_prompt_checkBox(),
                   _statement_via_email_CheckBox(),
                   _ussd_checkBox(),

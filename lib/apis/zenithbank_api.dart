@@ -430,7 +430,7 @@ class ZenithBankApi {
         throw CleanerException(value.message);
       } else {
         throw CleanerException(
-            'Drivers License Verification failed in connecting to the server.');
+            'Verification failed in connecting to the server.');
       }
     } catch (error) {
       if (error is DioError) {

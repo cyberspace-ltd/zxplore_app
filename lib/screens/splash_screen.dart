@@ -1,19 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:zxplore_app/apis/zenithbank_api.dart';
-import 'package:zxplore_app/blocs/account_class_bloc.dart';
-import 'package:zxplore_app/blocs/cities_bloc.dart';
-import 'package:zxplore_app/blocs/countries_bloc.dart';
-import 'package:zxplore_app/blocs/occupations_bloc.dart';
-import 'package:zxplore_app/blocs/provider.dart';
-import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/colors.dart';
-import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/home.dart';
-import 'package:zxplore_app/models/occupation_model.dart';
-import 'package:zxplore_app/navigation/zexplore_navigator.dart';
-import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
 import '../login.dart';
