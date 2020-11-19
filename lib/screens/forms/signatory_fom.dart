@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/libs/Signature.dart';
@@ -28,6 +31,9 @@ class _SignatoryStepState extends State<SignatoryStep>
   AccountFormBloc accountFormBloc;
   var loadingBar;
 
+  File _imageFile;
+  String _retrieveDataError;
+  dynamic _pickImageError;
   @override
   void initState() {
     super.initState();
@@ -49,6 +55,52 @@ class _SignatoryStepState extends State<SignatoryStep>
       body: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
+            SizedBox(height: 8,),
+
+            Padding(
+              padding: const EdgeInsets.only(left:8.0, right: 8),
+              child: Text(
+                'Upload your Signature by clicking either the gallery or camera icon',
+                textAlign: TextAlign.center,
+              ),
+            ),
+
+            SizedBox(height: 8,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                FloatingActionButton(
+                  onPressed: () {
+                    _onImageButtonPressed(ImageSource.gallery);
+                  },
+                  heroTag: 'image0',
+                  backgroundColor: ZxplorePrimaryColor,
+                  tooltip: 'Pick Image from gallery',
+                  child: const Icon(Icons.photo_library),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    _onImageButtonPressed(ImageSource.camera);
+                  },
+                  backgroundColor: ZxplorePrimaryColor,
+                  heroTag: 'image1',
+                  tooltip: 'Take a Photo',
+                  child: const Icon(Icons.camera_alt),
+                ),
+
+              ],
+            ),
+            Text(
+              'Or',
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16,),
+
+            Text(
+              'Sign Below',
+              textAlign: TextAlign.center,
+            ),
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: LimitedBox(
@@ -203,6 +255,44 @@ class _SignatoryStepState extends State<SignatoryStep>
         );
       },
     );
+  }
+
+
+  Future _convertImagesToByte() async {
+    List<int> imageBytes = await _imageFile.readAsBytes();
+    var imgBytes = new Uint8List.fromList(imageBytes);
+
+    String base64Image = base64Encode(imageBytes);
+    _img = imgBytes.buffer.asByteData();
+
+    accountFormBloc.setSignature(base64Image);
+
+//    print(base64Image);
+  }
+
+  Future<void> retrieveLostData() async {
+    final LostDataResponse response = await ImagePicker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        _imageFile = response.file;
+        _convertImagesToByte();
+      });
+    } else {
+      _retrieveDataError = response.exception.code;
+    }
+  }
+
+  void _onImageButtonPressed(ImageSource source) async {
+    try {
+      _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 350);
+      _convertImagesToByte();
+    } catch (e) {
+      _pickImageError = e;
+    }
+    setState(() {});
   }
 
   @override

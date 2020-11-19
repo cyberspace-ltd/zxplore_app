@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'blocs/account_form_bloc.dart';
 import 'colors.dart';
 import 'home.dart';
-import 'login.dart';
 import 'screens/splash_screen.dart';
 
 class ZxploreApp extends StatefulWidget {

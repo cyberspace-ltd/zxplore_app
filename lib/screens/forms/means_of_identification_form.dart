@@ -5,6 +5,7 @@ import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/utils/const.dart';
+import 'package:zxplore_app/utils/helper_functions.dart';
 
 import '../../colors.dart';
 import '../../login.dart';
@@ -36,7 +37,27 @@ class _MeansOfIdentificationStepStepState
     'NATIONAL ID',
     'VOTER\'S ID CARD',
     'STUDENT ID',
+    'SSNIT CARD',
     'OTHERS'
+  ];
+
+  List<String> _stateRegion = [
+    'Ahafo Region',
+    'Ashanti Region',
+    'Bono Region',
+    'Bono East Region',
+    'Central Region',
+    'Eastern Region',
+    'Greater Accra Region',
+    'Northern Region',
+    'North East Region',
+    'Oti Region',
+    'Savannah Region',
+    'Upper East Region',
+    'Upper West Region',
+    'Volta Region',
+    'Western Region',
+    'Western North Region'
   ];
 
   final _idIssuer = [
@@ -44,7 +65,6 @@ class _MeansOfIdentificationStepStepState
     'DVLA',
     'MINISTRY OF FOREIGN AFFAIRS',
     'NIA',
-    'BA1',
     'OTHERS'
   ];
   String _selectedIdentityType;
@@ -81,16 +101,26 @@ class _MeansOfIdentificationStepStepState
                   value: snapshot.data,
                   isDense: true,
                   onChanged: (value) {
-                    _selectedIdentityType = value;
-                    if (value == DRIVERS_LICENSE) {
-                      _selectedIdFilter = 0;
-                    } else if (value == VOTERS_CARD) {
-                      _selectedIdFilter = 1;
-                    } else if (value == INT_PASSPORT) {
-                      _selectedIdFilter = 2;
-                    } else {
-                      _selectedIdFilter = 3;
-                    }
+                    setState(() {
+                      _selectedIdentityType = value;
+                      if (value == DRIVERS_LICENSE) {
+                        _selectedIdFilter = 0;
+                      } else if (value == VOTERS_CARD) {
+                        _selectedIdFilter = 1;
+                      } else if (value == INT_PASSPORT) {
+                        _selectedIdFilter = 2;
+                      } else if (value == SSNIT_CARD) {
+                        _selectedIdFilter = 3;
+                      } else if (value == OTHERS) {
+                        _selectedIdFilter = 4;
+                      } else if (value == NATIONAL_ID) {
+                        _selectedIdFilter = 5;
+                      } else if (value == STUDENT_ID) {
+                        _selectedIdFilter = 6;
+                      } else {
+                        _selectedIdFilter = 99;
+                      }
+                    });
                     accountFormBloc.updateIdentityType(value);
                   },
                   items: _idTypes.map((String value) {
@@ -226,27 +256,42 @@ class _MeansOfIdentificationStepStepState
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
-                child: StreamBuilder<List<StateEntity>>(
-                    stream: statesBloc.states,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<StateEntity>> shot) {
-                      if (!shot.hasData)
-                        return SizedBox(
-                            height: 24.0,
-                            child: Center(child: CircularProgressIndicator()));
-                      return DropdownButton<String>(
-                        value: snapshot.data,
-                        items: shot.data.map((StateEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
-                        onChanged: accountFormBloc.changePlaceOfIssue,
+                child: DropdownButton<String>(
+                  value: snapshot.hasData
+                      ? Helper.returnValidStateRegionSelectedItem(
+                          snapshot.data, _stateRegion)
+                      : null,
+                  isDense: true,
+                  onChanged: accountFormBloc.changePlaceOfIssue,
+                  items: _stateRegion.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value.toUpperCase(),
+                      child: Text(value.toUpperCase()),
+                    );
+                  }).toList(),
+                ),
 
-                        isDense: true, //value: _currentUser,
-                      );
-                    }),
+//                child: StreamBuilder<List<StateEntity>>(
+//                    stream: statesBloc.states,
+//                    builder: (BuildContext context,
+//                        AsyncSnapshot<List<StateEntity>> shot) {
+//                      if (!shot.hasData)
+//                        return SizedBox(
+//                            height: 24.0,
+//                            child: Center(child: CircularProgressIndicator()));
+//                      return DropdownButton<String>(
+//                        value: snapshot.data,
+//                        items: shot.data.map((StateEntity value) {
+//                          return DropdownMenuItem<String>(
+//                            value: value.stateName,
+//                            child: Text(value.stateName),
+//                          );
+//                        }).toList(),
+//                        onChanged: accountFormBloc.changePlaceOfIssue,
+//
+//                        isDense: true, //value: _currentUser,
+//                      );
+//                    }),
               ),
             );
           },
@@ -358,88 +403,103 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _idIssueDateField() {
-    return StreamBuilder(
-      stream: accountFormBloc.idIssueDate,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _idIssueDateController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _idIssueDateController.selection);
-        }
-        return GestureDetector(
-            onTap: () async {
-              DateTime picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: new DateTime(DateTime.now().year - 25),
-                  lastDate: new DateTime.now());
+    return Visibility(
+      visible: _selectedIdFilter == 6 ||
+              _selectedIdFilter == 4 ||
+              _selectedIdFilter == 3
+          ? false
+          : true,
+      child: StreamBuilder(
+        stream: accountFormBloc.idIssueDate,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _idIssueDateController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _idIssueDateController.selection);
+          }
+          return GestureDetector(
+              onTap: () async {
+                DateTime picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: new DateTime(DateTime.now().year - 25),
+                    lastDate: new DateTime.now());
 
-              if (picked != null) {
-                var formatter = new DateFormat('dd-MMM-yy');
+                if (picked != null) {
+                  var formatter = new DateFormat('dd-MMM-yy');
 
-                var date = formatter.format(picked);
+                  var date = formatter.format(picked);
 
-                _idIssueDateController.text = date;
-                accountFormBloc.changeIssueDate(date);
-              }
-            },
-            child: AbsorbPointer(
-              child: TextField(
-                controller: _idIssueDateController,
-                onChanged: accountFormBloc.changeIssueDate,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  labelText: 'ID Issue Date',
-                  helperText: "* Required",
-                  suffixIcon: Icon(Icons.date_range),
-                  errorText: snapshot.error,
+                  _idIssueDateController.text = date;
+                  accountFormBloc.changeIssueDate(date);
+                }
+              },
+              child: AbsorbPointer(
+                child: TextField(
+                  controller: _idIssueDateController,
+                  onChanged: accountFormBloc.changeIssueDate,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'ID Issue Date',
+                    helperText: "* Required",
+                    suffixIcon: Icon(Icons.date_range),
+                    errorText: snapshot.error,
+                  ),
                 ),
-              ),
-            ));
-      },
+              ));
+        },
+      ),
     );
   }
 
   Widget _idExpiryDateField() {
-    return StreamBuilder(
-      stream: accountFormBloc.idExpiryDate,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _idExpiryDateController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _idExpiryDateController.selection);
-        }
-        return GestureDetector(
-            onTap: () async {
-              DateTime picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: new DateTime.now(),
-                  lastDate: new DateTime(DateTime.now().year + 25));
+    return Visibility(
+      visible: _selectedIdFilter == 6 ||
+              _selectedIdFilter == 1 ||
+              _selectedIdFilter == 4 ||
+              _selectedIdFilter == 3
+          ? false
+          : true,
+      child: StreamBuilder(
+        stream: accountFormBloc.idExpiryDate,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _idExpiryDateController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _idExpiryDateController.selection);
+          }
+          return GestureDetector(
+              onTap: () async {
+                DateTime picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: new DateTime.now(),
+                    lastDate: new DateTime(DateTime.now().year + 25));
 
-              if (picked != null) {
-                var formatter = new DateFormat('dd-MMM-yy');
+                if (picked != null) {
+                  var formatter = new DateFormat('dd-MMM-yy');
 
-                var date = formatter.format(picked);
+                  var date = formatter.format(picked);
 
-                _idExpiryDateController.text = date;
-                accountFormBloc.changeExpiryDate(date);
-              }
-            },
-            child: AbsorbPointer(
-              child: TextField(
-                controller: _idExpiryDateController,
-                onChanged: accountFormBloc.changeExpiryDate,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  labelText: 'ID Expiry Date',
-                  helperText: "* Required",
-                  suffixIcon: Icon(Icons.date_range),
-                  errorText: snapshot.error,
+                  _idExpiryDateController.text = date;
+                  accountFormBloc.changeExpiryDate(date);
+                }
+              },
+              child: AbsorbPointer(
+                child: TextField(
+                  controller: _idExpiryDateController,
+                  onChanged: accountFormBloc.changeExpiryDate,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'ID Expiry Date',
+                    helperText: "* Required",
+                    suffixIcon: Icon(Icons.date_range),
+                    errorText: snapshot.error,
+                  ),
                 ),
-              ),
-            ));
-      },
+              ));
+        },
+      ),
     );
   }
 

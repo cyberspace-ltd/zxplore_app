@@ -186,6 +186,8 @@ class AccountDetailsSignatoryDetail {
   String city;
   String state;
   String emailAddress;
+  String placeOfBirth;
+  String mmda;
   String phoneNumber;
   dynamic fax;
   dynamic tin;
@@ -239,6 +241,8 @@ class AccountDetailsSignatoryDetail {
     this.phoneNumber,
     this.fax,
     this.tin,
+    this.placeOfBirth,
+    this.mmda,
     this.permitType,
     this.cerpacRpIdNo,
     this.cerpacRPplaceofIssue,
@@ -290,6 +294,8 @@ class AccountDetailsSignatoryDetail {
     phoneNumber: json["PhoneNumber"],
     fax: json["Fax"],
     tin: json["TIN"],
+    placeOfBirth: json["PlaceOfBirth"],
+    mmda: json["MMDA"],
     permitType: json["PermitType"],
     cerpacRpIdNo: json["CerpacRPIdNo"],
     cerpacRPplaceofIssue: json["CerpacRPplaceofIssue"],
@@ -341,6 +347,8 @@ class AccountDetailsSignatoryDetail {
     "PhoneNumber": phoneNumber,
     "Fax": fax,
     "TIN": tin,
+    "PlaceOfBirth":placeOfBirth,
+    "MMDA":mmda,
     "PermitType": permitType,
     "CerpacRPIdNo": cerpacRpIdNo,
     "CerpacRPplaceofIssue": cerpacRPplaceofIssue,

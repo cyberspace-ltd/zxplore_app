@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
+import 'package:zxplore_app/models/state_model.dart';
 import 'entities/account_class_entity.dart';
 import 'entities/city_entity.dart';
 import 'entities/country_entity.dart';
@@ -39,7 +40,7 @@ class DBProvider {
           'CREATE TABLE $tableOccupation ($columnOccupationId INTEGER IDENTITY , $columnOccupationName TEXT PRIMARY KEY)');
 
       await db.execute(
-          'CREATE TABLE $tableState ($columnStateId INTEGER IDENTITY , $columnStateName TEXT PRIMARY KEY)');
+          'CREATE TABLE $tableState ($columnStateId INTEGER PRIMARY KEY , $columnStateName TEXT , $columnSateMMDA TEXT)');
 
       await db.execute(
           'CREATE TABLE $tableCountry (id INTEGER $columnCountryId , $columnCountryName TEXT PRIMARY KEY)');
@@ -54,7 +55,7 @@ class DBProvider {
           'CREATE TABLE $tableAccountClass ($columnAccountClassCode INTEGER PRIMARY KEY, $columnAccountClassDescription TEXT, $columnAccountClassType TEXT)');
 
       await db.execute(
-          'CREATE TABLE $tableOfflineAccount (id INTEGER PRIMARY KEY , $columnOfflineReferenceId TEXT, accountType TEXT, accountHolderType TEXT, riskRank TEXT,accountCategory TEXT,bvn TEXT, $columnOfflineTitle TEXT, surname TEXT, firstName TEXT,otherName TEXT,mothersMaidenName TEXT,dateOfBirth TEXT,stateOfOrigin TEXT, countryOfOrigin TEXT, email TEXT, phone TEXT, nextOfKin TEXT, address1 TEXT,address2 TEXT, countryOfResidence TEXT, stateOfResidence TEXT, cityOfResidence TEXT, gender TEXT,occupation TEXT,maritalStatus TEXT, idType TEXT,idIssuer TEXT, idNumber TEXT,idPlaceOfIssue TEXT, idIssueDate TEXT,idExpiryDate TEXT, isSendEmail BOOLEAN NOT NULL,isReceiveAlert BOOLEAN NOT NULL,isRequestHardwareToken BOOLEAN NOT NULL,isRequestInternetBanking BOOLEAN NOT NULL,idCard TEXT, passport TEXT,utility TEXT, signature TEXT)');
+          'CREATE TABLE $tableOfflineAccount (id INTEGER PRIMARY KEY , $columnOfflineReferenceId TEXT, accountType TEXT, accountHolderType TEXT, riskRank TEXT,accountCategory TEXT,tin TEXT, $columnOfflineTitle TEXT, surname TEXT, firstName TEXT,otherName TEXT,mothersMaidenName TEXT,dateOfBirth TEXT,stateOfOrigin TEXT, placeOfBirth TEXT, mmda TEXT, countryOfOrigin TEXT, email TEXT, phone TEXT, nextOfKin TEXT, address1 TEXT,address2 TEXT, countryOfResidence TEXT, stateOfResidence TEXT, cityOfResidence TEXT, gender TEXT,occupation TEXT,maritalStatus TEXT, idType TEXT,idIssuer TEXT, idNumber TEXT,idPlaceOfIssue TEXT, idIssueDate TEXT,idExpiryDate TEXT, isScanToPay BOOLEAN NOT NULL,isZMobile BOOLEAN NOT NULL,isZPrompt BOOLEAN NOT NULL,isStatementViaEmail BOOLEAN NOT NULL,isUSSD BOOLEAN NOT NULL,isBankToWallet BOOLEAN NOT NULL,idCard TEXT, passport TEXT,longitude TEXT,latitude TEXT,utility TEXT, signature TEXT)');
     });
   }
 
@@ -89,15 +90,15 @@ class DBProvider {
   Future<int> updateOfflineAccount(OfflineAccountEntity account) async {
     final db = await database;
     var result = await db.update(tableOfflineAccount, account.toMap(),
-        where: '$columnOfflineId = ?',
-        whereArgs: [account.id]);
+        where: '$columnOfflineId = ?', whereArgs: [account.id]);
 
     return result;
   }
 
   Future<int> deleteOfflineAccount(int id) async {
     var db = await database;
-    return await db.delete(tableOfflineAccount, where: '$columnOfflineId = ?', whereArgs: [id]);
+    return await db.delete(tableOfflineAccount,
+        where: '$columnOfflineId = ?', whereArgs: [id]);
   }
 
   void insertOccupations(List<String> occupations) async {
@@ -131,11 +132,14 @@ class DBProvider {
     return list;
   }
 
-  void insertStates(List<String> states) async {
+  void insertStates(List<Menu> states) async {
     final db = await database;
 
-    states.forEach((element) async =>
-        await db.insert(tableState, {columnStateName: element}));
+    states.forEach((element) async => await db.insert(tableState, {
+      columnStateId: element.srn.toString(),
+      columnStateName: element.stateName,
+          columnSateMMDA: element.mmda,
+        }));
   }
 
   Future<List<StateEntity>> getStates() async {

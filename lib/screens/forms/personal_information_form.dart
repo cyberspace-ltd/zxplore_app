@@ -20,19 +20,17 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     with AutomaticKeepAliveClientMixin<PersonalInformationStep> {
   final _titles = [
     'Miss',
+  'Ms.',
     'Dr.',
     'Prof.',
     'Rev.',
     'Mr.',
-    'Pastor',
     'Mrs',
-    'Engr',
     'Alhaji',
-    'Alhaja',
     'Mr & Mrs',
     'Dr. & Mrs.',
-    'Hon Just.',
-    'Hon'
+    'Hon.',
+    'Nana'
   ];
 
   AccountFormBloc accountFormBloc;
@@ -48,7 +46,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   TextEditingController _otherNameController;
   TextEditingController _mothersMaidenNameController;
   TextEditingController _dateOfBirthController;
-  TextEditingController _stateOfOriginController;
+  TextEditingController _placeOfBirthController;
   TextEditingController _countryOfOriginController;
 
   @override
@@ -67,7 +65,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     _otherNameController = TextEditingController();
     _mothersMaidenNameController = TextEditingController();
     _dateOfBirthController = TextEditingController();
-    _stateOfOriginController = TextEditingController();
+    _placeOfBirthController = TextEditingController();
     _countryOfOriginController = TextEditingController();
   }
 
@@ -82,7 +80,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     _otherNameController.dispose();
     _mothersMaidenNameController.dispose();
     _dateOfBirthController.dispose();
-    _stateOfOriginController.dispose();
+    _placeOfBirthController.dispose();
     _countryOfOriginController.dispose();
 
     super.dispose();
@@ -327,77 +325,55 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-  Widget _stateOfOriginField() {
-    return StreamBuilder(
-      stream: accountFormBloc.stateOfOrigin,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _stateOfOriginController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _stateOfOriginController.selection);
-        }
-        return TextField(
-          controller: _stateOfOriginController,
-          textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeStateOfOrigin,
-          keyboardType: TextInputType.text,
-          maxLength: 40,
-          enabled: accountFormBloc.bvnState,
-          maxLines: null,
-          maxLengthEnforced: true,
-          decoration: InputDecoration(
-            labelText: 'Date of Birth',
-            helperText: '* Required',
-            errorText: snapshot.error,
-          ),
-        );
-      },
-    );
-  }
+//  Widget _stateOfOriginField() {
+//    return StreamBuilder(
+//      stream: accountFormBloc.stateOfOrigin,
+//      builder: (context, snapshot) {
+//        if (snapshot.hasData) {
+//          _placeOfBirthController.value = TextEditingValue(
+//              text: snapshot.data.toString(),
+//              selection: _placeOfBirthController.selection);
+//        }
+//        return TextField(
+//          controller: _placeOfBirthController,
+//          textCapitalization: TextCapitalization.characters,
+//          onChanged: accountFormBloc.changePlaceOfBirth,
+//          keyboardType: TextInputType.text,
+//          maxLength: 40,
+//          enabled: accountFormBloc.bvnState,
+//          maxLines: null,
+//          maxLengthEnforced: true,
+//          decoration: InputDecoration(
+//            labelText: 'Place of Birth',
+//            helperText: '* Required',
+//            errorText: snapshot.error,
+//          ),
+//        );
+//      },
+//    );
+//  }
 
   Widget _stateOfOriginTextField() {
     return StreamBuilder(
-      stream: accountFormBloc.stateOfOrigin,
+      stream: accountFormBloc.placeOfBirth,
       builder: (context, snapshot) {
-        return FormField<String>(
-          autovalidate: true,
-          builder: (FormFieldState<String> state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                  labelText: 'Place of Birth',
-                  helperText: "* Required",
-                  errorText: snapshot.error),
-              isEmpty: snapshot.data == '',
-              child: DropdownButtonHideUnderline(
-                child: StreamBuilder<List<StateEntity>>(
-                    stream: statesBloc.states,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<StateEntity>> shot) {
-                      if (!shot.hasData)
-                        return SizedBox(
-                            height: 24.0,
-                            child: Center(child: CircularProgressIndicator()));
-                      return DropdownButton<String>(
-                        value: snapshot.hasData
-                            ? Helper.returnValidStateSelectedItem(snapshot.data,
-                                shot.data.map((x) => x.name).toList())
-                            : null,
-                        items: shot.data != null
-                            ? shot.data.map((StateEntity value) {
-                                return DropdownMenuItem<String>(
-                                  value: value.name,
-                                  child: Text(value.name),
-                                );
-                              }).toList()
-                            : null,
-                        onChanged: accountFormBloc.changeStateOfOrigin,
-
-                        isDense: true, //value: _currentUser,
-                      );
-                    }),
-              ),
-            );
-          },
+        if (snapshot.hasData) {
+          _placeOfBirthController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _placeOfBirthController.selection);
+        }
+        return TextField(
+          controller: _placeOfBirthController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changePlaceOfBirth,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+              labelText: 'Place of Birth',
+              helperText: "* Required",
+              errorText: snapshot.error),
         );
       },
     );
@@ -463,19 +439,19 @@ class _PersonalInformationState extends State<PersonalInformationStep>
         });
   }
 
-  Widget _buildStateOfOrigin() {
-    return StreamBuilder(
-        stream: accountFormBloc.bvnStateOfOrigin,
-        builder: (context, snapShot) {
-          if (!snapShot.hasData) {
-            return _stateOfOriginTextField();
-          }
-          if (snapShot.data) {
-            return _stateOfOriginTextField();
-          } else
-            return _stateOfOriginField();
-        });
-  }
+//  Widget _buildStateOfOrigin() {
+//    return StreamBuilder(
+//        stream: accountFormBloc.bvnStateOfOrigin,
+//        builder: (context, snapShot) {
+//          if (!snapShot.hasData) {
+//            return _stateOfOriginTextField();
+//          }
+//          if (snapShot.data) {
+//            return _stateOfOriginTextField();
+//          } else
+//            return _stateOfOriginField();
+//        });
+//  }
 
   @override
   Widget build(BuildContext context) {

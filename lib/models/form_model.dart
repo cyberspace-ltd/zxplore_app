@@ -36,12 +36,13 @@ class AccountForm {
   String countryOfOrigin;
   List<SignatoryDetail> signatoryDetails;
   String refId;
-  String alertZRequest;
+//  String alertZRequest;
   String masterCardRequest;
   String visaCardRequest;
   String verveCardRequest;
-  String tokenRequest;
-  String ibankRequest;
+//  String tokenRequest;
+//  String ibankRequest;
+  String scanToPay;
   String zMobileRequest;
   String zPromptRequest;
   String statementByEmailRequest;
@@ -52,7 +53,7 @@ class AccountForm {
 
   AccountForm({
     @required this.accountType,
-    @required this.accountNumber,
+     this.accountNumber,
     @required this.accountHolderType,
     @required this.classCode,
     @required this.branchNumber,
@@ -60,7 +61,7 @@ class AccountForm {
     @required this.rsmId,
     @required this.accountName,
     @required this.tin,
-    @required this.registrationNumber,
+     this.registrationNumber,
     @required this.sex,
     @required this.title,
     @required this.dateOfBirth,
@@ -75,12 +76,13 @@ class AccountForm {
     @required this.countryOfOrigin,
     @required this.signatoryDetails,
     @required this.refId,
-    @required this.alertZRequest,
+//    @required this.alertZRequest,
     @required this.masterCardRequest,
     @required this.visaCardRequest,
     @required this.verveCardRequest,
-    @required this.tokenRequest,
-    @required this.ibankRequest,
+    @required this.scanToPay,
+//    @required this.tokenRequest,
+//    @required this.ibankRequest,
     @required this.zMobileRequest,
     @required this.zPromptRequest,
     @required this.statementByEmailRequest,
@@ -116,12 +118,13 @@ class AccountForm {
         signatoryDetails: new List<SignatoryDetail>.from(
             json["SignatoryDetails"].map((x) => SignatoryDetail.fromJson(x))),
         refId: json["Ref_Id"],
-        alertZRequest: json["AlertZRequest"],
+//        alertZRequest: json["AlertZRequest"],
         masterCardRequest: json["MasterCardRequest"],
         visaCardRequest: json["VisaCardRequest"],
         verveCardRequest: json["VerveCardRequest"],
-        tokenRequest: json["TokenRequest"],
-        ibankRequest: json["IbankRequest"],
+//        tokenRequest: json["TokenRequest"],
+//        ibankRequest: json["IbankRequest"],
+        scanToPay: json["ScanToPayRequest"],
         zMobileRequest: json["ZMobileRequest"],
         zPromptRequest: json["ZPromptRequest"],
         statementByEmailRequest: json["StatementByEmailRequest"],
@@ -157,12 +160,13 @@ class AccountForm {
         "SignatoryDetails":
             new List<dynamic>.from(signatoryDetails.map((x) => x.toJson())),
         "Ref_Id": refId,
-        "AlertZRequest": alertZRequest,
+//        "AlertZRequest": alertZRequest,
         "MasterCardRequest": masterCardRequest,
         "VisaCardRequest": visaCardRequest,
         "VerveCardRequest": verveCardRequest,
-        "TokenRequest": tokenRequest,
-        "IbankRequest": ibankRequest,
+//        "TokenRequest": tokenRequest,
+//        "IbankRequest": ibankRequest,
+        "ScanToPayRequest": scanToPay,
         "ZMobileRequest": zMobileRequest,
         "ZPromptRequest": zPromptRequest,
         "StatementByEmailRequest": statementByEmailRequest,
@@ -222,6 +226,8 @@ class SignatoryDetail {
   String maritalStatus;
   String nextOfKin;
   List<Attachment> attachments;
+  String mmda;
+  String placeOfBirth;
 
   SignatoryDetail({
     this.firstName,
@@ -254,6 +260,8 @@ class SignatoryDetail {
     this.cerpacRpIssueAuth,
     this.visaNo,
     this.arrivalDate,
+    this.mmda,
+    this.placeOfBirth,
     this.permitValidFrom,
     this.permitValidTo,
     this.foreignAddress1,
@@ -284,6 +292,8 @@ class SignatoryDetail {
         dateOfBirth: json["DateOfBirth"],
         motherMaidenName: json["MotherMaidenName"],
         title: json["Title"],
+        mmda: json["MMDA"],
+        placeOfBirth: json["PlaceOfBirth"],
         stateOfOrigin: json["StateOfOrigin"],
         countryOfOrigin: json["CountryOfOrigin"],
         meansOfId: json["MeansOfId"],
@@ -349,6 +359,8 @@ class SignatoryDetail {
         "AddressLine1": addressLine1,
         "AddressLine2": addressLine2,
         "City": city,
+        "PlaceOfBirth": placeOfBirth,
+        "MMDA": mmda,
         "State": state,
         "EmailAddress": emailAddress,
         "PhoneNumber": phoneNumber,

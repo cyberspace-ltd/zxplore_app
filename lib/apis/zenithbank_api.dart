@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' show BaseClient, IOClient;
 
-import 'package:http/http.dart' as http;
 import 'package:zxplore_app/apis/endpoints.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
+import 'package:zxplore_app/models/cities_model.dart';
+import 'package:zxplore_app/models/country_model.dart';
 import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/login_response.dart';
 import 'package:zxplore_app/models/occupation_model.dart';
@@ -18,7 +18,6 @@ import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/state_model.dart';
 import 'package:zxplore_app/models/title_model.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
-import 'package:zxplore_app/models/voters_response.dart';
 
 class ZenithBankApi {
   Future<Occupation> fetchOccupations(String token) async {
@@ -117,7 +116,7 @@ class ZenithBankApi {
 
   }
 
-  Future<State> fetchCities(String token) async {
+  Future<Cities> fetchCities(String token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -133,7 +132,7 @@ class ZenithBankApi {
       };
       response =
       await dio.get(Endpoints.getCitiesUrl());
-      return State.fromJson(response.data);
+      return Cities.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
@@ -152,7 +151,7 @@ class ZenithBankApi {
 //    }
   }
 
-  Future<State> fetchCountries(String token) async {
+  Future<Country> fetchCountries(String token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -168,7 +167,7 @@ class ZenithBankApi {
       };
       response =
       await dio.get(Endpoints.getCountriesUrl());
-      return State.fromJson(response.data);
+      return Country.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));

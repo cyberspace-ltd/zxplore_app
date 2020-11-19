@@ -5,7 +5,7 @@ final String columnOfflineAccountType = "accountType";
 final String columnOfflineAccountHolderType = "accountHolderType";
 final String columnOfflineRiskRank = "riskRank";
 final String columnOfflineAccountCategory = "accountCategory";
-final String columnOfflineBVN = "bvn";
+final String columnOfflineTIN = "tin"; //Changed BVN to TIN
 final String columnOfflineTitle = "title";
 final String columnOfflineSurname = "surname";
 final String columnOfflineFirstName = "firstName";
@@ -13,6 +13,8 @@ final String columnOfflineOtherName = "otherName";
 final String columnOfflineMothersMaidenName = "mothersMaidenName";
 final String columnOfflineDateOfBirth = "dateOfBirth";
 final String columnOfflineStateOfOrigin = "stateOfOrigin";
+final String columnOfflinePlaceOfBirth = "placeOfBirth";
+final String columnOfflineMMDA = "mmda";
 final String columnOfflineCountryOfOrigin = "countryOfOrigin";
 final String columnOfflineEmail = "email";
 final String columnOfflinePhone = "phone";
@@ -31,10 +33,10 @@ final String columnOfflineIdNumber = "idNumber";
 final String columnOfflineIdPlaceOfIssue = "idPlaceOfIssue";
 final String columnOfflineIdIssueDate = "idIssueDate";
 final String columnOfflineIdExpiryDate = "idExpiryDate";
-final String columnOfflineIsSendEmail = "isSendEmail";
-final String columnOfflineIsReceiveAlert = "isReceiveAlert";
-final String columnOfflineIsRequestHardwareToken = "isRequestHardwareToken";
-final String columnOfflineIsRequestInternetBanking = "isRequestInternetBanking";
+//final String columnOfflineIsSendEmail = "isSendEmail";
+//final String columnOfflineIsReceiveAlert = "isReceiveAlert";
+//final String columnOfflineIsRequestHardwareToken = "isRequestHardwareToken";
+//final String columnOfflineIsRequestInternetBanking = "isRequestInternetBanking";
 final String columnOfflineIsScanToPay = "isScanToPay";
 final String columnOfflineIsZMobile = "isZMobile";
 final String columnOfflineIsZPrompt = "isZPrompt";
@@ -43,8 +45,8 @@ final String columnOfflineIsUSSD = "isUSSD";
 final String columnOfflineIsBankToWallet = "isBankToWallet";
 final String columnOfflineIdCard = "idCard";
 final String columnOfflinePassport = "passport";
-final String columnOfflineLongitude = "Longitude";
-final String columnOfflineLatitude = "Latitude";
+final String columnOfflineLongitude = "longitude";
+final String columnOfflineLatitude = "latitude";
 final String columnOfflineUtility = "utility";
 final String columnOfflineSignature = "signature";
 
@@ -56,7 +58,7 @@ class OfflineAccountEntity {
   String accountHolderType;
   String riskRank;
   String accountCategory;
-  String bvn;
+  String tin;
   String title;
   String surname;
   String firstName;
@@ -64,6 +66,8 @@ class OfflineAccountEntity {
   String mothersMaidenName;
   String dateOfBirth;
   String stateOfOrigin;
+  String placeOfBirth;
+  String mmda;
   String countryOfOrigin;
   String email;
   String phone;
@@ -82,18 +86,18 @@ class OfflineAccountEntity {
   String idPlaceOfIssue;
   String idIssueDate;
   String idExpiryDate;
-  bool isSendEmail;
-  bool isReceiveAlert;
-  bool isRequestHardwareToken;
-  bool isRequestInternetBanking;
+//  bool isSendEmail;
+//  bool isReceiveAlert;
+//  bool isRequestHardwareToken;
+//  bool isRequestInternetBanking;
   bool isScanToPay;
   bool isZMobile;
   bool isZPrompt;
   bool isStatementViaEmail;
   bool isUSSD;
   bool isBankToWallet;
-  double longitude;
-  double latitude;
+  String longitude;
+  String latitude;
   String idCard;
   String passport;
   String utility;
@@ -106,7 +110,7 @@ class OfflineAccountEntity {
       this.accountHolderType,
       this.riskRank,
       this.accountCategory,
-      this.bvn,
+      this.tin,
       this.title,
       this.surname,
       this.firstName,
@@ -114,6 +118,8 @@ class OfflineAccountEntity {
       this.mothersMaidenName,
       this.dateOfBirth,
       this.stateOfOrigin,
+      this.placeOfBirth,
+      this.mmda,
       this.countryOfOrigin,
       this.email,
       this.phone,
@@ -134,10 +140,10 @@ class OfflineAccountEntity {
       this.idPlaceOfIssue,
       this.idIssueDate,
       this.idExpiryDate,
-      this.isSendEmail,
-      this.isReceiveAlert,
-      this.isRequestHardwareToken,
-      this.isRequestInternetBanking,
+//      this.isSendEmail,
+//      this.isReceiveAlert,
+//      this.isRequestHardwareToken,
+//      this.isRequestInternetBanking,
       this.isScanToPay,
       this.isZMobile,
       this.isZPrompt,
@@ -157,13 +163,15 @@ class OfflineAccountEntity {
     map[columnOfflineAccountHolderType] = accountHolderType;
     map[columnOfflineRiskRank] = riskRank;
     map[columnOfflineAccountCategory] = accountCategory;
-    map[columnOfflineBVN] = bvn;
+    map[columnOfflineTIN] = tin;
     map[columnOfflineTitle] = title;
     map[columnOfflineSurname] = surname;
     map[columnOfflineFirstName] = firstName;
     map[columnOfflineMothersMaidenName] = mothersMaidenName;
     map[columnOfflineMothersMaidenName] = dateOfBirth;
     map[columnOfflineStateOfOrigin] = stateOfOrigin;
+    map[columnOfflinePlaceOfBirth] = placeOfBirth;
+    map[columnOfflineMMDA] = mmda;
     map[columnOfflineCountryOfOrigin] = countryOfOrigin;
     map[columnOfflineEmail] = email;
     map[columnOfflineLongitude] = longitude;
@@ -183,10 +191,10 @@ class OfflineAccountEntity {
     map[columnOfflineIdPlaceOfIssue] = idPlaceOfIssue;
     map[columnOfflineIdIssueDate] = idIssueDate;
     map[columnOfflineIdExpiryDate] = idExpiryDate;
-    map[columnOfflineIsSendEmail] = isSendEmail;
-    map[columnOfflineIsReceiveAlert] = isReceiveAlert;
-    map[columnOfflineIsRequestHardwareToken] = isRequestHardwareToken;
-    map[columnOfflineIsRequestInternetBanking] = isRequestInternetBanking;
+//    map[columnOfflineIsSendEmail] = isSendEmail;
+//    map[columnOfflineIsReceiveAlert] = isReceiveAlert;
+//    map[columnOfflineIsRequestHardwareToken] = isRequestHardwareToken;
+//    map[columnOfflineIsRequestInternetBanking] = isRequestInternetBanking;
     map[columnOfflineIsScanToPay] = isScanToPay;
     map[columnOfflineIsZMobile] = isZMobile;
     map[columnOfflineIsZPrompt] = isZPrompt;
@@ -209,13 +217,15 @@ class OfflineAccountEntity {
           accountHolderType: json[columnOfflineAccountHolderType],
           riskRank: json[columnOfflineRiskRank],
           accountCategory: json[columnOfflineAccountCategory],
-          bvn: json[columnOfflineBVN],
+          tin: json[columnOfflineTIN],
           title: json[columnOfflineTitle],
           surname: json[columnOfflineSurname],
           firstName: json[columnOfflineFirstName],
           mothersMaidenName: json[columnOfflineMothersMaidenName],
           dateOfBirth: json[columnOfflineMothersMaidenName],
           stateOfOrigin: json[columnOfflineStateOfOrigin],
+          placeOfBirth: json[columnOfflinePlaceOfBirth],
+          mmda: json[columnOfflineMMDA],
           countryOfOrigin: json[columnOfflineCountryOfOrigin],
           email: json[columnOfflineEmail],
           phone: json[columnOfflinePhone],
@@ -235,19 +245,19 @@ class OfflineAccountEntity {
           idPlaceOfIssue: json[columnOfflineIdPlaceOfIssue],
           idIssueDate: json[columnOfflineIdIssueDate],
           idExpiryDate: json[columnOfflineIdExpiryDate],
-          isSendEmail: json[columnOfflineIsSendEmail] == 0 ? false : true,
-          isReceiveAlert: json[columnOfflineIsReceiveAlert] == 0 ? false : true,
-          isRequestHardwareToken:
-              json[columnOfflineIsRequestHardwareToken] == 0 ? false : true,
-          isRequestInternetBanking:
-              json[columnOfflineIsRequestInternetBanking] == 0 ? false : true,
-          isScanToPay: json[columnOfflineIsScanToPay] == 0 ? false : true,
-          isZMobile: json[columnOfflineIsZMobile] == 0 ? false : true,
-          isZPrompt: json[columnOfflineIsZPrompt] == 0 ? false : true,
+//          isSendEmail: json[columnOfflineIsSendEmail] == 0 ? false : true,
+//          isReceiveAlert: json[columnOfflineIsReceiveAlert] == 0 ? false : true,
+//          isRequestHardwareToken:
+//              json[columnOfflineIsRequestHardwareToken] == 0 ? false : true,
+//          isRequestInternetBanking:
+//              json[columnOfflineIsRequestInternetBanking] == 0 ? false : true,
+          isScanToPay: json[columnOfflineIsScanToPay]  == 0 ? false : true,
+          isZMobile: json[columnOfflineIsZMobile]  == 0 ? false : true,
+          isZPrompt: json[columnOfflineIsZPrompt]  == 0 ? false : true,
           isStatementViaEmail:
-              json[columnOfflineIsStatementViaEmail] == 0 ? false : true,
-          isUSSD: json[columnOfflineIsUSSD] == 0 ? false : true,
-          isBankToWallet: json[columnOfflineIsBankToWallet] == 0 ? false : true,
+              json[columnOfflineIsStatementViaEmail]  == 0 ? false : true,
+          isUSSD: json[columnOfflineIsUSSD]  == 0 ? false : true,
+          isBankToWallet: json[columnOfflineIsBankToWallet]  == 0 ? false : true,
           idCard: json[columnOfflineIdCard],
           passport: json[columnOfflinePassport],
           utility: json[columnOfflineUtility],

@@ -9,6 +9,7 @@ import 'package:zxplore_app/data/entities/city_entity.dart';
 import 'package:zxplore_app/data/entities/country_entity.dart';
 import 'package:zxplore_app/data/entities/occupation_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/generated/i18n.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 import 'package:flushbar/flushbar.dart';
 
@@ -24,6 +25,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   CountriesBloc _countriesBloc;
   StatesBloc statesBloc;
   CitiesBloc _citiesBloc;
+  String _selectedAccFilter = "";
 
   @override
   bool get wantKeepAlive => true;
@@ -43,7 +45,10 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   final _genders = ['MALE', 'FEMALE'];
 
-  final _maritalStatus = ['SINGLE', 'MARRIED', 'SEPERATED', 'DIVORCED'];
+  final _maritalStatus = ['SINGLE', 'MARRIED', 'SEPARATED', 'DIVORCED'];
+
+  List<String> _stateRegion = ['Ahafo Region','Ashanti Region','Bono Region','Bono East Region', 'Central Region', 'Eastern Region','Greater Accra Region','Northern Region',
+  'North East Region','Oti Region','Savannah Region','Upper East Region','Upper West Region','Volta Region','Western Region','Western North Region'];
   TextEditingController _emailController;
   TextEditingController _phoneController;
   TextEditingController _nextOfKinController;
@@ -56,6 +61,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     _countriesBloc = CountriesBloc();
     _occupationsBloc = OccupationsBloc();
     statesBloc = StatesBloc();
+    statesBloc.getStates();
     _citiesBloc = CitiesBloc();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
     _occupationsBloc.getOccupations();
@@ -310,32 +316,33 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                   labelText: 'Region of Residence',
                   helperText: "* Required",
                   errorText: snapshot.error),
-              isEmpty: snapshot.data == '',
+//              isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
-                child: StreamBuilder<List<StateEntity>>(
-                    stream: statesBloc.states,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<StateEntity>> shot) {
-                      if (!shot.hasData)
-                        return SizedBox(
-                            height: 24.0,
-                            child: Center(child: CircularProgressIndicator()));
-                      return DropdownButton<String>(
-                        value: snapshot.hasData
-                            ? Helper.returnValidStateSelectedItem(snapshot.data,
-                                shot.data.map((x) => x.name).toList())
-                            : null,
-                        items: shot.data.map((StateEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
-                        onChanged: accountFormBloc.changeStateOfResidence,
+                child: DropdownButton<String>(
+                  value: snapshot.hasData
+                      ? Helper.returnValidStateRegionSelectedItem(
+                      snapshot.data, _stateRegion)
+                      : null,
+                  isDense: true,
+                  onChanged:(value) {
+                    setState(() {
+                      if(value == null){
+                        _selectedAccFilter = "";
+                      }else
+                      _selectedAccFilter = value.toUpperCase();
+                      print(_selectedAccFilter);
 
-                        isDense: true, //value: _currentUser,
-                      );
-                    }),
+                    });
+                    accountFormBloc.updateStateRegion(value);
+                    accountFormBloc.updateMMDA(null);
+                  },
+                  items: _stateRegion.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value.toUpperCase(),
+                      child: Text(value.toUpperCase()),
+                    );
+                  }).toList(),
+                ),
               ),
             );
           },
@@ -344,6 +351,62 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     );
   }
 
+  Widget _mMDAFields() {
+    return StreamBuilder<List<StateEntity>>(
+      stream: statesBloc.states,
+      builder: (context, listSnapshot) {
+        return StreamBuilder(
+            stream: accountFormBloc.mmda,
+            builder: (context, itemSnapshot) {
+              return FormField<String>(
+                autovalidate: true,
+                builder: (FormFieldState<String> state) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                        labelText: 'MMDA',
+                        helperText: "* Required",
+                        errorText: itemSnapshot.error),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _getAccountTypeValue(itemSnapshot, listSnapshot),
+                        isDense: true,
+                        items: listSnapshot.hasData
+                            ? listSnapshot.data
+                            .where((x) =>
+                            x.stateName.toUpperCase().startsWith(_selectedAccFilter))
+                            .map((StateEntity entity) {
+                          return DropdownMenuItem<String>(
+                            value: entity.mmda.toUpperCase().toString(),
+                            child: Text(entity.mmda.toUpperCase().toString()),
+                          );
+                        }).toList()
+                            : null,
+                        onChanged: (value) {
+                          accountFormBloc.updateMMDA(value);
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
+            });
+        },
+    );
+  }
+
+  String _getAccountTypeValue(AsyncSnapshot itemSnapshot,
+      AsyncSnapshot<List<StateEntity>> listSnapshot) {
+    var data = (listSnapshot.hasData &&
+        listSnapshot.data.length > 0 &&
+        listSnapshot.data.firstWhere(
+                (x) => x.mmda.toUpperCase() == itemSnapshot.data.toString().toUpperCase(),
+            orElse: () => null) !=
+            null)
+        ? itemSnapshot.data.toString().toUpperCase()
+        : null;
+
+    return data;
+  }
   Widget _cityOfResidenceTextField() {
     return StreamBuilder(
       stream: accountFormBloc.cityOfResidence,
@@ -353,7 +416,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           builder: (FormFieldState<String> city) {
             return InputDecorator(
               decoration: InputDecoration(
-                  labelText: 'City Of Residence',
+                  labelText: 'CITY/TOWN OF RESIDENCE',
                   helperText: "* Required",
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',
@@ -612,7 +675,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                   SizedBox(height: 30.0),
                   _countryOfResidenceTextField(),
                   SizedBox(height: 30.0),
-                  _stateOfResidenceTextField(),
+                  _buildStateOfResidence(),
+                  SizedBox(height: 30.0),
+                  _mMDAFields(),
                   SizedBox(height: 30.0),
                   _cityOfResidenceTextField(),
                   SizedBox(height: 30.0),

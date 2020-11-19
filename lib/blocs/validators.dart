@@ -123,6 +123,14 @@ class Validators {
       sink.addError('Region of Residence is required');
     }
   });
+  final validatePlaceOfBirth =
+      StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg.isNotEmpty && arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('Place of Birth is required');
+    }
+  });
 
   final validateCountryOfOrigin =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
@@ -204,6 +212,15 @@ class Validators {
       sink.add(arg);
     } else {
       sink.addError('Region of Residence is required');
+    }
+  });
+
+  final validateMMDA =
+      StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('MMDA is required');
     }
   });
 

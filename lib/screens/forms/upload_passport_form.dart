@@ -60,13 +60,13 @@ class _UploadPassportState extends State<UploadPassportStep>
                           case ConnectionState.none:
                           case ConnectionState.waiting:
                             return const Text(
-                              'Click either the gallery or camera icon to upload a passport',
+                              'Click either the gallery or camera icon to upload a passport photograph',
                               textAlign: TextAlign.center,
                             );
                           case ConnectionState.done:
                             return (_img.buffer.lengthInBytes == 0
                                 ? const Text(
-                                    'Click either the gallery or camera icon to upload a passport',
+                                    'Click either the gallery or camera icon to upload a passport photograph',
                                     textAlign: TextAlign.center,
                                   )
                                 : LimitedBox(
@@ -81,7 +81,7 @@ class _UploadPassportState extends State<UploadPassportStep>
                               );
                             } else {
                               const Text(
-                                'Click either the gallery or camera icon to upload a passport',
+                                'Click either the gallery or camera icon to upload a passport photograph',
                                 textAlign: TextAlign.center,
                               );
                             }
@@ -90,7 +90,7 @@ class _UploadPassportState extends State<UploadPassportStep>
                     )
                   : (_img.buffer.lengthInBytes == 0
                       ? const Text(
-                          'Click either the gallery or camera icon to upload a passport',
+                          'Click either the gallery or camera icon to upload a passport photograph',
                           textAlign: TextAlign.center,
                         )
                       : LimitedBox(

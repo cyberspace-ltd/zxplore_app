@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/models/state_model.dart';
 
 class StatesBloc extends BlocBase {
 
@@ -14,8 +15,8 @@ class StatesBloc extends BlocBase {
   Stream<List<StateEntity>> get states => _statesController.stream;
 
 
-  final _addStateController = StreamController<List<String>>.broadcast();
-  StreamSink<List<String>> get inAddStates => _addStateController.sink;
+  final _addStateController = StreamController<List<Menu>>.broadcast();
+  StreamSink<List<Menu>> get inAddStates => _addStateController.sink;
 
 
   StatesBloc() {
@@ -39,7 +40,7 @@ class StatesBloc extends BlocBase {
   }
 
 
-  void _handleAddStates(List<String> values) async {
+  void _handleAddStates(List<Menu> values) async {
     DBProvider.db.insertStates(values);
 
     getStates();
