@@ -168,7 +168,7 @@ class Validators {
 
   final validatePhoneNumber =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length >= 7) {
+    if (arg.length >= 10) {
       sink.add(arg);
     } else {
       sink.addError('Mobile Number must be a valid phone number');

@@ -13,6 +13,7 @@ import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/repositories/accounts_repository.dart';
+import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 import 'package:zxplore_app/utils/zxplore_crypto_helper.dart';
 
@@ -92,6 +93,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _genderController = BehaviorSubject<String>();
 
   final occupationController = BehaviorSubject<String>();
+  final othersOccupationController = BehaviorSubject<String>();
 
   final _maritalStatusController = BehaviorSubject<String>();
 
@@ -224,7 +226,6 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get dateOfBirth =>
       _dateOfBirthController.stream.transform(validateDateOfBirth);
 
-
   Stream<String> get placeOfBirth =>
       _placeOfBirthController.stream.transform(validatePlaceOfBirth);
 
@@ -266,6 +267,9 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get occupation =>
       occupationController.stream.transform(validateOccupation);
+
+  Stream<String> get otherOccupation =>
+      othersOccupationController.stream.transform(validateOccupation);
 
   Stream<String> get maritalStatus =>
       _maritalStatusController.stream.transform(validateMaritalStatus);
@@ -367,7 +371,6 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeDateOfBirth => _dateOfBirthController.sink.add;
 
-
   Function(String) get changePlaceOfBirth => _placeOfBirthController.sink.add;
 
   Function(String) get changeMMDA => _MMDAController.sink.add;
@@ -402,6 +405,9 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeOccupation => occupationController.sink.add;
 
+
+  Function(String) get changeOtherOccupation =>
+      othersOccupationController.sink.add;
   Function(String) get changeMaritalStatus => _maritalStatusController.sink.add;
 
   Function(String) get changeIdType => _idTypeController.sink.add;
@@ -526,7 +532,10 @@ class AccountFormBloc extends BlocBase with Validators {
     final validStateOfResidence = _stateOfResidenceController.value;
     final validCityOfResidence = _cityOfResidenceController.value;
     final validGender = _genderController.value;
-    final validOccupation = occupationController.value;
+    var validOccupation = occupationController.value;
+    if (validOccupation == "OTHERS") {
+      validOccupation = othersOccupationController.value;
+    }
     final validMaritalStatus = _maritalStatusController.value;
 
     final validIdType = _idTypeController.value;
@@ -546,15 +555,12 @@ class AccountFormBloc extends BlocBase with Validators {
 //        _isRequestHardwareTokenController.value == null ? false : true;
 //    final validIsRequestInternetBanking =
 //        _isRequestInternetBankingController.value == null ? false : true;
-    final validIsScanToPay =
-        _isScanToPayController.value;
+    final validIsScanToPay = _isScanToPayController.value;
     final validIsZMobile = _isZMobileController.value;
     final validIsZPrompt = _isZPromptController.value;
-    final validIsStatementViaEmail =
-        _isStatementViaEmailController.value;
+    final validIsStatementViaEmail = _isStatementViaEmailController.value;
     final validIsUssd = _isUssdController.value;
-    final validIsBankToWallet =
-        _isBankToWalletController.value;
+    final validIsBankToWallet = _isBankToWalletController.value;
 
     final validUploadIdImageInBase64 = _uploadIdImageController.value;
     final validUploadPassportInBase64 = _uploadPassportController.value;
@@ -588,7 +594,7 @@ class AccountFormBloc extends BlocBase with Validators {
         otherName: validOtherName,
         mothersMaidenName: validMothersMaidenName,
         dateOfBirth: validDateOfBirth,
-        stateOfOrigin: validStateOfResidence,
+        stateOfOrigin: "$validStateOfResidence REGION",
         placeOfBirth: validPlaceOfBirth,
         mmda: validMMDA,
         countryOfOrigin: validCountryOfOrigin,
@@ -598,7 +604,7 @@ class AccountFormBloc extends BlocBase with Validators {
         address1: validAddress1,
         address2: validAddress2,
         countryOfResidence: validCountryOfResidence,
-        stateOfResidence: validStateOfResidence,
+        stateOfResidence: "$validStateOfResidence REGION",
         cityOfResidence: validCityOfResidence,
         gender: validGender,
         latitude: validLatitude,
@@ -615,12 +621,18 @@ class AccountFormBloc extends BlocBase with Validators {
 //        isReceiveAlert: validIsReceiveSms,
 //        isRequestHardwareToken: validIsRequestHardwareToken,
 //        isRequestInternetBanking: validIsRequestInternetBanking,
-        isScanToPay: validIsScanToPay,//  == true ? "Y" : "N",
-        isZMobile: validIsZMobile,// == true ? "Y" : "N",
-        isZPrompt: validIsZPrompt,// == true ? "Y" : "N",
-        isStatementViaEmail: validIsStatementViaEmail,// == true ? "Y" : "N",
-        isUSSD: validIsUssd,// == true ? "Y" : "N",
-        isBankToWallet: validIsBankToWallet,// == true ? "Y" : "N",
+        isScanToPay: validIsScanToPay,
+        //  == true ? "Y" : "N",
+        isZMobile: validIsZMobile,
+        // == true ? "Y" : "N",
+        isZPrompt: validIsZPrompt,
+        // == true ? "Y" : "N",
+        isStatementViaEmail: validIsStatementViaEmail,
+        // == true ? "Y" : "N",
+        isUSSD: validIsUssd,
+        // == true ? "Y" : "N",
+        isBankToWallet: validIsBankToWallet,
+        // == true ? "Y" : "N",
         idCard: validUploadIdImageInBase64,
         passport: validUploadPassportInBase64,
         utility: validUploadUtilityBillInBase64,
@@ -646,6 +658,11 @@ class AccountFormBloc extends BlocBase with Validators {
   updateIDIssuerType(String value) {
     _idIssuerController.sink.add(value);
   }
+
+  updateOccupation(String value) {
+    occupationController.sink.add(value);
+  }
+
 
   updateAccountType(String value) {
     _accountTypeController.sink.add(value);
@@ -708,7 +725,6 @@ class AccountFormBloc extends BlocBase with Validators {
 //    final validStateOfOrigin = _stateOfOriginController.value;
     final validPlaceOfBirth = _placeOfBirthController.value;
 
-    //TODO Okare FIX MMDA by State
     var validMMDA = _MMDAController.value;
 
     final validCountryOfOrigin = _countryOfOriginController.value == null
@@ -729,7 +745,10 @@ class AccountFormBloc extends BlocBase with Validators {
     final validStateOfResidence = _stateOfResidenceController.value;
     final validCityOfResidence = _cityOfResidenceController.value;
     final validGender = _genderController.value;
-    final validOccupation = occupationController.value;
+    var validOccupation = occupationController.value;
+    if (validOccupation == "OTHERS") {
+      validOccupation = othersOccupationController.value;
+    }
     final validMaritalStatus = _maritalStatusController.value;
 
     var validIdType = _idTypeController.value;
@@ -988,26 +1007,52 @@ class AccountFormBloc extends BlocBase with Validators {
       validIdPlaceOfIssue = "";
     }
 
-    if (validIdIssueDate == null && validAccountCategory != easy_classic) {
+    if(validIdIssueDate == null &&
+        (validIdType == STUDENT_ID ||
+            validIdType == OTHERS ||
+            validIdType == SSNIT_CARD)){
+      validIdIssueDate = "";
+
+    }else if(validIdIssueDate != null){
+      validIdIssueDate = validIdIssueDate;
+
+    }else{
       _idIssueDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid issue date");
 
       return;
-    } else if (validIdIssueDate == null &&
-        validAccountCategory == easy_classic) {
-      validIdIssueDate = "";
     }
+//    if (validIdIssueDate == null && validAccountCategory != easy_classic  &&
+//        (validIdType != STUDENT_ID ||
+//        validIdType != OTHERS ||
+//        validIdType != SSNIT_CARD)) {
+//      _idIssueDateController.addError("Field is required");
+//      _subjectSaveAccountResponse
+//          .addError("You have not selected a valid issue date");
+//
+//      return;
+//    } else if (validIdIssueDate == null &&
+//        validAccountCategory == easy_classic) {
+//      validIdIssueDate = "";
+//    }
 
-    if (validIdExpiryDate == null && validAccountCategory != easy_classic) {
+    if (validIdExpiryDate == null &&
+        (validIdType == STUDENT_ID ||
+        validIdType == OTHERS ||
+        validIdType == SSNIT_CARD ||
+        validIdType == VOTERS_CARD)) {
+
+      validIdExpiryDate = "";
+
+    } else if(validIdExpiryDate != null){
+      validIdExpiryDate = validIdExpiryDate;
+
+    }else {
       _idExpiryDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid expiry date");
-
       return;
-    } else if (validIdExpiryDate == null &&
-        validAccountCategory == easy_classic) {
-      validIdExpiryDate = "";
     }
 
     validAccountType = validAccountType.startsWith('S') ? "SA" : "CA";
@@ -1151,7 +1196,7 @@ class AccountFormBloc extends BlocBase with Validators {
         verveCardRequest: 'N',
 //        tokenRequest: isTokenRequest,
 //        ibankRequest: isIBankRequest,
-    scanToPay: isScanToPay,
+        scanToPay: isScanToPay,
         zPromptRequest: isZprompt,
         statementByEmailRequest: isIsStatementViaEmail,
         zMobileRequest: isZMobile,
@@ -1262,7 +1307,8 @@ class AccountFormBloc extends BlocBase with Validators {
         }
         if (bvnResponse.stateOfOrigin != null &&
             bvnResponse.stateOfOrigin.isNotEmpty) {
-          _stateOfResidenceController.add(bvnResponse.stateOfOrigin.toUpperCase());
+          _stateOfResidenceController
+              .add(bvnResponse.stateOfOrigin.toUpperCase());
           bvnState = bvnResponse.phoneNumber.isNotEmpty ? false : true;
           _isStateOfOriginChangeController.add(bvnState);
         }
@@ -1472,6 +1518,7 @@ class AccountFormBloc extends BlocBase with Validators {
     _idTypeController.close();
     _idIssuerController.close();
     _idIssuerOthersController.close();
+    othersOccupationController.close();
     _idNumberController.close();
     _idPlaceOfIssueController.close();
     _idIssueDateController.close();

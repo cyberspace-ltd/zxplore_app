@@ -30,6 +30,7 @@ class _SignatoryStepState extends State<SignatoryStep>
 
   AccountFormBloc accountFormBloc;
   var loadingBar;
+  bool _isButtonDisabled;
 
   File _imageFile;
   String _retrieveDataError;
@@ -37,6 +38,8 @@ class _SignatoryStepState extends State<SignatoryStep>
   @override
   void initState() {
     super.initState();
+    _isButtonDisabled = true;
+
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
 
     accountFormBloc.uploadSignatureController.listen((base64Signature) {
@@ -72,6 +75,8 @@ class _SignatoryStepState extends State<SignatoryStep>
                 FloatingActionButton(
                   onPressed: () {
                     _onImageButtonPressed(ImageSource.gallery);
+                    _isButtonDisabled = false;
+
                   },
                   heroTag: 'image0',
                   backgroundColor: ZxplorePrimaryColor,
@@ -81,6 +86,8 @@ class _SignatoryStepState extends State<SignatoryStep>
                 FloatingActionButton(
                   onPressed: () {
                     _onImageButtonPressed(ImageSource.camera);
+                    _isButtonDisabled = false;
+
                   },
                   backgroundColor: ZxplorePrimaryColor,
                   heroTag: 'image1',
@@ -157,6 +164,8 @@ class _SignatoryStepState extends State<SignatoryStep>
 
                         setState(() {
                           _img = data;
+                          _isButtonDisabled = false;
+
                         });
 //                        debugPrint("onPressed " + encoded);
                       },
@@ -172,6 +181,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                           accountFormBloc.setSignature(null);
                           setState(() {
                             _img = ByteData(0);
+                             _isButtonDisabled = true;
                           });
                         }),
                   ],
@@ -199,27 +209,7 @@ class _SignatoryStepState extends State<SignatoryStep>
               textColor: Color.fromRGBO(255, 255, 255, 1),
               color: ZxplorePrimaryColor,
               elevation: 8.0,
-              onPressed: snapshot.hasData
-                  ? () async {
-                      var loadingBar = FlushbarHelper.createLoading(
-                          message: "Attempting to submit account form....")
-                        ..show(context);
-                      accountFormBloc.submit();
-
-                      accountFormBloc.subjectSaveAccountResponse
-                          .listen((response) {
-                        loadingBar.dismiss(context);
-
-                        _showSuccessDialog(
-                            'The created account was sent successfully, an account number will be generated shortly.');
-                      }).onError((error) {
-                        loadingBar.dismiss(context);
-
-                        FlushbarHelper.createError(message: error.toString())
-                          ..show(context);
-                      });
-                    }
-                  : null,
+              onPressed: _isButtonDisabled ? null : submitAccount,
 //              onPressed: accountFormBloc.submit,
             ),
           ),
@@ -228,6 +218,33 @@ class _SignatoryStepState extends State<SignatoryStep>
     );
   }
 
+  void submitAccount()async{
+      var loadingBar = FlushbarHelper.createLoading(
+          message: "Attempting to submit account form....")
+        ..show(context);
+      setState(() {
+        _isButtonDisabled = true;
+      });
+      accountFormBloc.submit();
+
+      accountFormBloc.subjectSaveAccountResponse
+          .listen((response) {
+        loadingBar.dismiss(context);
+
+
+        _showSuccessDialog(
+            'The created account was sent successfully, an account number will be generated shortly.');
+      }).onError((error) {
+        loadingBar.dismiss(context);
+
+        FlushbarHelper.createError(message: error.toString())
+          ..show(context);
+        setState(() {
+          _isButtonDisabled = false;
+        });
+
+      });
+  }
   void _showSuccessDialog(String message) {
     // flutter defined function
     showDialog(

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/data/entities/country_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 
@@ -294,6 +295,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
         }
         return GestureDetector(
             onTap: () async {
+              FocusScope.of(context).unfocus();
               DateTime picked = await showDatePicker(
                   context: context,
                   initialDate: new DateTime(DateTime.now().year - 13),
@@ -392,31 +394,43 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   helperText: "* Required",
                   errorText: snapshot.error),
               child: DropdownButtonHideUnderline(
-                child: StreamBuilder<List<CountryEntity>>(
-                    stream: countriesBloc.countries,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<CountryEntity>> shot) {
-                      if (!shot.hasData)
-                        return SizedBox(
-                            height: 24.0,
-                            child: Center(child: CircularProgressIndicator()));
-                      return DropdownButton<String>(
-                        value: shot.data != null
-                            ? shot.data?.first?.name
-                            : 'GHANA',
-                        items: shot.data.map((CountryEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-//                            child: Text(value.name),
-                            child: Text("GHANA"), //TODO: HAND CODED COUNTRY, GHANA
-
-                          );
-                        }).toList(),
-                        onChanged: accountFormBloc.changeCountryOfOrigin,
-
-                        isDense: true, //value: _currentUser,
+                  child: DropdownButton<String>(
+                    value: snapshot.data,
+                    isDense: true,
+                    onChanged: accountFormBloc.changeCountryOfOrigin,
+                    items: COUNTRY_LIST.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
                       );
-                    }),
+                    }).toList(),
+                  )
+
+//                 child: StreamBuilder<List<CountryEntity>>(
+//                     stream: countriesBloc.countries,
+//                     builder: (BuildContext context,
+//                         AsyncSnapshot<List<CountryEntity>> shot) {
+//                       if (!shot.hasData)
+//                         return SizedBox(
+//                             height: 24.0,
+//                             child: Center(child: CircularProgressIndicator()));
+//                       return DropdownButton<String>(
+//                         value: shot.data != null
+//                             ? shot.data?.first?.name
+//                             : 'GHANA',
+//                         items: shot.data.map((CountryEntity value) {
+//                           return DropdownMenuItem<String>(
+//                             value: value.name,
+// //                            child: Text(value.name),
+//                             child: Text("GHANA"), //TODO: HAND CODED COUNTRY, GHANA
+//
+//                           );
+//                         }).toList(),
+//                         onChanged: accountFormBloc.changeCountryOfOrigin,
+//
+//                         isDense: true, //value: _currentUser,
+//                       );
+//                     }),
               ),
             );
           },
@@ -457,20 +471,28 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            children: <Widget>[
-              SizedBox(height: 16.0),
-              Column(
-                children: <Widget>[
-                  SizedBox(height: 16.0),
-                  IntrinsicHeight(
-                    child: Column(
-                      children: <Widget>[
-                        _tinField(),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              children: <Widget>[
+                SizedBox(height: 16.0),
+                Column(
+                  children: <Widget>[
+                    SizedBox(height: 16.0),
+                    IntrinsicHeight(
+                      child: Column(
+                        children: <Widget>[
+                          _tinField(),
 //                        Container(
 //                          alignment: Alignment(1.0, 0.0),
 //                          height: 60.0,
@@ -501,29 +523,30 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 //                            },
 //                          ),
 //                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16.0),
-                  titleTextField(),
-                  SizedBox(height: 30.0),
-                  _surnameField(),
-                  SizedBox(height: 30.0),
-                  _firstNameField(),
-                  SizedBox(height: 30.0),
-                  _otherNameField(),
-                  SizedBox(height: 30.0),
-                  _mothersMaidenNameField(),
-                  SizedBox(height: 30.0),
-                  _buildDateOfBirth(),
-                  SizedBox(height: 30.0),
-                  _stateOfOriginTextField(),
-                  SizedBox(height: 30.0),
-                  _countryOfOriginTextField(),
-                ],
-              ),
-              SizedBox(height: 60.0),
-            ],
+                    SizedBox(height: 16.0),
+                    titleTextField(),
+                    SizedBox(height: 30.0),
+                    _surnameField(),
+                    SizedBox(height: 30.0),
+                    _firstNameField(),
+                    SizedBox(height: 30.0),
+                    _otherNameField(),
+                    SizedBox(height: 30.0),
+                    _mothersMaidenNameField(),
+                    SizedBox(height: 30.0),
+                    _buildDateOfBirth(),
+                    SizedBox(height: 30.0),
+                    _stateOfOriginTextField(),
+                    SizedBox(height: 30.0),
+                    _countryOfOriginTextField(),
+                  ],
+                ),
+                SizedBox(height: 60.0),
+              ],
+            ),
           ),
         ),
       ),

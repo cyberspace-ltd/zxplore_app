@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
 //    _occupationsBloc = OccupationsBloc();
 //    _countriesBloc = CountriesBloc();
 //    statesBloc = StatesBloc();
-//    _citiesBloc = CitiesBloc();
+//    _citiesBloc = CitiesBloc(); 
 //    _accountClassBloc = AccountClassBloc();
 
     SecureStorage.getEmployeeToken().then((token) {

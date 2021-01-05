@@ -34,7 +34,7 @@ class _MeansOfIdentificationStepStepState
   final _idTypes = [
     'DRIVER\'S LICENSE',
     'INT\'L PASSPORT',
-    'NATIONAL ID',
+    'NATIONAL ID CARD',
     'VOTER\'S ID CARD',
     'STUDENT ID',
     'SSNIT CARD',
@@ -507,117 +507,126 @@ class _MeansOfIdentificationStepStepState
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            children: <Widget>[
-              SizedBox(height: 16.0),
-              Column(
-                children: <Widget>[
-                  SizedBox(height: 16.0),
-                  _idTypeTextField(),
-                  SizedBox(height: 30.0),
-                  _idIssuerTextField(),
-                  SizedBox(height: 30.0),
-                  Visibility(visible: others, child: _otherIdIssuerTextField()),
-                  SizedBox(height: 30.0),
-                  IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        _idNumberTextField(),
-                        Container(
-                          alignment: Alignment(1.0, 0.0),
-                          height: 60.0,
-                          child: OutlineButton(
-                            child: Text('VERIFY NUMBER'),
-                            textColor: ZxplorePrimaryColor,
-                            color: Colors.transparent,
-                            onPressed: () {
-                              var loadingBar = FlushbarHelper.createLoading(
-                                  message: "verifying NUMBER PLease wait...",
-                                  linearProgressIndicator: null);
-                              loadingBar..show(context);
-                              accountFormBloc.verifyNumber(_selectedIdFilter);
-                              accountFormBloc.driverLicenseVerificationResponse
-                                  .listen((response) {
-                                loadingBar.dismiss();
-                                if (_selectedIdFilter == 0) {
-                                  FlushbarHelper.createSuccess(
-                                      message:
-                                          "Driver Liscence provided is correct.")
-                                    ..show(context);
-                                } else if (_selectedIdFilter == 1) {
-                                  FlushbarHelper.createSuccess(
-                                      message:
-                                          "Voters Card provided is correct.")
-                                    ..show(context);
-                                } else if (_selectedIdFilter == 2) {
-                                  FlushbarHelper.createSuccess(
-                                      message: "Passport provided is correct.")
-                                    ..show(context);
-                                } else {
-                                  FlushbarHelper.createSuccess(
-                                      message: "Identity provided is correct.")
-                                    ..show(context);
-                                }
-                              }).onError((error) {
-                                loadingBar.dismiss();
-                                if (_selectedIdFilter == 0) {
-                                  FlushbarHelper.createError(
-                                      message:
-                                          "Driver Liscence provided could not be verified.")
-                                    ..show(context);
-                                } else if (_selectedIdFilter == 1) {
-                                  FlushbarHelper.createError(
-                                      message:
-                                          "Voters Card provided could not be verified.")
-                                    ..show(context);
-                                } else if (_selectedIdFilter == 2) {
-                                  FlushbarHelper.createError(
-                                      message:
-                                          "Passport provided provided could not be verified.")
-                                    ..show(context);
-                                } else {
-                                  FlushbarHelper.createError(
-                                      message:
-                                          "Identity provided provided could not be verified.")
-                                    ..show(context);
-                                }
-                                loadingBar.dismiss();
-                              });
-                            },
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              children: <Widget>[
+                SizedBox(height: 16.0),
+                Column(
+                  children: <Widget>[
+                    SizedBox(height: 16.0),
+                    _idTypeTextField(),
+                    SizedBox(height: 30.0),
+                    _idIssuerTextField(),
+                    Visibility(visible: others, child: SizedBox(height: 30.0)),
+                    Visibility(visible: others, child: _otherIdIssuerTextField()),
+                    SizedBox(height: 30.0),
+                    IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          _idNumberTextField(),
+                          Container(
+                            alignment: Alignment(1.0, 0.0),
+                            height: 60.0,
+                            child: OutlineButton(
+                              child: Text('VERIFY NUMBER'),
+                              textColor: ZxplorePrimaryColor,
+                              color: Colors.transparent,
+                              onPressed: () {
+                                var loadingBar = FlushbarHelper.createLoading(
+                                    message: "verifying NUMBER PLease wait...",
+                                    linearProgressIndicator: null);
+                                loadingBar..show(context);
+                                accountFormBloc.verifyNumber(_selectedIdFilter);
+                                accountFormBloc.driverLicenseVerificationResponse
+                                    .listen((response) {
+                                  loadingBar.dismiss();
+                                  if (_selectedIdFilter == 0) {
+                                    FlushbarHelper.createSuccess(
+                                        message:
+                                            "Driver Liscence provided is correct.")
+                                      ..show(context);
+                                  } else if (_selectedIdFilter == 1) {
+                                    FlushbarHelper.createSuccess(
+                                        message:
+                                            "Voters Card provided is correct.")
+                                      ..show(context);
+                                  } else if (_selectedIdFilter == 2) {
+                                    FlushbarHelper.createSuccess(
+                                        message: "Passport provided is correct.")
+                                      ..show(context);
+                                  } else {
+                                    FlushbarHelper.createSuccess(
+                                        message: "Identity provided is correct.")
+                                      ..show(context);
+                                  }
+                                }).onError((error) {
+                                  loadingBar.dismiss();
+                                  if (_selectedIdFilter == 0) {
+                                    FlushbarHelper.createError(
+                                        message:
+                                            "Driver Liscence provided could not be verified.")
+                                      ..show(context);
+                                  } else if (_selectedIdFilter == 1) {
+                                    FlushbarHelper.createError(
+                                        message:
+                                            "Voters Card provided could not be verified.")
+                                      ..show(context);
+                                  } else if (_selectedIdFilter == 2) {
+                                    FlushbarHelper.createError(
+                                        message:
+                                            "Passport provided provided could not be verified.")
+                                      ..show(context);
+                                  } else {
+                                    FlushbarHelper.createError(
+                                        message:
+                                            "Identity provided provided could not be verified.")
+                                      ..show(context);
+                                  }
+                                  loadingBar.dismiss();
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 30.0),
-                  _idPlaceOfIssue(),
-                  SizedBox(height: 30.0),
-                  _idIssueDateField(),
-                  SizedBox(height: 30.0),
-                  _idExpiryDateField(),
-                  SizedBox(height: 30.0),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Select the E-products available to this account.',
-                      style: Theme.of(context).textTheme.caption,
-                      textAlign: TextAlign.start,
+                    SizedBox(height: 30.0),
+                    _idPlaceOfIssue(),
+                    SizedBox(height: 30.0),
+                    _idIssueDateField(),
+                    SizedBox(height: 30.0),
+                    _idExpiryDateField(),
+                    SizedBox(height: 30.0),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Select the E-products available to this account.',
+                        style: Theme.of(context).textTheme.caption,
+                        textAlign: TextAlign.start,
+                      ),
                     ),
-                  ),
-                  _scan_to_pay_checkBox(),
-                  _z_mobile_checkBox(),
-                  _z_prompt_checkBox(),
-                  _statement_via_email_CheckBox(),
-                  _ussd_checkBox(),
-                  _bank_to_wallet_checkBox(),
-                ],
-              ),
-              SizedBox(height: 60.0),
-            ],
+                    _scan_to_pay_checkBox(),
+                    _z_mobile_checkBox(),
+                    _z_prompt_checkBox(),
+                    _statement_via_email_CheckBox(),
+                    _ussd_checkBox(),
+                    _bank_to_wallet_checkBox(),
+                  ],
+                ),
+                SizedBox(height: 60.0),
+              ],
+            ),
           ),
         ),
       ),
@@ -627,3 +636,56 @@ class _MeansOfIdentificationStepStepState
   @override
   bool get wantKeepAlive => true;
 }
+
+//
+//if (validIdIssueDate == null && validAccountCategory == easy_classic) {
+//validIdIssueDate = "";
+//} else if (validIdIssueDate == null && validIdType == STUDENT_ID) {
+////6,4,3
+//validIdIssueDate = "";
+//return;
+//
+//} else if (validIdIssueDate == null && validIdType == OTHERS) {
+////6,4,3
+//validIdIssueDate = "";
+//return;
+//
+//} else if (validIdIssueDate == null && validIdType == SSNIT_CARD) {
+//validIdIssueDate = "";
+//return;
+//
+//} else if (validIdIssueDate == null &&
+//validAccountCategory != easy_classic) {
+//_idIssueDateController.addError("Field is required");
+//_subjectSaveAccountResponse
+//    .addError("You have not selected a valid issue date");
+//
+//return;
+//} else {
+//validIdIssueDate = "";
+//return;
+//
+//}
+//
+//if (validIdExpiryDate == null && validAccountCategory == easy_classic) {
+//validIdExpiryDate = "";
+//} else if (validIdIssueDate == null && validIdType == STUDENT_ID) {
+////6,4,3
+//validIdIssueDate = "";
+//} else if (validIdIssueDate == null && validIdType == OTHERS) {
+////6,4,3
+//validIdIssueDate = "";
+//} else if (validIdIssueDate == null && validIdType == SSNIT_CARD) {
+//validIdIssueDate = "";
+//} else if (validIdIssueDate == null && validIdType == VOTERS_CARD) {
+//validIdIssueDate = "";
+//} else if (validIdExpiryDate == null &&
+//validAccountCategory != easy_classic) {
+//_idExpiryDateController.addError("Field is required");
+//_subjectSaveAccountResponse
+//    .addError("You have not selected a valid expiry date");
+//
+//return;
+//} else {
+//validIdIssueDate = "";
+//}

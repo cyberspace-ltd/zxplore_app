@@ -25,9 +25,7 @@ class _AccountInformationState extends State<AccountInformationStep>
 
   final _accountTypes = [
     SAVINGS_ACCOUNT,
-    CURRENT_ACCOUNT,
-    ASPIRE_ACCOUNT,
-    PLATINUM_ACCOUNT
+    CURRENT_ACCOUNT
   ];
 
   String _selectedAccountType;

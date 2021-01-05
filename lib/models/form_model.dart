@@ -53,7 +53,7 @@ class AccountForm {
 
   AccountForm({
     @required this.accountType,
-     this.accountNumber,
+    this.accountNumber,
     @required this.accountHolderType,
     @required this.classCode,
     @required this.branchNumber,
@@ -61,7 +61,7 @@ class AccountForm {
     @required this.rsmId,
     @required this.accountName,
     @required this.tin,
-     this.registrationNumber,
+    this.registrationNumber,
     @required this.sex,
     @required this.title,
     @required this.dateOfBirth,
@@ -147,6 +147,8 @@ class AccountForm {
         "RegistrationNumber": registrationNumber,
         "Sex": sex,
         "Title": title,
+        "Longitude": longitude,
+        "Latitude": latitude,
         "DateOfBirth": dateOfBirth,
         "DateOfIncorporation": dateOfIncorporation,
         "BusinessNature": businessNature,

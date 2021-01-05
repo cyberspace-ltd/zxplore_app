@@ -10,6 +10,7 @@ import 'package:zxplore_app/data/entities/country_entity.dart';
 import 'package:zxplore_app/data/entities/occupation_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/generated/i18n.dart';
+import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 import 'package:flushbar/flushbar.dart';
 
@@ -26,6 +27,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   StatesBloc statesBloc;
   CitiesBloc _citiesBloc;
   String _selectedAccFilter = "";
+
+  final TextEditingController _othersOccupationController =
+  TextEditingController();
+
+  bool others = false;
+
+  String _selectedOccupation;
 
   @override
   bool get wantKeepAlive => true;
@@ -47,8 +55,206 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   final _maritalStatus = ['SINGLE', 'MARRIED', 'SEPARATED', 'DIVORCED'];
 
-  List<String> _stateRegion = ['Ahafo Region','Ashanti Region','Bono Region','Bono East Region', 'Central Region', 'Eastern Region','Greater Accra Region','Northern Region',
-  'North East Region','Oti Region','Savannah Region','Upper East Region','Upper West Region','Volta Region','Western Region','Western North Region'];
+  final _country = [
+    "GHANA",
+    "Afghanistan",
+    "Albania",
+    "Algeria",
+    "Andorra",
+    "Angola",
+    "Antigua and Barbuda",
+    "Argentina",
+    "Armenia",
+    "Australia",
+    "Austria",
+    "Azerbaijan",
+    "The Bahamas",
+    "Bahrain",
+    "Bangladesh",
+    "Barbados",
+    "Belarus",
+    "Belgium",
+    "Belize",
+    "Benin",
+    "Bhutan",
+    "Bolivia",
+    "Bosnia and Herzegovina",
+    "Botswana",
+    "Brazil",
+    "Brunei",
+    "Bulgaria",
+    "Burkina Faso",
+    "Burundi",
+    "Cambodia",
+    "Cameroon",
+    "Canada",
+    "Cape Verde",
+    "Central African Republic",
+    "Chad",
+    "Chile",
+    "China",
+    "Colombia",
+    "Comoros",
+    "Congo",
+    "Costa Rica",
+    "Cote d'Ivoire",
+    "Croatia",
+    "Cuba",
+    "Cyprus",
+    "Czech Republic",
+    "Denmark",
+    "Djibouti",
+    "Dominica",
+    "Dominican Republic",
+    "East Timor (Timor-Leste)",
+    "Ecuador",
+    "Egypt",
+    "El Salvador",
+    "Equatorial Guinea",
+    "Eritrea",
+    "Estonia",
+    "Ethiopia",
+    "Fiji",
+    "Finland",
+    "France",
+    "Gabon",
+    "The Gambia",
+    "Georgia",
+    "Germany",
+    "Greece",
+    "Grenada",
+    "Guatemala",
+    "Guinea",
+    "Guinea-Bissau",
+    "Guyana",
+    "Haiti",
+    "Honduras",
+    "Hungary",
+    "Iceland",
+    "India",
+    "Indonesia",
+    "Iran",
+    "Iraq",
+    "Ireland",
+    "Israel",
+    "Italy",
+    "Jamaica",
+    "Japan",
+    "Jordan",
+    "Kazakhstan",
+    "Kenya",
+    "Kiribati",
+    "Korea, North",
+    "Korea, South",
+    "Kosovo",
+    "Kuwait",
+    "Kyrgyzstan",
+    "Laos",
+    "Latvia",
+    "Lebanon",
+    "Lesotho",
+    "Liberia",
+    "Libya",
+    "Liechtenstein",
+    "Lithuania",
+    "Luxembourg",
+    "Macedonia",
+    "Madagascar",
+    "Malawi",
+    "Malaysia",
+    "Maldives",
+    "Mali",
+    "Malta",
+    "Marshall Islands",
+    "Mauritania",
+    "Mauritius",
+    "Mexico",
+    "Micronesia",
+    "Moldova",
+    "Monaco",
+    "Mongolia",
+    "Montenegro",
+    "Morocco",
+    "Mozambique",
+    "Myanmar (Burma)",
+    "Namibia",
+    "Nauru",
+    "Nepal",
+    "Netherlands",
+    "New Zealand",
+    "Nicaragua",
+    "Niger",
+    "Nigeria",
+    "Norway",
+    "Oman",
+    "Pakistan",
+    "Palau",
+    "Panama",
+    "Papua New Guinea",
+    "Paraguay",
+    "Peru",
+    "Philippines",
+    "Poland",
+    "Portugal",
+    "Qatar",
+    "Romania",
+    "Russia",
+    "Rwanda",
+    "Saint Kitts and Nevis",
+    "Saint Lucia",
+    "Saint Vincent and the Grenadines",
+    "Samoa",
+    "San Marino",
+    "Sao Tome and Principe",
+    "Saudi Arabia",
+    "Senegal",
+    "Serbia",
+    "Seychelles",
+    "Sierra Leone",
+    "Singapore",
+    "Slovakia",
+    "Slovenia",
+    "Solomon Islands",
+    "Somalia",
+    "South Africa",
+    "South Sudan",
+    "Spain",
+    "Sri Lanka",
+    "Sudan",
+    "Suriname",
+    "Swaziland",
+    "Sweden",
+    "Switzerland",
+    "Syria",
+    "Taiwan",
+    "Tajikistan",
+    "Tanzania",
+    "Thailand",
+    "Togo",
+    "Tonga",
+    "Trinidad and Tobago",
+    "Tunisia",
+    "Turkey",
+    "Turkmenistan",
+    "Tuvalu",
+    "Uganda",
+    "Ukraine",
+    "United Arab Emirates",
+    "United Kingdom",
+    "United States of America",
+    "Uruguay",
+    "Uzbekistan",
+    "Vanuatu",
+    "Vatican City",
+    "Venezuela",
+    "Vietnam",
+    "Yemen",
+    "Zambia",
+    "Zimbabwe"
+  ];
+
+  List<String> _stateRegion = ['Ahafo','Ashanti','Bono ','Bono East ', 'Central ', 'Eastern ','Greater Accra ','Northern ',
+  'North East ','Oti ','Savannah ','Upper East ','Upper West ','Volta ','Western ','Western North '];
   TextEditingController _emailController;
   TextEditingController _phoneController;
   TextEditingController _nextOfKinController;
@@ -219,6 +425,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc.countryOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
+          autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -227,33 +434,47 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
-                child: StreamBuilder<List<CountryEntity>>(
-                    stream: _countriesBloc.countries,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<CountryEntity>> shot) {
-                      if (!shot.hasData)
-                        return SizedBox(
-                            height: 24.0,
-                            child: Center(child: CircularProgressIndicator()));
+                child: DropdownButton<String>(
+                  value: snapshot.data,
+                  isDense: true,
+                  onChanged: accountFormBloc.changeCountryOfResidence,
+                  items: _country.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )
 
-                      //TODO: HAND CODED COUNTRY OF RESIDENCE GHANA
-                      return DropdownButton<String>(
-                        value: shot.data != null
-                            ? shot.data?.first?.name
-                            : 'GHANA',
-                        items: shot.data.map((CountryEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name != null ? value.name : 'GHANA',
-//                            child: Text(
-//                                value.name != null ? value.name : 'GHANA'),
-                            child: Text('GHANA'),
-                          );
-                        }).toList(),
-                        onChanged: accountFormBloc.changeCountryOfResidence,
 
-                        isDense: true, //value: _currentUser,
-                      );
-                    }),
+//
+//                 StreamBuilder<List<CountryEntity>>(
+//                     stream: _countriesBloc.countries,
+//                     builder: (BuildContext context,
+//                         AsyncSnapshot<List<CountryEntity>> shot) {
+//                       if (!shot.hasData)
+//                         return SizedBox(
+//                             height: 24.0,
+//                             child: Center(child: CircularProgressIndicator()));
+//
+//                       //TODO: HAND CODED COUNTRY OF RESIDENCE GHANA
+//                       return DropdownButton<String>(
+//                         value: shot.data != null
+//                             ? shot.data?.first?.name
+//                             : 'GHANA',
+//                         items: shot.data.map((CountryEntity value) {
+//                           return DropdownMenuItem<String>(
+//                             value: value.name != null ? value.name : 'GHANA',
+// //                            child: Text(
+// //                                value.name != null ? value.name : 'GHANA'),
+//                             child: Text('GHANA'),
+//                           );
+//                         }).toList(),
+//                         onChanged: accountFormBloc.changeCountryOfResidence,
+//
+//                         isDense: true, //value: _currentUser,
+//                       );
+//                     }),
               ),
             );
           },
@@ -528,6 +749,33 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     );
   }
 
+  Widget _other_occupationField() {
+    return StreamBuilder(
+      stream: accountFormBloc.otherOccupation,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _othersOccupationController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _othersOccupationController.selection);
+        }
+        return TextField(
+          controller: _othersOccupationController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changeOtherOccupation,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+            labelText: 'Other Occupation',
+            helperText: '* Required',
+            errorText: snapshot.error,
+          ),
+        );
+      },
+    );
+  }
+
   Widget _occupationField() {
     return StreamBuilder(
       stream: accountFormBloc.occupation,
@@ -558,7 +806,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                             child: Text(value.name),
                           );
                         }).toList(),
-                        onChanged: accountFormBloc.changeOccupation,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedOccupation = value;
+                            if (value == OTHERS) {
+                              others = true;
+                            } else {
+                              others = false;
+                            }
+                          });
+                          accountFormBloc.updateOccupation(value);
+                        },
 
                         isDense: true, //value: _currentUser,
                       );
@@ -653,43 +911,56 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            children: <Widget>[
-              SizedBox(height: 16.0),
-              Column(
-                children: <Widget>[
-                  SizedBox(height: 16.0),
-                  _emailTextField(),
-                  SizedBox(height: 30.0),
-                  _phoneTextField(),
-                  SizedBox(height: 30.0),
-                  _nextOfKinTextField(),
-                  SizedBox(height: 30.0),
-                  _address1TextField(),
-                  SizedBox(height: 30.0),
-                  _address2TextField(),
-                  SizedBox(height: 30.0),
-                  _countryOfResidenceTextField(),
-                  SizedBox(height: 30.0),
-                  _buildStateOfResidence(),
-                  SizedBox(height: 30.0),
-                  _mMDAFields(),
-                  SizedBox(height: 30.0),
-                  _cityOfResidenceTextField(),
-                  SizedBox(height: 30.0),
-                  _buildGender(),
-                  SizedBox(height: 30.0),
-                  _occupationField(),
-                  SizedBox(height: 30.0),
-                  _maritalStatusField(),
-                ],
-              ),
-              SizedBox(height: 60.0),
-            ],
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              children: <Widget>[
+                SizedBox(height: 16.0),
+                Column(
+                  children: <Widget>[
+                    SizedBox(height: 16.0),
+                    _emailTextField(),
+                    SizedBox(height: 30.0),
+                    _phoneTextField(),
+                    SizedBox(height: 30.0),
+                    _nextOfKinTextField(),
+                    SizedBox(height: 30.0),
+                    _address1TextField(),
+                    SizedBox(height: 30.0),
+                    _address2TextField(),
+                    SizedBox(height: 30.0),
+                    _countryOfResidenceTextField(),
+                    SizedBox(height: 30.0),
+                    _buildStateOfResidence(),
+                    SizedBox(height: 30.0),
+                    _mMDAFields(),
+                    SizedBox(height: 30.0),
+                    _cityOfResidenceTextField(),
+                    SizedBox(height: 30.0),
+                    _buildGender(),
+                    SizedBox(height: 30.0),
+                    _occupationField(),
+                    Visibility(visible: others, child: SizedBox(height: 30.0)),
+
+                    Visibility(visible: others, child: _other_occupationField()),
+
+                    SizedBox(height: 30.0),
+                    _maritalStatusField(),
+                  ],
+                ),
+                SizedBox(height: 60.0),
+              ],
+            ),
           ),
         ),
       ),

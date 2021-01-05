@@ -4,9 +4,9 @@ class Endpoints {
 
   static const String ZENITH_API_BASE_URL = "https://webservicestest.zenithbank.com:8443/ZenithAccountService/api/";
 
-  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
+//  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
 
-//  static const String GATEWAY_BASE_API_URL = "https://196.216.180.130/ZxploreGhanaAPI/api/"; //Staging Environment
+  static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/"; //Live Environment
   static String getOccupationUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/Occupations';
