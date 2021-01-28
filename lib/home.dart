@@ -212,7 +212,34 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext context) {
           return ListView(
             children: <Widget>[
-              SizedBox(height: 12.0),
+              new ListTile(
+                contentPadding:
+                EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      width: 24,
+                      height: 24,
+                    ),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+                  child: new Text(
+                    'COLOR KEY',
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+
+                onTap: () {
+//                _controller.animateTo(0);
+//                Navigator.pop(context);
+                },
+              ),
+              Container(
+                height: 1,
+                color: Colors.grey,
+              ),
+              SizedBox(height: 24.0),
               new ListTile(
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
@@ -591,7 +618,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             IconButton(
                 icon: Icon(
-                  Icons.tune,
+                  Icons.info_outlined,
                   color: Colors.white,
                 ),
                 onPressed: () {

@@ -35,6 +35,8 @@ class _SignatoryStepState extends State<SignatoryStep>
   File _imageFile;
   String _retrieveDataError;
   dynamic _pickImageError;
+
+  bool isSignatureAcceptButtonVisible = false;
   @override
   void initState() {
     super.initState();
@@ -76,7 +78,9 @@ class _SignatoryStepState extends State<SignatoryStep>
                   onPressed: () {
                     _onImageButtonPressed(ImageSource.gallery);
                     _isButtonDisabled = false;
-
+                    setState(() {
+                      isSignatureAcceptButtonVisible = false;
+                    });
                   },
                   heroTag: 'image0',
                   backgroundColor: ZxplorePrimaryColor,
@@ -87,7 +91,9 @@ class _SignatoryStepState extends State<SignatoryStep>
                   onPressed: () {
                     _onImageButtonPressed(ImageSource.camera);
                     _isButtonDisabled = false;
-
+                    setState(() {
+                      isSignatureAcceptButtonVisible = false;
+                    });
                   },
                   backgroundColor: ZxplorePrimaryColor,
                   heroTag: 'image1',
@@ -122,6 +128,9 @@ class _SignatoryStepState extends State<SignatoryStep>
                       key: _sign,
                       onSign: () {
                         final sign = _sign.currentState;
+                        setState(() {
+                          isSignatureAcceptButtonVisible = true;
+                        });
                         // debugPrint(
                         //     '${sign.points.length} points in the signature');
                       },
@@ -138,53 +147,57 @@ class _SignatoryStepState extends State<SignatoryStep>
                     child: Image.memory(_img.buffer.asUint8List())),
             Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    OutlineButton(
-                      child: Text('Accept Signature.'),
-                      onPressed: () async {
-                        final sign = _sign.currentState;
-                        if (sign.points.length == 0) {
-                          FlushbarHelper.createError(
-                              message: "You have not signed this form")
-                            ..show(context);
-                          return;
-                        }
-                        //retrieve image data, do whatever you want with it (send to server, save locally...)
-                        final image = await sign.getData();
-                        var data = await image.toByteData(
-                            format: ui.ImageByteFormat.png);
-                        sign.clear();
-                        final encoded = base64
-                            .encode(data.buffer.asUint8ClampedList())
-                            .toString();
-
-                        accountFormBloc.setSignature(encoded);
-
-                        setState(() {
-                          _img = data;
-                          _isButtonDisabled = false;
-
-                        });
-//                        debugPrint("onPressed " + encoded);
-                      },
-                    ),
-                    FlatButton(
-                        child: Text(
-                          'Clear Signature',
-                        ),
-                        textColor: ZxploreRedColor,
-                        onPressed: () {
+                Visibility(
+                  visible: isSignatureAcceptButtonVisible,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      OutlineButton(
+                        child: Text('Accept Signature.'),
+                        onPressed: () async {
                           final sign = _sign.currentState;
+                          if (sign.points.length == 0) {
+                            FlushbarHelper.createError(
+                                message: "You have not signed this form")
+                              ..show(context);
+                            return;
+                          }
+                          //retrieve image data, do whatever you want with it (send to server, save locally...)
+                          final image = await sign.getData();
+                          var data = await image.toByteData(
+                              format: ui.ImageByteFormat.png);
                           sign.clear();
-                          accountFormBloc.setSignature(null);
+                          final encoded = base64
+                              .encode(data.buffer.asUint8ClampedList())
+                              .toString();
+
+                          accountFormBloc.setSignature(encoded);
+
                           setState(() {
-                            _img = ByteData(0);
-                             _isButtonDisabled = true;
+                            _img = data;
+                            _isButtonDisabled = false;
+
                           });
-                        }),
-                  ],
+//                        debugPrint("onPressed " + encoded);
+                        },
+                      ),
+                      FlatButton(
+                          child: Text(
+                            'Clear Signature',
+                          ),
+                          textColor: ZxploreRedColor,
+                          onPressed: () {
+                            final sign = _sign.currentState;
+                            sign.clear();
+                            accountFormBloc.setSignature(null);
+                            setState(() {
+                              _img = ByteData(0);
+                               _isButtonDisabled = true;
+                              isSignatureAcceptButtonVisible = false;
+                            });
+                          }),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 16.0),
                 submitButton(),

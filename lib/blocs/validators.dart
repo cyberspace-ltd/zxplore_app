@@ -146,7 +146,9 @@ class Validators {
     if (email.isNotEmpty && email.length < 1) {
       sink.add(
           email); //unique to this application, as email field isn't compulsory
-    } else if (email.contains('@')) {
+    } else if (RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(email)) {
       sink.add(email);
     } else {
       sink.addError('Enter a valid email');
@@ -168,7 +170,8 @@ class Validators {
 
   final validatePhoneNumber =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg.length >= 10) {
+        print(arg);
+    if (arg.length > 8 && arg.length < 11) {
       sink.add(arg);
     } else {
       sink.addError('Mobile Number must be a valid phone number');
