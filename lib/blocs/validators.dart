@@ -157,12 +157,9 @@ class Validators {
 
   final validateUsername = StreamTransformer<String, String>.fromHandlers(
       handleData: (username, sink) {
-    if (username.isNotEmpty && username.contains('@')) {
+   if (username.isEmpty) {
       sink.addError(
-          'Ensure your username is in the format of firstname.lastname');
-    } else if (username.isNotEmpty && !username.contains('.')) {
-      sink.addError(
-          'Ensure your username is in the format of firstname.lastname');
+          'Ensure your username is valid & not empty');
     } else {
       sink.add(username);
     }

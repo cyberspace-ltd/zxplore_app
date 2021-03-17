@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'home.dart';
 import 'screens/splash_screen.dart';
+import 'package:flutter/services.dart';
 
 class ZxploreApp extends StatefulWidget {
   @override
@@ -12,10 +13,13 @@ class ZxploreApp extends StatefulWidget {
 class _ZxploreAppState extends State<ZxploreApp> {
   @override
   Widget build(BuildContext context) {
-
+  SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Z-XPLORE',
+      title: 'Z-XPLORE GH',
       home: MyHomePage(title: 'Z-XPLORE Home Page'),
       initialRoute: '/splash',
       onGenerateRoute: _getRoute,
