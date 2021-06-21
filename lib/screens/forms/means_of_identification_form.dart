@@ -3,12 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
-import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 
 import '../../colors.dart';
-import '../../login.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 class MeansOfIdentificationStep extends StatefulWidget {
@@ -65,6 +63,7 @@ class _MeansOfIdentificationStepStepState
     'DVLA',
     'MINISTRY OF FOREIGN AFFAIRS',
     'NIA',
+    'SSNIT',
     'OTHERS'
   ];
   String _selectedIdentityType;
@@ -251,9 +250,7 @@ class _MeansOfIdentificationStepStepState
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
-                  labelText: 'ID Place of Issue',
-                  helperText: "* Required",
-                  errorText: snapshot.error),
+                  labelText: 'ID Place of Issue', errorText: snapshot.error),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -529,7 +526,8 @@ class _MeansOfIdentificationStepStepState
                     SizedBox(height: 30.0),
                     _idIssuerTextField(),
                     Visibility(visible: others, child: SizedBox(height: 30.0)),
-                    Visibility(visible: others, child: _otherIdIssuerTextField()),
+                    Visibility(
+                        visible: others, child: _otherIdIssuerTextField()),
                     SizedBox(height: 30.0),
                     IntrinsicHeight(
                       child: Column(
@@ -539,16 +537,17 @@ class _MeansOfIdentificationStepStepState
                             alignment: Alignment(1.0, 0.0),
                             height: 60.0,
                             child: OutlineButton(
-                              child: Text('VERIFY NUMBER'),
+                              child: Text('VERIFY ID NUMBER'),
                               textColor: ZxplorePrimaryColor,
                               color: Colors.transparent,
                               onPressed: () {
                                 var loadingBar = FlushbarHelper.createLoading(
-                                    message: "verifying NUMBER PLease wait...",
+                                    message: "verifying ID NUMBER PLease wait...",
                                     linearProgressIndicator: null);
                                 loadingBar..show(context);
                                 accountFormBloc.verifyNumber(_selectedIdFilter);
-                                accountFormBloc.driverLicenseVerificationResponse
+                                accountFormBloc
+                                    .driverLicenseVerificationResponse
                                     .listen((response) {
                                   loadingBar.dismiss();
                                   if (_selectedIdFilter == 0) {
@@ -563,11 +562,13 @@ class _MeansOfIdentificationStepStepState
                                       ..show(context);
                                   } else if (_selectedIdFilter == 2) {
                                     FlushbarHelper.createSuccess(
-                                        message: "Passport provided is correct.")
+                                        message:
+                                            "Passport provided is correct.")
                                       ..show(context);
                                   } else {
                                     FlushbarHelper.createSuccess(
-                                        message: "Identity provided is correct.")
+                                        message:
+                                            "Identity provided is correct.")
                                       ..show(context);
                                   }
                                 }).onError((error) {
@@ -624,7 +625,7 @@ class _MeansOfIdentificationStepStepState
                     _bank_to_wallet_checkBox(),
                   ],
                 ),
-                SizedBox(height: 60.0),
+                SizedBox(height: 120.0),
               ],
             ),
           ),

@@ -4,9 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
-import 'package:zxplore_app/blocs/provider.dart';
-import 'package:zxplore_app/home.dart';
-import 'package:zxplore_app/screens/offline_home.dart';
+import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 import 'category.dart';
@@ -249,7 +247,10 @@ class _BackdropState extends State<Backdrop>
               onTap: _toggleBackdropPanelVisibility,
               onVerticalDragUpdate: _handleDragUpdate,
               onVerticalDragEnd: _handleDragEnd,
-              title: Text(widget.currentCategory.toString()),
+              title: StreamBuilder(
+                stream: widget.accountFormBloc.currentFormCategory,
+                builder: (context, snapshot) =>  Text('${snapshot.data}'),
+              ),
               child: widget.frontPanel,
             ),
           ),

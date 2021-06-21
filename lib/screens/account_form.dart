@@ -22,8 +22,13 @@ class AccountFormPage extends StatefulWidget {
   final String accountReferenceId;
   final AccountFormBloc accountFormBloc;
   final bool isEditAccount;
-
-  const AccountFormPage({@required this.category,@required this.accountFormBloc , this.accountReferenceId, this.isEditAccount = false})
+  final List<Category> categories;
+  const AccountFormPage(
+      {@required this.category,
+      @required this.accountFormBloc,
+      @required this.categories,
+      this.accountReferenceId,
+      this.isEditAccount = false})
       : assert(category != null);
 
   @override
@@ -45,7 +50,6 @@ class _AccountFormPageState extends State<AccountFormPage>
   final _kArrowColor = Colors.black.withOpacity(0.8);
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-
 
   final List<Widget> _pages = <Widget>[
     Container(
@@ -78,27 +82,26 @@ class _AccountFormPageState extends State<AccountFormPage>
 
     _setDefaults();
 
-    if(_isEditAccount && accountReferenceId != null){
+    if (_isEditAccount && accountReferenceId != null) {
       _getAccountDetailsFromDatabase(accountReferenceId);
-    }
-    else {
+    } else {
       if (accountReferenceId != null) {
         _getAccountDetailsByReferenceId(accountReferenceId);
       }
     }
-
   }
 
   void _setDefaults() {
     setState(() {
       accountFormBloc = widget.accountFormBloc;
       category = widget.category;
+      accountFormBloc.setCurrentFormCategory(widget.category);
       accountReferenceId = widget.accountReferenceId;
       _isEditAccount = widget.isEditAccount;
     });
   }
 
-  _getAccountDetailsFromDatabase(String referenceId){
+  _getAccountDetailsFromDatabase(String referenceId) {
     var backButton = FlatButton(
       onPressed: () {
         Navigator.pop(context);
@@ -110,9 +113,9 @@ class _AccountFormPageState extends State<AccountFormPage>
     );
 
     accountFormBloc.getOfflineAccountDetailsByRefId(referenceId);
-    accountFormBloc.subjectOfflineDetailsResponse.listen((message){
-
-    }).onError((error){
+    accountFormBloc.subjectOfflineDetailsResponse
+        .listen((message) {})
+        .onError((error) {
       var errorSnackBar = FlushbarHelper.createErrorAction(
           message: error.toString(), button: backButton);
 
@@ -133,9 +136,9 @@ class _AccountFormPageState extends State<AccountFormPage>
       );
 
       var loadingBar = FlushbarHelper.createLoading(
-          message: "Retrieving Account. Please wait...",
-          linearProgressIndicator: null,
-         );
+        message: "Retrieving Account. Please wait...",
+        linearProgressIndicator: null,
+      );
 
       accountFormBloc.getAccountsDetailsByReferenceId(referenceId);
 
@@ -173,6 +176,8 @@ class _AccountFormPageState extends State<AccountFormPage>
     // We update our [DropdownMenuItem] units when we switch [Categories].
     if (old.category != widget.category) {
       _setDefaults();
+
+      accountFormBloc.setCurrentFormCategory(widget.category);
 
       _controller.animateToPage(widget.category.id,
           duration: _kDuration, curve: _kCurve);
@@ -218,8 +223,10 @@ class _AccountFormPageState extends State<AccountFormPage>
                             icon: Icon(Icons.navigate_before,
                                 color: Colors.white),
                             onPressed: () {
-                              _controller.previousPage(duration: _kDuration, curve: _kCurve);
-
+                              _controller.previousPage(
+                                  duration: _kDuration, curve: _kCurve);
+                              widget.accountFormBloc.setCurrentFormCategory(
+                                  widget.categories[_controller.page.toInt() - 1]);
                             }),
                         Center(
                           child: DotsIndicator(
@@ -238,8 +245,10 @@ class _AccountFormPageState extends State<AccountFormPage>
                             icon:
                                 Icon(Icons.navigate_next, color: Colors.white),
                             onPressed: () {
-                                _controller.nextPage(duration: _kDuration, curve: _kCurve);
-
+                              _controller.nextPage(
+                                  duration: _kDuration, curve: _kCurve);
+                              widget.accountFormBloc.setCurrentFormCategory(
+                                  widget.categories[_controller.page.toInt() + 1]);
                             }),
                       ],
                     ),

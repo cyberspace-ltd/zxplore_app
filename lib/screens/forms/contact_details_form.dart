@@ -29,12 +29,11 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   String _selectedAccFilter = "";
 
   final TextEditingController _othersOccupationController =
-  TextEditingController();
+      TextEditingController();
 
   bool others = false;
 
-  String _selectedOccupation;
-
+  String _selectedOccupationGroup = '';
   @override
   bool get wantKeepAlive => true;
 
@@ -42,8 +41,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       TextEditingController();
   final TextEditingController _stateOfResidenceController =
       TextEditingController();
-  final TextEditingController _cityOfResidenceController =
-      TextEditingController();
+
   final TextEditingController _genderController = TextEditingController();
 
   final TextEditingController _occupationController = TextEditingController();
@@ -57,210 +55,33 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   final _country = [
     "GHANA",
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "Andorra",
-    "Angola",
-    "Antigua and Barbuda",
-    "Argentina",
-    "Armenia",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "The Bahamas",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bhutan",
-    "Bolivia",
-    "Bosnia and Herzegovina",
-    "Botswana",
-    "Brazil",
-    "Brunei",
-    "Bulgaria",
-    "Burkina Faso",
-    "Burundi",
-    "Cambodia",
-    "Cameroon",
-    "Canada",
-    "Cape Verde",
-    "Central African Republic",
-    "Chad",
-    "Chile",
-    "China",
-    "Colombia",
-    "Comoros",
-    "Congo",
-    "Costa Rica",
-    "Cote d'Ivoire",
-    "Croatia",
-    "Cuba",
-    "Cyprus",
-    "Czech Republic",
-    "Denmark",
-    "Djibouti",
-    "Dominica",
-    "Dominican Republic",
-    "East Timor (Timor-Leste)",
-    "Ecuador",
-    "Egypt",
-    "El Salvador",
-    "Equatorial Guinea",
-    "Eritrea",
-    "Estonia",
-    "Ethiopia",
-    "Fiji",
-    "Finland",
-    "France",
-    "Gabon",
-    "The Gambia",
-    "Georgia",
-    "Germany",
-    "Greece",
-    "Grenada",
-    "Guatemala",
-    "Guinea",
-    "Guinea-Bissau",
-    "Guyana",
-    "Haiti",
-    "Honduras",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iran",
-    "Iraq",
-    "Ireland",
-    "Israel",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kiribati",
-    "Korea, North",
-    "Korea, South",
-    "Kosovo",
-    "Kuwait",
-    "Kyrgyzstan",
-    "Laos",
-    "Latvia",
-    "Lebanon",
-    "Lesotho",
-    "Liberia",
-    "Libya",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Macedonia",
-    "Madagascar",
-    "Malawi",
-    "Malaysia",
-    "Maldives",
-    "Mali",
-    "Malta",
-    "Marshall Islands",
-    "Mauritania",
-    "Mauritius",
-    "Mexico",
-    "Micronesia",
-    "Moldova",
-    "Monaco",
-    "Mongolia",
-    "Montenegro",
-    "Morocco",
-    "Mozambique",
-    "Myanmar (Burma)",
-    "Namibia",
-    "Nauru",
-    "Nepal",
-    "Netherlands",
-    "New Zealand",
-    "Nicaragua",
-    "Niger",
-    "Nigeria",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Palau",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines",
-    "Poland",
-    "Portugal",
-    "Qatar",
-    "Romania",
-    "Russia",
-    "Rwanda",
-    "Saint Kitts and Nevis",
-    "Saint Lucia",
-    "Saint Vincent and the Grenadines",
-    "Samoa",
-    "San Marino",
-    "Sao Tome and Principe",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Seychelles",
-    "Sierra Leone",
-    "Singapore",
-    "Slovakia",
-    "Slovenia",
-    "Solomon Islands",
-    "Somalia",
-    "South Africa",
-    "South Sudan",
-    "Spain",
-    "Sri Lanka",
-    "Sudan",
-    "Suriname",
-    "Swaziland",
-    "Sweden",
-    "Switzerland",
-    "Syria",
-    "Taiwan",
-    "Tajikistan",
-    "Tanzania",
-    "Thailand",
-    "Togo",
-    "Tonga",
-    "Trinidad and Tobago",
-    "Tunisia",
-    "Turkey",
-    "Turkmenistan",
-    "Tuvalu",
-    "Uganda",
-    "Ukraine",
-    "United Arab Emirates",
-    "United Kingdom",
-    "United States of America",
-    "Uruguay",
-    "Uzbekistan",
-    "Vanuatu",
-    "Vatican City",
-    "Venezuela",
-    "Vietnam",
-    "Yemen",
-    "Zambia",
-    "Zimbabwe"
   ];
 
-  List<String> _stateRegion = ['Ahafo','Ashanti','Bono ','Bono East ', 'Central ', 'Eastern ','Greater Accra ','Northern ',
-  'North East ','Oti ','Savannah ','Upper East ','Upper West ','Volta ','Western ','Western North '];
+  List<String> _stateRegion = [
+    'Ahafo',
+    'Ashanti',
+    'Bono ',
+    'Bono East ',
+    'Central ',
+    'Eastern ',
+    'Greater Accra ',
+    'Northern ',
+    'North East ',
+    'Oti ',
+    'Savannah ',
+    'Upper East ',
+    'Upper West ',
+    'Volta ',
+    'Western ',
+    'Western North '
+  ];
   TextEditingController _emailController;
   TextEditingController _phoneController;
   TextEditingController _nextOfKinController;
   TextEditingController _address1Controller;
   TextEditingController _address2Controller;
-
+  TextEditingController _cityOfResidenceController;
+  TextEditingController _occupationCategoryController;
   @override
   void initState() {
     super.initState();
@@ -276,6 +97,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     _nextOfKinController = TextEditingController();
     _address1Controller = TextEditingController();
     _address2Controller = TextEditingController();
+    _cityOfResidenceController = TextEditingController();
+    _occupationCategoryController = TextEditingController();
   }
 
   @override
@@ -289,6 +112,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     _nextOfKinController.dispose();
     _address1Controller.dispose();
     _address2Controller.dispose();
+    _cityOfResidenceController.dispose();
+    _occupationCategoryController.dispose();
+
     super.dispose();
   }
 
@@ -434,48 +260,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: snapshot.data,
-                  isDense: true,
-                  onChanged: accountFormBloc.changeCountryOfResidence,
-                  items: _country.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                )
-
-
-//
-//                 StreamBuilder<List<CountryEntity>>(
-//                     stream: _countriesBloc.countries,
-//                     builder: (BuildContext context,
-//                         AsyncSnapshot<List<CountryEntity>> shot) {
-//                       if (!shot.hasData)
-//                         return SizedBox(
-//                             height: 24.0,
-//                             child: Center(child: CircularProgressIndicator()));
-//
-//                       //TODO: HAND CODED COUNTRY OF RESIDENCE GHANA
-//                       return DropdownButton<String>(
-//                         value: shot.data != null
-//                             ? shot.data?.first?.name
-//                             : 'GHANA',
-//                         items: shot.data.map((CountryEntity value) {
-//                           return DropdownMenuItem<String>(
-//                             value: value.name != null ? value.name : 'GHANA',
-// //                            child: Text(
-// //                                value.name != null ? value.name : 'GHANA'),
-//                             child: Text('GHANA'),
-//                           );
-//                         }).toList(),
-//                         onChanged: accountFormBloc.changeCountryOfResidence,
-//
-//                         isDense: true, //value: _currentUser,
-//                       );
-//                     }),
-              ),
+                  child: DropdownButton<String>(
+                value: snapshot.data,
+                isDense: true,
+                onChanged: accountFormBloc.changeCountryOfResidence,
+                items: _country.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              )),
             );
           },
         );
@@ -542,17 +337,16 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                 child: DropdownButton<String>(
                   value: snapshot.hasData
                       ? Helper.returnValidStateRegionSelectedItem(
-                      snapshot.data, _stateRegion)
+                          snapshot.data, _stateRegion)
                       : null,
                   isDense: true,
-                  onChanged:(value) {
+                  onChanged: (value) {
                     setState(() {
-                      if(value == null){
+                      if (value == null) {
                         _selectedAccFilter = "";
-                      }else
-                      _selectedAccFilter = value.toUpperCase();
+                      } else
+                        _selectedAccFilter = value.toUpperCase();
                       print(_selectedAccFilter);
-
                     });
                     accountFormBloc.updateStateRegion(value);
                     accountFormBloc.updateMMDA(null);
@@ -589,18 +383,25 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         errorText: itemSnapshot.error),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: _getAccountTypeValue(itemSnapshot, listSnapshot),
+                        value:
+                            _getAccountTypeValue(itemSnapshot, listSnapshot),
+                            isExpanded: true,
                         isDense: true,
                         items: listSnapshot.hasData
                             ? listSnapshot.data
-                            .where((x) =>
-                            x.stateName.toUpperCase().startsWith(_selectedAccFilter))
-                            .map((StateEntity entity) {
-                          return DropdownMenuItem<String>(
-                            value: entity.mmda.toUpperCase().toString(),
-                            child: Text(entity.mmda.toUpperCase().toString()),
-                          );
-                        }).toList()
+                                .where((x) => x.stateName
+                                    .toUpperCase()
+                                    .startsWith(_selectedAccFilter))
+                                .map((StateEntity entity) {
+                                return DropdownMenuItem<String>(
+                                  value: entity.mmda.toUpperCase().toString(),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                        entity.mmda.toUpperCase().toString(), overflow: TextOverflow.ellipsis,),
+                                  ),
+                                );
+                              }).toList()
                             : null,
                         onChanged: (value) {
                           accountFormBloc.updateMMDA(value);
@@ -611,60 +412,64 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                 },
               );
             });
-        },
+      },
     );
   }
 
   String _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<StateEntity>> listSnapshot) {
     var data = (listSnapshot.hasData &&
-        listSnapshot.data.length > 0 &&
-        listSnapshot.data.firstWhere(
-                (x) => x.mmda.toUpperCase() == itemSnapshot.data.toString().toUpperCase(),
-            orElse: () => null) !=
-            null)
+            listSnapshot.data.length > 0 &&
+            listSnapshot.data.firstWhere(
+                    (x) =>
+                        x.mmda.toUpperCase() ==
+                        itemSnapshot.data.toString().toUpperCase(),
+                    orElse: () => null) !=
+                null)
         ? itemSnapshot.data.toString().toUpperCase()
         : null;
 
     return data;
   }
+
+  String _getOccupationValue(AsyncSnapshot itemSnapshot,
+      AsyncSnapshot<List<OccupationEntity>> listSnapshot) {
+    var data = (listSnapshot.hasData &&
+            listSnapshot.data.length > 0 &&
+            listSnapshot.data.firstWhere(
+                    (x) =>
+                        x.occupationName.toUpperCase() ==
+                        itemSnapshot.data.toString().toUpperCase(),
+                    orElse: () => null) !=
+                null)
+        ? itemSnapshot.data.toString().toUpperCase()
+        : null;
+
+    return data;
+  }
+
   Widget _cityOfResidenceTextField() {
     return StreamBuilder(
       stream: accountFormBloc.cityOfResidence,
       builder: (context, snapshot) {
-        return FormField<String>(
-          autovalidate: true,
-          builder: (FormFieldState<String> city) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                  labelText: 'CITY/TOWN OF RESIDENCE',
-                  helperText: "* Required",
-                  errorText: snapshot.error),
-              isEmpty: snapshot.data == '',
-              child: DropdownButtonHideUnderline(
-                child: StreamBuilder<List<CityEntity>>(
-                    stream: _citiesBloc.cities,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<CityEntity>> shot) {
-                      if (!shot.hasData)
-                        return SizedBox(
-                            height: 24.0,
-                            child: Center(child: CircularProgressIndicator()));
-                      return DropdownButton<String>(
-                        value: snapshot.data,
-                        items: shot.data.map((CityEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
-                        onChanged: accountFormBloc.changeCityOfResidence,
-                        isDense: true,
-                      );
-                    }),
-              ),
-            );
-          },
+        if (snapshot.hasData) {
+          _cityOfResidenceController.value = TextEditingValue(
+              text: snapshot.data.toString(),
+              selection: _cityOfResidenceController.selection);
+        }
+        return TextField(
+          controller: _cityOfResidenceController,
+          textCapitalization: TextCapitalization.characters,
+          onChanged: accountFormBloc.changeCityOfResidence,
+          keyboardType: TextInputType.text,
+          maxLength: 40,
+          maxLines: null,
+          maxLengthEnforced: true,
+          decoration: InputDecoration(
+            labelText: 'CITY/TOWN OF RESIDENCE',
+            helperText: '* Required',
+            errorText: snapshot.error,
+          ),
         );
       },
     );
@@ -749,6 +554,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget _other_occupationField() {
     return StreamBuilder(
       stream: accountFormBloc.otherOccupation,
@@ -776,49 +582,60 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     );
   }
 
-  Widget _occupationField() {
+  Widget _occupationCategoryField() {
     return StreamBuilder(
-      stream: accountFormBloc.occupation,
+      stream: accountFormBloc.occupationCategory,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
-                  labelText: 'Occupation',
+                  labelText: 'Occupation Group',
                   helperText: "* Required",
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: StreamBuilder<List<OccupationEntity>>(
-                    stream: _occupationsBloc.occupations,
+                    stream: _occupationsBloc.occupationCategories,
                     builder: (BuildContext context,
                         AsyncSnapshot<List<OccupationEntity>> shot) {
                       if (!shot.hasData)
                         return SizedBox(
                             height: 24.0,
                             child: Center(child: CircularProgressIndicator()));
-                      return DropdownButton<String>(
-                        value: snapshot.data,
-                        items: shot.data.map((OccupationEntity value) {
-                          return DropdownMenuItem<String>(
-                            value: value.name,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedOccupation = value;
-                            if (value == OTHERS) {
-                              others = true;
+                      return FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: DropdownButton<String>(
+                          value: snapshot.data,
+                          items:
+                              shot.data.toSet().map((OccupationEntity value) {
+                            return DropdownMenuItem<String>(
+                              value: value.sironCode,
+                              child: Text(value.groupName.toUpperCase(),
+                                  overflow: TextOverflow.ellipsis),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            if (value == null) {
+                              _selectedOccupationGroup = "";
+                              accountFormBloc.updateOccupationCategory(null);
                             } else {
-                              others = false;
+                              setState(() {
+                                if (value == null) {
+                                  _selectedOccupationGroup = "";
+                                } else
+                                  _selectedOccupationGroup =
+                                      value.toUpperCase();
+                                print(_selectedOccupationGroup);
+                              });
+                              accountFormBloc.updateOccupationCategory(value);
+                              accountFormBloc.updateOccupation(null);
                             }
-                          });
-                          accountFormBloc.updateOccupation(value);
-                        },
+                          },
 
-                        isDense: true, //value: _currentUser,
+                          isDense: true, //value: _currentUser,
+                        ),
                       );
                     }),
               ),
@@ -829,47 +646,119 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     );
   }
 
-  Widget _buildMaritalStatus() {
-    return StreamBuilder(
-        stream: accountFormBloc.bvnMaritalStatuses,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return _maritalStatusField();
-          }
-          if (snapshot.data) {
-            return _maritalStatusField();
-          } else
-            return _maritalStatusTextField();
+  Widget _occupationField() {
+    return StreamBuilder<List<OccupationEntity>>(
+        stream: _occupationsBloc.occupations,
+        builder: (context, listSnapshot) {
+          return StreamBuilder(
+            stream: accountFormBloc.occupation,
+            builder: (context, itemSnapshot) {
+              return FormField<String>(
+                autovalidate: true,
+                builder: (FormFieldState<String> occupations) {
+                  return InputDecorator(
+                    decoration: InputDecoration(
+                        labelText: 'Occupation',
+                        helperText: "* Required",
+                        errorText: itemSnapshot.error),
+                    isEmpty: itemSnapshot.data == '',
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: _getOccupationValue(itemSnapshot, listSnapshot),
+                        isExpanded: true,
+                        isDense: true,
+                        items: listSnapshot.hasData
+                            ? listSnapshot.data
+                                .where((x) => x.sironCode
+                                    .toUpperCase()
+                                    .startsWith(_selectedOccupationGroup))
+                                .map((OccupationEntity entity) {
+                                return DropdownMenuItem<String>(
+                                  value: entity.occupationName
+                                      .toUpperCase()
+                                      .toString(),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                        entity.occupationName
+                                            .toUpperCase()
+                                            .toString(),
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                );
+                              }).toList()
+                            : null,
+                        onChanged: (value) {
+                          print(value);
+                          setState(() {
+                            if (value != null) {
+                              if (value
+                                  .replaceAll(' ', '')
+                                  .toUpperCase()
+                                  .trim()
+                                  .contains(PLEASE_SPECIFY
+                                      .replaceAll(' ', '')
+                                      .toUpperCase()
+                                      .trim())) {
+                                others = true;
+                              } else {
+                                others = false;
+                              }
+                            }
+                          });
+                          accountFormBloc.updateOccupation(value);
+                        },
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
         });
   }
 
-  Widget _maritalStatusTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.maritalStatus,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _maritalStatusController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _maritalStatusController.selection);
-        }
-        return TextField(
-          controller: _maritalStatusController,
-          textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeMaritalStatus,
-          keyboardType: TextInputType.text,
-          maxLength: 40,
-          enabled: accountFormBloc.bvnMaritalStatus,
-          maxLines: null,
-          maxLengthEnforced: true,
-          decoration: InputDecoration(
-            labelText: 'Marital Status',
-            helperText: '* Required',
-            errorText: snapshot.error,
-          ),
-        );
-      },
-    );
-  }
+  // Widget _buildMaritalStatus() {
+  //   return StreamBuilder(
+  //       stream: accountFormBloc.bvnMaritalStatuses,
+  //       builder: (context, snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return _maritalStatusField();
+  //         }
+  //         if (snapshot.data) {
+  //           return _maritalStatusField();
+  //         } else
+  //           return _maritalStatusTextField();
+  //       });
+  // }
+
+  // Widget _maritalStatusTextField() {
+  //   return StreamBuilder(
+  //     stream: accountFormBloc.maritalStatus,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         _maritalStatusController.value = TextEditingValue(
+  //             text: snapshot.data.toString(),
+  //             selection: _maritalStatusController.selection);
+  //       }
+  //       return TextField(
+  //         controller: _maritalStatusController,
+  //         textCapitalization: TextCapitalization.characters,
+  //         onChanged: accountFormBloc.changeMaritalStatus,
+  //         keyboardType: TextInputType.text,
+  //         maxLength: 40,
+  //         enabled: accountFormBloc.bvnMaritalStatus,
+  //         maxLines: null,
+  //         maxLengthEnforced: true,
+  //         decoration: InputDecoration(
+  //           labelText: 'Marital Status',
+  //           helperText: '* Required',
+  //           errorText: snapshot.error,
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   Widget _maritalStatusField() {
     return StreamBuilder(
@@ -949,16 +838,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     SizedBox(height: 30.0),
                     _buildGender(),
                     SizedBox(height: 30.0),
+                    _occupationCategoryField(),
+                    SizedBox(height: 30.0),
                     _occupationField(),
                     Visibility(visible: others, child: SizedBox(height: 30.0)),
-
-                    Visibility(visible: others, child: _other_occupationField()),
-
+                    Visibility(
+                        visible: others, child: _other_occupationField()),
                     SizedBox(height: 30.0),
                     _maritalStatusField(),
                   ],
                 ),
-                SizedBox(height: 60.0),
+            SizedBox(height: 120.0),
               ],
             ),
           ),

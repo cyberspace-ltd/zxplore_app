@@ -6,8 +6,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
-import 'package:zxplore_app/blocs/provider.dart';
-
 import '../backdrop.dart';
 import '../category.dart';
 import '../category_tile.dart';
@@ -54,7 +52,6 @@ class _CategoryRouteState extends State<CategoryPage> {
     setState(() {
       accountReferenceId = widget.accountReferenceId;
       _isEditAccount = widget.isEditAccount;
-
     });
   }
 
@@ -112,6 +109,7 @@ class _CategoryRouteState extends State<CategoryPage> {
 
   /// Function to call when a [Category] is tapped.
   void _onCategoryTap(Category category) {
+    accountFormBloc.setCurrentFormCategory(category);
     setState(() {
       _currentCategory = category;
     });
@@ -169,8 +167,19 @@ class _CategoryRouteState extends State<CategoryPage> {
       currentCategory:
           _currentCategory == null ? _defaultCategory : _currentCategory,
       frontPanel: _currentCategory == null
-          ? AccountFormPage(category: _defaultCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId,isEditAccount: _isEditAccount,)
-          : AccountFormPage(category: _currentCategory,accountFormBloc: accountFormBloc,accountReferenceId: accountReferenceId,isEditAccount: _isEditAccount),
+          ? AccountFormPage(
+              category: _defaultCategory,
+              categories: _categories,
+              accountFormBloc: accountFormBloc,
+              accountReferenceId: accountReferenceId,
+              isEditAccount: _isEditAccount,
+            )
+          : AccountFormPage(
+              category: _currentCategory,
+              categories: _categories,
+              accountFormBloc: accountFormBloc,
+              accountReferenceId: accountReferenceId,
+              isEditAccount: _isEditAccount),
       backPanel: listView,
       frontTitle: Text('Create Account'),
       backTitle: Text('Select a Category'),

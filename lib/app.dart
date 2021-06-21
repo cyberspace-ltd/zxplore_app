@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'colors.dart';
-import 'home.dart';
+import 'screens/home_screen.dart';
 import 'screens/splash_screen.dart';
 import 'package:flutter/services.dart';
 

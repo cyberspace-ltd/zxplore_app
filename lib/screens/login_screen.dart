@@ -2,14 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
-import 'package:zxplore_app/utils/secure_storage.dart';
 
-import 'blocs/login_bloc.dart';
-import 'colors.dart';
-import 'home.dart';
-import 'libs/top_wave.dart';
-import 'libs/wavy_header_image.dart';
-import 'models/login_response.dart';
+import '../blocs/login_bloc.dart';
+import '../colors.dart';
+import 'home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,13 +14,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   LoginBloc _loginBloc;
-  Offset _offset = Offset.zero;
-  final _perspective = 0.003;
-  final _zeroAngle = 0.0001;
-
+  bool _passwordVisible = false;
   @override
   void initState() {
     _loginBloc = LoginBloc();
+    _passwordVisible = false;
     super.initState();
   }
 
@@ -58,8 +52,21 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 labelText: 'Password',
                 errorText: snapshot.error,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    // Based on passwordVisible state choose the icon
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: ZxplorePrimaryColor,
+                  ),
+                  onPressed: () {
+                    // Update the state i.e. toogle the state of passwordVisible variable
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                ),
               ),
-              obscureText: true,
+              obscureText: !_passwordVisible,
             ),
           );
         });
@@ -72,7 +79,6 @@ class _LoginPageState extends State<LoginPage> {
         return ButtonTheme(
           height: 60.0,
           child: RaisedButton(
-
             child: Text('Login'),
             textColor: Color.fromRGBO(255, 255, 255, 1),
             color: ZxplorePrimaryColor,
@@ -86,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
 
                     _loginBloc.submit();
 
-                    _loginBloc.subjectLoginResponse.listen((loginResponse) async {
+                    _loginBloc.subjectLoginResponse
+                        .listen((loginResponse) async {
                       loadingBar.dismiss();
 
                       Navigator.pushReplacement(
@@ -98,7 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                       loadingBar.dismiss();
 
                       loadingBar.dismiss();
-                      FlushbarHelper.createError(message: "${error.toString()}.")
+                      FlushbarHelper.createError(
+                              message: "${error.toString()}.")
                           .show(context);
                       loadingBar.dismiss();
                     });
@@ -107,26 +115,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildLoadingWidget() {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text("Loading data from API..."), CircularProgressIndicator()],
-    ));
-  }
-
-  Widget _buildErrorWidget(String error) {
-    return SnackBar(
-      content: Text(error),
-      action: SnackBarAction(
-        label: 'retry',
-        onPressed: () {
-          // Some code to undo the change!
-        },
-      ),
     );
   }
 
@@ -140,8 +128,7 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               color: ZxplorePrimaryColor,
               height: 0.5 * MediaQuery.of(context).size.height,
-              child:
-              Center(
+              child: Center(
                 child: Container(
                   height: 120,
                   width: 120,

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 import 'app.dart';
 import 'package:catcher/catcher_plugin.dart';

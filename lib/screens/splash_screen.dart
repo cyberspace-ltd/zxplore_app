@@ -1,11 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/colors.dart';
-import 'package:zxplore_app/home.dart';
+import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
-import '../login.dart';
+import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

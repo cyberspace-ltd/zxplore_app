@@ -49,6 +49,19 @@ class Helper {
     return validData;
   }
 
+    static String returnValidOccupationGroupSelecteditem(String sourceValue, List<String> matchingList) {
+    sourceValue = sourceValue.toUpperCase();
+    String validData;
+
+    matchingList.forEach((value) {
+      if (value.toUpperCase().contains(sourceValue)) {
+        validData = value.toUpperCase();
+      }
+    });
+
+    return validData;
+  }
+
   static String returnValidGenderSelectedItem(String sourceValue, List<String> matchingList) {
     sourceValue = sourceValue.toUpperCase();
     String validData;

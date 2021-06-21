@@ -1,35 +1,61 @@
+// To parse this JSON data, do
+//
+//     final occupation = occupationFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:zxplore_app/data/entities/occupation_entity.dart';
-
-Occupation occupationFromJson(String str) =>
-    Occupation.fromJson(json.decode(str));
+Occupation occupationFromJson(String str) => Occupation.fromJson(json.decode(str));
 
 String occupationToJson(Occupation data) => json.encode(data.toJson());
 
 class Occupation {
-  String responseCode;
-  String responseMessage;
-  List<String> menu;
+    Occupation({
+        this.responseCode,
+        this.responseMessage,
+        this.menu,
+    });
 
+    String responseCode;
+    String responseMessage;
+    List<OccupationMenu> menu;
 
+    factory Occupation.fromJson(Map<String, dynamic> json) => Occupation(
+        responseCode: json["ResponseCode"] == null ? null : json["ResponseCode"],
+        responseMessage: json["ResponseMessage"] == null ? null : json["ResponseMessage"],
+        menu: json["Menu"] == null ? null : List<OccupationMenu>.from(json["Menu"].map((x) => OccupationMenu.fromJson(x))),
+    );
 
-  Occupation({
-    this.responseCode,
-    this.responseMessage,
-    this.menu,
-  });
+    Map<String, dynamic> toJson() => {
+        "ResponseCode": responseCode == null ? null : responseCode,
+        "ResponseMessage": responseMessage == null ? null : responseMessage,
+        "Menu": menu == null ? null : List<dynamic>.from(menu.map((x) => x.toJson())),
+    };
+}
 
-  factory Occupation.fromJson(Map<String, dynamic> json) => new Occupation(
-        responseCode: json["ResponseCode"],
-        responseMessage: json["ResponseMessage"],
-        menu: new List<String>.from(json["Menu"].map((x) => x)),
-      );
+class OccupationMenu {
+    OccupationMenu({
+        this.srn,
+        this.occupationName,
+        this.sironCode,
+        this.groupName,
+    });
 
-  Map<String, dynamic> toJson() => {
-        "ResponseCode": responseCode,
-        "ResponseMessage": responseMessage,
-        "Menu": new List<dynamic>.from(menu.map((x) => x)),
-      };
+    int srn;
+    String occupationName;
+    String sironCode;
+    String groupName;
 
+    factory OccupationMenu.fromJson(Map<String, dynamic> json) => OccupationMenu(
+        srn: json["Srn"] == null ? null : json["Srn"],
+        occupationName: json["OccupationName"] == null ? null : json["OccupationName"],
+        sironCode: json["SironCode"] == null ? null : json["SironCode"],
+        groupName: json["GroupName"] == null ? null : json["GroupName"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "Srn": srn == null ? null : srn,
+        "OccupationName": occupationName == null ? null : occupationName,
+        "SironCode": sironCode == null ? null : sironCode,
+        "GroupName": groupName == null ? null : groupName,
+    };
 }

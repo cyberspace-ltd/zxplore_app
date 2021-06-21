@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:location/location.dart';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/category.dart';
 import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/data/entities/account_class_entity.dart';
 import 'package:zxplore_app/data/entities/offline_form_entity.dart';
@@ -28,6 +29,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final _referenceIdController =
       BehaviorSubject<String>(); // used in the case of updating accounts.
+
+  final _currentFormCategoryController = BehaviorSubject<Category>();
 
   final _isDateOfBirthChangeController = BehaviorSubject<bool>();
   final _isStateOfOriginChangeController = BehaviorSubject<bool>();
@@ -72,7 +75,9 @@ class AccountFormBloc extends BlocBase with Validators {
   //Contact Details
 
   final _emailController = BehaviorSubject<String>();
+
   final _latitudeController = BehaviorSubject<String>();
+
   final _longitudeController = BehaviorSubject<String>();
 
   final _phoneNumberController = BehaviorSubject<String>();
@@ -86,13 +91,15 @@ class AccountFormBloc extends BlocBase with Validators {
   final _countryOfResidenceController = BehaviorSubject<String>();
 
   final _stateOfResidenceController = BehaviorSubject<String>();
-  final _MMDAController = BehaviorSubject<String>();
+  final _mmdaController = BehaviorSubject<String>();
 
   final _cityOfResidenceController = BehaviorSubject<String>();
 
   final _genderController = BehaviorSubject<String>();
 
   final occupationController = BehaviorSubject<String>();
+    final occupationCategoryController = BehaviorSubject<String>();
+
   final othersOccupationController = BehaviorSubject<String>();
 
   final _maritalStatusController = BehaviorSubject<String>();
@@ -173,6 +180,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<bool> get bvnMaritalStatuses =>
       _isMaritalStatusChangeController.stream;
 
+  // ignore: non_constant_identifier_names
   String easy_classic = "344";
   bool bvnlastNameValue = true;
   bool bvnFirstName = true;
@@ -229,7 +237,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get placeOfBirth =>
       _placeOfBirthController.stream.transform(validatePlaceOfBirth);
 
-  Stream<String> get mmda => _MMDAController.stream.transform(validateMMDA);
+  Stream<String> get mmda => _mmdaController.stream.transform(validateMMDA);
 
   Stream<String> get countryOfOrigin =>
       _countryOfOriginController.stream.transform(validateCountryOfOrigin);
@@ -243,6 +251,9 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get email => _emailController.stream.transform(validateEmail);
 
   BehaviorSubject<LocationData> get subjectLocationResponse => _subjectLocation;
+
+
+  Stream<Category> get currentFormCategory => _currentFormCategoryController.stream;
 
   Stream<String> get latitude => _latitudeController.stream;
 
@@ -267,6 +278,9 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get occupation =>
       occupationController.stream.transform(validateOccupation);
+
+Stream<String> get occupationCategory =>
+      occupationCategoryController.stream.transform(validateOccupation);
 
   Stream<String> get otherOccupation =>
       othersOccupationController.stream.transform(validateOccupation);
@@ -346,6 +360,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeLatitude => _latitudeController.sink.add;
 
+  Function(Category) get changeFormCategory => _currentFormCategoryController.sink.add;
+
   Function(String) get changeLongitude => _longitudeController.sink.add;
 
   Function(String) get changeHolderType =>
@@ -373,7 +389,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changePlaceOfBirth => _placeOfBirthController.sink.add;
 
-  Function(String) get changeMMDA => _MMDAController.sink.add;
+  Function(String) get changeMMDA => _mmdaController.sink.add;
 
   Function(String) get changeCountryOfOrigin =>
       _countryOfOriginController.sink.add;
@@ -405,6 +421,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeOccupation => occupationController.sink.add;
 
+
+  Function(String) get changeOccupationCategory => occupationCategoryController.sink.add;
 
   Function(String) get changeOtherOccupation =>
       othersOccupationController.sink.add;
@@ -496,6 +514,14 @@ class AccountFormBloc extends BlocBase with Validators {
     changeOccupation;
   }
 
+  setOccupationCategory(String value) {
+    occupationCategoryController.sink.add(value);
+    changeOccupationCategory;
+  }
+
+
+  
+
   saveOffline() async {
     var validId = _idController.value;
     var validRefenceId = _referenceIdController.value;
@@ -513,7 +539,7 @@ class AccountFormBloc extends BlocBase with Validators {
     final validMothersMaidenName = _mothersMaidenNameController.value;
     final validDateOfBirth = _dateOfBirthController.value;
     final validPlaceOfBirth = _placeOfBirthController.value;
-    final validMMDA = _MMDAController.value;
+    final validMMDA = _mmdaController.value;
     final validCountryOfOrigin = _countryOfOriginController.value == null
         ? 'GHANA'
         : _countryOfOriginController.value; //workaround for bug
@@ -649,9 +675,9 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   updateMMDA(String value) {
-    _MMDAController.sink.add(value);
+    _mmdaController.sink.add(value);
     if (value == null) {
-      _MMDAController.sink.addError("Field is required");
+      _mmdaController.sink.addError("Field is required");
     }
   }
 
@@ -660,7 +686,22 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   updateOccupation(String value) {
+     if(value == null) {
+      occupationController.sink.addError("Occupation is required");
+    }
+    else{
     occupationController.sink.add(value);
+    }
+  }
+
+
+  updateOccupationCategory(String value) {
+    if(value == null) {
+      occupationCategoryController.sink.addError("Occupation category is required");
+    }
+    else{
+          occupationCategoryController.sink.add(value);
+    }
   }
 
 
@@ -705,7 +746,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
     var validAccountType = _accountTypeController.value;
     final validAccountHolderType = _accountHolderTypeController.value;
-    final validAccountRiskRank = _riskRankController.value;
+    final validAccountRiskRank = _riskRankController.value != null ? _riskRankController.value : '';
     var validAccountCategory = _accountCategoryController.value;
 
     List<AccountClassEntity> accountClasses =
@@ -725,7 +766,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //    final validStateOfOrigin = _stateOfOriginController.value;
     final validPlaceOfBirth = _placeOfBirthController.value;
 
-    var validMMDA = _MMDAController.value;
+    var validMMDA = _mmdaController.value;
 
     final validCountryOfOrigin = _countryOfOriginController.value == null
         ? 'GHANA'
@@ -757,7 +798,7 @@ class AccountFormBloc extends BlocBase with Validators {
       validIdIssuer = _idIssuerOthersController.value;
     }
     var validIdNumber = _idNumberController.value;
-    var validIdPlaceOfIssue = _idPlaceOfIssueController.value;
+    var validIdPlaceOfIssue = _idPlaceOfIssueController.value != null ? _idPlaceOfIssueController.value : '';
     var validIdIssueDate = _idIssueDateController.value;
     var validIdExpiryDate = _idExpiryDateController.value;
 //    final validIsSendEmail = _isSendEmailController.value;
@@ -793,10 +834,10 @@ class AccountFormBloc extends BlocBase with Validators {
     }
 
     if (validAccountRiskRank == null) {
-      _riskRankController.addError("Field is required");
-      _subjectSaveAccountResponse
-          .addError("You have not selected a risk rank.");
-      return;
+      // _riskRankController.addError("Field is required");
+      // _subjectSaveAccountResponse
+      //     .addError("You have not selected a risk rank.");
+      // return;
     }
 
     if (validAccountCategory == null) {
@@ -880,7 +921,7 @@ class AccountFormBloc extends BlocBase with Validators {
     }
 
     if (validMMDA == null) {
-      _MMDAController.addError("Field is required");
+      _mmdaController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid MMDA");
 
@@ -998,10 +1039,10 @@ class AccountFormBloc extends BlocBase with Validators {
     }
 
     if (validIdPlaceOfIssue == null && validAccountCategory != easy_classic) {
-      _idPlaceOfIssueController.addError("Field is required");
-      _subjectSaveAccountResponse
-          .addError("You have not selected a valid id place of issue");
-      return;
+      // _idPlaceOfIssueController.addError("Field is required");
+      // _subjectSaveAccountResponse
+      //     .addError("You have not selected a valid id place of issue");
+      // return;
     } else if (validIdPlaceOfIssue == null &&
         validAccountCategory == easy_classic) {
       validIdPlaceOfIssue = "";
@@ -1340,7 +1381,10 @@ class AccountFormBloc extends BlocBase with Validators {
       bvnVerificationResponse.addError(error);
     });
   }
-
+  setCurrentFormCategory(Category category){
+    // changeFormCategory(category);
+      _currentFormCategoryController.sink.add(category);
+  }
   getCurrentLocation() async {
     try {
       final Location location = Location();
@@ -1384,7 +1428,7 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   verifyNumber(int idType) async {
-    var encodedBVN = CryptoHelper.encrypt(_idNumberController.value);
+    // var encodedBVN = CryptoHelper.encrypt(_idNumberController.value);
     var identity = _idNumberController.value;
 
     await _accountsRepository
@@ -1393,13 +1437,13 @@ class AccountFormBloc extends BlocBase with Validators {
       driverLicenseVerificationResponse.add(identityResponse);
 
       if (identityResponse?.responseCode == '200') {
-        print(CryptoHelper.decrypt("bNxR3JQR9SQLUZZydVzQuw=="));
-        print(CryptoHelper.decrypt("rOSmtmXdFkOWi1rRBsQ/aA=="));
-        print(CryptoHelper.decrypt("VW+vu5PSeRRqxIHk6Gkj5w=="));
-        print(CryptoHelper.decrypt("mowRSoiP3yiJ7vxaoRqUfQ=="));
-        print(CryptoHelper.decrypt("cAjVqZrxDJO01zjVe4SV6Q=="));
-        print(CryptoHelper.decrypt(
-            "m/p8hrMIVm76MoR7fpGSfqqKGnt2e7zOUt5EFdEJfoQ="));
+        // print(CryptoHelper.decrypt("bNxR3JQR9SQLUZZydVzQuw=="));
+        // print(CryptoHelper.decrypt("rOSmtmXdFkOWi1rRBsQ/aA=="));
+        // print(CryptoHelper.decrypt("VW+vu5PSeRRqxIHk6Gkj5w=="));
+        // print(CryptoHelper.decrypt("mowRSoiP3yiJ7vxaoRqUfQ=="));
+        // print(CryptoHelper.decrypt("cAjVqZrxDJO01zjVe4SV6Q=="));
+        // print(CryptoHelper.decrypt(
+        //     "m/p8hrMIVm76MoR7fpGSfqqKGnt2e7zOUt5EFdEJfoQ="));
 
         if (identityResponse.name != null && identityResponse.name.isNotEmpty) {
           _surnameController.add(CryptoHelper.decrypt(identityResponse.name));
@@ -1499,7 +1543,7 @@ class AccountFormBloc extends BlocBase with Validators {
     _mothersMaidenNameController.close();
     _dateOfBirthController.close();
     _placeOfBirthController.close();
-    _MMDAController.close();
+    _mmdaController.close();
     _countryOfOriginController.close();
     _emailController.close();
     _phoneNumberController.close();
@@ -1514,6 +1558,7 @@ class AccountFormBloc extends BlocBase with Validators {
     _cityOfResidenceController.close();
     _genderController.close();
     occupationController.close();
+    occupationCategoryController.close();
     _maritalStatusController.close();
     _idTypeController.close();
     _idIssuerController.close();
@@ -1541,6 +1586,7 @@ class AccountFormBloc extends BlocBase with Validators {
     _isEditModeController.close();
     _idController.close();
     _subjectDeleteOfflineAccountResponse.close();
+    _currentFormCategoryController.close();
   }
 
   final PublishSubject<String> _subjectOfflineDetailsResponse =
@@ -1571,7 +1617,7 @@ class AccountFormBloc extends BlocBase with Validators {
           _riskRankController.add(offlineAccount.riskRank);
         }
         if (offlineAccount.mmda != null && offlineAccount.mmda.isNotEmpty) {
-          _MMDAController.add(offlineAccount.mmda);
+          _mmdaController.add(offlineAccount.mmda);
         }
 
         if (offlineAccount.accountCategory != null &&
@@ -1774,9 +1820,9 @@ class AccountFormBloc extends BlocBase with Validators {
                 .mmda
                 .toString(); //hotfix: to solve issue of mmda  filter from state on edit
 
-            if (mmda != null) _MMDAController.add(mmda);
+            if (mmda != null) _mmdaController.add(mmda);
           } catch (err) {
-            _MMDAController.add(accountResponse.data.classCode);
+            _mmdaController.add(accountResponse.data.classCode);
           }
         }
         if (accountResponse.data?.signatoryDetails?.first?.placeOfBirth !=

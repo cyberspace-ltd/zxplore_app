@@ -10,17 +10,25 @@ class OccupationsBloc extends BlocBase {
   // to multiple times. This is the primary, if not only, type of stream you'll be using.
   final _occupationsController = StreamController<List<OccupationEntity>>.broadcast();
 
+  final _occupationsCategoryController = StreamController<List<OccupationEntity>>.broadcast();
+
   // Input stream. We add our notes to the stream using this variable.
   StreamSink<List<OccupationEntity>> get _inOccupations =>
       _occupationsController.sink;
+
+        StreamSink<List<OccupationEntity>> get _inOccupationsCategories =>
+      _occupationsCategoryController.sink;
+
 
   // Output stream. This one will be used within our pages to display the notes.
   Stream<List<OccupationEntity>> get occupations => _occupationsController.stream;
 
 
+  Stream<List<OccupationEntity>> get occupationCategories => _occupationsCategoryController.stream;
+
   // Input stream for adding new notes. We'll call this from our pages.
-  final _addOccupationController = StreamController<List<String>>.broadcast();
-  StreamSink<List<String>> get inAddOccupations => _addOccupationController.sink;
+  final _addOccupationController = StreamController<List<OccupationMenu>>.broadcast();
+  StreamSink<List<OccupationMenu>> get inAddOccupations => _addOccupationController.sink;
 
 
   OccupationsBloc() {
@@ -36,19 +44,21 @@ class OccupationsBloc extends BlocBase {
   void dispose() {
     _occupationsController.close();
     _addOccupationController.close();
+    _occupationsCategoryController.close();
 
   }
 
   void getOccupations() async {
     // Retrieve all the notes from the database
     List<OccupationEntity> notes = await DBProvider.db.getOccupations();
-
+    print(notes);
     // Add all of the notes to the stream so we can grab them later from our pages
     _inOccupations.add(notes);
+    _inOccupationsCategories.add(notes);
   }
 
 
-  void _handleAddOccupations(List<String> values) async {
+  void _handleAddOccupations(List<OccupationMenu> values) async {
     // Create the note in the database
      DBProvider.db.insertOccupations(values);
 

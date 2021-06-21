@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:zxplore_app/blocs/account_class_bloc.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
-import 'package:zxplore_app/blocs/all_accounts_bloc.dart';
-import 'package:zxplore_app/blocs/occupations_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/data/entities/account_class_entity.dart';
-import 'package:zxplore_app/models/account_type.dart';
 import 'package:zxplore_app/utils/const.dart';
 
 class AccountInformationStep extends StatefulWidget {
@@ -33,6 +29,8 @@ class _AccountInformationState extends State<AccountInformationStep>
   String _selectedAccFilter = "";
   final _accountHolderTypes = [
     'INDIVIDUAL',
+    'CHEQUE',
+    'SAVINGS'
   ];
 
   final _riskRanks = [
@@ -145,13 +143,11 @@ class _AccountInformationState extends State<AccountInformationStep>
       stream: accountFormBloc.riskRankType,
       builder: (context, snapshot) {
         return FormField<String>(
-
           autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
                   labelText: 'Risk Rank',
-                  helperText: "* Required",
                   errorText: snapshot.error),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
@@ -260,18 +256,5 @@ class _AccountInformationState extends State<AccountInformationStep>
         ),
       ),
     );
-  }
-
-  static List<AccountType> getAccountTypes() {
-    return [
-      AccountType(
-        description: "SAVINGS ACCOUNT",
-        classType: "SA",
-      ),
-      AccountType(
-        description: "CURRENT ACCOUNT",
-        classType: "CA",
-      )
-    ];
   }
 }

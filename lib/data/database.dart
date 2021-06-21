@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
+import 'package:zxplore_app/models/occupation_model.dart';
 import 'package:zxplore_app/models/state_model.dart';
 import 'entities/account_class_entity.dart';
 import 'entities/city_entity.dart';
@@ -32,12 +33,12 @@ class DBProvider {
     // and only our app, are stored. Files in this directory are deleted
     // when the app is deleted.
     Directory documentsDir = await getApplicationDocumentsDirectory();
-    String path = join(documentsDir.path, 'zxplore_data.db');
+    String path = join(documentsDir.path, 'zxplore_gh_data.db');
 
-    return await openDatabase(path, version: 1, onOpen: (db) async {},
+    return await openDatabase(path, version: 2, onOpen: (db) async {},
         onCreate: (Database db, int version) async {
       await db.execute(
-          'CREATE TABLE $tableOccupation ($columnOccupationId INTEGER IDENTITY , $columnOccupationName TEXT PRIMARY KEY)');
+          'CREATE TABLE $tableOccupation ($columnOccupationId INTEGER IDENTITY , $columnOccupationName TEXT PRIMARY KEY, $columnSironCode TEXT , $columnGroupName TEXT)');
 
       await db.execute(
           'CREATE TABLE $tableState ($columnStateId INTEGER PRIMARY KEY , $columnStateName TEXT , $columnSateMMDA TEXT)');
@@ -101,11 +102,16 @@ class DBProvider {
         where: '$columnOfflineId = ?', whereArgs: [id]);
   }
 
-  void insertOccupations(List<String> occupations) async {
+  void insertOccupations(List<OccupationMenu> occupations) async {
     final db = await database;
 
     occupations.forEach((element) async =>
-        await db.insert(tableOccupation, {columnOccupationName: element}));
+        await db.insert(tableOccupation, {
+          columnOccupationId: element.srn,
+          columnOccupationName: element.occupationName,
+          columnGroupName: element.groupName,
+          columnSironCode: element.sironCode
+          }));
   }
 
   Future<List<OccupationEntity>> getOccupations() async {
@@ -136,7 +142,7 @@ class DBProvider {
     final db = await database;
 
     states.forEach((element) async => await db.insert(tableState, {
-      columnStateId: element.srn.toString(),
+      columnStateId: element.srn,
       columnStateName: element.stateName,
           columnSateMMDA: element.mmda,
         }));

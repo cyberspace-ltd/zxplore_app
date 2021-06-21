@@ -1,20 +1,19 @@
 import 'dart:io';
 
-import 'package:flushbar/flushbar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/libs/Signature.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 import '../../colors.dart';
-import '../../login.dart';
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:zxplore_app/home.dart';
+import 'package:zxplore_app/screens/home_screen.dart';
 
 class SignatoryStep extends StatefulWidget {
   @override
@@ -33,7 +32,9 @@ class _SignatoryStepState extends State<SignatoryStep>
   bool _isButtonDisabled;
 
   File _imageFile;
+  // ignore: unused_field
   String _retrieveDataError;
+  // ignore: unused_field
   dynamic _pickImageError;
 
   bool isSignatureAcceptButtonVisible = false;
@@ -60,17 +61,19 @@ class _SignatoryStepState extends State<SignatoryStep>
       body: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            SizedBox(height: 8,),
-
+            SizedBox(
+              height: 8,
+            ),
             Padding(
-              padding: const EdgeInsets.only(left:8.0, right: 8),
+              padding: const EdgeInsets.only(left: 8.0, right: 8),
               child: Text(
                 'Upload your Signature by clicking either the gallery or camera icon',
                 textAlign: TextAlign.center,
               ),
             ),
-
-            SizedBox(height: 8,),
+            SizedBox(
+              height: 8,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -100,20 +103,19 @@ class _SignatoryStepState extends State<SignatoryStep>
                   tooltip: 'Take a Photo',
                   child: const Icon(Icons.camera_alt),
                 ),
-
               ],
             ),
             Text(
               'Or',
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 16,),
-
+            SizedBox(
+              height: 16,
+            ),
             Text(
               'Sign Below',
               textAlign: TextAlign.center,
             ),
-
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: LimitedBox(
@@ -176,7 +178,6 @@ class _SignatoryStepState extends State<SignatoryStep>
                           setState(() {
                             _img = data;
                             _isButtonDisabled = false;
-
                           });
 //                        debugPrint("onPressed " + encoded);
                         },
@@ -192,7 +193,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                             accountFormBloc.setSignature(null);
                             setState(() {
                               _img = ByteData(0);
-                               _isButtonDisabled = true;
+                              _isButtonDisabled = true;
                               isSignatureAcceptButtonVisible = false;
                             });
                           }),
@@ -200,6 +201,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                   ),
                 ),
                 SizedBox(height: 16.0),
+                disclaimerText(),
                 submitButton(),
                 SizedBox(height: 60.0),
               ],
@@ -208,6 +210,46 @@ class _SignatoryStepState extends State<SignatoryStep>
         ),
       ),
     );
+  }
+
+  Widget disclaimerText() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      alignment: Alignment.center,
+      child: RichText(
+        text: TextSpan(
+          text:
+              "By clicking the 'Submit Account' button, you accept that you have read the ",
+          style: Theme.of(context).textTheme.caption,
+          children: [
+            TextSpan(
+                text: "Terms & Conditions",
+                style: Theme.of(context)
+                    .textTheme
+                    .caption
+                    .apply(color: Colors.pink, fontWeightDelta: 1),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    const url = 'https://www.zenithbank.com.gh/terms-and-conditions/';
+                    launchURL(url);
+                  }),
+            TextSpan(
+              text:
+                  " and that you understand them and that you (the RM) agree to be bound by them.",
+              style: Theme.of(context).textTheme.caption,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceWebView: true);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Widget submitButton() {
@@ -231,33 +273,30 @@ class _SignatoryStepState extends State<SignatoryStep>
     );
   }
 
-  void submitAccount()async{
-      var loadingBar = FlushbarHelper.createLoading(
-          message: "Attempting to submit account form....")
-        ..show(context);
+  void submitAccount() async {
+    var loadingBar = FlushbarHelper.createLoading(
+        message: "Attempting to submit account form....")
+      ..show(context);
+    setState(() {
+      _isButtonDisabled = true;
+    });
+    accountFormBloc.submit();
+
+    accountFormBloc.subjectSaveAccountResponse.listen((response) {
+      loadingBar.dismiss(context);
+
+      _showSuccessDialog(
+          'The created account was sent successfully, an account number will be generated shortly.');
+    }).onError((error) {
+      loadingBar.dismiss(context);
+
+      FlushbarHelper.createError(message: error.toString())..show(context);
       setState(() {
-        _isButtonDisabled = true;
+        _isButtonDisabled = false;
       });
-      accountFormBloc.submit();
-
-      accountFormBloc.subjectSaveAccountResponse
-          .listen((response) {
-        loadingBar.dismiss(context);
-
-
-        _showSuccessDialog(
-            'The created account was sent successfully, an account number will be generated shortly.');
-      }).onError((error) {
-        loadingBar.dismiss(context);
-
-        FlushbarHelper.createError(message: error.toString())
-          ..show(context);
-        setState(() {
-          _isButtonDisabled = false;
-        });
-
-      });
+    });
   }
+
   void _showSuccessDialog(String message) {
     // flutter defined function
     showDialog(
@@ -286,7 +325,6 @@ class _SignatoryStepState extends State<SignatoryStep>
       },
     );
   }
-
 
   Future _convertImagesToByte() async {
     List<int> imageBytes = await _imageFile.readAsBytes();

@@ -36,9 +36,10 @@ class ZenithBankApi {
       };
       response =
       await dio.get("${Endpoints.getOccupationUrl()}");
+      print(response);
       return Occupation.fromJson(response.data);
     } catch (error, stacktrace) {
-//      print("Exception occured: $error stackTrace: $stacktrace");
+     print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }

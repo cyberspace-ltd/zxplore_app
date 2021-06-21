@@ -6,18 +6,17 @@ import 'package:zxplore_app/blocs/cities_bloc.dart';
 import 'package:zxplore_app/blocs/countries_bloc.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/data/database.dart';
-import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/screens/category_screen.dart';
 import 'package:zxplore_app/screens/offline_home.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
-import 'blocs/occupations_bloc.dart';
-import 'colors.dart';
-import 'login.dart';
-import 'models/accounts_response.dart';
-import 'utils/zxplore_crypto_helper.dart';
+import '../blocs/occupations_bloc.dart';
+import '../colors.dart';
+import 'login_screen.dart';
+import '../models/accounts_response.dart';
+import '../utils/zxplore_crypto_helper.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

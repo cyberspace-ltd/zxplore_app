@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:zxplore_app/category.dart';
+
 class Validators {
   final validateAccountType =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
@@ -139,6 +141,11 @@ class Validators {
     } else {
       sink.addError('Country of origin is required');
     }
+  });
+
+   final validateCurrentFormCategory =
+      StreamTransformer<Category, Category>.fromHandlers(handleData: (arg, sink) {
+     sink.add(arg);
   });
 
   final validateEmail =

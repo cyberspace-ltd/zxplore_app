@@ -1,26 +1,50 @@
+import 'package:equatable/equatable.dart';
+
 final String tableOccupation = 'Occupation';
 final String columnOccupationId = 'id';
 final String columnOccupationName = 'name';
+final String columnSironCode = 'sironCode';
+final String columnGroupName = 'groupName';
 
-class OccupationEntity {
+// ignore: must_be_immutable
+class OccupationEntity extends Equatable {
   //database fields
-  String name;
+  int srn;
+  String occupationName;
+  String sironCode;
+  String groupName;
 
   OccupationEntity({
-    this.name,
+    this.srn,
+    this.occupationName,
+    this.sironCode,
+    this.groupName,
   });
 
-
-  Map<String, dynamic> toMapForDb() {
-    var map = Map<String, dynamic>();
-    map[columnOccupationName] = name;
-    return map;
+ @override
+  bool operator ==(Object other) {
+    return other != null && other is OccupationEntity && hashCode == other.hashCode;
   }
 
 
-  factory OccupationEntity.fromMap(Map<String, dynamic> json) => new OccupationEntity(
-    name: json[columnOccupationName],
-  );
+  @override
+  int get hashCode => sironCode.hashCode;
 
+  Map<String, dynamic> toMapForDb() {
+    var map = Map<String, dynamic>();
+    map[columnOccupationId] = srn;
+    map[columnOccupationName] = occupationName;
+    map[columnSironCode] = sironCode;
+    map[columnGroupName] = groupName;
 
+    return map;
+  }
+
+  factory OccupationEntity.fromMap(Map<String, dynamic> json) =>
+      new OccupationEntity(
+        srn: json[columnOccupationId],
+        occupationName: json[columnOccupationName],
+        sironCode: json[columnSironCode],
+        groupName: json[columnGroupName],
+      );
 }

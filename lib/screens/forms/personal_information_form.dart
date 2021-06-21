@@ -4,13 +4,8 @@ import 'package:zxplore_app/blocs/countries_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
-import 'package:zxplore_app/data/entities/country_entity.dart';
-import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/utils/const.dart';
-import 'package:zxplore_app/utils/flushbar_helper.dart';
-import 'package:zxplore_app/utils/helper_functions.dart';
 
-import '../../colors.dart';
 
 class PersonalInformationStep extends StatefulWidget {
   @override
@@ -21,7 +16,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     with AutomaticKeepAliveClientMixin<PersonalInformationStep> {
   final _titles = [
     'Miss',
-  'Ms.',
+    'Ms.',
     'Dr.',
     'Prof.',
     'Rev.',
@@ -136,8 +131,8 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             onChanged: accountFormBloc.changeTin,
             decoration: InputDecoration(
               labelText: 'TIN (Tax Identification Number)',
-              helperText:
-                  'Click the verify TIN button to populate account form.',
+              // helperText:
+              //     'Click the verify TIN button to populate account form.',
               errorText: snapshot.error,
             ),
           );
@@ -327,34 +322,6 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-//  Widget _stateOfOriginField() {
-//    return StreamBuilder(
-//      stream: accountFormBloc.stateOfOrigin,
-//      builder: (context, snapshot) {
-//        if (snapshot.hasData) {
-//          _placeOfBirthController.value = TextEditingValue(
-//              text: snapshot.data.toString(),
-//              selection: _placeOfBirthController.selection);
-//        }
-//        return TextField(
-//          controller: _placeOfBirthController,
-//          textCapitalization: TextCapitalization.characters,
-//          onChanged: accountFormBloc.changePlaceOfBirth,
-//          keyboardType: TextInputType.text,
-//          maxLength: 40,
-//          enabled: accountFormBloc.bvnState,
-//          maxLines: null,
-//          maxLengthEnforced: true,
-//          decoration: InputDecoration(
-//            labelText: 'Place of Birth',
-//            helperText: '* Required',
-//            errorText: snapshot.error,
-//          ),
-//        );
-//      },
-//    );
-//  }
-
   Widget _stateOfOriginTextField() {
     return StreamBuilder(
       stream: accountFormBloc.placeOfBirth,
@@ -395,43 +362,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   errorText: snapshot.error),
               child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    value: snapshot.data,
-                    isDense: true,
-                    onChanged: accountFormBloc.changeCountryOfOrigin,
-                    items: COUNTRY_LIST.map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  )
-
-//                 child: StreamBuilder<List<CountryEntity>>(
-//                     stream: countriesBloc.countries,
-//                     builder: (BuildContext context,
-//                         AsyncSnapshot<List<CountryEntity>> shot) {
-//                       if (!shot.hasData)
-//                         return SizedBox(
-//                             height: 24.0,
-//                             child: Center(child: CircularProgressIndicator()));
-//                       return DropdownButton<String>(
-//                         value: shot.data != null
-//                             ? shot.data?.first?.name
-//                             : 'GHANA',
-//                         items: shot.data.map((CountryEntity value) {
-//                           return DropdownMenuItem<String>(
-//                             value: value.name,
-// //                            child: Text(value.name),
-//                             child: Text("GHANA"), //TODO: HAND CODED COUNTRY, GHANA
-//
-//                           );
-//                         }).toList(),
-//                         onChanged: accountFormBloc.changeCountryOfOrigin,
-//
-//                         isDense: true, //value: _currentUser,
-//                       );
-//                     }),
-              ),
+                value: snapshot.data,
+                isDense: true,
+                onChanged: accountFormBloc.changeCountryOfOrigin,
+                items: COUNTRY_LIST.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value.toUpperCase()),
+                  );
+                }).toList(),
+              )),
             );
           },
         );
@@ -453,20 +393,6 @@ class _PersonalInformationState extends State<PersonalInformationStep>
         });
   }
 
-//  Widget _buildStateOfOrigin() {
-//    return StreamBuilder(
-//        stream: accountFormBloc.bvnStateOfOrigin,
-//        builder: (context, snapShot) {
-//          if (!snapShot.hasData) {
-//            return _stateOfOriginTextField();
-//          }
-//          if (snapShot.data) {
-//            return _stateOfOriginTextField();
-//          } else
-//            return _stateOfOriginField();
-//        });
-//  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -480,74 +406,30 @@ class _PersonalInformationState extends State<PersonalInformationStep>
         }
       },
       child: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
-              children: <Widget>[
-                SizedBox(height: 16.0),
-                Column(
-                  children: <Widget>[
-                    SizedBox(height: 16.0),
-                    IntrinsicHeight(
-                      child: Column(
-                        children: <Widget>[
-                          _tinField(),
-//                        Container(
-//                          alignment: Alignment(1.0, 0.0),
-//                          height: 60.0,
-//                          child: OutlineButton(
-//                            child: Text('VERIFY TIN'),
-//                            textColor: ZxplorePrimaryColor,
-//                            color: Colors.transparent,
-//                            onPressed: () {
-//                              var loadingBar = FlushbarHelper.createLoading(
-//                                  message: "verifying TIN PLease wait...",
-//                                  linearProgressIndicator: null);
-//                              loadingBar..show(context);
-//                              accountFormBloc.verifyBvn();
-//                              accountFormBloc.bvnVerificationResponse
-//                                  .listen((response) {
-//                                loadingBar.dismiss();
-//                                FlushbarHelper.createSuccess(
-//                                    message: "TIN provided is correct.")
-//                                  ..show(context);
-//                              }).onError((error) {
-//                                loadingBar.dismiss();
-//                                FlushbarHelper.createError(
-//                                        message:
-//                                            "TIN provided could not be verified.")
-//                                    .show(context);
-//                                loadingBar.dismiss();
-//                              });
-//                            },
-//                          ),
-//                        ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    titleTextField(),
-                    SizedBox(height: 30.0),
-                    _surnameField(),
-                    SizedBox(height: 30.0),
-                    _firstNameField(),
-                    SizedBox(height: 30.0),
-                    _otherNameField(),
-                    SizedBox(height: 30.0),
-                    _mothersMaidenNameField(),
-                    SizedBox(height: 30.0),
-                    _buildDateOfBirth(),
-                    SizedBox(height: 30.0),
-                    _stateOfOriginTextField(),
-                    SizedBox(height: 30.0),
-                    _countryOfOriginTextField(),
-                  ],
-                ),
-                SizedBox(height: 60.0),
-              ],
-            ),
-          ),
+        body: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          children: <Widget>[
+            SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
+            _tinField(),
+            SizedBox(height: 30.0),
+            titleTextField(),
+            SizedBox(height: 30.0),
+            _surnameField(),
+            SizedBox(height: 30.0),
+            _firstNameField(),
+            SizedBox(height: 30.0),
+            _otherNameField(),
+            SizedBox(height: 30.0),
+            _mothersMaidenNameField(),
+            SizedBox(height: 30.0),
+            _buildDateOfBirth(),
+            SizedBox(height: 30.0),
+            _stateOfOriginTextField(),
+            SizedBox(height: 30.0),
+            _countryOfOriginTextField(),
+            SizedBox(height: 120.0),
+          ],
         ),
       ),
     );
