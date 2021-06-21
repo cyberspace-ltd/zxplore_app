@@ -9,6 +9,7 @@ import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
+import 'package:zxplore_app/models/verify_id_response.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
 class AccountsRepository {
@@ -76,7 +77,7 @@ class AccountsRepository {
       rethrow;
     }
   }
-  Future<DriverLicenseResponse> verifyIdentity(String identityNumber, int idType) async {
+  Future<VerifyIdResponse> verifyIdentity(String identityNumber, int idType) async {
     try {
       var token = await SecureStorage.getEmployeeToken();
 

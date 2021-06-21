@@ -18,6 +18,7 @@ import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/state_model.dart';
 import 'package:zxplore_app/models/title_model.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
+import 'package:zxplore_app/models/verify_id_response.dart';
 
 class ZenithBankApi {
   Future<Occupation> fetchOccupations(String token) async {
@@ -394,7 +395,7 @@ class ZenithBankApi {
     }
   }
 
-  Future<DriverLicenseResponse> verifyIdentity(
+  Future<VerifyIdResponse> verifyIdentity(
       String identityNumber, int idType, String token) async {
     Response response;
     Dio dio = new Dio();
@@ -410,20 +411,11 @@ class ZenithBankApi {
         };
       };
 
-      if (idType == 0) {
-        response = await dio.post(Endpoints.getVerifyDriverLicenceUrl(),
-            data: {"Id": identityNumber});
-      } else if (idType == 1) {
-        response = await dio
-            .post(Endpoints.getVerifyVotersUrl(), data: {"Id": identityNumber});
-
-      } else if (idType == 2) {
-        response = await dio.post(Endpoints.getVerifyPassportUrl(),
-            data: {"Id": identityNumber});
-      }
+          response = await dio.post(Endpoints.getVerifyIdUrl(),
+            data: {'Id': identityNumber, 'VerificationType': idType});
 
       if (response.statusCode == 200) {
-        return DriverLicenseResponse.fromJson(response.data);
+        return VerifyIdResponse.fromJson(response.data);
       }
       if (response.statusCode == 400) {
         var value = LoginResponse.fromJson(response.data);

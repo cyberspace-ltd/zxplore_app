@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
@@ -5,6 +7,7 @@ import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
+import 'package:zxplore_app/utils/zxplore_crypto_helper.dart';
 
 import '../../colors.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
@@ -104,11 +107,11 @@ class _MeansOfIdentificationStepStepState
                       _selectedIdentityType = value;
                       if (value == DRIVERS_LICENSE) {
                         _selectedIdFilter = 0;
-                      } else if (value == VOTERS_CARD) {
-                        _selectedIdFilter = 1;
                       } else if (value == INT_PASSPORT) {
-                        _selectedIdFilter = 2;
+                        _selectedIdFilter = 1;
                       } else if (value == SSNIT_CARD) {
+                        _selectedIdFilter = 2;
+                      } else if (value == VOTERS_CARD) {
                         _selectedIdFilter = 3;
                       } else if (value == OTHERS) {
                         _selectedIdFilter = 4;
@@ -542,7 +545,7 @@ class _MeansOfIdentificationStepStepState
                               color: Colors.transparent,
                               onPressed: () {
                                 var loadingBar = FlushbarHelper.createLoading(
-                                    message: "verifying ID NUMBER PLease wait...",
+                                    message: "Verifying ID please wait...",
                                     linearProgressIndicator: null);
                                 loadingBar..show(context);
                                 accountFormBloc.verifyNumber(_selectedIdFilter);
@@ -550,43 +553,33 @@ class _MeansOfIdentificationStepStepState
                                     .driverLicenseVerificationResponse
                                     .listen((response) {
                                   loadingBar.dismiss();
-                                  if (_selectedIdFilter == 0) {
-                                    FlushbarHelper.createSuccess(
-                                        message:
-                                            "Driver Liscence provided is correct.")
-                                      ..show(context);
-                                  } else if (_selectedIdFilter == 1) {
-                                    FlushbarHelper.createSuccess(
-                                        message:
-                                            "Voters Card provided is correct.")
-                                      ..show(context);
-                                  } else if (_selectedIdFilter == 2) {
-                                    FlushbarHelper.createSuccess(
-                                        message:
-                                            "Passport provided is correct.")
-                                      ..show(context);
-                                  } else {
-                                    FlushbarHelper.createSuccess(
-                                        message:
-                                            "Identity provided is correct.")
-                                      ..show(context);
-                                  }
+                                  showSuccessVerificationBottomsheet(
+                                    context: context,
+                                    image: response.photo,
+                                    name:
+                                        CryptoHelper.decrypt(response.fullName),
+                                  );
                                 }).onError((error) {
                                   loadingBar.dismiss();
                                   if (_selectedIdFilter == 0) {
                                     FlushbarHelper.createError(
                                         message:
-                                            "Driver Liscence provided could not be verified.")
+                                            "Driver License provided could not be verified.")
                                       ..show(context);
                                   } else if (_selectedIdFilter == 1) {
                                     FlushbarHelper.createError(
                                         message:
-                                            "Voters Card provided could not be verified.")
+                                            "The Passport number provided could not be verified.")
                                       ..show(context);
                                   } else if (_selectedIdFilter == 2) {
                                     FlushbarHelper.createError(
                                         message:
-                                            "Passport provided provided could not be verified.")
+                                            "SSNIT number provided could not be verified.")
+                                      ..show(context);
+                                  } else if (_selectedIdFilter == 3) {
+                                    FlushbarHelper.createError(
+                                        message:
+                                            "Voters card number provided could not be verified.")
                                       ..show(context);
                                   } else {
                                     FlushbarHelper.createError(
@@ -634,59 +627,85 @@ class _MeansOfIdentificationStepStepState
     );
   }
 
+  Widget getImagenBase64(String imagen) {
+    var _imageBase64 = imagen;
+    const Base64Codec base64 = Base64Codec();
+    if (_imageBase64 == null) return new Container();
+    var bytes = base64.decode(_imageBase64);
+    return Image.memory(
+      bytes,
+      fit: BoxFit.fitWidth,
+    );
+  }
+
+  showSuccessVerificationBottomsheet(
+      {@required BuildContext context,
+      @required String image,
+      @required String name}) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0), topRight: Radius.circular(16.0)),
+        ),
+        builder: (context) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(
+                  height: 32,
+                ),
+                Center(
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    child: Text(
+                      'The ID number provided is valid',
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption
+                          .apply(color: Colors.green, fontWeightDelta: 2),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: LimitedBox(
+                    maxHeight: 300,
+                    maxWidth: 350,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(child: getImagenBase64(image))),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    "$name",
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                ),
+                SizedBox(
+                  height: 32,
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   bool get wantKeepAlive => true;
 }
-
-//
-//if (validIdIssueDate == null && validAccountCategory == easy_classic) {
-//validIdIssueDate = "";
-//} else if (validIdIssueDate == null && validIdType == STUDENT_ID) {
-////6,4,3
-//validIdIssueDate = "";
-//return;
-//
-//} else if (validIdIssueDate == null && validIdType == OTHERS) {
-////6,4,3
-//validIdIssueDate = "";
-//return;
-//
-//} else if (validIdIssueDate == null && validIdType == SSNIT_CARD) {
-//validIdIssueDate = "";
-//return;
-//
-//} else if (validIdIssueDate == null &&
-//validAccountCategory != easy_classic) {
-//_idIssueDateController.addError("Field is required");
-//_subjectSaveAccountResponse
-//    .addError("You have not selected a valid issue date");
-//
-//return;
-//} else {
-//validIdIssueDate = "";
-//return;
-//
-//}
-//
-//if (validIdExpiryDate == null && validAccountCategory == easy_classic) {
-//validIdExpiryDate = "";
-//} else if (validIdIssueDate == null && validIdType == STUDENT_ID) {
-////6,4,3
-//validIdIssueDate = "";
-//} else if (validIdIssueDate == null && validIdType == OTHERS) {
-////6,4,3
-//validIdIssueDate = "";
-//} else if (validIdIssueDate == null && validIdType == SSNIT_CARD) {
-//validIdIssueDate = "";
-//} else if (validIdIssueDate == null && validIdType == VOTERS_CARD) {
-//validIdIssueDate = "";
-//} else if (validIdExpiryDate == null &&
-//validAccountCategory != easy_classic) {
-//_idExpiryDateController.addError("Field is required");
-//_subjectSaveAccountResponse
-//    .addError("You have not selected a valid expiry date");
-//
-//return;
-//} else {
-//validIdIssueDate = "";
-//}

@@ -13,6 +13,7 @@ import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
+import 'package:zxplore_app/models/verify_id_response.dart';
 import 'package:zxplore_app/repositories/accounts_repository.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
@@ -98,7 +99,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _genderController = BehaviorSubject<String>();
 
   final occupationController = BehaviorSubject<String>();
-    final occupationCategoryController = BehaviorSubject<String>();
+  final occupationCategoryController = BehaviorSubject<String>();
 
   final othersOccupationController = BehaviorSubject<String>();
 
@@ -164,9 +165,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final PublishSubject<BvnResponse> bvnVerificationResponse =
       PublishSubject<BvnResponse>();
 
-  final PublishSubject<DriverLicenseResponse>
-      driverLicenseVerificationResponse =
-      PublishSubject<DriverLicenseResponse>();
+   PublishSubject<VerifyIdResponse> driverLicenseVerificationResponse;
 
   Stream<bool> get bvnStateOfOrigin => _isStateOfOriginChangeController.stream;
 
@@ -252,8 +251,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   BehaviorSubject<LocationData> get subjectLocationResponse => _subjectLocation;
 
-
-  Stream<Category> get currentFormCategory => _currentFormCategoryController.stream;
+  Stream<Category> get currentFormCategory =>
+      _currentFormCategoryController.stream;
 
   Stream<String> get latitude => _latitudeController.stream;
 
@@ -279,7 +278,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get occupation =>
       occupationController.stream.transform(validateOccupation);
 
-Stream<String> get occupationCategory =>
+  Stream<String> get occupationCategory =>
       occupationCategoryController.stream.transform(validateOccupation);
 
   Stream<String> get otherOccupation =>
@@ -360,7 +359,8 @@ Stream<String> get occupationCategory =>
 
   Function(String) get changeLatitude => _latitudeController.sink.add;
 
-  Function(Category) get changeFormCategory => _currentFormCategoryController.sink.add;
+  Function(Category) get changeFormCategory =>
+      _currentFormCategoryController.sink.add;
 
   Function(String) get changeLongitude => _longitudeController.sink.add;
 
@@ -421,8 +421,8 @@ Stream<String> get occupationCategory =>
 
   Function(String) get changeOccupation => occupationController.sink.add;
 
-
-  Function(String) get changeOccupationCategory => occupationCategoryController.sink.add;
+  Function(String) get changeOccupationCategory =>
+      occupationCategoryController.sink.add;
 
   Function(String) get changeOtherOccupation =>
       othersOccupationController.sink.add;
@@ -518,9 +518,6 @@ Stream<String> get occupationCategory =>
     occupationCategoryController.sink.add(value);
     changeOccupationCategory;
   }
-
-
-  
 
   saveOffline() async {
     var validId = _idController.value;
@@ -686,24 +683,21 @@ Stream<String> get occupationCategory =>
   }
 
   updateOccupation(String value) {
-     if(value == null) {
+    if (value == null) {
       occupationController.sink.addError("Occupation is required");
-    }
-    else{
-    occupationController.sink.add(value);
+    } else {
+      occupationController.sink.add(value);
     }
   }
-
 
   updateOccupationCategory(String value) {
-    if(value == null) {
-      occupationCategoryController.sink.addError("Occupation category is required");
-    }
-    else{
-          occupationCategoryController.sink.add(value);
+    if (value == null) {
+      occupationCategoryController.sink
+          .addError("Occupation category is required");
+    } else {
+      occupationCategoryController.sink.add(value);
     }
   }
-
 
   updateAccountType(String value) {
     _accountTypeController.sink.add(value);
@@ -746,7 +740,8 @@ Stream<String> get occupationCategory =>
 
     var validAccountType = _accountTypeController.value;
     final validAccountHolderType = _accountHolderTypeController.value;
-    final validAccountRiskRank = _riskRankController.value != null ? _riskRankController.value : '';
+    final validAccountRiskRank =
+        _riskRankController.value != null ? _riskRankController.value : '';
     var validAccountCategory = _accountCategoryController.value;
 
     List<AccountClassEntity> accountClasses =
@@ -798,7 +793,9 @@ Stream<String> get occupationCategory =>
       validIdIssuer = _idIssuerOthersController.value;
     }
     var validIdNumber = _idNumberController.value;
-    var validIdPlaceOfIssue = _idPlaceOfIssueController.value != null ? _idPlaceOfIssueController.value : '';
+    var validIdPlaceOfIssue = _idPlaceOfIssueController.value != null
+        ? _idPlaceOfIssueController.value
+        : '';
     var validIdIssueDate = _idIssueDateController.value;
     var validIdExpiryDate = _idExpiryDateController.value;
 //    final validIsSendEmail = _isSendEmailController.value;
@@ -1048,16 +1045,14 @@ Stream<String> get occupationCategory =>
       validIdPlaceOfIssue = "";
     }
 
-    if(validIdIssueDate == null &&
+    if (validIdIssueDate == null &&
         (validIdType == STUDENT_ID ||
             validIdType == OTHERS ||
-            validIdType == SSNIT_CARD)){
+            validIdType == SSNIT_CARD)) {
       validIdIssueDate = "";
-
-    }else if(validIdIssueDate != null){
+    } else if (validIdIssueDate != null) {
       validIdIssueDate = validIdIssueDate;
-
-    }else{
+    } else {
       _idIssueDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid issue date");
@@ -1080,16 +1075,13 @@ Stream<String> get occupationCategory =>
 
     if (validIdExpiryDate == null &&
         (validIdType == STUDENT_ID ||
-        validIdType == OTHERS ||
-        validIdType == SSNIT_CARD ||
-        validIdType == VOTERS_CARD)) {
-
+            validIdType == OTHERS ||
+            validIdType == SSNIT_CARD ||
+            validIdType == VOTERS_CARD)) {
       validIdExpiryDate = "";
-
-    } else if(validIdExpiryDate != null){
+    } else if (validIdExpiryDate != null) {
       validIdExpiryDate = validIdExpiryDate;
-
-    }else {
+    } else {
       _idExpiryDateController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected a valid expiry date");
@@ -1381,10 +1373,12 @@ Stream<String> get occupationCategory =>
       bvnVerificationResponse.addError(error);
     });
   }
-  setCurrentFormCategory(Category category){
+
+  setCurrentFormCategory(Category category) {
     // changeFormCategory(category);
-      _currentFormCategoryController.sink.add(category);
+    _currentFormCategoryController.sink.add(category);
   }
+
   getCurrentLocation() async {
     try {
       final Location location = Location();
@@ -1428,6 +1422,7 @@ Stream<String> get occupationCategory =>
   }
 
   verifyNumber(int idType) async {
+    driverLicenseVerificationResponse = PublishSubject<VerifyIdResponse>();
     // var encodedBVN = CryptoHelper.encrypt(_idNumberController.value);
     var identity = _idNumberController.value;
 
@@ -1444,79 +1439,9 @@ Stream<String> get occupationCategory =>
         // print(CryptoHelper.decrypt("cAjVqZrxDJO01zjVe4SV6Q=="));
         // print(CryptoHelper.decrypt(
         //     "m/p8hrMIVm76MoR7fpGSfqqKGnt2e7zOUt5EFdEJfoQ="));
+        print(CryptoHelper.decrypt(identityResponse.fullName));
 
-        if (identityResponse.name != null && identityResponse.name.isNotEmpty) {
-          _surnameController.add(CryptoHelper.decrypt(identityResponse.name));
-          bvnlastNameValue = identityResponse.name != null ? false : true;
-        }
-
-        if (identityResponse.fullname != null &&
-            identityResponse.fullname.isNotEmpty) {
-          _surnameController
-              .add(CryptoHelper.decrypt(identityResponse.fullname));
-          bvnlastNameValue = identityResponse.fullname != null ? false : true;
-        }
-
-        if (identityResponse.sex != null && identityResponse.sex.isNotEmpty) {
-          if (CryptoHelper.decrypt(identityResponse.sex) == 'M') {
-            _genderController.add('MALE');
-          } else {
-            _genderController.add('FEMALE');
-          }
-          bvnGender = identityResponse.sex != null ? false : true;
-        }
-
-        if (identityResponse.processingCenter != null &&
-            identityResponse.processingCenter.isNotEmpty) {
-          print(CryptoHelper.decrypt(identityResponse.processingCenter));
-//          _idIssuerController
-//              .add(CryptoHelper.decrypt(identityResponse.processingCenter));
-//          processCenter =
-//              identityResponse.processingCenter.isNotEmpty ? false : true;
-        }
-        if (identityResponse.nationality != null &&
-            identityResponse.nationality.isNotEmpty) {
-          _countryOfOriginController
-              .add(CryptoHelper.decrypt(identityResponse.nationality));
-          _countryOfResidenceController
-              .add(CryptoHelper.decrypt(identityResponse.nationality));
-          country = identityResponse.nationality.isNotEmpty ? false : true;
-        }
-        if (identityResponse.dateOfBirth != null &&
-            identityResponse.dateOfBirth.isNotEmpty) {
-          _dateOfBirthController
-              .add(CryptoHelper.decrypt(identityResponse.dateOfBirth));
-          bvnDateOfBirths =
-              identityResponse.dateOfBirth.isNotEmpty ? false : true;
-        }
-        if (identityResponse.dateOfIssue != null &&
-            identityResponse.dateOfIssue.isNotEmpty) {
-          _idIssueDateController
-              .add(CryptoHelper.decrypt(identityResponse.dateOfIssue));
-          lsIssueDate = identityResponse.dateOfIssue.isNotEmpty ? false : true;
-        }
-//        if (bvnResponse.expiryDate != null &&
-//            bvnResponse.expiryDate.isNotEmpty) {
-//          var decryptedPhone = CryptoHelper.decrypt(bvnResponse.expiryDate);
-//          if (decryptedPhone != null && decryptedPhone.startsWith('0')) {
-//            decryptedPhone = decryptedPhone.replaceFirst('0', '');
-//            _phoneNumberController.add(decryptedPhone);
-//            bvnPhone = bvnResponse.phoneNumber.isNotEmpty ? false : true;
-//          }
-//        }
-        if (identityResponse.expiryDate != null &&
-            identityResponse.expiryDate.isNotEmpty) {
-          _idExpiryDateController
-              .add(CryptoHelper.decrypt(identityResponse.expiryDate));
-          expiryDate = identityResponse.expiryDate.isNotEmpty ? false : true;
-        }
-//        if (bvnResponse.maritalStatus != null &&
-//            bvnResponse.maritalStatus.isNotEmpty) {
-//          _maritalStatusController.add(bvnResponse.maritalStatus);
-//          bvnMaritalStatus =
-//              bvnResponse.maritalStatus.isNotEmpty ? false : true;
-//          _isMaritalStatusChangeController.add(bvnMaritalStatus);
-//        }
+        print(identityResponse.photo);
 
       } else {
         driverLicenseVerificationResponse

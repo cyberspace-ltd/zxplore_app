@@ -70,6 +70,11 @@ class Endpoints {
         'accounts/VerifyDriverLicense/';
   }
 
+
+ static String getVerifyIdUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/Verify/';
+  }
   static String getVerifyPassportUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/VerifyPassport/';
