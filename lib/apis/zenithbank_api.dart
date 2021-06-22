@@ -35,18 +35,16 @@ class ZenithBankApi {
           return true;
         };
       };
-      response =
-      await dio.get("${Endpoints.getOccupationUrl()}");
+      response = await dio.get("${Endpoints.getOccupationUrl()}");
       print(response);
       return Occupation.fromJson(response.data);
     } catch (error, stacktrace) {
-     print("Exception occured: $error stackTrace: $stacktrace");
+      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
 
   Future<AccountClass> fetchAccountClasses(String token) async {
-
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -60,14 +58,12 @@ class ZenithBankApi {
           return true;
         };
       };
-      response =
-      await dio.get(Endpoints.getAccountClassesUrl());
+      response = await dio.get(Endpoints.getAccountClassesUrl());
       return AccountClass.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
-
   }
 
   Future<Title> fetchTitles(String token) async {
@@ -84,14 +80,12 @@ class ZenithBankApi {
           return true;
         };
       };
-      response =
-      await dio.get(Endpoints.getTitlesUrl());
+      response = await dio.get(Endpoints.getTitlesUrl());
       return Title.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
-
   }
 
   Future<State> fetchStates(String token) async {
@@ -108,14 +102,12 @@ class ZenithBankApi {
           return true;
         };
       };
-      response =
-      await dio.get(Endpoints.getStatesUrl());
+      response = await dio.get(Endpoints.getStatesUrl());
       return State.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
-
   }
 
   Future<Cities> fetchCities(String token) async {
@@ -132,8 +124,7 @@ class ZenithBankApi {
           return true;
         };
       };
-      response =
-      await dio.get(Endpoints.getCitiesUrl());
+      response = await dio.get(Endpoints.getCitiesUrl());
       return Cities.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
@@ -167,8 +158,7 @@ class ZenithBankApi {
           return true;
         };
       };
-      response =
-      await dio.get(Endpoints.getCountriesUrl());
+      response = await dio.get(Endpoints.getCountriesUrl());
       return Country.fromJson(response.data);
     } catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
@@ -215,8 +205,14 @@ class ZenithBankApi {
       }
     } on DioError catch (error) {
       if (error is DioError) {
-        if (error.response?.statusCode == 400) {
-          throw CleanerException("Invalid login details. Try again");
+        if (error.response != null &&
+            error.response.data != null &&
+            error.response.data['message'] != null) {
+          throw CleanerException(error.response.data['message']);
+        } else if (error.response != null &&
+            error.response.data != null &&
+            error.response.data['Message'] != null) {
+          throw CleanerException(error.response.data['Message']);
         } else if (error.response?.statusCode == 502) {
           var value = LoginResponse.fromJson(error.response?.data);
           throw CleanerException(value.message);
@@ -294,7 +290,8 @@ class ZenithBankApi {
     } else if (response.statusCode == 400) {
       var errorResponse =
           VerifyAccountResponse().fromErrorJson(json.decode(reply));
-      throw CleanerException(errorResponse.message??"Account Number not generated yet");
+      throw CleanerException(
+          errorResponse.message ?? "Account Number not generated yet");
     } else {
       throw CleanerException('Failed to load cities');
     }
@@ -411,8 +408,8 @@ class ZenithBankApi {
         };
       };
 
-          response = await dio.post(Endpoints.getVerifyIdUrl(),
-            data: {'Id': identityNumber, 'VerificationType': idType});
+      response = await dio.post(Endpoints.getVerifyIdUrl(),
+          data: {'Id': identityNumber, 'VerificationType': idType});
 
       if (response.statusCode == 200) {
         return VerifyIdResponse.fromJson(response.data);

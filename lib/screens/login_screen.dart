@@ -6,6 +6,7 @@ import 'package:zxplore_app/utils/flushbar_helper.dart';
 import '../blocs/login_bloc.dart';
 import '../colors.dart';
 import 'home_screen.dart';
+import 'package:package_info/package_info.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -15,10 +16,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   LoginBloc _loginBloc;
   bool _passwordVisible = false;
+  String appVersion = '';
   @override
   void initState() {
     _loginBloc = LoginBloc();
     _passwordVisible = false;
+    getPackageInfo();
     super.initState();
   }
 
@@ -39,6 +42,13 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
+  }
+
+  getPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      appVersion = packageInfo.version;
+    });
   }
 
   Widget passwordField() {
@@ -171,6 +181,16 @@ class _LoginPageState extends State<LoginPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: submitButton(),
+            ),
+             Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                child: Text(
+                  'Zxplore GH Version $appVersion',
+                  style: Theme.of(context).textTheme.caption,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
 //          Expanded(child: WavyFooter())
           ]),
