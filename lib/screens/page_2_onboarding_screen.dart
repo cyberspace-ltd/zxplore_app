@@ -14,10 +14,10 @@ class Page2 extends StatelessWidget {
       width: double.infinity,
       decoration: new BoxDecoration(
           gradient: LinearGradient(colors: [
-            Colors.white,
-            ZxplorePrimaryColor,
-            ZxplorePrimaryColor,
-          ], begin: Alignment(0.5, -1.0), end: Alignment(0.5, 1.0))),
+        Colors.white,
+        ZxplorePrimaryColor,
+        ZxplorePrimaryColor,
+      ], begin: Alignment(0.5, -1.0), end: Alignment(0.5, 1.0))),
       child: Stack(
         children: <Widget>[
           new Positioned(
@@ -29,11 +29,9 @@ class Page2 extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-
                 SizedBox(
                   child: Image(
                     image: AssetImage(Assets.viewOfflineImage),
-
                     fit: BoxFit.fitHeight,
                   ),
                   height: IMAGE_SIZE,
@@ -43,7 +41,7 @@ class Page2 extends StatelessWidget {
                   'View accounts that have been created offline.',
                   style: Theme.of(context)
                       .textTheme
-                      .body1
+                      .bodyText1
                       .copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),

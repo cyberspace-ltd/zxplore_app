@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 import 'category.dart';
 import 'colors.dart';
-
 
 const double _kFlingVelocity = 2.0;
 
@@ -50,7 +48,7 @@ class _BackdropPanel extends StatelessWidget {
               padding: EdgeInsetsDirectional.only(start: 16.0),
               alignment: AlignmentDirectional.centerStart,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.subhead,
+                style: Theme.of(context).textTheme.subtitle1,
                 child: title,
               ),
             ),
@@ -134,7 +132,7 @@ class Backdrop extends StatefulWidget {
         assert(backPanel != null),
         assert(frontTitle != null),
         assert(accountFormBloc != null),
-      assert(backTitle != null);
+        assert(backTitle != null);
 
   @override
   _BackdropState createState() => _BackdropState();
@@ -166,7 +164,7 @@ class _BackdropState extends State<Backdrop>
       setState(() {
         _controller.fling(
             velocity:
-            _backdropPanelVisible ? -_kFlingVelocity : _kFlingVelocity);
+                _backdropPanelVisible ? -_kFlingVelocity : _kFlingVelocity);
       });
     } else if (!_backdropPanelVisible) {
       setState(() {
@@ -221,7 +219,7 @@ class _BackdropState extends State<Backdrop>
     else
       _controller.fling(
           velocity:
-          _controller.value < 0.5 ? -_kFlingVelocity : _kFlingVelocity);
+              _controller.value < 0.5 ? -_kFlingVelocity : _kFlingVelocity);
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
@@ -249,7 +247,7 @@ class _BackdropState extends State<Backdrop>
               onVerticalDragEnd: _handleDragEnd,
               title: StreamBuilder(
                 stream: widget.accountFormBloc.currentFormCategory,
-                builder: (context, snapshot) =>  Text('${snapshot.data}'),
+                builder: (context, snapshot) => Text('${snapshot.data}'),
               ),
               child: widget.frontPanel,
             ),
@@ -275,49 +273,54 @@ class _BackdropState extends State<Backdrop>
           ),
         ),
         actions: <Widget>[
-          new IconButton(icon: new Icon(Icons.close, color: Colors.white,),
-            onPressed: (){ Navigator.pop(context);},
+          new IconButton(
+            icon: new Icon(
+              Icons.close,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
 //          new IconButton(icon: new Icon(Icons.clear_all, color: Colors.white,),
 //            onPressed: (){},
 //          ),
-          new IconButton(icon: new Icon(Icons.save_alt,color: Colors.white,),
-            onPressed: (){
-
+          new IconButton(
+            icon: new Icon(
+              Icons.save_alt,
+              color: Colors.white,
+            ),
+            onPressed: () {
               var loadingBar = FlushbarHelper.createLoading(
                 message: "Saving account offline...",
-                linearProgressIndicator: null,);
+                linearProgressIndicator: null,
+              );
 
               loadingBar..show(context);
 
-
               _accountFormBloc.saveOffline();
 
-            _accountFormBloc.subjectSaveOfflineAccountResponse.listen((result){
-              loadingBar.dismiss(context);
+              _accountFormBloc.subjectSaveOfflineAccountResponse
+                  .listen((result) {
+                loadingBar.dismiss(context);
 
-              _showSuccessDialog(
-                  '$result');
+                _showSuccessDialog('$result');
+              }).onError((error) {
+                loadingBar.dismiss(context);
 
-            }).onError((error) {
-              loadingBar.dismiss(context);
+                var errorSnackBar =
+                    FlushbarHelper.createError(message: error.toString());
 
-              var errorSnackBar = FlushbarHelper.createError(
-                  message: error.toString());
-
-              errorSnackBar..show(context);
-
-            });
+                errorSnackBar..show(context);
+              });
             },
           ),
-
         ],
         title: _BackdropTitle(
           listenable: _controller.view,
           frontTitle: widget.frontTitle,
           backTitle: widget.backTitle,
         ),
-
       ),
       body: LayoutBuilder(
         builder: _buildStack,
@@ -353,5 +356,4 @@ class _BackdropState extends State<Backdrop>
       },
     );
   }
-
 }

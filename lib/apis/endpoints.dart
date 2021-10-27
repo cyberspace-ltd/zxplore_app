@@ -1,17 +1,14 @@
-
-
 class Endpoints {
-
   // static const String ZENITH_API_BASE_URL = "https://webservicestest.zenithbank.com:8443/ZenithAccountService/api/";
 
- static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
+//  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
 
-  // static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/"; //Live Environment
+  static const String GATEWAY_BASE_API_URL =
+      "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/"; //Live Environment
   static String getOccupationUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/Occupations';
   }
-
 
   static String getAccountClassesUrl() {
     return '$GATEWAY_BASE_API_URL'
@@ -28,7 +25,6 @@ class Endpoints {
         'accounts/States';
   }
 
-
   static String getCountriesUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/Countries';
@@ -38,7 +34,6 @@ class Endpoints {
     return '$GATEWAY_BASE_API_URL'
         'accounts/Cities';
   }
-
 
   static String getLoginUrl() {
     return '$GATEWAY_BASE_API_URL'
@@ -70,11 +65,11 @@ class Endpoints {
         'accounts/VerifyDriverLicense/';
   }
 
-
- static String getVerifyIdUrl() {
+  static String getVerifyIdUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/Verify/';
   }
+
   static String getVerifyPassportUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/VerifyPassport/';
@@ -89,6 +84,4 @@ class Endpoints {
     return '$GATEWAY_BASE_API_URL'
         'accounts/GetAccountByRefID/';
   }
-
-
 }

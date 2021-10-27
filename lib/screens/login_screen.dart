@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
               child: submitButton(),
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(16.0),
               child: Center(
                 child: Text(
@@ -209,20 +209,22 @@ class _LoginPageState extends State<LoginPage> {
 Future<bool> _exitApp(BuildContext context) {
   return showDialog(
         context: context,
-        child: new AlertDialog(
-          title: new Text('Do you want to exit this application?'),
-          content: new Text('We hate to see you leave...'),
-          actions: <Widget>[
-            new FlatButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: new Text('No'),
-            ),
-            new FlatButton(
-              onPressed: () => exit(0),
-              child: new Text('Yes'),
-            ),
-          ],
-        ),
+        builder: (context) {
+          return AlertDialog(
+            title: new Text('Do you want to exit this application?'),
+            content: new Text('We hate to see you leave...'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () => exit(0),
+                child: new Text('Yes'),
+              ),
+            ],
+          );
+        },
       ) ??
       false;
 }

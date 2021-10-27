@@ -13,7 +13,7 @@ class ZxploreApp extends StatefulWidget {
 class _ZxploreAppState extends State<ZxploreApp> {
   @override
   Widget build(BuildContext context) {
-  SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
@@ -66,15 +66,15 @@ ThemeData _buildZxploreTheme() {
 TextTheme _buildZxploreTextTheme(TextTheme base) {
   return base
       .copyWith(
-        headline: base.headline
+        headline5: base.headline6
             .copyWith(fontWeight: FontWeight.w500, color: ZxplorePrimaryColor),
-        title: base.title.copyWith(fontSize: 18.0),
+        headline6: base.headline6.copyWith(fontSize: 18.0),
         caption:
             base.caption.copyWith(fontSize: 11.0, color: ZxplorePrimaryColor),
-        body2: base.body2.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 16.0,
-            ),
+        bodyText2: base.bodyText2.copyWith(
+          fontWeight: FontWeight.w500,
+          fontSize: 16.0,
+        ),
       )
       .apply(
         displayColor: Colors.black87,

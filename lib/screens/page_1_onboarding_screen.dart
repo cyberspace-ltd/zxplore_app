@@ -29,11 +29,9 @@ class Page1 extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-
                 SizedBox(
                   child: Image(
                     image: AssetImage(Assets.createAccount),
-
                     fit: BoxFit.fitHeight,
                   ),
                   height: IMAGE_SIZE,
@@ -43,7 +41,7 @@ class Page1 extends StatelessWidget {
                   'View accounts that have been created offline.',
                   style: Theme.of(context)
                       .textTheme
-                      .body1
+                      .bodyText1
                       .copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 Type _typeOf<T>() => T;
 
 abstract class BlocBase {
@@ -23,7 +22,7 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
   static T of<T extends BlocBase>(BuildContext context) {
     final type = _typeOf<_BlocProviderInherited<T>>();
     _BlocProviderInherited<T> provider =
-        context.ancestorInheritedElementForWidgetOfExactType(type)?.widget;
+        context.getElementForInheritedWidgetOfExactType()?.widget;
     return provider?.bloc;
   }
 }
