@@ -6,14 +6,10 @@ import 'package:zxplore_app/blocs/countries_bloc.dart';
 import 'package:zxplore_app/blocs/occupations_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
-import 'package:zxplore_app/data/entities/city_entity.dart';
-import 'package:zxplore_app/data/entities/country_entity.dart';
 import 'package:zxplore_app/data/entities/occupation_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
-import 'package:zxplore_app/generated/i18n.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
-import 'package:another_flushbar/flushbar.dart';
 
 class ContactDetailsStep extends StatefulWidget {
   @override

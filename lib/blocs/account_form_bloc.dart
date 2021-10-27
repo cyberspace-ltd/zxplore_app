@@ -7,10 +7,8 @@ import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/data/entities/account_class_entity.dart';
 import 'package:zxplore_app/data/entities/offline_form_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
-import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
-import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/verify_id_response.dart';
@@ -42,7 +40,7 @@ class AccountFormBloc extends BlocBase with Validators {
       BehaviorSubject<LocationData>();
 
   final _idController = BehaviorSubject<int?>();
-  final _isEditModeController = BehaviorSubject<bool>();
+  final _isEditModeController = BehaviorSubject<bool?>();
 
   final _accountTypeController = BehaviorSubject<String?>();
 
@@ -717,7 +715,7 @@ class AccountFormBloc extends BlocBase with Validators {
         ? false
         : _isEditModeController.value;
     try {
-      if (isEditMode) {
+      if (isEditMode!) {
         await _accountsRepository.updateAccountOffline(offlineForm);
       } else {
         await _accountsRepository.saveAccountOffline(offlineForm);
@@ -1298,7 +1296,7 @@ class AccountFormBloc extends BlocBase with Validators {
     await _accountsRepository.verifyBvn(encodedBVN).then((bvnResponse) {
       bvnVerificationResponse.add(bvnResponse);
 
-      if (bvnResponse?.responseCode == '00') {
+      if (bvnResponse.responseCode == '00') {
         if (bvnResponse.lastName != null && bvnResponse.lastName!.isNotEmpty) {
           _surnameController.add(CryptoHelper.decrypt(bvnResponse.lastName!));
           bvnlastNameValue = bvnResponse.lastName != null ? false : true;
@@ -1438,7 +1436,7 @@ class AccountFormBloc extends BlocBase with Validators {
         .then((identityResponse) {
       driverLicenseVerificationResponse.add(identityResponse);
 
-      if (identityResponse?.responseCode == '200') {
+      if (identityResponse.responseCode == '200') {
         // print(CryptoHelper.decrypt("bNxR3JQR9SQLUZZydVzQuw=="));
         // print(CryptoHelper.decrypt("rOSmtmXdFkOWi1rRBsQ/aA=="));
         // print(CryptoHelper.decrypt("VW+vu5PSeRRqxIHk6Gkj5w=="));
@@ -1743,7 +1741,7 @@ class AccountFormBloc extends BlocBase with Validators {
           _riskRankController.add(accountResponse.data!.riskRank);
         }
 
-        if (accountResponse.data?.signatoryDetails?.first?.mmda != null &&
+        if (accountResponse.data?.signatoryDetails?.first.mmda != null &&
             accountResponse.data!.signatoryDetails!.first.mmda!.isNotEmpty) {
           try {
             List<StateEntity> states = await DBProvider.db.getStates();
@@ -1759,7 +1757,7 @@ class AccountFormBloc extends BlocBase with Validators {
             _mmdaController.add(accountResponse.data!.classCode);
           }
         }
-        if (accountResponse.data?.signatoryDetails?.first?.placeOfBirth !=
+        if (accountResponse.data?.signatoryDetails?.first.placeOfBirth !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.placeOfBirth!.isNotEmpty) {}
@@ -1792,20 +1790,20 @@ class AccountFormBloc extends BlocBase with Validators {
             accountResponse.data!.title!.isNotEmpty) {
           _titleController.add(accountResponse.data!.title);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.lastName != null &&
+        if (accountResponse.data!.signatoryDetails?.first.lastName != null &&
             accountResponse
                 .data!.signatoryDetails!.first.lastName!.isNotEmpty) {
           _surnameController.add(CryptoHelper.decrypt(
               accountResponse.data!.signatoryDetails!.first.lastName!));
         }
-        if (accountResponse.data!.signatoryDetails?.first?.firstName != null &&
+        if (accountResponse.data!.signatoryDetails?.first.firstName != null &&
             accountResponse
                 .data!.signatoryDetails!.first.firstName!.isNotEmpty) {
           _firstNameController.add(CryptoHelper.decrypt(
               accountResponse.data!.signatoryDetails!.first.firstName!));
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.middleName != null &&
+        if (accountResponse.data!.signatoryDetails?.first.middleName != null &&
             accountResponse
                 .data!.signatoryDetails!.first.middleName!.isNotEmpty) {
           _otherNameController.add(CryptoHelper.decrypt(
@@ -1818,7 +1816,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //              accountResponse.data.signatoryDetails.first.middleName));
 //        }
 
-        if (accountResponse.data!.signatoryDetails?.first?.motherMaidenName !=
+        if (accountResponse.data!.signatoryDetails?.first.motherMaidenName !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.motherMaidenName!.isNotEmpty) {
@@ -1826,8 +1824,7 @@ class AccountFormBloc extends BlocBase with Validators {
               accountResponse.data!.signatoryDetails!.first.motherMaidenName!));
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.dateOfBirth !=
-                null &&
+        if (accountResponse.data!.signatoryDetails?.first.dateOfBirth != null &&
             accountResponse
                 .data!.signatoryDetails!.first.dateOfBirth!.isNotEmpty) {
           _dateOfBirthController.add(CryptoHelper.decrypt(
@@ -1841,7 +1838,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //              accountResponse.data.signatoryDetails.first.dateOfBirth));
 //        }
 
-        if (accountResponse.data!.signatoryDetails?.first?.stateOfOrigin !=
+        if (accountResponse.data!.signatoryDetails?.first.stateOfOrigin !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.stateOfOrigin!.isNotEmpty) {
@@ -1850,7 +1847,7 @@ class AccountFormBloc extends BlocBase with Validators {
         }
         _countryOfOriginController.add('GHANA');
 
-        if (accountResponse.data!.signatoryDetails?.first?.emailAddress !=
+        if (accountResponse.data!.signatoryDetails?.first.emailAddress !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.emailAddress!.isNotEmpty) {
@@ -1858,22 +1855,21 @@ class AccountFormBloc extends BlocBase with Validators {
               accountResponse.data!.signatoryDetails!.first.emailAddress!));
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.phoneNumber !=
-                null &&
+        if (accountResponse.data!.signatoryDetails?.first.phoneNumber != null &&
             accountResponse
                 .data!.signatoryDetails!.first.phoneNumber!.isNotEmpty) {
           _phoneNumberController.add(CryptoHelper.decrypt(
               accountResponse.data!.signatoryDetails!.first.phoneNumber!));
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.nextOfKin != null &&
+        if (accountResponse.data!.signatoryDetails?.first.nextOfKin != null &&
             accountResponse
                 .data!.signatoryDetails!.first.nextOfKin!.isNotEmpty) {
           _nextOfKinController.add(CryptoHelper.decrypt(
               accountResponse.data!.signatoryDetails!.first.nextOfKin!));
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.addressLine1 !=
+        if (accountResponse.data!.signatoryDetails?.first.addressLine1 !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.addressLine1!.isNotEmpty) {
@@ -1881,7 +1877,7 @@ class AccountFormBloc extends BlocBase with Validators {
               accountResponse.data!.signatoryDetails!.first.addressLine1!));
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.addressLine2 !=
+        if (accountResponse.data!.signatoryDetails?.first.addressLine2 !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.addressLine2!.isNotEmpty) {
@@ -1890,18 +1886,18 @@ class AccountFormBloc extends BlocBase with Validators {
         }
         _countryOfResidenceController.add('GHANA');
 
-        if (accountResponse.data!.signatoryDetails?.first?.state != null &&
+        if (accountResponse.data!.signatoryDetails?.first.state != null &&
             accountResponse.data!.signatoryDetails!.first.state!.isNotEmpty) {
           _stateOfResidenceController
               .add(accountResponse.data!.signatoryDetails!.first.state);
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.city != null &&
+        if (accountResponse.data!.signatoryDetails?.first.city != null &&
             accountResponse.data!.signatoryDetails!.first.city!.isNotEmpty) {
           _cityOfResidenceController
               .add(accountResponse.data!.signatoryDetails!.first.city);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.sex != null &&
+        if (accountResponse.data!.signatoryDetails?.first.sex != null &&
             accountResponse.data!.signatoryDetails!.first.sex!.isNotEmpty) {
           if (accountResponse.data!.signatoryDetails!.first.sex == 'M') {
             _genderController.add('MALE');
@@ -1909,13 +1905,13 @@ class AccountFormBloc extends BlocBase with Validators {
             _genderController.add('FEMALE');
           }
         }
-        if (accountResponse.data!.signatoryDetails?.first?.occupation != null &&
+        if (accountResponse.data!.signatoryDetails?.first.occupation != null &&
             accountResponse
                 .data!.signatoryDetails!.first.occupation!.isNotEmpty) {
           occupationController
               .add(accountResponse.data!.signatoryDetails!.first.occupation);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.maritalStatus !=
+        if (accountResponse.data!.signatoryDetails?.first.maritalStatus !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.maritalStatus!.isNotEmpty) {
@@ -1923,39 +1919,38 @@ class AccountFormBloc extends BlocBase with Validators {
               .add(accountResponse.data!.signatoryDetails!.first.maritalStatus);
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.meansOfId != null &&
+        if (accountResponse.data!.signatoryDetails?.first.meansOfId != null &&
             accountResponse
                 .data!.signatoryDetails!.first.meansOfId!.isNotEmpty) {
           _idTypeController
               .add(accountResponse.data!.signatoryDetails!.first.meansOfId);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.idIssuer != null &&
+        if (accountResponse.data!.signatoryDetails?.first.idIssuer != null &&
             accountResponse
                 .data!.signatoryDetails!.first.idIssuer!.isNotEmpty) {
           _idIssuerController
               .add(accountResponse.data!.signatoryDetails!.first.idIssuer);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.idNumber != null &&
+        if (accountResponse.data!.signatoryDetails?.first.idNumber != null &&
             accountResponse
                 .data!.signatoryDetails!.first.idNumber!.isNotEmpty) {
           _idNumberController
               .add(accountResponse.data!.signatoryDetails!.first.idNumber);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.idPlaceOfIssue !=
+        if (accountResponse.data!.signatoryDetails?.first.idPlaceOfIssue !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.idPlaceOfIssue!.isNotEmpty) {
           _idPlaceOfIssueController.add(
               accountResponse.data!.signatoryDetails!.first.idPlaceOfIssue);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.idIssueDate !=
-                null &&
+        if (accountResponse.data!.signatoryDetails?.first.idIssueDate != null &&
             accountResponse
                 .data!.signatoryDetails!.first.idIssueDate!.isNotEmpty) {
           _idIssueDateController
               .add(accountResponse.data!.signatoryDetails!.first.idIssueDate);
         }
-        if (accountResponse.data!.signatoryDetails?.first?.idExpiryDate !=
+        if (accountResponse.data!.signatoryDetails?.first.idExpiryDate !=
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.idExpiryDate!.isNotEmpty) {
@@ -1963,7 +1958,7 @@ class AccountFormBloc extends BlocBase with Validators {
               .add(accountResponse.data!.signatoryDetails!.first.idExpiryDate);
         }
         if (accountResponse
-                    .data!.signatoryDetails?.first?.useEmailForStatement !=
+                    .data!.signatoryDetails?.first.useEmailForStatement !=
                 null &&
             accountResponse.data!.signatoryDetails!.first.useEmailForStatement!
                 .isNotEmpty) {
@@ -2007,8 +2002,7 @@ class AccountFormBloc extends BlocBase with Validators {
           }
         }
 
-        if (accountResponse.data!.signatoryDetails?.first?.attachments !=
-            null) {
+        if (accountResponse.data!.signatoryDetails?.first.attachments != null) {
           var _idCardAttachment = accountResponse
               .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'IdentityCard')

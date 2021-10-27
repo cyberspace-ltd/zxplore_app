@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:location/location.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/data/database.dart';

@@ -59,7 +59,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getAccountClassesUrl());
       return AccountClass.fromJson(response.data);
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -81,7 +81,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getTitlesUrl());
       return Title.fromJson(response.data);
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -103,7 +103,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getStatesUrl());
       return State.fromJson(response.data);
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -125,7 +125,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getCitiesUrl());
       return Cities.fromJson(response.data);
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -159,7 +159,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getCountriesUrl());
       return Country.fromJson(response.data);
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -243,7 +243,7 @@ class ZenithBankApi {
       response =
           await dio.get("${Endpoints.getAccountsByRsmIdUrl()}$rsmId/All");
       return AccountsResponse.fromJson(response.data);
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -268,7 +268,7 @@ class ZenithBankApi {
       response =
           await dio.get("${Endpoints.getAccountDetailsUrl()}$referenceId");
       return AccountDetailsResponse.fromJson(response.data);
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
       throw CleanerException(_handleError(error));
     }
   }
@@ -323,7 +323,7 @@ class ZenithBankApi {
       } else {
         return SaveAccountResponse.fromJson(response.data);
       }
-    } on DioError catch (error, stacktrace) {
+    } on DioError catch (error) {
       if (error is DioError) {
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);

@@ -7,9 +7,9 @@ final String columnAccountClassDescription = 'name';
 
 class AccountClassEntity extends Equatable {
   //database fields
-  int? id;
-  String? name;
-  String? type;
+  final int? id;
+  final String? name;
+  final String? type;
 
   AccountClassEntity({this.id, this.name, this.type});
 

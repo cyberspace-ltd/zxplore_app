@@ -131,8 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () async {
             if (token!.isEmpty) {
               token = await SecureStorage.getEmployeeToken();
-            } else if(token!.isNotEmpty){
-
+            } else if (token!.isNotEmpty) {
               _fetchAccountClasses(token);
               _fetchStates(token);
               _fetchOccupations(token);
@@ -213,13 +212,13 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               new ListTile(
                 contentPadding:
-                EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                    EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
                 leading: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                      width: 24,
-                      height: 24,
-                    ),
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
                 title: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
@@ -228,7 +227,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
-
                 onTap: () {
 //                _controller.animateTo(0);
 //                Navigator.pop(context);
@@ -439,11 +437,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       if (response.data!.accountNumber != null) {
                         FlushbarHelper.createSuccess(
                             message:
-                                '${response?.message} . Account number is: ${response.data!.accountNumber}')
+                                '${response.message} . Account number is: ${response.data!.accountNumber}')
                           ..show(context);
                       } else {
                         FlushbarHelper.createInformation(
-                                message: '${response?.message}')
+                                message: '${response.message}')
                             .show(context);
                         loadingBar.dismiss();
                       }
@@ -472,7 +470,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
 
   Widget _statusWidget(Datum form) {
-    if (form?.status?.toLowerCase() == 'completed') {
+    if (form.status?.toLowerCase() == 'completed') {
       return Chip(
           backgroundColor: Colors.transparent,
           labelPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
@@ -508,7 +506,7 @@ class _MyHomePageState extends State<MyHomePage> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      CategoryPage(accountReferenceId: form?.refId)),
+                      CategoryPage(accountReferenceId: form.refId)),
             );
           });
     }

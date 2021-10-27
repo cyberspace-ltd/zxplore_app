@@ -5,8 +5,6 @@
 // To keep your imports tidy, follow the ordering guidelines at
 // https://www.dartlang.org/guides/language/effective-dart/style#ordering
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-
 import 'category.dart';
 import 'colors.dart';
 
@@ -24,8 +22,7 @@ class CategoryTile extends StatelessWidget {
     Key? key,
     required this.category,
     this.onTap,
-  })  : assert(category != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

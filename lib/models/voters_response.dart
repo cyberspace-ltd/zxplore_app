@@ -2,10 +2,10 @@
 //
 //     final votersResponse = votersResponseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
-VotersResponse votersResponseFromJson(String str) => VotersResponse.fromJson(json.decode(str));
+VotersResponse votersResponseFromJson(String str) =>
+    VotersResponse.fromJson(json.decode(str));
 
 String votersResponseToJson(VotersResponse data) => json.encode(data.toJson());
 
@@ -31,24 +31,26 @@ class VotersResponse {
   final String? picture;
 
   factory VotersResponse.fromJson(Map<String, dynamic> json) => VotersResponse(
-    responseCode: json["ResponseCode"] == null ? null : json["ResponseCode"],
-    pollingStation: json["PollingStation"] == null ? null : json["PollingStation"],
-    voterId: json["VoterID"] == null ? null : json["VoterID"],
-    age: json["Age"] == null ? null : json["Age"],
-    sex: json["Sex"] == null ? null : json["Sex"],
-    regDate: json["RegDate"] == null ? null : json["RegDate"],
-    fullname: json["Fullname"] == null ? null : json["Fullname"],
-    picture: json["Picture"] == null ? null : json["Picture"],
-  );
+        responseCode:
+            json["ResponseCode"] == null ? null : json["ResponseCode"],
+        pollingStation:
+            json["PollingStation"] == null ? null : json["PollingStation"],
+        voterId: json["VoterID"] == null ? null : json["VoterID"],
+        age: json["Age"] == null ? null : json["Age"],
+        sex: json["Sex"] == null ? null : json["Sex"],
+        regDate: json["RegDate"] == null ? null : json["RegDate"],
+        fullname: json["Fullname"] == null ? null : json["Fullname"],
+        picture: json["Picture"] == null ? null : json["Picture"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "ResponseCode": responseCode == null ? null : responseCode,
-    "PollingStation": pollingStation == null ? null : pollingStation,
-    "VoterID": voterId == null ? null : voterId,
-    "Age": age == null ? null : age,
-    "Sex": sex == null ? null : sex,
-    "RegDate": regDate == null ? null : regDate,
-    "Fullname": fullname == null ? null : fullname,
-    "Picture": picture == null ? null : picture,
-  };
+        "ResponseCode": responseCode == null ? null : responseCode,
+        "PollingStation": pollingStation == null ? null : pollingStation,
+        "VoterID": voterId == null ? null : voterId,
+        "Age": age == null ? null : age,
+        "Sex": sex == null ? null : sex,
+        "RegDate": regDate == null ? null : regDate,
+        "Fullname": fullname == null ? null : fullname,
+        "Picture": picture == null ? null : picture,
+      };
 }

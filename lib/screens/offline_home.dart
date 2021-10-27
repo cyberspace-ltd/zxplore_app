@@ -74,16 +74,15 @@ class _OfflineHomeState extends State<OfflineHomePage> {
         contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
         leading: Container(
           padding: EdgeInsets.only(left: 16.0),
-          child: IconButton(icon: const Icon(Icons.remove,color: Colors.red), onPressed: (){
-            _accountsBloc.deleteOfflineAccount(form.id);
-            _accountsBloc.getOfflineAccounts();
+          child: IconButton(
+              icon: const Icon(Icons.remove, color: Colors.red),
+              onPressed: () {
+                _accountsBloc.deleteOfflineAccount(form.id);
+                _accountsBloc.getOfflineAccounts();
 
-            setState(() {
-
-            });
-          }),
-          ),
-
+                setState(() {});
+              }),
+        ),
         title: Padding(
           padding: const EdgeInsets.all(8.0),
           child: new Text.rich(
@@ -157,7 +156,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => CategoryPage(
-                      accountReferenceId: form?.referenceId,
+                      accountReferenceId: form.referenceId,
                       isEditAccount: true,
                     )),
           );
@@ -219,8 +218,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
             return makeBody(snapshot.data!, context);
           } else if (snapshot.hasError) {
             return _buildErrorWidget(snapshot.error as String?);
-          }
-          else {
+          } else {
             return Container();
           }
         },

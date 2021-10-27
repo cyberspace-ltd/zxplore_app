@@ -208,25 +208,24 @@ class _LoginPageState extends State<LoginPage> {
 
 Future<bool> _exitApp(BuildContext context) {
   return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: new Text('Do you want to exit this application?'),
-            content: new Text('We hate to see you leave...'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
-              ),
-              new FlatButton(
-                onPressed: () => exit(0),
-                child: new Text('Yes'),
-              ),
-            ],
-          );
-        },
-      ).then((value) => value as bool) ??
-      false as Future<bool>;
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: new Text('Do you want to exit this application?'),
+        content: new Text('We hate to see you leave...'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('No'),
+          ),
+          new FlatButton(
+            onPressed: () => exit(0),
+            child: new Text('Yes'),
+          ),
+        ],
+      );
+    },
+  ).then((value) => value as bool);
 }
 
 class AccentColorOverride extends StatelessWidget {

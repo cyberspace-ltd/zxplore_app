@@ -7,9 +7,9 @@ final String columnStateName = 'name';
 
 class StateEntity extends Equatable {
   //database fields
-  String? stateName;
-  String? mmda;
-  int? srn;
+  final String? stateName;
+  final String? mmda;
+  final int? srn;
   StateEntity({this.srn, this.stateName, this.mmda});
 
   Map<String, dynamic> toMapForDb() {

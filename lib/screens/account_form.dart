@@ -23,13 +23,13 @@ class AccountFormPage extends StatefulWidget {
   final AccountFormBloc? accountFormBloc;
   final bool? isEditAccount;
   final List<Category> categories;
-  const AccountFormPage(
-      {required this.category,
-      required this.accountFormBloc,
-      required this.categories,
-      this.accountReferenceId,
-      this.isEditAccount = false})
-      : assert(category != null);
+  const AccountFormPage({
+    required this.category,
+    required this.accountFormBloc,
+    required this.categories,
+    this.accountReferenceId,
+    this.isEditAccount = false,
+  });
 
   @override
   _AccountFormPageState createState() => _AccountFormPageState();

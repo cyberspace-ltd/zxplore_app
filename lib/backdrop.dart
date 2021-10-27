@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
@@ -127,12 +126,7 @@ class Backdrop extends StatefulWidget {
     required this.frontTitle,
     required this.backTitle,
     required this.accountFormBloc,
-  })  : assert(currentCategory != null),
-        assert(frontPanel != null),
-        assert(backPanel != null),
-        assert(frontTitle != null),
-        assert(accountFormBloc != null),
-        assert(backTitle != null);
+  });
 
   @override
   _BackdropState createState() => _BackdropState();
@@ -192,7 +186,8 @@ class _BackdropState extends State<Backdrop>
   }
 
   double get _backdropHeight {
-    final RenderBox renderBox = _backdropKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox renderBox =
+        _backdropKey.currentContext!.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 

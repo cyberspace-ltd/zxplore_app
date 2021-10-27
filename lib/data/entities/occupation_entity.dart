@@ -23,9 +23,7 @@ class OccupationEntity extends Equatable {
 
   @override
   bool operator ==(Object other) {
-    return other != null &&
-        other is OccupationEntity &&
-        hashCode == other.hashCode;
+    return other is OccupationEntity && hashCode == other.hashCode;
   }
 
   @override
