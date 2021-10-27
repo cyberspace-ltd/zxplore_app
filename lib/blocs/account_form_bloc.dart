@@ -99,9 +99,9 @@ class AccountFormBloc extends BlocBase with Validators {
   final _genderController = BehaviorSubject<String?>();
 
   final occupationController = BehaviorSubject<String?>();
-  final occupationCategoryController = BehaviorSubject<String>();
+  final occupationCategoryController = BehaviorSubject<String?>();
 
-  final othersOccupationController = BehaviorSubject<String>();
+  final othersOccupationController = BehaviorSubject<String?>();
 
   final _maritalStatusController = BehaviorSubject<String?>();
 
@@ -109,7 +109,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _idTypeController = BehaviorSubject<String?>();
 
   final _idIssuerController = BehaviorSubject<String?>();
-  final _idIssuerOthersController = BehaviorSubject<String>();
+  final _idIssuerOthersController = BehaviorSubject<String?>();
 
   final _idNumberController = BehaviorSubject<String?>();
 
@@ -297,7 +297,7 @@ class AccountFormBloc extends BlocBase with Validators {
           ? _idIssuerController.stream
           : _idIssuerController.stream.transform(validateIdIssuer);
 
-  Stream<String> get idOthersIssuer =>
+  Stream<String?> get idOthersIssuer =>
       _accountCategoryController.valueOrNull == easy_classic
           ? _idIssuerOthersController.stream
           : _idIssuerOthersController.stream.transform(validateIdIssuer);

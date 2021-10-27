@@ -6,8 +6,8 @@ import 'package:zxplore_app/utils/secure_storage.dart';
 import 'package:zxplore_app/utils/zxplore_crypto_helper.dart';
 
 class LoginBloc extends Object with Validators {
-  final _userNameController = BehaviorSubject<String>();
-  final _passwordController = BehaviorSubject<String>();
+  final _userNameController = BehaviorSubject<String?>();
+  final _passwordController = BehaviorSubject<String?>();
   final LoginRepository _loginRepository = LoginRepository();
 
   // Add data to stream
@@ -35,8 +35,8 @@ class LoginBloc extends Object with Validators {
     final validUserName = _userNameController.value;
     final validPassword = _passwordController.value;
 
-    final encryptedUserName = CryptoHelper.encrypt(validUserName);
-    final encryptedPassword = CryptoHelper.encrypt(validPassword);
+    final encryptedUserName = CryptoHelper.encrypt(validUserName!);
+    final encryptedPassword = CryptoHelper.encrypt(validPassword!);
 
     attemptLogin(encryptedUserName, encryptedPassword);
   }

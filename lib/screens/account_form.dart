@@ -190,7 +190,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return BlocProvider<AccountFormBloc?>(
+    return BlocProvider<AccountFormBloc>(
       child: Form(
         key: this._formKey,
         child: Scaffold(
@@ -226,7 +226,8 @@ class _AccountFormPageState extends State<AccountFormPage>
                               _controller.previousPage(
                                   duration: _kDuration, curve: _kCurve);
                               widget.accountFormBloc!.setCurrentFormCategory(
-                                  widget.categories[_controller.page!.toInt() - 1]);
+                                  widget.categories[
+                                      _controller.page!.toInt() - 1]);
                             }),
                         Center(
                           child: DotsIndicator(
@@ -248,7 +249,8 @@ class _AccountFormPageState extends State<AccountFormPage>
                               _controller.nextPage(
                                   duration: _kDuration, curve: _kCurve);
                               widget.accountFormBloc!.setCurrentFormCategory(
-                                  widget.categories[_controller.page!.toInt() + 1]);
+                                  widget.categories[
+                                      _controller.page!.toInt() + 1]);
                             }),
                       ],
                     ),
@@ -259,7 +261,7 @@ class _AccountFormPageState extends State<AccountFormPage>
           ),
         ),
       ),
-      bloc: accountFormBloc,
+      bloc: accountFormBloc!,
     );
   }
 
