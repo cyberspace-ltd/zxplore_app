@@ -9,23 +9,23 @@ BvnResponse bvnResponseFromJson(String str) => BvnResponse.fromJson(json.decode(
 String bvnResponseToJson(BvnResponse data) => json.encode(data.toJson());
 
 class BvnResponse {
-  String responseCode;
-  String responseMessage;
-  String firstName;
-  String lastName;
-  String middleName;
-  String nationality;
-  String email;
+  String? responseCode;
+  String? responseMessage;
+  String? firstName;
+  String? lastName;
+  String? middleName;
+  String? nationality;
+  String? email;
   dynamic title;
-  String bvn;
-  String dateOfBirth;
-  String gender;
-  String phoneNumber;
-  String base64Image;
-  String stateOfOrigin;
-  String maritalStatus;
-  String residentialAddress;
-  String stateOfResidence;
+  String? bvn;
+  String? dateOfBirth;
+  String? gender;
+  String? phoneNumber;
+  String? base64Image;
+  String? stateOfOrigin;
+  String? maritalStatus;
+  String? residentialAddress;
+  String? stateOfResidence;
 
   BvnResponse({
     this.responseCode,

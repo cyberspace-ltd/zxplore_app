@@ -9,9 +9,9 @@ AccountsResponse accountsResponseFromJson(String str) => AccountsResponse.fromJs
 String accountsResponseToJson(AccountsResponse data) => json.encode(data.toJson());
 
 class AccountsResponse {
-  bool status;
-  String message;
-  List<Datum> data;
+  bool? status;
+  String? message;
+  List<Datum>? data;
 
   AccountsResponse({
     this.status,
@@ -28,27 +28,27 @@ class AccountsResponse {
   Map<String, dynamic> toJson() => {
     "status": status,
     "message": message,
-    "data": new List<dynamic>.from(data.map((x) => x.toJson())),
+    "data": new List<dynamic>.from(data!.map((x) => x.toJson())),
   };
 }
 
 class Datum {
-  String accountType;
-  String refId;
-  String batchId;
-  String accountNumber;
-  String accountHolderType;
-  int classCode;
-  int branchNumber;
-  int rsmId;
-  String accountName;
-  String title;
-  String addressLine1;
-  String city;
-  String state;
-  String status;
-  String phoneNumber;
-  String dateCreated;
+  String? accountType;
+  String? refId;
+  String? batchId;
+  String? accountNumber;
+  String? accountHolderType;
+  int? classCode;
+  int? branchNumber;
+  int? rsmId;
+  String? accountName;
+  String? title;
+  String? addressLine1;
+  String? city;
+  String? state;
+  String? status;
+  String? phoneNumber;
+  String? dateCreated;
 
   Datum({
     this.accountType,

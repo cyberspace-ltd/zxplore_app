@@ -16,8 +16,8 @@ class AccountClassBloc extends BlocBase {
   Stream<List<AccountClassEntity>> get accountClasses => _accountClassController.stream;
 
 
-  final _addAccountClassesController = StreamController<List<AccountClassCode>>.broadcast();
-  StreamSink<List<AccountClassCode>> get inAddAccountClasses => _addAccountClassesController.sink;
+  final _addAccountClassesController = StreamController<List<AccountClassCode>?>.broadcast();
+  StreamSink<List<AccountClassCode>?> get inAddAccountClasses => _addAccountClassesController.sink;
 
 
   AccountClassBloc() {
@@ -41,8 +41,8 @@ class AccountClassBloc extends BlocBase {
   }
 
 
-  void _handleAddCities(List<AccountClassCode> values) async {
-    DBProvider.db.insertAccountClasses(values);
+  void _handleAddCities(List<AccountClassCode>? values) async {
+    DBProvider.db.insertAccountClasses(values!);
 
     getAccountClasses();
   }

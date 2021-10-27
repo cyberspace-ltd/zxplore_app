@@ -9,9 +9,9 @@ AccountDetailsResponse accountDetailsResponseFromJson(String str) => AccountDeta
 String accountDetailsResponseToJson(AccountDetailsResponse data) => json.encode(data.toJson());
 
 class AccountDetailsResponse {
-  bool status;
-  String message;
-  AccountDetailsData data;
+  bool? status;
+  String? message;
+  AccountDetailsData? data;
 
   AccountDetailsResponse({
     this.status,
@@ -28,41 +28,41 @@ class AccountDetailsResponse {
   Map<String, dynamic> toJson() => {
     "status": status,
     "message": message,
-    "data": data.toJson(),
+    "data": data!.toJson(),
   };
 }
 
 class AccountDetailsData {
-  String accountType;
+  String? accountType;
   dynamic accountNumber;
-  String accountHolderType;
-  String classCode;
-  String branchNumber;
-  String phoneNumber;
-  String rsmId;
-  String accountName;
+  String? accountHolderType;
+  String? classCode;
+  String? branchNumber;
+  String? phoneNumber;
+  String? rsmId;
+  String? accountName;
   dynamic tin;
   dynamic registrationNumber;
-  String sex;
-  String title;
-  String dateOfBirth;
-  String dateOfIncorporation;
-  String businessNature;
-  String sector;
-  String industry;
-  String riskRank;
-  String addressLine1;
-  String city;
-  String state;
-  String countryOfOrigin;
-  List<AccountDetailsSignatoryDetail> signatoryDetails;
-  String refId;
-  String alertZRequest;
-  String masterCardRequest;
-  String visaCardRequest;
-  String verveCardRequest;
-  String tokenRequest;
-  String ibankRequest;
+  String? sex;
+  String? title;
+  String? dateOfBirth;
+  String? dateOfIncorporation;
+  String? businessNature;
+  String? sector;
+  String? industry;
+  String? riskRank;
+  String? addressLine1;
+  String? city;
+  String? state;
+  String? countryOfOrigin;
+  List<AccountDetailsSignatoryDetail>? signatoryDetails;
+  String? refId;
+  String? alertZRequest;
+  String? masterCardRequest;
+  String? visaCardRequest;
+  String? verveCardRequest;
+  String? tokenRequest;
+  String? ibankRequest;
 
   AccountDetailsData({
     this.accountType,
@@ -153,7 +153,7 @@ class AccountDetailsData {
     "City": city,
     "State": state,
     "CountryOfOrigin": countryOfOrigin,
-    "SignatoryDetails": new List<dynamic>.from(signatoryDetails.map((x) => x.toJson())),
+    "SignatoryDetails": new List<dynamic>.from(signatoryDetails!.map((x) => x.toJson())),
     "Ref_Id": refId,
     "AlertZRequest": alertZRequest,
     "MasterCardRequest": masterCardRequest,
@@ -165,30 +165,30 @@ class AccountDetailsData {
 }
 
 class AccountDetailsSignatoryDetail {
-  String firstName;
-  String middleName;
-  String lastName;
-  String sex;
-  String dateOfBirth;
-  String motherMaidenName;
-  String title;
-  String stateOfOrigin;
-  String countryOfOrigin;
-  String meansOfId;
-  String idNumber;
-  String idIssuer;
-  String idPlaceOfIssue;
-  String idIssueDate;
-  String idExpiryDate;
-  String occupation;
-  String addressLine1;
-  String addressLine2;
-  String city;
-  String state;
-  String emailAddress;
-  String placeOfBirth;
-  String mmda;
-  String phoneNumber;
+  String? firstName;
+  String? middleName;
+  String? lastName;
+  String? sex;
+  String? dateOfBirth;
+  String? motherMaidenName;
+  String? title;
+  String? stateOfOrigin;
+  String? countryOfOrigin;
+  String? meansOfId;
+  String? idNumber;
+  String? idIssuer;
+  String? idPlaceOfIssue;
+  String? idIssueDate;
+  String? idExpiryDate;
+  String? occupation;
+  String? addressLine1;
+  String? addressLine2;
+  String? city;
+  String? state;
+  String? emailAddress;
+  String? placeOfBirth;
+  String? mmda;
+  String? phoneNumber;
   dynamic fax;
   dynamic tin;
   dynamic permitType;
@@ -201,20 +201,20 @@ class AccountDetailsSignatoryDetail {
   dynamic permitValidTo;
   dynamic foreignAddress1;
   dynamic foreignAddress2;
-  String studentLevel;
+  String? studentLevel;
   dynamic yearOfGraduation;
   dynamic faculty;
   dynamic department;
-  String amlCustType;
-  String amlCustNature;
-  String amlCustNatureBusiness;
-  String useEmailForStatement;
+  String? amlCustType;
+  String? amlCustNature;
+  String? amlCustNatureBusiness;
+  String? useEmailForStatement;
   dynamic passportUrl;
   dynamic signatureUrl;
   dynamic utilityUrl;
-  String maritalStatus;
-  String nextOfKin;
-  List<AccountDetailsAttachment> attachments;
+  String? maritalStatus;
+  String? nextOfKin;
+  List<AccountDetailsAttachment>? attachments;
 
   AccountDetailsSignatoryDetail({
     this.firstName,
@@ -372,13 +372,13 @@ class AccountDetailsSignatoryDetail {
     "UtilityUrl": utilityUrl,
     "MaritalStatus": maritalStatus,
     "NextOfKin": nextOfKin,
-    "Attachments": new List<dynamic>.from(attachments.map((x) => x.toJson())),
+    "Attachments": new List<dynamic>.from(attachments!.map((x) => x.toJson())),
   };
 }
 
 class AccountDetailsAttachment {
-  String encodedImage;
-  String type;
+  String? encodedImage;
+  String? type;
 
   AccountDetailsAttachment({
     this.encodedImage,

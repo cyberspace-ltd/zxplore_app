@@ -20,7 +20,7 @@ import 'account_form.dart';
 /// While it is named CategoryRoute, a more apt name would be CategoryScreen,
 /// because it is responsible for the UI at the route's destination.
 class CategoryPage extends StatefulWidget {
-  final String accountReferenceId;
+  final String? accountReferenceId;
   final bool isEditAccount;
   const CategoryPage({this.accountReferenceId, this.isEditAccount = false});
 
@@ -29,11 +29,11 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryRouteState extends State<CategoryPage> {
-  Category _defaultCategory;
-  Category _currentCategory;
-  String accountReferenceId;
-  AccountFormBloc accountFormBloc;
-  bool _isEditAccount;
+  Category? _defaultCategory;
+  Category? _currentCategory;
+  String? accountReferenceId;
+  AccountFormBloc? accountFormBloc;
+  bool? _isEditAccount;
   // Widgets are supposed to be deeply immutable objects. We can update and edit
   // _categories as we build our app, and when we pass it into a widget's
   // `children` property, we call .toList() on it.
@@ -109,7 +109,7 @@ class _CategoryRouteState extends State<CategoryPage> {
 
   /// Function to call when a [Category] is tapped.
   void _onCategoryTap(Category category) {
-    accountFormBloc.setCurrentFormCategory(category);
+    accountFormBloc!.setCurrentFormCategory(category);
     setState(() {
       _currentCategory = category;
     });
@@ -163,19 +163,19 @@ class _CategoryRouteState extends State<CategoryPage> {
       child: _buildCategoryWidgets(MediaQuery.of(context).orientation),
     );
     return Backdrop(
-      accountFormBloc: accountFormBloc,
+      accountFormBloc: accountFormBloc!,
       currentCategory:
-          _currentCategory == null ? _defaultCategory : _currentCategory,
+          _currentCategory == null ? _defaultCategory! : _currentCategory!,
       frontPanel: _currentCategory == null
           ? AccountFormPage(
-              category: _defaultCategory,
+              category: _defaultCategory!,
               categories: _categories,
               accountFormBloc: accountFormBloc,
               accountReferenceId: accountReferenceId,
               isEditAccount: _isEditAccount,
             )
           : AccountFormPage(
-              category: _currentCategory,
+              category: _currentCategory!,
               categories: _categories,
               accountFormBloc: accountFormBloc,
               accountReferenceId: accountReferenceId,

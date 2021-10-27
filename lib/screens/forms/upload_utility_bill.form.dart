@@ -19,28 +19,25 @@ class UploadUtilityBillStep extends StatefulWidget {
 
 class _UploadUtilityBillState extends State<UploadUtilityBillStep>
     with AutomaticKeepAliveClientMixin<UploadUtilityBillStep> {
-  File _imageFile;
-  String _retrieveDataError;
+  XFile? _imageFile;
+  String? _retrieveDataError;
   dynamic _pickImageError;
-  AccountFormBloc accountFormBloc;
+  AccountFormBloc? accountFormBloc;
   ByteData _img = ByteData(0);
-
-
+  ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
-    accountFormBloc.uploadUtilityBillController.listen((base64Signature){
-      if(_img.lengthInBytes == 0){
-        var imageData = base64Decode(base64Signature);
+    accountFormBloc!.uploadUtilityBillController.listen((base64Signature) {
+      if (_img.lengthInBytes == 0) {
+        var imageData = base64Decode(base64Signature!);
 
         setState(() {
           _img = imageData.buffer.asByteData();
         });
-
       }
-
     });
   }
 
@@ -66,11 +63,15 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
                               textAlign: TextAlign.center,
                             );
                           case ConnectionState.done:
-                            return  (_img.buffer.lengthInBytes == 0
+                            return (_img.buffer.lengthInBytes == 0
                                 ? const Text(
-                              'Click either the gallery or camera icon to upload a picture of your utility Bill',
-                              textAlign: TextAlign.center,
-                            ) : LimitedBox(maxHeight: 600.0, child: Image.memory(_img.buffer.asUint8List())));
+                                    'Click either the gallery or camera icon to upload a picture of your utility Bill',
+                                    textAlign: TextAlign.center,
+                                  )
+                                : LimitedBox(
+                                    maxHeight: 600.0,
+                                    child: Image.memory(
+                                        _img.buffer.asUint8List())));
                           default:
                             if (snapshot.hasError) {
                               return Text(
@@ -84,13 +85,20 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
                               );
                             }
                         }
+                        return Text(
+                          'Click either the gallery or camera icon to upload a picture of your utility Bill',
+                          textAlign: TextAlign.center,
+                        );
                       },
                     )
-                  :  (_img.buffer.lengthInBytes == 0
-                  ? const Text(
-                'Click either the gallery or camera icon to upload a picture of your utility Bill',
-                textAlign: TextAlign.center,
-              ) : LimitedBox(maxHeight: 600.0, child: Image.memory(_img.buffer.asUint8List()))),
+                  : (_img.buffer.lengthInBytes == 0
+                      ? const Text(
+                          'Click either the gallery or camera icon to upload a picture of your utility Bill',
+                          textAlign: TextAlign.center,
+                        )
+                      : LimitedBox(
+                          maxHeight: 600.0,
+                          child: Image.memory(_img.buffer.asUint8List()))),
             ),
             SizedBox(height: 30.0),
             Row(
@@ -114,11 +122,9 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
                   tooltip: 'Take a Photo',
                   child: const Icon(Icons.camera_alt),
                 ),
-
               ],
             ),
             SizedBox(height: 40.0),
-
           ],
         ),
       ),
@@ -155,20 +161,19 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
 //    }
 //  }
 
-
   Future _convertImagesToByte() async {
-    List<int> imageBytes = await _imageFile.readAsBytes();
+    List<int> imageBytes = await _imageFile!.readAsBytes();
     var imgBytes = new Uint8List.fromList(imageBytes);
 
     String base64Image = base64Encode(imageBytes);
     _img = imgBytes.buffer.asByteData();
 
-    accountFormBloc.setUploadUtilityBillForm(base64Image);
+    accountFormBloc!.setUploadUtilityBillForm(base64Image);
 //    print(base64Image);
   }
 
   Future<void> retrieveLostData() async {
-    final LostDataResponse response = await ImagePicker.retrieveLostData();
+    final LostDataResponse response = await _picker.retrieveLostData();
     if (response.isEmpty) {
       return;
     }
@@ -178,13 +183,13 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
         _convertImagesToByte();
       });
     } else {
-      _retrieveDataError = response.exception.code;
+      _retrieveDataError = response.exception!.code;
     }
   }
 
   void _onImageButtonPressed(ImageSource source) async {
     try {
-      _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 350);
+      _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte();
     } catch (e) {
       _pickImageError = e;

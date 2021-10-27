@@ -4,7 +4,7 @@ final String columnCountryName = 'name';
 
 class CountryEntity {
   //database fields
-  String name;
+  String? name;
 
   CountryEntity({
     this.name,

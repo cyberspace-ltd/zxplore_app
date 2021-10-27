@@ -5,15 +5,12 @@ final String columnStateId = 'id';
 final String columnSateMMDA = 'mmda';
 final String columnStateName = 'name';
 
-class StateEntity extends Equatable{
+class StateEntity extends Equatable {
   //database fields
-  String stateName;
-  String mmda;
-  int srn;
-  StateEntity({
-    this.srn, this.stateName, this.mmda
-  });
-
+  String? stateName;
+  String? mmda;
+  int? srn;
+  StateEntity({this.srn, this.stateName, this.mmda});
 
   Map<String, dynamic> toMapForDb() {
     var map = Map<String, dynamic>();
@@ -23,12 +20,12 @@ class StateEntity extends Equatable{
     return map;
   }
 
-
   factory StateEntity.fromMap(Map<String, dynamic> json) => new StateEntity(
-    stateName: json[columnStateName],
-    mmda: json[columnSateMMDA],
-    srn: json[columnStateId]
-  );
+      stateName: json[columnStateName],
+      mmda: json[columnSateMMDA],
+      srn: json[columnStateId]);
 
-
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }

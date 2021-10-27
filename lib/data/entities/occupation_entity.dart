@@ -9,10 +9,10 @@ final String columnGroupName = 'groupName';
 // ignore: must_be_immutable
 class OccupationEntity extends Equatable {
   //database fields
-  int srn;
-  String occupationName;
-  String sironCode;
-  String groupName;
+  int? srn;
+  String? occupationName;
+  String? sironCode;
+  String? groupName;
 
   OccupationEntity({
     this.srn,
@@ -21,11 +21,12 @@ class OccupationEntity extends Equatable {
     this.groupName,
   });
 
- @override
+  @override
   bool operator ==(Object other) {
-    return other != null && other is OccupationEntity && hashCode == other.hashCode;
+    return other != null &&
+        other is OccupationEntity &&
+        hashCode == other.hashCode;
   }
-
 
   @override
   int get hashCode => sironCode.hashCode;
@@ -47,4 +48,8 @@ class OccupationEntity extends Equatable {
         sironCode: json[columnSironCode],
         groupName: json[columnGroupName],
       );
+
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }

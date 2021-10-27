@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_class_bloc.dart';
@@ -13,32 +14,25 @@ class AccountInformationStep extends StatefulWidget {
 
 class _AccountInformationState extends State<AccountInformationStep>
     with AutomaticKeepAliveClientMixin<AccountInformationStep> {
-  AccountFormBloc accountFormBloc;
-  AccountClassBloc _accountClassBloc;
+  AccountFormBloc? accountFormBloc;
+  late AccountClassBloc _accountClassBloc;
 
   @override
   bool get wantKeepAlive => true;
 
-  final _accountTypes = [
-    SAVINGS_ACCOUNT,
-    CURRENT_ACCOUNT
-  ];
+  final _accountTypes = [SAVINGS_ACCOUNT, CURRENT_ACCOUNT];
 
-  String _selectedAccountType;
+  String? _selectedAccountType;
 
   String _selectedAccFilter = "";
-  final _accountHolderTypes = [
-    'INDIVIDUAL',
-    'CHEQUE',
-    'SAVINGS'
-  ];
+  final _accountHolderTypes = ['INDIVIDUAL', 'CHEQUE', 'SAVINGS'];
 
   final _riskRanks = [
     'HIGH',
     'LOW',
     'MEDIUM',
   ];
-  List<AccountClassEntity> accountClasses;
+  List<AccountClassEntity>? accountClasses;
 
   @override
   void dispose() {
@@ -55,12 +49,12 @@ class _AccountInformationState extends State<AccountInformationStep>
     _accountClassBloc.accountClasses.listen((data) {
       accountClasses = data;
     });
-    accountFormBloc.getCurrentLocation();
+    accountFormBloc!.getCurrentLocation();
   }
 
   Widget accountTypeField() {
-    return StreamBuilder(
-      stream: accountFormBloc.accountType,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.accountType,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -69,7 +63,7 @@ class _AccountInformationState extends State<AccountInformationStep>
               decoration: InputDecoration(
                   labelText: 'Account Type',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
 //              isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -93,8 +87,8 @@ class _AccountInformationState extends State<AccountInformationStep>
                       }
                     });
 //                    accountFormBloc.changeAccountType;
-                    accountFormBloc.updateAccountType(value);
-                    accountFormBloc.updateAccountCategoryType(null);
+                    accountFormBloc!.updateAccountType(value);
+                    accountFormBloc!.updateAccountCategoryType(null);
                   },
                 ),
               ),
@@ -106,8 +100,8 @@ class _AccountInformationState extends State<AccountInformationStep>
   }
 
   Widget accountHolderTypeField() {
-    return StreamBuilder(
-      stream: accountFormBloc.accountHolderType,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.accountHolderType,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -116,13 +110,13 @@ class _AccountInformationState extends State<AccountInformationStep>
               decoration: InputDecoration(
                   labelText: 'Account Holder Type',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.data,
                   isDense: true,
-                  onChanged: accountFormBloc.changeHolderType,
+                  onChanged: accountFormBloc!.changeHolderType,
                   items: _accountHolderTypes.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -139,22 +133,21 @@ class _AccountInformationState extends State<AccountInformationStep>
   }
 
   Widget riskRankField() {
-    return StreamBuilder(
-      stream: accountFormBloc.riskRankType,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.riskRankType,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
-                  labelText: 'Risk Rank',
-                  errorText: snapshot.error),
+                  labelText: 'Risk Rank', errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.data,
                   isDense: true,
-                  onChanged: accountFormBloc.changeRiskRank,
+                  onChanged: accountFormBloc!.changeRiskRank,
                   items: _riskRanks.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -175,7 +168,7 @@ class _AccountInformationState extends State<AccountInformationStep>
       stream: _accountClassBloc.accountClasses,
       builder: (context, listSnapshot) {
         return StreamBuilder(
-            stream: accountFormBloc.accountCategoryType,
+            stream: accountFormBloc!.accountCategoryType,
             builder: (context, itemSnapshot) {
               return FormField<String>(
                 autovalidate: true,
@@ -184,15 +177,15 @@ class _AccountInformationState extends State<AccountInformationStep>
                     decoration: InputDecoration(
                         labelText: 'Account Category',
                         helperText: "* Required",
-                        errorText: itemSnapshot.error),
+                        errorText: itemSnapshot.error as String?),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: _getAccountTypeValue(itemSnapshot, listSnapshot),
                         isDense: true,
                         items: listSnapshot.hasData
-                            ? listSnapshot.data
+                            ? listSnapshot.data!
                                 .where((x) =>
-                                    x.type.startsWith(_selectedAccFilter))
+                                    x.type!.startsWith(_selectedAccFilter))
                                 .map((AccountClassEntity entity) {
                                 return DropdownMenuItem<String>(
                                   value: entity.name.toString(),
@@ -201,7 +194,7 @@ class _AccountInformationState extends State<AccountInformationStep>
                               }).toList()
                             : null,
                         onChanged: (value) {
-                          accountFormBloc.updateAccountCategoryType(value);
+                          accountFormBloc!.updateAccountCategoryType(value);
                         },
                       ),
                     ),
@@ -213,13 +206,12 @@ class _AccountInformationState extends State<AccountInformationStep>
     );
   }
 
-  String _getAccountTypeValue(AsyncSnapshot itemSnapshot,
+  String? _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<AccountClassEntity>> listSnapshot) {
     var data = (listSnapshot.hasData &&
-            listSnapshot.data.length > 0 &&
-            listSnapshot.data.firstWhere(
-                    (x) => x.name == itemSnapshot.data.toString(),
-                    orElse: () => null) !=
+            listSnapshot.data!.length > 0 &&
+            listSnapshot.data!.firstWhereOrNull(
+                    (x) => x.name == itemSnapshot.data.toString()) !=
                 null)
         ? itemSnapshot.data.toString()
         : null;

@@ -15,9 +15,9 @@ class Occupation {
         this.menu,
     });
 
-    String responseCode;
-    String responseMessage;
-    List<OccupationMenu> menu;
+    String? responseCode;
+    String? responseMessage;
+    List<OccupationMenu>? menu;
 
     factory Occupation.fromJson(Map<String, dynamic> json) => Occupation(
         responseCode: json["ResponseCode"] == null ? null : json["ResponseCode"],
@@ -28,7 +28,7 @@ class Occupation {
     Map<String, dynamic> toJson() => {
         "ResponseCode": responseCode == null ? null : responseCode,
         "ResponseMessage": responseMessage == null ? null : responseMessage,
-        "Menu": menu == null ? null : List<dynamic>.from(menu.map((x) => x.toJson())),
+        "Menu": menu == null ? null : List<dynamic>.from(menu!.map((x) => x.toJson())),
     };
 }
 
@@ -40,10 +40,10 @@ class OccupationMenu {
         this.groupName,
     });
 
-    int srn;
-    String occupationName;
-    String sironCode;
-    String groupName;
+    int? srn;
+    String? occupationName;
+    String? sironCode;
+    String? groupName;
 
     factory OccupationMenu.fromJson(Map<String, dynamic> json) => OccupationMenu(
         srn: json["Srn"] == null ? null : json["Srn"],

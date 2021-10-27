@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  LoginBloc _loginBloc;
+  LoginBloc? _loginBloc;
   bool _passwordVisible = false;
   String appVersion = '';
   @override
@@ -27,16 +27,16 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget userNameField() {
     return StreamBuilder(
-      stream: _loginBloc.username,
+      stream: _loginBloc!.username,
       builder: (context, snapshot) {
         return AccentColorOverride(
           color: ZxplorePrimaryColor,
           child: TextField(
-            onChanged: _loginBloc.changeUserName,
+            onChanged: _loginBloc!.changeUserName,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               labelText: 'Username',
-              errorText: snapshot.error,
+              errorText: snapshot.error as String?,
             ),
           ),
         );
@@ -53,15 +53,15 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget passwordField() {
     return StreamBuilder(
-        stream: _loginBloc.password,
+        stream: _loginBloc!.password,
         builder: (context, snapshot) {
           return AccentColorOverride(
             color: ZxplorePrimaryColor,
             child: TextField(
-              onChanged: _loginBloc.changePassword,
+              onChanged: _loginBloc!.changePassword,
               decoration: InputDecoration(
                 labelText: 'Password',
-                errorText: snapshot.error,
+                errorText: snapshot.error as String?,
                 suffixIcon: IconButton(
                   icon: Icon(
                     // Based on passwordVisible state choose the icon
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget submitButton() {
     return StreamBuilder(
-      stream: _loginBloc.submitValid,
+      stream: _loginBloc!.submitValid,
       builder: (context, snapshot) {
         return ButtonTheme(
           height: 60.0,
@@ -100,9 +100,9 @@ class _LoginPageState extends State<LoginPage> {
                         linearProgressIndicator: null);
                     loadingBar..show(context);
 
-                    _loginBloc.submit();
+                    _loginBloc!.submit();
 
-                    _loginBloc.subjectLoginResponse
+                    _loginBloc!.subjectLoginResponse
                         .listen((loginResponse) async {
                       loadingBar.dismiss();
 
@@ -225,21 +225,21 @@ Future<bool> _exitApp(BuildContext context) {
             ],
           );
         },
-      ) ??
-      false;
+      ).then((value) => value as bool) ??
+      false as Future<bool>;
 }
 
 class AccentColorOverride extends StatelessWidget {
-  const AccentColorOverride({Key key, this.color, this.child})
+  const AccentColorOverride({Key? key, this.color, this.child})
       : super(key: key);
 
-  final Color color;
-  final Widget child;
+  final Color? color;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     return Theme(
-      child: child,
+      child: child!,
       data: Theme.of(context).copyWith(
         accentColor: color,
         brightness: Brightness.dark,

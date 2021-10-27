@@ -41,7 +41,7 @@ class Page1 extends StatelessWidget {
                   'View accounts that have been created offline.',
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText1
+                      .bodyText1!
                       .copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),

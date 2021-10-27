@@ -15,8 +15,8 @@ class CitiesBloc extends BlocBase {
   Stream<List<CityEntity>> get cities => _citiesController.stream;
 
 
-  final _addCityController = StreamController<List<String>>.broadcast();
-  StreamSink<List<String>> get inAddCities => _addCityController.sink;
+  final _addCityController = StreamController<List<String>?>.broadcast();
+  StreamSink<List<String>?> get inAddCities => _addCityController.sink;
 
 
   CitiesBloc() {
@@ -40,8 +40,8 @@ class CitiesBloc extends BlocBase {
   }
 
 
-  void _handleAddCities(List<String> values) async {
-    DBProvider.db.insertCities(values);
+  void _handleAddCities(List<String>? values) async {
+    DBProvider.db.insertCities(values!);
 
     getCities();
   }

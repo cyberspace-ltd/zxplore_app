@@ -15,7 +15,7 @@ import 'package:zxplore_app/utils/secure_storage.dart';
 class AccountsRepository {
   ZenithBankApi _api = ZenithBankApi();
 
-  getAccountsByRsmId(String rsmId) async {
+  getAccountsByRsmId(String? rsmId) async {
     try {
       var token = await SecureStorage.getEmployeeToken();
 
@@ -36,7 +36,7 @@ class AccountsRepository {
   }
 
   Future<AccountDetailsResponse> getAccountsDetailsByReference(
-      String referenceId) async {
+      String? referenceId) async {
     try {
       var token = await SecureStorage.getEmployeeToken();
 
@@ -47,7 +47,7 @@ class AccountsRepository {
   }
 
   Future<VerifyAccountResponse> verifyAccountsByRefId(
-      String referenceId) async {
+      String? referenceId) async {
     try {
       var token = await SecureStorage.getEmployeeToken();
 
@@ -77,7 +77,7 @@ class AccountsRepository {
       rethrow;
     }
   }
-  Future<VerifyIdResponse> verifyIdentity(String identityNumber, int idType) async {
+  Future<VerifyIdResponse> verifyIdentity(String? identityNumber, int idType) async {
     try {
       var token = await SecureStorage.getEmployeeToken();
 
@@ -108,7 +108,7 @@ class AccountsRepository {
     }
   }
 
-  Future<int> deleteOfflineAccount(int id) async {
+  Future<int> deleteOfflineAccount(int? id) async {
     try {
       var deletedAccountNum = DBProvider.db.deleteOfflineAccount(id);
       return deletedAccountNum;
@@ -117,8 +117,8 @@ class AccountsRepository {
     }
   }
 
-  Future<OfflineAccountEntity> getOfflineAccountByRefId(
-      String referenceId) async {
+  Future<OfflineAccountEntity?> getOfflineAccountByRefId(
+      String? referenceId) async {
     try {
       return DBProvider.db.getOfflineAccount(referenceId);
     } catch (error) {

@@ -29,7 +29,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final AccountsRepository _accountsRepository = AccountsRepository();
 
   final _referenceIdController =
-      BehaviorSubject<String>(); // used in the case of updating accounts.
+      BehaviorSubject<String?>(); // used in the case of updating accounts.
 
   final _currentFormCategoryController = BehaviorSubject<Category>();
 
@@ -41,83 +41,83 @@ class AccountFormBloc extends BlocBase with Validators {
   final BehaviorSubject<LocationData> _subjectLocation =
       BehaviorSubject<LocationData>();
 
-  final _idController = BehaviorSubject<int>();
+  final _idController = BehaviorSubject<int?>();
   final _isEditModeController = BehaviorSubject<bool>();
 
-  final _accountTypeController = BehaviorSubject<String>();
+  final _accountTypeController = BehaviorSubject<String?>();
 
-  final _accountHolderTypeController = BehaviorSubject<String>();
+  final _accountHolderTypeController = BehaviorSubject<String?>();
 
-  final _riskRankController = BehaviorSubject<String>();
+  final _riskRankController = BehaviorSubject<String?>();
 
-  final _accountCategoryController = BehaviorSubject<String>();
+  final _accountCategoryController = BehaviorSubject<String?>();
 
   //Personal Information
 
-  final _tinController = BehaviorSubject<String>();
+  final _tinController = BehaviorSubject<String?>();
 
-  final _titleController = BehaviorSubject<String>();
+  final _titleController = BehaviorSubject<String?>();
 
-  final _surnameController = BehaviorSubject<String>();
+  final _surnameController = BehaviorSubject<String?>();
 
-  final _firstNameController = BehaviorSubject<String>();
+  final _firstNameController = BehaviorSubject<String?>();
 
-  final _otherNameController = BehaviorSubject<String>();
+  final _otherNameController = BehaviorSubject<String?>();
 
-  final _mothersMaidenNameController = BehaviorSubject<String>();
+  final _mothersMaidenNameController = BehaviorSubject<String?>();
 
-  final _dateOfBirthController = BehaviorSubject<String>();
+  final _dateOfBirthController = BehaviorSubject<String?>();
 
 //  final _stateOfOriginController = BehaviorSubject<String>();
-  final _placeOfBirthController = BehaviorSubject<String>();
+  final _placeOfBirthController = BehaviorSubject<String?>();
 
-  final _countryOfOriginController = BehaviorSubject<String>();
+  final _countryOfOriginController = BehaviorSubject<String?>();
 
   //Contact Details
 
-  final _emailController = BehaviorSubject<String>();
+  final _emailController = BehaviorSubject<String?>();
 
   final _latitudeController = BehaviorSubject<String>();
 
   final _longitudeController = BehaviorSubject<String>();
 
-  final _phoneNumberController = BehaviorSubject<String>();
+  final _phoneNumberController = BehaviorSubject<String?>();
 
-  final _nextOfKinController = BehaviorSubject<String>();
+  final _nextOfKinController = BehaviorSubject<String?>();
 
-  final _address1Controller = BehaviorSubject<String>();
+  final _address1Controller = BehaviorSubject<String?>();
 
-  final _address2Controller = BehaviorSubject<String>();
+  final _address2Controller = BehaviorSubject<String?>();
 
-  final _countryOfResidenceController = BehaviorSubject<String>();
+  final _countryOfResidenceController = BehaviorSubject<String?>();
 
-  final _stateOfResidenceController = BehaviorSubject<String>();
-  final _mmdaController = BehaviorSubject<String>();
+  final _stateOfResidenceController = BehaviorSubject<String?>();
+  final _mmdaController = BehaviorSubject<String?>();
 
-  final _cityOfResidenceController = BehaviorSubject<String>();
+  final _cityOfResidenceController = BehaviorSubject<String?>();
 
-  final _genderController = BehaviorSubject<String>();
+  final _genderController = BehaviorSubject<String?>();
 
-  final occupationController = BehaviorSubject<String>();
+  final occupationController = BehaviorSubject<String?>();
   final occupationCategoryController = BehaviorSubject<String>();
 
   final othersOccupationController = BehaviorSubject<String>();
 
-  final _maritalStatusController = BehaviorSubject<String>();
+  final _maritalStatusController = BehaviorSubject<String?>();
 
   //Means of Identification
-  final _idTypeController = BehaviorSubject<String>();
+  final _idTypeController = BehaviorSubject<String?>();
 
-  final _idIssuerController = BehaviorSubject<String>();
+  final _idIssuerController = BehaviorSubject<String?>();
   final _idIssuerOthersController = BehaviorSubject<String>();
 
-  final _idNumberController = BehaviorSubject<String>();
+  final _idNumberController = BehaviorSubject<String?>();
 
-  final _idPlaceOfIssueController = BehaviorSubject<String>();
+  final _idPlaceOfIssueController = BehaviorSubject<String?>();
 
-  final _idIssueDateController = BehaviorSubject<String>();
+  final _idIssueDateController = BehaviorSubject<String?>();
 
-  final _idExpiryDateController = BehaviorSubject<String>();
+  final _idExpiryDateController = BehaviorSubject<String?>();
 
 //  final _isSendEmailController = BehaviorSubject<bool>();
 //
@@ -128,25 +128,25 @@ class AccountFormBloc extends BlocBase with Validators {
 //  final _isRequestInternetBankingController = BehaviorSubject<bool>();
 
   //TODO: GHANA SPECIFIC SERVICES STREAM
-  final _isScanToPayController = BehaviorSubject<bool>();
+  final _isScanToPayController = BehaviorSubject<bool?>();
 
-  final _isZMobileController = BehaviorSubject<bool>();
+  final _isZMobileController = BehaviorSubject<bool?>();
 
-  final _isZPromptController = BehaviorSubject<bool>();
+  final _isZPromptController = BehaviorSubject<bool?>();
 
-  final _isStatementViaEmailController = BehaviorSubject<bool>();
+  final _isStatementViaEmailController = BehaviorSubject<bool?>();
 
-  final _isUssdController = BehaviorSubject<bool>();
+  final _isUssdController = BehaviorSubject<bool?>();
 
-  final _isBankToWalletController = BehaviorSubject<bool>();
+  final _isBankToWalletController = BehaviorSubject<bool?>();
 
-  final _uploadIdImageController = BehaviorSubject<String>();
+  final _uploadIdImageController = BehaviorSubject<String?>();
 
-  final _uploadPassportController = BehaviorSubject<String>();
+  final _uploadPassportController = BehaviorSubject<String?>();
 
-  final _uploadUtilityBillController = BehaviorSubject<String>();
+  final _uploadUtilityBillController = BehaviorSubject<String?>();
 
-  final _uploadSignatureController = BehaviorSubject<String>();
+  final _uploadSignatureController = BehaviorSubject<String?>();
 
   final BehaviorSubject<SaveAccountResponse> _subjectSaveAccountResponse =
       BehaviorSubject<SaveAccountResponse>();
@@ -165,7 +165,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final PublishSubject<BvnResponse> bvnVerificationResponse =
       PublishSubject<BvnResponse>();
 
-   PublishSubject<VerifyIdResponse> driverLicenseVerificationResponse;
+  late PublishSubject<VerifyIdResponse> driverLicenseVerificationResponse;
 
   Stream<bool> get bvnStateOfOrigin => _isStateOfOriginChangeController.stream;
 
@@ -214,7 +214,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get accountCategoryType =>
       _accountCategoryController.stream.transform(validateAccountCategory);
 
-  Stream<String> get tin => _tinController.stream;
+  Stream<String?> get tin => _tinController.stream;
 
   Stream<String> get title => _titleController.stream.transform(validateTitle);
 
@@ -261,7 +261,7 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get address1 =>
       _address1Controller.stream.transform(validateAddress1);
 
-  Stream<String> get address2 => _address2Controller.stream;
+  Stream<String?> get address2 => _address2Controller.stream;
 
   Stream<String> get countryOfResidence => _countryOfResidenceController.stream
       .transform(validateCountryOfResidence);
@@ -287,59 +287,61 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String> get maritalStatus =>
       _maritalStatusController.stream.transform(validateMaritalStatus);
 
-  Stream<String> get idType => _accountCategoryController.value == easy_classic
-      ? _idTypeController.stream
-      : _idTypeController.stream.transform(validateIdType);
+  Stream<String?> get idType =>
+      _accountCategoryController.valueOrNull == easy_classic
+          ? _idTypeController.stream
+          : _idTypeController.stream.transform(validateIdType);
 
-  Stream<String> get idIssuer =>
-      _accountCategoryController.value == easy_classic
+  Stream<String?> get idIssuer =>
+      _accountCategoryController.valueOrNull == easy_classic
           ? _idIssuerController.stream
           : _idIssuerController.stream.transform(validateIdIssuer);
 
   Stream<String> get idOthersIssuer =>
-      _accountCategoryController.value == easy_classic
+      _accountCategoryController.valueOrNull == easy_classic
           ? _idIssuerOthersController.stream
           : _idIssuerOthersController.stream.transform(validateIdIssuer);
 
-  Stream<String> get idNumber =>
-      _accountCategoryController.value == easy_classic
+  Stream<String?> get idNumber =>
+      _accountCategoryController.valueOrNull == easy_classic
           ? _idNumberController.stream
           : _idNumberController.stream.transform(validateIdNumber);
 
-  Stream<String> get idPlaceOfIssue =>
-      _accountCategoryController.value == easy_classic
+  Stream<String?> get idPlaceOfIssue =>
+      _accountCategoryController.valueOrNull == easy_classic
           ? _idPlaceOfIssueController.stream
           : _idPlaceOfIssueController.stream.transform(validateIdPlaceOfIssue);
 
-  Stream<String> get idIssueDate =>
-      _accountCategoryController.value == easy_classic
+  Stream<String?> get idIssueDate =>
+      _accountCategoryController.valueOrNull == easy_classic
           ? _idIssueDateController.stream
           : _idIssueDateController.stream.transform(validateIdIssueDate);
 
-  Stream<String> get idExpiryDate =>
-      _accountCategoryController.value == easy_classic
+  Stream<String?> get idExpiryDate =>
+      _accountCategoryController.valueOrNull == easy_classic
           ? _idExpiryDateController.stream
           : _idExpiryDateController.stream.transform(validateIdExpiryDate);
 
   //TODO: GHANA SPECIFIC SERVICES STREAM BOOL
 
-  Stream<bool> get isScanToPay => _isScanToPayController.stream;
+  Stream<bool?> get isScanToPay => _isScanToPayController.stream;
 
-  Stream<bool> get isZMobile => _isZMobileController.stream;
+  Stream<bool?> get isZMobile => _isZMobileController.stream;
 
-  Stream<bool> get isZPrompt => _isZPromptController.stream;
+  Stream<bool?> get isZPrompt => _isZPromptController.stream;
 
-  Stream<bool> get isStatementViaEmail => _isStatementViaEmailController.stream;
+  Stream<bool?> get isStatementViaEmail =>
+      _isStatementViaEmailController.stream;
 
-  Stream<bool> get isUssd => _isUssdController.stream;
+  Stream<bool?> get isUssd => _isUssdController.stream;
 
-  Stream<bool> get isBankToWallet => _isBankToWalletController.stream;
+  Stream<bool?> get isBankToWallet => _isBankToWalletController.stream;
 
-  Stream<String> get idCard => _uploadIdImageController.stream;
+  Stream<String?> get idCard => _uploadIdImageController.stream;
 
-  Stream<String> get passport => _uploadPassportController.stream;
+  Stream<String?> get passport => _uploadPassportController.stream;
 
-  Stream<String> get signature => _uploadSignatureController.stream;
+  Stream<String?> get signature => _uploadSignatureController.stream;
 
   Stream<LocationData> get location => _subjectLocation.stream;
 
@@ -351,7 +353,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //      (a, ac, r, act) => true);
 
   Stream<bool> get submitValid =>
-      Observable.combineLatest2(phoneNumber, signature, (e, p) => true);
+      Rx.combineLatest2(phoneNumber, signature, (dynamic e, dynamic p) => true);
 
   // change data
 
@@ -364,17 +366,17 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeLongitude => _longitudeController.sink.add;
 
-  Function(String) get changeHolderType =>
+  Function(String?) get changeHolderType =>
       _accountHolderTypeController.sink.add;
 
-  Function(String) get changeRiskRank => _riskRankController.sink.add;
+  Function(String?) get changeRiskRank => _riskRankController.sink.add;
 
   Function(String) get changeAccountCategory =>
       _accountCategoryController.sink.add;
 
   Function(String) get changeTin => _tinController.sink.add;
 
-  Function(String) get changeTitle => _titleController.sink.add;
+  Function(String?) get changeTitle => _titleController.sink.add;
 
   Function(String) get changeSurname => _surnameController.sink.add;
 
@@ -391,7 +393,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeMMDA => _mmdaController.sink.add;
 
-  Function(String) get changeCountryOfOrigin =>
+  Function(String?) get changeCountryOfOrigin =>
       _countryOfOriginController.sink.add;
 
   Function(String) get changeEmail => _emailController.sink.add;
@@ -404,20 +406,20 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeAddress2 => _address2Controller.sink.add;
 
-  Function(String) get changeCountryOfResidence =>
+  Function(String?) get changeCountryOfResidence =>
       _countryOfResidenceController.sink.add;
 
   Function(String) get changeStateOfResidence =>
       _stateOfResidenceController.sink.add;
 
-  updateStateRegion(String value) {
+  updateStateRegion(String? value) {
     _stateOfResidenceController.sink.add(value);
   }
 
   Function(String) get changeCityOfResidence =>
       _cityOfResidenceController.sink.add;
 
-  Function(String) get changeGender => _genderController.sink.add;
+  Function(String?) get changeGender => _genderController.sink.add;
 
   Function(String) get changeOccupation => occupationController.sink.add;
 
@@ -426,7 +428,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeOtherOccupation =>
       othersOccupationController.sink.add;
-  Function(String) get changeMaritalStatus => _maritalStatusController.sink.add;
+  Function(String?) get changeMaritalStatus =>
+      _maritalStatusController.sink.add;
 
   Function(String) get changeIdType => _idTypeController.sink.add;
 
@@ -437,7 +440,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String) get changeIdNumber => _idNumberController.sink.add;
 
-  Function(String) get changePlaceOfIssue => _idPlaceOfIssueController.sink.add;
+  Function(String?) get changePlaceOfIssue =>
+      _idPlaceOfIssueController.sink.add;
 
   Function(String) get changeIssueDate => _idIssueDateController.sink.add;
 
@@ -448,18 +452,19 @@ class AccountFormBloc extends BlocBase with Validators {
 //  Function(bool) get changeIsReceiveSms => _isReceiveSmsController.sink.add;
 
   //TODO: Newly added GHANA change functions
-  Function(bool) get changeIsScanToPay => _isScanToPayController.sink.add;
+  Function(bool?) get changeIsScanToPay => _isScanToPayController.sink.add;
 
-  Function(bool) get changeIsZMobile => _isZMobileController.sink.add;
+  Function(bool?) get changeIsZMobile => _isZMobileController.sink.add;
 
-  Function(bool) get changeIsZPrompt => _isZPromptController.sink.add;
+  Function(bool?) get changeIsZPrompt => _isZPromptController.sink.add;
 
-  Function(bool) get changeIsStatementViaEmail =>
+  Function(bool?) get changeIsStatementViaEmail =>
       _isStatementViaEmailController.sink.add;
 
-  Function(bool) get changeIsUssd => _isUssdController.sink.add;
+  Function(bool?) get changeIsUssd => _isUssdController.sink.add;
 
-  Function(bool) get changeIsBankToWallet => _isBankToWalletController.sink.add;
+  Function(bool?) get changeIsBankToWallet =>
+      _isBankToWalletController.sink.add;
 
   Function(bool) get changeMaritalStatusValue =>
       _isMaritalStatusChangeController.sink.add;
@@ -470,7 +475,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //  Function(bool) get changeIsRequestInternetBanking =>
 //      _isRequestInternetBankingController.sink.add;
 
-  Function(String) get changeSignature => _uploadSignatureController.sink.add;
+  Function(String?) get changeSignature => _uploadSignatureController.sink.add;
 
   setAccountType(String value) {
     _accountTypeController.sink.add(value);
@@ -504,7 +509,7 @@ class AccountFormBloc extends BlocBase with Validators {
     _uploadUtilityBillController.sink.add(value);
   }
 
-  setSignature(String value) {
+  setSignature(String? value) {
     _uploadSignatureController.sink.add(value);
     changeSignature(value);
   }
@@ -664,25 +669,25 @@ class AccountFormBloc extends BlocBase with Validators {
     insertFormOffline(_offlineAccount);
   }
 
-  updateAccountCategoryType(String value) {
+  updateAccountCategoryType(String? value) {
     _accountCategoryController.sink.add(value);
     if (value == null) {
       _accountCategoryController.sink.addError("Field is required");
     }
   }
 
-  updateMMDA(String value) {
+  updateMMDA(String? value) {
     _mmdaController.sink.add(value);
     if (value == null) {
       _mmdaController.sink.addError("Field is required");
     }
   }
 
-  updateIDIssuerType(String value) {
+  updateIDIssuerType(String? value) {
     _idIssuerController.sink.add(value);
   }
 
-  updateOccupation(String value) {
+  updateOccupation(String? value) {
     if (value == null) {
       occupationController.sink.addError("Occupation is required");
     } else {
@@ -690,7 +695,7 @@ class AccountFormBloc extends BlocBase with Validators {
     }
   }
 
-  updateOccupationCategory(String value) {
+  updateOccupationCategory(String? value) {
     if (value == null) {
       occupationCategoryController.sink
           .addError("Occupation category is required");
@@ -699,11 +704,11 @@ class AccountFormBloc extends BlocBase with Validators {
     }
   }
 
-  updateAccountType(String value) {
+  updateAccountType(String? value) {
     _accountTypeController.sink.add(value);
   }
 
-  updateIdentityType(String value) {
+  updateIdentityType(String? value) {
     _idTypeController.sink.add(value);
   }
 
@@ -858,7 +863,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
       return;
     }
-    RegExp regex = new RegExp(pattern);
+    RegExp regex = new RegExp(pattern as String);
 
     if (validSurname != null && regex.hasMatch(validSurname)) {
       _surnameController.addError("Enter a valid surname");
@@ -1127,7 +1132,7 @@ class AccountFormBloc extends BlocBase with Validators {
     var isUssD = validUSSD == true ? "Y" : "N";
     var isBankToWallet = validBankToWallet == true ? "Y" : "N";
 
-    List<Attachment> _attachments = new List();
+    List<Attachment> _attachments = [];
 
     Attachment _idCardAttachment;
     Attachment _passportAttachment;
@@ -1197,7 +1202,7 @@ class AccountFormBloc extends BlocBase with Validators {
         nextOfKin: CryptoHelper.encrypt(validNextOfKin),
         attachments: _attachments);
 
-    List<SignatoryDetail> _signatoryDetails = new List();
+    List<SignatoryDetail> _signatoryDetails = [];
     _signatoryDetails.add(_signatoryDetail);
 
     AccountForm _accountForm = AccountForm(
@@ -1260,16 +1265,16 @@ class AccountFormBloc extends BlocBase with Validators {
   PublishSubject<AccountDetailsResponse> get subjectAccountsDetailsResponse =>
       _subjectAccountsDetailsResponse;
 
-  BehaviorSubject<String> get uploadIdImageController =>
+  BehaviorSubject<String?> get uploadIdImageController =>
       _uploadIdImageController;
 
-  BehaviorSubject<String> get uploadUtilityBillController =>
+  BehaviorSubject<String?> get uploadUtilityBillController =>
       _uploadUtilityBillController;
 
-  BehaviorSubject<String> get uploadPassportController =>
+  BehaviorSubject<String?> get uploadPassportController =>
       _uploadPassportController;
 
-  BehaviorSubject<String> get uploadSignatureController =>
+  BehaviorSubject<String?> get uploadSignatureController =>
       _uploadSignatureController;
 
   sendAccountsToApi(String encodedAccount) async {
@@ -1288,82 +1293,84 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   verifyBvn() async {
-    var encodedBVN = CryptoHelper.encrypt(_tinController.value);
+    var encodedBVN = CryptoHelper.encrypt(_tinController.value!);
 
     await _accountsRepository.verifyBvn(encodedBVN).then((bvnResponse) {
       bvnVerificationResponse.add(bvnResponse);
 
       if (bvnResponse?.responseCode == '00') {
-        if (bvnResponse.lastName != null && bvnResponse.lastName.isNotEmpty) {
-          _surnameController.add(CryptoHelper.decrypt(bvnResponse.lastName));
+        if (bvnResponse.lastName != null && bvnResponse.lastName!.isNotEmpty) {
+          _surnameController.add(CryptoHelper.decrypt(bvnResponse.lastName!));
           bvnlastNameValue = bvnResponse.lastName != null ? false : true;
         }
-        if (bvnResponse.firstName != null && bvnResponse.firstName.isNotEmpty) {
-          _firstNameController.add(CryptoHelper.decrypt(bvnResponse.firstName));
-          bvnFirstName = bvnResponse.firstName.isNotEmpty ? false : true;
+        if (bvnResponse.firstName != null &&
+            bvnResponse.firstName!.isNotEmpty) {
+          _firstNameController
+              .add(CryptoHelper.decrypt(bvnResponse.firstName!));
+          bvnFirstName = bvnResponse.firstName!.isNotEmpty ? false : true;
         }
         if (bvnResponse.middleName != null &&
-            bvnResponse.middleName.isNotEmpty) {
+            bvnResponse.middleName!.isNotEmpty) {
           _otherNameController
-              .add(CryptoHelper.decrypt(bvnResponse.middleName));
-          bvnOtherName = bvnResponse.email.isNotEmpty ? false : true;
+              .add(CryptoHelper.decrypt(bvnResponse.middleName!));
+          bvnOtherName = bvnResponse.email!.isNotEmpty ? false : true;
         }
-        if (bvnResponse.email != null && bvnResponse.email.isNotEmpty) {
-          _emailController.add(CryptoHelper.decrypt(bvnResponse.email));
-          bvnEmail = bvnResponse.email.isNotEmpty ? false : true;
+        if (bvnResponse.email != null && bvnResponse.email!.isNotEmpty) {
+          _emailController.add(CryptoHelper.decrypt(bvnResponse.email!));
+          bvnEmail = bvnResponse.email!.isNotEmpty ? false : true;
         }
         if (bvnResponse.title != null && bvnResponse.title.isNotEmpty) {
           _titleController.add(bvnResponse.title);
           bvnTitle = bvnResponse.title.isNotEmpty ? false : true;
         }
         if (bvnResponse.dateOfBirth != null &&
-            bvnResponse.dateOfBirth.isNotEmpty) {
+            bvnResponse.dateOfBirth!.isNotEmpty) {
           _dateOfBirthController
-              .add(CryptoHelper.decrypt(bvnResponse.dateOfBirth));
+              .add(CryptoHelper.decrypt(bvnResponse.dateOfBirth!));
 
-          bvnDateOfBirths = bvnResponse.dateOfBirth.isNotEmpty ? false : true;
+          bvnDateOfBirths = bvnResponse.dateOfBirth!.isNotEmpty ? false : true;
           _isDateOfBirthChangeController.add(bvnDateOfBirths);
         }
-        if (bvnResponse.gender != null && bvnResponse.gender.isNotEmpty) {
+        if (bvnResponse.gender != null && bvnResponse.gender!.isNotEmpty) {
           _genderController.add(bvnResponse.gender);
-          bvnGender = bvnResponse.gender.isNotEmpty ? false : true;
+          bvnGender = bvnResponse.gender!.isNotEmpty ? false : true;
           _isGenderChangeController.add(bvnGender);
         }
         if (bvnResponse.phoneNumber != null &&
-            bvnResponse.phoneNumber.isNotEmpty) {
-          var decryptedPhone = CryptoHelper.decrypt(bvnResponse.phoneNumber);
+            bvnResponse.phoneNumber!.isNotEmpty) {
+          var decryptedPhone = CryptoHelper.decrypt(bvnResponse.phoneNumber!);
           if (decryptedPhone != null && decryptedPhone.startsWith('0')) {
             decryptedPhone = decryptedPhone.replaceFirst('0', '');
             _phoneNumberController.add(decryptedPhone);
-            bvnPhone = bvnResponse.phoneNumber.isNotEmpty ? false : true;
+            bvnPhone = bvnResponse.phoneNumber!.isNotEmpty ? false : true;
           }
         }
         if (bvnResponse.stateOfOrigin != null &&
-            bvnResponse.stateOfOrigin.isNotEmpty) {
+            bvnResponse.stateOfOrigin!.isNotEmpty) {
           _stateOfResidenceController
-              .add(bvnResponse.stateOfOrigin.toUpperCase());
-          bvnState = bvnResponse.phoneNumber.isNotEmpty ? false : true;
+              .add(bvnResponse.stateOfOrigin!.toUpperCase());
+          bvnState = bvnResponse.phoneNumber!.isNotEmpty ? false : true;
           _isStateOfOriginChangeController.add(bvnState);
         }
         if (bvnResponse.maritalStatus != null &&
-            bvnResponse.maritalStatus.isNotEmpty) {
+            bvnResponse.maritalStatus!.isNotEmpty) {
           _maritalStatusController.add(bvnResponse.maritalStatus);
           bvnMaritalStatus =
-              bvnResponse.maritalStatus.isNotEmpty ? false : true;
+              bvnResponse.maritalStatus!.isNotEmpty ? false : true;
           _isMaritalStatusChangeController.add(bvnMaritalStatus);
         }
         if (bvnResponse.residentialAddress != null &&
-            bvnResponse.residentialAddress.isNotEmpty) {
+            bvnResponse.residentialAddress!.isNotEmpty) {
           _address1Controller
-              .add(CryptoHelper.decrypt(bvnResponse.residentialAddress));
+              .add(CryptoHelper.decrypt(bvnResponse.residentialAddress!));
           bvnResidentialAddress =
-              bvnResponse.residentialAddress.isNotEmpty ? false : true;
+              bvnResponse.residentialAddress!.isNotEmpty ? false : true;
         }
         if (bvnResponse.stateOfResidence != null &&
-            bvnResponse.stateOfResidence.isNotEmpty) {
+            bvnResponse.stateOfResidence!.isNotEmpty) {
           _stateOfResidenceController.add(bvnResponse.stateOfResidence);
           bvnStateOfResidence =
-              bvnResponse.stateOfResidence.isNotEmpty ? false : true;
+              bvnResponse.stateOfResidence!.isNotEmpty ? false : true;
           _isStateOfResidenceChangeController.add(bvnStateOfResidence);
         }
       } else {
@@ -1379,12 +1386,12 @@ class AccountFormBloc extends BlocBase with Validators {
     _currentFormCategoryController.sink.add(category);
   }
 
-  getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     try {
       final Location location = Location();
 
       LocationData _location;
-      StreamSubscription<LocationData> _locationSubscription;
+      late StreamSubscription<LocationData> _locationSubscription;
       bool _serviceEnabled;
       PermissionStatus _permissionGranted;
 
@@ -1411,7 +1418,7 @@ class AccountFormBloc extends BlocBase with Validators {
         _locationSubscription.cancel();
       }).listen((LocationData currentLocation) {
         _location = currentLocation;
-        return currentLocation;
+        // return currentLocation;
       });
       _subjectLocation.sink.add(_location);
       _latitudeController.sink.add(_location.latitude.toString());
@@ -1439,10 +1446,9 @@ class AccountFormBloc extends BlocBase with Validators {
         // print(CryptoHelper.decrypt("cAjVqZrxDJO01zjVe4SV6Q=="));
         // print(CryptoHelper.decrypt(
         //     "m/p8hrMIVm76MoR7fpGSfqqKGnt2e7zOUt5EFdEJfoQ="));
-        print(CryptoHelper.decrypt(identityResponse.fullName));
+        print(CryptoHelper.decrypt(identityResponse.fullName!));
 
         print(identityResponse.photo);
-
       } else {
         driverLicenseVerificationResponse
             .addError('Could not verify the Driver License provided. ');
@@ -1520,7 +1526,7 @@ class AccountFormBloc extends BlocBase with Validators {
   PublishSubject<String> get subjectOfflineDetailsResponse =>
       _subjectOfflineDetailsResponse;
 
-  getOfflineAccountDetailsByRefId(String referenceId) async {
+  getOfflineAccountDetailsByRefId(String? referenceId) async {
     _isEditModeController.add(true);
 
     await _accountsRepository
@@ -1538,93 +1544,94 @@ class AccountFormBloc extends BlocBase with Validators {
         _accountHolderTypeController.add('INDIVIDUAL');
 
         if (offlineAccount.riskRank != null &&
-            offlineAccount.riskRank.isNotEmpty) {
+            offlineAccount.riskRank!.isNotEmpty) {
           _riskRankController.add(offlineAccount.riskRank);
         }
-        if (offlineAccount.mmda != null && offlineAccount.mmda.isNotEmpty) {
+        if (offlineAccount.mmda != null && offlineAccount.mmda!.isNotEmpty) {
           _mmdaController.add(offlineAccount.mmda);
         }
 
         if (offlineAccount.accountCategory != null &&
-            offlineAccount.accountCategory.isNotEmpty) {
+            offlineAccount.accountCategory!.isNotEmpty) {
           _accountCategoryController.add(offlineAccount.accountCategory);
         }
 
-        if (offlineAccount.tin != null && offlineAccount.tin.isNotEmpty) {
+        if (offlineAccount.tin != null && offlineAccount.tin!.isNotEmpty) {
           _tinController.add(offlineAccount.tin);
         }
 
-        if (offlineAccount.title != null && offlineAccount.title.isNotEmpty) {
+        if (offlineAccount.title != null && offlineAccount.title!.isNotEmpty) {
           _titleController.add(offlineAccount.title);
         }
 
         if (offlineAccount.surname != null &&
-            offlineAccount.surname.isNotEmpty) {
+            offlineAccount.surname!.isNotEmpty) {
           _surnameController.add(offlineAccount.surname);
         }
         if (offlineAccount.firstName != null &&
-            offlineAccount.firstName.isNotEmpty) {
+            offlineAccount.firstName!.isNotEmpty) {
           _firstNameController.add(offlineAccount.firstName);
         }
 
         if (offlineAccount.otherName != null &&
-            offlineAccount.otherName.isNotEmpty) {
+            offlineAccount.otherName!.isNotEmpty) {
           _otherNameController.add(offlineAccount.otherName);
         }
 
         if (offlineAccount.mothersMaidenName != null &&
-            offlineAccount.mothersMaidenName.isNotEmpty) {
+            offlineAccount.mothersMaidenName!.isNotEmpty) {
           _mothersMaidenNameController.add(offlineAccount.mothersMaidenName);
         }
 
         if (offlineAccount.dateOfBirth != null &&
-            offlineAccount.dateOfBirth.isNotEmpty) {
+            offlineAccount.dateOfBirth!.isNotEmpty) {
           _dateOfBirthController.add(offlineAccount.dateOfBirth);
         }
 
         if (offlineAccount.stateOfOrigin != null &&
-            offlineAccount.stateOfOrigin.isNotEmpty) {
+            offlineAccount.stateOfOrigin!.isNotEmpty) {
           _stateOfResidenceController.add(offlineAccount.stateOfOrigin);
         }
         if (offlineAccount.placeOfBirth != null &&
-            offlineAccount.placeOfBirth.isNotEmpty) {
+            offlineAccount.placeOfBirth!.isNotEmpty) {
           _placeOfBirthController.add(offlineAccount.placeOfBirth);
         }
         _countryOfOriginController.add('GHANA');
 
-        if (offlineAccount.email != null && offlineAccount.email.isNotEmpty) {
+        if (offlineAccount.email != null && offlineAccount.email!.isNotEmpty) {
           _emailController.add(offlineAccount.email);
         }
 
-        if (offlineAccount.phone != null && offlineAccount.phone.isNotEmpty) {
+        if (offlineAccount.phone != null && offlineAccount.phone!.isNotEmpty) {
           _phoneNumberController.add(offlineAccount.phone);
         }
 
         if (offlineAccount.nextOfKin != null &&
-            offlineAccount.nextOfKin.isNotEmpty) {
+            offlineAccount.nextOfKin!.isNotEmpty) {
           _nextOfKinController.add(offlineAccount.nextOfKin);
         }
 
         if (offlineAccount.address1 != null &&
-            offlineAccount.address1.isNotEmpty) {
+            offlineAccount.address1!.isNotEmpty) {
           _address1Controller.add(offlineAccount.address1);
         }
 
         if (offlineAccount.address2 != null &&
-            offlineAccount.address2.isNotEmpty) {
+            offlineAccount.address2!.isNotEmpty) {
           _address2Controller.add(offlineAccount.address2);
         }
 
         if (offlineAccount.stateOfResidence != null &&
-            offlineAccount.stateOfResidence.isNotEmpty) {
+            offlineAccount.stateOfResidence!.isNotEmpty) {
           _stateOfResidenceController.add(offlineAccount.stateOfResidence);
         }
         if (offlineAccount.cityOfResidence != null &&
-            offlineAccount.cityOfResidence.isNotEmpty) {
+            offlineAccount.cityOfResidence!.isNotEmpty) {
           _cityOfResidenceController.add(offlineAccount.cityOfResidence);
         }
 
-        if (offlineAccount.gender != null && offlineAccount.gender.isNotEmpty) {
+        if (offlineAccount.gender != null &&
+            offlineAccount.gender!.isNotEmpty) {
           if (offlineAccount.gender == 'M') {
             _genderController.add('MALE');
           } else {
@@ -1633,39 +1640,40 @@ class AccountFormBloc extends BlocBase with Validators {
         }
 
         if (offlineAccount.occupation != null &&
-            offlineAccount.occupation.isNotEmpty) {
+            offlineAccount.occupation!.isNotEmpty) {
           occupationController.add(offlineAccount.occupation);
         }
 
         if (offlineAccount.maritalStatus != null &&
-            offlineAccount.maritalStatus.isNotEmpty) {
+            offlineAccount.maritalStatus!.isNotEmpty) {
           _maritalStatusController.add(offlineAccount.maritalStatus);
         }
 
-        if (offlineAccount.idType != null && offlineAccount.idType.isNotEmpty) {
+        if (offlineAccount.idType != null &&
+            offlineAccount.idType!.isNotEmpty) {
           _idTypeController.add(offlineAccount.idType);
         }
 
         if (offlineAccount.idIssuer != null &&
-            offlineAccount.idIssuer.isNotEmpty) {
+            offlineAccount.idIssuer!.isNotEmpty) {
           _idIssuerController.add(offlineAccount.idIssuer);
         }
 
         if (offlineAccount.idNumber != null &&
-            offlineAccount.idNumber.isNotEmpty) {
+            offlineAccount.idNumber!.isNotEmpty) {
           _idNumberController.add(offlineAccount.idNumber);
         }
         if (offlineAccount.idPlaceOfIssue != null &&
-            offlineAccount.idPlaceOfIssue.isNotEmpty) {
+            offlineAccount.idPlaceOfIssue!.isNotEmpty) {
           _idPlaceOfIssueController.add(offlineAccount.idPlaceOfIssue);
         }
 
         if (offlineAccount.idIssueDate != null &&
-            offlineAccount.idIssueDate.isNotEmpty) {
+            offlineAccount.idIssueDate!.isNotEmpty) {
           _idIssueDateController.add(offlineAccount.idIssueDate);
         }
         if (offlineAccount.idExpiryDate != null &&
-            offlineAccount.idExpiryDate.isNotEmpty) {
+            offlineAccount.idExpiryDate!.isNotEmpty) {
           _idExpiryDateController.add(offlineAccount.idExpiryDate);
         }
 
@@ -1682,20 +1690,21 @@ class AccountFormBloc extends BlocBase with Validators {
         _isBankToWalletController.add(offlineAccount.isBankToWallet);
         _isScanToPayController.add(offlineAccount.isScanToPay);
 
-        if (offlineAccount.idCard != null && offlineAccount.idCard.isNotEmpty) {
+        if (offlineAccount.idCard != null &&
+            offlineAccount.idCard!.isNotEmpty) {
           _uploadIdImageController.add(offlineAccount.idCard);
         }
 
         if (offlineAccount.passport != null &&
-            offlineAccount.passport.isNotEmpty) {
+            offlineAccount.passport!.isNotEmpty) {
           _uploadPassportController.add(offlineAccount.passport);
         }
         if (offlineAccount.utility != null &&
-            offlineAccount.utility.isNotEmpty) {
+            offlineAccount.utility!.isNotEmpty) {
           _uploadUtilityBillController.add(offlineAccount.utility);
         }
         if (offlineAccount.signature != null &&
-            offlineAccount.signature.isNotEmpty) {
+            offlineAccount.signature!.isNotEmpty) {
           _uploadSignatureController.add(offlineAccount.signature);
         }
       } else {
@@ -1707,56 +1716,56 @@ class AccountFormBloc extends BlocBase with Validators {
     });
   }
 
-  getAccountsDetailsByReferenceId(String referenceId) async {
+  getAccountsDetailsByReferenceId(String? referenceId) async {
     _referenceIdController.add(referenceId);
 
     await _accountsRepository
         .getAccountsDetailsByReference(referenceId)
         .then((accountResponse) async {
       subjectAccountsDetailsResponse.add(accountResponse);
-      if (accountResponse.status) {
+      if (accountResponse.status!) {
 //        if (accountResponse.data.refId != null &&
 //            accountResponse.data.refId.isNotEmpty) {
 //          _referenceIdController.add(accountResponse.data.refId);
 //        }
 
-        if (accountResponse.data.accountType != null &&
-            accountResponse.data.accountType.isNotEmpty) {
-          if (accountResponse.data.accountType == 'SA') {
+        if (accountResponse.data!.accountType != null &&
+            accountResponse.data!.accountType!.isNotEmpty) {
+          if (accountResponse.data!.accountType == 'SA') {
             _accountTypeController.add('SAVINGS ACCOUNT');
           } else {
             _accountTypeController.add('CURRENT ACCOUNT');
           }
         }
         _accountHolderTypeController.add('INDIVIDUAL');
-        if (accountResponse.data.riskRank != null &&
-            accountResponse.data.riskRank.isNotEmpty) {
-          _riskRankController.add(accountResponse.data.riskRank);
+        if (accountResponse.data!.riskRank != null &&
+            accountResponse.data!.riskRank!.isNotEmpty) {
+          _riskRankController.add(accountResponse.data!.riskRank);
         }
 
         if (accountResponse.data?.signatoryDetails?.first?.mmda != null &&
-            accountResponse.data.signatoryDetails.first.mmda.isNotEmpty) {
+            accountResponse.data!.signatoryDetails!.first.mmda!.isNotEmpty) {
           try {
             List<StateEntity> states = await DBProvider.db.getStates();
 
             var mmda = states
                 .firstWhere(
-                    (x) => x.srn.toString() == accountResponse.data.state)
+                    (x) => x.srn.toString() == accountResponse.data!.state)
                 .mmda
                 .toString(); //hotfix: to solve issue of mmda  filter from state on edit
 
             if (mmda != null) _mmdaController.add(mmda);
           } catch (err) {
-            _mmdaController.add(accountResponse.data.classCode);
+            _mmdaController.add(accountResponse.data!.classCode);
           }
         }
         if (accountResponse.data?.signatoryDetails?.first?.placeOfBirth !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.placeOfBirth.isNotEmpty) {}
-        if (accountResponse.data.classCode != null &&
-            accountResponse.data.classCode.isNotEmpty) {
-          print('log class code ${accountResponse.data.classCode}');
+                .data!.signatoryDetails!.first.placeOfBirth!.isNotEmpty) {}
+        if (accountResponse.data!.classCode != null &&
+            accountResponse.data!.classCode!.isNotEmpty) {
+          print('log class code ${accountResponse.data!.classCode}');
 
           try {
             List<AccountClassEntity> accountClasses =
@@ -1764,40 +1773,43 @@ class AccountFormBloc extends BlocBase with Validators {
 
             var accountCategory = accountClasses
                 .firstWhere(
-                    (x) => x.id.toString() == accountResponse.data.classCode)
+                    (x) => x.id.toString() == accountResponse.data!.classCode)
                 .name
                 .toString(); //hotfix: to solve issue of account category filter from account type on edit
 
             if (accountCategory != null)
               _accountCategoryController.add(accountCategory);
           } catch (err) {
-            _accountCategoryController.add(accountResponse.data.classCode);
+            _accountCategoryController.add(accountResponse.data!.classCode);
           }
         }
-        if (accountResponse.data.tin != null &&
-            accountResponse.data.tin.isNotEmpty) {
-          _tinController.add(CryptoHelper.decrypt(accountResponse.data.tin));
+        if (accountResponse.data!.tin != null &&
+            accountResponse.data!.tin.isNotEmpty) {
+          _tinController.add(CryptoHelper.decrypt(accountResponse.data!.tin));
         }
 
-        if (accountResponse.data.title != null &&
-            accountResponse.data.title.isNotEmpty) {
-          _titleController.add(accountResponse.data.title);
+        if (accountResponse.data!.title != null &&
+            accountResponse.data!.title!.isNotEmpty) {
+          _titleController.add(accountResponse.data!.title);
         }
-        if (accountResponse.data.signatoryDetails?.first?.lastName != null &&
-            accountResponse.data.signatoryDetails.first.lastName.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.lastName != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.lastName!.isNotEmpty) {
           _surnameController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.lastName));
+              accountResponse.data!.signatoryDetails!.first.lastName!));
         }
-        if (accountResponse.data.signatoryDetails?.first?.firstName != null &&
-            accountResponse.data.signatoryDetails.first.firstName.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.firstName != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.firstName!.isNotEmpty) {
           _firstNameController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.firstName));
+              accountResponse.data!.signatoryDetails!.first.firstName!));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.middleName != null &&
-            accountResponse.data.signatoryDetails.first.middleName.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.middleName != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.middleName!.isNotEmpty) {
           _otherNameController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.middleName));
+              accountResponse.data!.signatoryDetails!.first.middleName!));
         }
 
 //        if (accountResponse.data.signatoryDetails?.first?.middleName != null &&
@@ -1806,19 +1818,20 @@ class AccountFormBloc extends BlocBase with Validators {
 //              accountResponse.data.signatoryDetails.first.middleName));
 //        }
 
-        if (accountResponse.data.signatoryDetails?.first?.motherMaidenName !=
+        if (accountResponse.data!.signatoryDetails?.first?.motherMaidenName !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.motherMaidenName.isNotEmpty) {
+                .data!.signatoryDetails!.first.motherMaidenName!.isNotEmpty) {
           _mothersMaidenNameController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.motherMaidenName));
+              accountResponse.data!.signatoryDetails!.first.motherMaidenName!));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.dateOfBirth != null &&
+        if (accountResponse.data!.signatoryDetails?.first?.dateOfBirth !=
+                null &&
             accountResponse
-                .data.signatoryDetails.first.dateOfBirth.isNotEmpty) {
+                .data!.signatoryDetails!.first.dateOfBirth!.isNotEmpty) {
           _dateOfBirthController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.dateOfBirth));
+              accountResponse.data!.signatoryDetails!.first.dateOfBirth!));
         }
 
 //        if (accountResponse.data.signatoryDetails?.first?.dateOfBirth != null &&
@@ -1828,183 +1841,191 @@ class AccountFormBloc extends BlocBase with Validators {
 //              accountResponse.data.signatoryDetails.first.dateOfBirth));
 //        }
 
-        if (accountResponse.data.signatoryDetails?.first?.stateOfOrigin !=
+        if (accountResponse.data!.signatoryDetails?.first?.stateOfOrigin !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.stateOfOrigin.isNotEmpty) {
+                .data!.signatoryDetails!.first.stateOfOrigin!.isNotEmpty) {
           _stateOfResidenceController
-              .add(accountResponse.data.signatoryDetails.first.stateOfOrigin);
+              .add(accountResponse.data!.signatoryDetails!.first.stateOfOrigin);
         }
         _countryOfOriginController.add('GHANA');
 
-        if (accountResponse.data.signatoryDetails?.first?.emailAddress !=
+        if (accountResponse.data!.signatoryDetails?.first?.emailAddress !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.emailAddress.isNotEmpty) {
+                .data!.signatoryDetails!.first.emailAddress!.isNotEmpty) {
           _emailController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.emailAddress));
+              accountResponse.data!.signatoryDetails!.first.emailAddress!));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.phoneNumber != null &&
+        if (accountResponse.data!.signatoryDetails?.first?.phoneNumber !=
+                null &&
             accountResponse
-                .data.signatoryDetails.first.phoneNumber.isNotEmpty) {
+                .data!.signatoryDetails!.first.phoneNumber!.isNotEmpty) {
           _phoneNumberController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.phoneNumber));
+              accountResponse.data!.signatoryDetails!.first.phoneNumber!));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.nextOfKin != null &&
-            accountResponse.data.signatoryDetails.first.nextOfKin.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.nextOfKin != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.nextOfKin!.isNotEmpty) {
           _nextOfKinController.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.nextOfKin));
+              accountResponse.data!.signatoryDetails!.first.nextOfKin!));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.addressLine1 !=
+        if (accountResponse.data!.signatoryDetails?.first?.addressLine1 !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.addressLine1.isNotEmpty) {
+                .data!.signatoryDetails!.first.addressLine1!.isNotEmpty) {
           _address1Controller.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.addressLine1));
+              accountResponse.data!.signatoryDetails!.first.addressLine1!));
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.addressLine2 !=
+        if (accountResponse.data!.signatoryDetails?.first?.addressLine2 !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.addressLine2.isNotEmpty) {
+                .data!.signatoryDetails!.first.addressLine2!.isNotEmpty) {
           _address2Controller.add(CryptoHelper.decrypt(
-              accountResponse.data.signatoryDetails.first.addressLine2));
+              accountResponse.data!.signatoryDetails!.first.addressLine2!));
         }
         _countryOfResidenceController.add('GHANA');
 
-        if (accountResponse.data.signatoryDetails?.first?.state != null &&
-            accountResponse.data.signatoryDetails.first.state.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.state != null &&
+            accountResponse.data!.signatoryDetails!.first.state!.isNotEmpty) {
           _stateOfResidenceController
-              .add(accountResponse.data.signatoryDetails.first.state);
+              .add(accountResponse.data!.signatoryDetails!.first.state);
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.city != null &&
-            accountResponse.data.signatoryDetails.first.city.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.city != null &&
+            accountResponse.data!.signatoryDetails!.first.city!.isNotEmpty) {
           _cityOfResidenceController
-              .add(accountResponse.data.signatoryDetails.first.city);
+              .add(accountResponse.data!.signatoryDetails!.first.city);
         }
-        if (accountResponse.data.signatoryDetails?.first?.sex != null &&
-            accountResponse.data.signatoryDetails.first.sex.isNotEmpty) {
-          if (accountResponse.data.signatoryDetails.first.sex == 'M') {
+        if (accountResponse.data!.signatoryDetails?.first?.sex != null &&
+            accountResponse.data!.signatoryDetails!.first.sex!.isNotEmpty) {
+          if (accountResponse.data!.signatoryDetails!.first.sex == 'M') {
             _genderController.add('MALE');
           } else {
             _genderController.add('FEMALE');
           }
         }
-        if (accountResponse.data.signatoryDetails?.first?.occupation != null &&
-            accountResponse.data.signatoryDetails.first.occupation.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.occupation != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.occupation!.isNotEmpty) {
           occupationController
-              .add(accountResponse.data.signatoryDetails.first.occupation);
+              .add(accountResponse.data!.signatoryDetails!.first.occupation);
         }
-        if (accountResponse.data.signatoryDetails?.first?.maritalStatus !=
+        if (accountResponse.data!.signatoryDetails?.first?.maritalStatus !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.maritalStatus.isNotEmpty) {
+                .data!.signatoryDetails!.first.maritalStatus!.isNotEmpty) {
           _maritalStatusController
-              .add(accountResponse.data.signatoryDetails.first.maritalStatus);
+              .add(accountResponse.data!.signatoryDetails!.first.maritalStatus);
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.meansOfId != null &&
-            accountResponse.data.signatoryDetails.first.meansOfId.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.meansOfId != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.meansOfId!.isNotEmpty) {
           _idTypeController
-              .add(accountResponse.data.signatoryDetails.first.meansOfId);
+              .add(accountResponse.data!.signatoryDetails!.first.meansOfId);
         }
-        if (accountResponse.data.signatoryDetails?.first?.idIssuer != null &&
-            accountResponse.data.signatoryDetails.first.idIssuer.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.idIssuer != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.idIssuer!.isNotEmpty) {
           _idIssuerController
-              .add(accountResponse.data.signatoryDetails.first.idIssuer);
+              .add(accountResponse.data!.signatoryDetails!.first.idIssuer);
         }
-        if (accountResponse.data.signatoryDetails?.first?.idNumber != null &&
-            accountResponse.data.signatoryDetails.first.idNumber.isNotEmpty) {
+        if (accountResponse.data!.signatoryDetails?.first?.idNumber != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.idNumber!.isNotEmpty) {
           _idNumberController
-              .add(accountResponse.data.signatoryDetails.first.idNumber);
+              .add(accountResponse.data!.signatoryDetails!.first.idNumber);
         }
-        if (accountResponse.data.signatoryDetails?.first?.idPlaceOfIssue !=
+        if (accountResponse.data!.signatoryDetails?.first?.idPlaceOfIssue !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.idPlaceOfIssue.isNotEmpty) {
-          _idPlaceOfIssueController
-              .add(accountResponse.data.signatoryDetails.first.idPlaceOfIssue);
+                .data!.signatoryDetails!.first.idPlaceOfIssue!.isNotEmpty) {
+          _idPlaceOfIssueController.add(
+              accountResponse.data!.signatoryDetails!.first.idPlaceOfIssue);
         }
-        if (accountResponse.data.signatoryDetails?.first?.idIssueDate != null &&
+        if (accountResponse.data!.signatoryDetails?.first?.idIssueDate !=
+                null &&
             accountResponse
-                .data.signatoryDetails.first.idIssueDate.isNotEmpty) {
+                .data!.signatoryDetails!.first.idIssueDate!.isNotEmpty) {
           _idIssueDateController
-              .add(accountResponse.data.signatoryDetails.first.idIssueDate);
+              .add(accountResponse.data!.signatoryDetails!.first.idIssueDate);
         }
-        if (accountResponse.data.signatoryDetails?.first?.idExpiryDate !=
+        if (accountResponse.data!.signatoryDetails?.first?.idExpiryDate !=
                 null &&
             accountResponse
-                .data.signatoryDetails.first.idExpiryDate.isNotEmpty) {
+                .data!.signatoryDetails!.first.idExpiryDate!.isNotEmpty) {
           _idExpiryDateController
-              .add(accountResponse.data.signatoryDetails.first.idExpiryDate);
+              .add(accountResponse.data!.signatoryDetails!.first.idExpiryDate);
         }
         if (accountResponse
-                    .data.signatoryDetails?.first?.useEmailForStatement !=
+                    .data!.signatoryDetails?.first?.useEmailForStatement !=
                 null &&
-            accountResponse
-                .data.signatoryDetails.first.useEmailForStatement.isNotEmpty) {
+            accountResponse.data!.signatoryDetails!.first.useEmailForStatement!
+                .isNotEmpty) {
           if (accountResponse
-                  .data.signatoryDetails.first.useEmailForStatement ==
+                  .data!.signatoryDetails!.first.useEmailForStatement ==
               "Y") {
             _isScanToPayController.add(true);
           }
         }
 
         if (accountResponse.data?.alertZRequest != null &&
-            accountResponse.data.alertZRequest.isNotEmpty) {
-          if (accountResponse.data.alertZRequest == "Y") {
+            accountResponse.data!.alertZRequest!.isNotEmpty) {
+          if (accountResponse.data!.alertZRequest == "Y") {
             _isZMobileController.add(true);
           }
         }
         if (accountResponse.data?.tokenRequest != null &&
-            accountResponse.data.tokenRequest.isNotEmpty) {
-          if (accountResponse.data.tokenRequest == "Y") {
+            accountResponse.data!.tokenRequest!.isNotEmpty) {
+          if (accountResponse.data!.tokenRequest == "Y") {
             _isZPromptController.add(true);
           }
         }
         if (accountResponse.data?.ibankRequest != null &&
-            accountResponse.data.ibankRequest.isNotEmpty) {
-          if (accountResponse.data.ibankRequest == "Y") {
+            accountResponse.data!.ibankRequest!.isNotEmpty) {
+          if (accountResponse.data!.ibankRequest == "Y") {
             _isStatementViaEmailController.add(true);
           }
         }
 
         //Todo get the right details
         if (accountResponse.data?.tokenRequest != null &&
-            accountResponse.data.tokenRequest.isNotEmpty) {
-          if (accountResponse.data.tokenRequest == "Y") {
+            accountResponse.data!.tokenRequest!.isNotEmpty) {
+          if (accountResponse.data!.tokenRequest == "Y") {
             _isUssdController.add(true);
           }
         }
         if (accountResponse.data?.ibankRequest != null &&
-            accountResponse.data.ibankRequest.isNotEmpty) {
-          if (accountResponse.data.ibankRequest == "Y") {
+            accountResponse.data!.ibankRequest!.isNotEmpty) {
+          if (accountResponse.data!.ibankRequest == "Y") {
             _isBankToWalletController.add(true);
           }
         }
 
-        if (accountResponse.data.signatoryDetails?.first?.attachments != null) {
+        if (accountResponse.data!.signatoryDetails?.first?.attachments !=
+            null) {
           var _idCardAttachment = accountResponse
-              .data.signatoryDetails.first.attachments
+              .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'IdentityCard')
               .toList();
 
           var _passportAttachment = accountResponse
-              .data.signatoryDetails.first.attachments
+              .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'PassportPhoto')
               .toList();
 
           var _utilityBillAttachment = accountResponse
-              .data.signatoryDetails.first.attachments
+              .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'UtilityBill')
               .toList();
 
           var _signatoryAttachment = accountResponse
-              .data.signatoryDetails.first.attachments
+              .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'Signatory')
               .toList();
 
@@ -2032,7 +2053,7 @@ class AccountFormBloc extends BlocBase with Validators {
           }
         }
       } else {
-        _subjectAccountsDetailsResponse.addError(accountResponse?.message);
+        _subjectAccountsDetailsResponse.addError(accountResponse.message!);
       }
     }).catchError((error) {
       _subjectAccountsDetailsResponse.addError(error);

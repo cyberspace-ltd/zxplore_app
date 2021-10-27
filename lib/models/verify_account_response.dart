@@ -7,9 +7,9 @@ String verifyAccountResponseToJson(VerifyAccountResponse data) =>
     json.encode(data.toJson());
 
 class VerifyAccountResponse {
-  bool status;
-  String message;
-  Data data;
+  bool? status;
+  String? message;
+  Data? data;
 
   VerifyAccountResponse({
     this.status,
@@ -32,16 +32,16 @@ class VerifyAccountResponse {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data.toJson(),
+        "data": data!.toJson(),
       };
 }
 
 class Data {
-  String responseCode;
-  String responseMessage;
-  String accountNumber;
-  String status;
-  int wkfId;
+  String? responseCode;
+  String? responseMessage;
+  String? accountNumber;
+  String? status;
+  int? wkfId;
 
   Data({
     this.responseCode,

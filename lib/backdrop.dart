@@ -13,7 +13,7 @@ const double _kFlingVelocity = 2.0;
 
 class _BackdropPanel extends StatelessWidget {
   const _BackdropPanel({
-    Key key,
+    Key? key,
     this.onTap,
     this.onVerticalDragUpdate,
     this.onVerticalDragEnd,
@@ -21,11 +21,11 @@ class _BackdropPanel extends StatelessWidget {
     this.child,
   }) : super(key: key);
 
-  final VoidCallback onTap;
-  final GestureDragUpdateCallback onVerticalDragUpdate;
-  final GestureDragEndCallback onVerticalDragEnd;
-  final Widget title;
-  final Widget child;
+  final VoidCallback? onTap;
+  final GestureDragUpdateCallback? onVerticalDragUpdate;
+  final GestureDragEndCallback? onVerticalDragEnd;
+  final Widget? title;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +48,8 @@ class _BackdropPanel extends StatelessWidget {
               padding: EdgeInsetsDirectional.only(start: 16.0),
               alignment: AlignmentDirectional.centerStart,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.subtitle1,
-                child: title,
+                style: Theme.of(context).textTheme.subtitle1!,
+                child: title!,
               ),
             ),
           ),
@@ -57,7 +57,7 @@ class _BackdropPanel extends StatelessWidget {
             height: 1.0,
           ),
           Expanded(
-            child: child,
+            child: child!,
           ),
         ],
       ),
@@ -66,19 +66,19 @@ class _BackdropPanel extends StatelessWidget {
 }
 
 class _BackdropTitle extends AnimatedWidget {
-  final Widget frontTitle;
-  final Widget backTitle;
+  final Widget? frontTitle;
+  final Widget? backTitle;
 
   const _BackdropTitle({
-    Key key,
-    Listenable listenable,
+    Key? key,
+    required Listenable listenable,
     this.frontTitle,
     this.backTitle,
   }) : super(key: key, listenable: listenable);
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> animation = this.listenable;
+    final Animation<double> animation = this.listenable as Animation<double>;
     return DefaultTextStyle(
       style: TextStyle(color: Colors.white),
       softWrap: false,
@@ -121,12 +121,12 @@ class Backdrop extends StatefulWidget {
   final Widget backTitle;
   final AccountFormBloc accountFormBloc;
   const Backdrop({
-    @required this.currentCategory,
-    @required this.frontPanel,
-    @required this.backPanel,
-    @required this.frontTitle,
-    @required this.backTitle,
-    @required this.accountFormBloc,
+    required this.currentCategory,
+    required this.frontPanel,
+    required this.backPanel,
+    required this.frontTitle,
+    required this.backTitle,
+    required this.accountFormBloc,
   })  : assert(currentCategory != null),
         assert(frontPanel != null),
         assert(backPanel != null),
@@ -141,8 +141,8 @@ class Backdrop extends StatefulWidget {
 class _BackdropState extends State<Backdrop>
     with SingleTickerProviderStateMixin {
   final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
-  AnimationController _controller;
-  AccountFormBloc _accountFormBloc;
+  late AnimationController _controller;
+  late AccountFormBloc _accountFormBloc;
   @override
   void initState() {
     super.initState();
@@ -192,7 +192,7 @@ class _BackdropState extends State<Backdrop>
   }
 
   double get _backdropHeight {
-    final RenderBox renderBox = _backdropKey.currentContext.findRenderObject();
+    final RenderBox renderBox = _backdropKey.currentContext!.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 
@@ -203,7 +203,7 @@ class _BackdropState extends State<Backdrop>
     if (_controller.isAnimating ||
         _controller.status == AnimationStatus.completed) return;
 
-    _controller.value -= details.primaryDelta / _backdropHeight;
+    _controller.value -= details.primaryDelta! / _backdropHeight;
   }
 
   void _handleDragEnd(DragEndDetails details) {

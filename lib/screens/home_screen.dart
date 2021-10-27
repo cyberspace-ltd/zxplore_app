@@ -19,7 +19,7 @@ import '../models/accounts_response.dart';
 import '../utils/zxplore_crypto_helper.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -30,23 +30,23 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  final String? title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List accounts;
-  AccountsBloc _accountsBloc;
-  var token = "";
+  List? accounts;
+  late AccountsBloc _accountsBloc;
+  String? token = "";
 
-  Future<List<String>> occupations;
-  OccupationsBloc _occupationsBloc;
-  CountriesBloc _countriesBloc;
-  StatesBloc statesBloc;
-  CitiesBloc _citiesBloc;
-  AccountClassBloc _accountClassBloc;
+  Future<List<String>>? occupations;
+  late OccupationsBloc _occupationsBloc;
+  late CountriesBloc _countriesBloc;
+  late StatesBloc statesBloc;
+  late CitiesBloc _citiesBloc;
+  late AccountClassBloc _accountClassBloc;
 
   @override
   void initState() {
@@ -129,9 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                   fontStyle: FontStyle.normal, color: ZxplorePrimaryColor)),
           onPressed: () async {
-            if (token.isEmpty) {
+            if (token!.isEmpty) {
               token = await SecureStorage.getEmployeeToken();
-            } else if(token.isNotEmpty){
+            } else if(token!.isNotEmpty){
 
               _fetchAccountClasses(token);
               _fetchStates(token);
@@ -359,7 +359,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  Color getColor(String selector) {
+  Color getColor(String? selector) {
     if (selector == 'Completed') {
       return ZxploreCompletedGreen;
     } else if (selector == 'Saved') {
@@ -388,7 +388,7 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsets.all(8.0),
           child: new Text.rich(
             TextSpan(
-              text: CryptoHelper.decrypt(form.accountName),
+              text: CryptoHelper.decrypt(form.accountName!),
               // default text style
               style: TextStyle(
                 color: Colors.black,
@@ -402,7 +402,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     text: '\n\n',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(
-                    text: ' +233${CryptoHelper.decrypt(form.phoneNumber)} ',
+                    text: ' +233${CryptoHelper.decrypt(form.phoneNumber!)} ',
                     style: TextStyle(
                         fontStyle: FontStyle.normal,
                         color: Colors.black54,
@@ -427,7 +427,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   var loadingBar = FlushbarHelper.createLoading(
                       message:
-                          "'Verifying account status for ${CryptoHelper.decrypt(form.accountName)}....",
+                          "'Verifying account status for ${CryptoHelper.decrypt(form.accountName!)}....",
                       linearProgressIndicator: null);
                   loadingBar..show(context);
                   _accountsBloc.verifyAccountByReferenceId(form.refId);
@@ -435,11 +435,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       .listen((response) {
                     loadingBar.dismiss();
 
-                    if (response.status) {
-                      if (response.data.accountNumber != null) {
+                    if (response.status!) {
+                      if (response.data!.accountNumber != null) {
                         FlushbarHelper.createSuccess(
                             message:
-                                '${response?.message} . Account number is: ${response.data.accountNumber}')
+                                '${response?.message} . Account number is: ${response.data!.accountNumber}')
                           ..show(context);
                       } else {
                         FlushbarHelper.createInformation(
@@ -485,7 +485,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           label: Text(
-            '${CryptoHelper.decrypt(form.accountNumber)}',
+            '${CryptoHelper.decrypt(form.accountNumber!)}',
           ));
 //          onPressed: () {});
     } else {
@@ -529,9 +529,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: accountsResponse.data.length,
+          itemCount: accountsResponse.data!.length,
           itemBuilder: (BuildContext context, int index) {
-            return makeCard(accountsResponse.data[index], _context);
+            return makeCard(accountsResponse.data![index], _context);
           },
         ),
       );
@@ -595,13 +595,13 @@ class _MyHomePageState extends State<MyHomePage> {
         stream: _accountsBloc.subjectAccountsResponse.stream,
         builder: (context, AsyncSnapshot<AccountsResponse> snapshot) {
           if (snapshot.hasData) {
-            if (!snapshot.data.status) {
+            if (!snapshot.data!.status!) {
               //todo: make use of error.
-              return _buildErrorWidget(snapshot.data.message);
+              return _buildErrorWidget(snapshot.data!.message!);
             }
-            return makeBody(snapshot.data, context);
+            return makeBody(snapshot.data!, context);
           } else if (snapshot.hasError) {
-            return _buildErrorWidget(snapshot.error);
+            return _buildErrorWidget(snapshot.error as String);
           } else {
             return _buildLoadingWidget();
           }
@@ -677,7 +677,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future _fetchStates(String token) async {
+  Future _fetchStates(String? token) async {
     await DBProvider.db.getStates().then((result) async {
       if (result.isEmpty) {
         await ZenithBankApi().fetchStates(token).then((result) {
@@ -692,7 +692,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchOccupations(String token) async {
+  Future _fetchOccupations(String? token) async {
     await DBProvider.db.getOccupations().then((result) async {
       if (result.isEmpty) {
         await ZenithBankApi().fetchOccupations(token).then((result) async {
@@ -707,7 +707,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchCountries(String token) async {
+  Future _fetchCountries(String? token) async {
     await DBProvider.db.getCountries().then((result) async {
       if (result.isEmpty) {
         await ZenithBankApi().fetchCountries(token).then((result) {
@@ -721,7 +721,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchCities(String token) async {
+  Future _fetchCities(String? token) async {
     await DBProvider.db.getCities().then((result) async {
       if (result.isEmpty) {
         await ZenithBankApi().fetchCities(token).then((result) {
@@ -735,7 +735,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future _fetchAccountClasses(String token) async {
+  Future _fetchAccountClasses(String? token) async {
     DBProvider.db.getAccountClasses().then((result) async {
       if (result.isEmpty) {
         await ZenithBankApi().fetchAccountClasses(token).then((result) {

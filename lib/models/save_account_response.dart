@@ -6,8 +6,8 @@ SaveAccountResponse saveAccountResponseFromJson(String str) =>
 String occupationToJson(SaveAccountResponse data) => json.encode(data.toJson());
 
 class SaveAccountResponse {
-  bool status;
-  String message;
+  bool? status;
+  String? message;
 
 
 

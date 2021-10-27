@@ -29,7 +29,7 @@ class AccountsBloc extends BlocBase {
 
   getAccounts() async {
     try {
-      String rsmId = await SecureStorage.getEmployeeId();
+      String? rsmId = await SecureStorage.getEmployeeId();
 
       AccountsResponse response =
           await _accountsRepository.getAccountsByRsmId(rsmId);
@@ -45,11 +45,11 @@ class AccountsBloc extends BlocBase {
     _OfflineAccounts.add(offlineAcccounts);
   }
 
-  deleteOfflineAccount(int id) async {
+  deleteOfflineAccount(int? id) async {
     await _accountsRepository.deleteOfflineAccount(id);
   }
 
-  verifyAccountByReferenceId(String referenceId) async {
+  verifyAccountByReferenceId(String? referenceId) async {
     try {
       VerifyAccountResponse response =
           await _accountsRepository.verifyAccountsByRefId(referenceId);

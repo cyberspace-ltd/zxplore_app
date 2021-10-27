@@ -19,14 +19,14 @@ import 'forms/upload_utility_bill.form.dart';
 class AccountFormPage extends StatefulWidget {
   final Category category;
 
-  final String accountReferenceId;
-  final AccountFormBloc accountFormBloc;
-  final bool isEditAccount;
+  final String? accountReferenceId;
+  final AccountFormBloc? accountFormBloc;
+  final bool? isEditAccount;
   final List<Category> categories;
   const AccountFormPage(
-      {@required this.category,
-      @required this.accountFormBloc,
-      @required this.categories,
+      {required this.category,
+      required this.accountFormBloc,
+      required this.categories,
       this.accountReferenceId,
       this.isEditAccount = false})
       : assert(category != null);
@@ -39,10 +39,10 @@ class _AccountFormPageState extends State<AccountFormPage>
     with AutomaticKeepAliveClientMixin<AccountFormPage> {
   PageController _controller = PageController();
 
-  Category category;
-  String accountReferenceId;
-  AccountFormBloc accountFormBloc;
-  bool _isEditAccount;
+  Category? category;
+  String? accountReferenceId;
+  AccountFormBloc? accountFormBloc;
+  bool? _isEditAccount;
   static const _kDuration = const Duration(milliseconds: 300);
 
   static const _kCurve = Curves.ease;
@@ -82,7 +82,7 @@ class _AccountFormPageState extends State<AccountFormPage>
 
     _setDefaults();
 
-    if (_isEditAccount && accountReferenceId != null) {
+    if (_isEditAccount! && accountReferenceId != null) {
       _getAccountDetailsFromDatabase(accountReferenceId);
     } else {
       if (accountReferenceId != null) {
@@ -95,13 +95,13 @@ class _AccountFormPageState extends State<AccountFormPage>
     setState(() {
       accountFormBloc = widget.accountFormBloc;
       category = widget.category;
-      accountFormBloc.setCurrentFormCategory(widget.category);
+      accountFormBloc!.setCurrentFormCategory(widget.category);
       accountReferenceId = widget.accountReferenceId;
       _isEditAccount = widget.isEditAccount;
     });
   }
 
-  _getAccountDetailsFromDatabase(String referenceId) {
+  _getAccountDetailsFromDatabase(String? referenceId) {
     var backButton = FlatButton(
       onPressed: () {
         Navigator.pop(context);
@@ -112,8 +112,8 @@ class _AccountFormPageState extends State<AccountFormPage>
       ),
     );
 
-    accountFormBloc.getOfflineAccountDetailsByRefId(referenceId);
-    accountFormBloc.subjectOfflineDetailsResponse
+    accountFormBloc!.getOfflineAccountDetailsByRefId(referenceId);
+    accountFormBloc!.subjectOfflineDetailsResponse
         .listen((message) {})
         .onError((error) {
       var errorSnackBar = FlushbarHelper.createErrorAction(
@@ -123,7 +123,7 @@ class _AccountFormPageState extends State<AccountFormPage>
     });
   }
 
-  _getAccountDetailsByReferenceId(String referenceId) {
+  _getAccountDetailsByReferenceId(String? referenceId) {
     Future.delayed(const Duration(milliseconds: 500), () {
       var backButton = FlatButton(
         onPressed: () {
@@ -140,12 +140,12 @@ class _AccountFormPageState extends State<AccountFormPage>
         linearProgressIndicator: null,
       );
 
-      accountFormBloc.getAccountsDetailsByReferenceId(referenceId);
+      accountFormBloc!.getAccountsDetailsByReferenceId(referenceId);
 
       loadingBar..show(context);
 
-      accountFormBloc.subjectAccountsDetailsResponse.listen((response) {
-        if (response.status) {
+      accountFormBloc!.subjectAccountsDetailsResponse.listen((response) {
+        if (response.status!) {
           loadingBar.dismiss();
           FlushbarHelper.createSuccess(
               message: 'Account retreived successfully.')
@@ -177,7 +177,7 @@ class _AccountFormPageState extends State<AccountFormPage>
     if (old.category != widget.category) {
       _setDefaults();
 
-      accountFormBloc.setCurrentFormCategory(widget.category);
+      accountFormBloc!.setCurrentFormCategory(widget.category);
 
       _controller.animateToPage(widget.category.id,
           duration: _kDuration, curve: _kCurve);
@@ -190,7 +190,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return BlocProvider<AccountFormBloc>(
+    return BlocProvider<AccountFormBloc?>(
       child: Form(
         key: this._formKey,
         child: Scaffold(
@@ -225,8 +225,8 @@ class _AccountFormPageState extends State<AccountFormPage>
                             onPressed: () {
                               _controller.previousPage(
                                   duration: _kDuration, curve: _kCurve);
-                              widget.accountFormBloc.setCurrentFormCategory(
-                                  widget.categories[_controller.page.toInt() - 1]);
+                              widget.accountFormBloc!.setCurrentFormCategory(
+                                  widget.categories[_controller.page!.toInt() - 1]);
                             }),
                         Center(
                           child: DotsIndicator(
@@ -247,8 +247,8 @@ class _AccountFormPageState extends State<AccountFormPage>
                             onPressed: () {
                               _controller.nextPage(
                                   duration: _kDuration, curve: _kCurve);
-                              widget.accountFormBloc.setCurrentFormCategory(
-                                  widget.categories[_controller.page.toInt() + 1]);
+                              widget.accountFormBloc!.setCurrentFormCategory(
+                                  widget.categories[_controller.page!.toInt() + 1]);
                             }),
                       ],
                     ),
@@ -276,7 +276,7 @@ class _AccountFormPageState extends State<AccountFormPage>
 /// An indicator showing the currently selected page of a PageController
 class DotsIndicator extends AnimatedWidget {
   DotsIndicator({
-    this.controller,
+    required this.controller,
     this.itemCount,
     this.onPageSelected,
     this.color: Colors.white,
@@ -286,10 +286,10 @@ class DotsIndicator extends AnimatedWidget {
   final PageController controller;
 
   /// The number of items managed by the PageController
-  final int itemCount;
+  final int? itemCount;
 
   /// Called when a dot is tapped
-  final ValueChanged<int> onPageSelected;
+  final ValueChanged<int>? onPageSelected;
 
   /// The color of the dots.
   ///
@@ -323,7 +323,7 @@ class DotsIndicator extends AnimatedWidget {
             width: _kDotSize * zoom,
             height: _kDotSize * zoom,
             child: new InkWell(
-              onTap: () => onPageSelected(index),
+              onTap: () => onPageSelected!(index),
             ),
           ),
         ),
@@ -334,7 +334,7 @@ class DotsIndicator extends AnimatedWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List<Widget>.generate(itemCount, _buildDot),
+      children: List<Widget>.generate(itemCount!, _buildDot),
     );
   }
 }

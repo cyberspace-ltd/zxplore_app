@@ -10,11 +10,11 @@ LoginResponse loginResponseFromJson(String str) =>
 String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
 
 class LoginResponse {
-  bool status;
-  String message;
-  Data data;
+  bool? status;
+  String? message;
+  Data? data;
 
-  String error;
+  String? error;
   LoginResponse({
     this.status,
     this.message,
@@ -31,14 +31,14 @@ class LoginResponse {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": data.toJson(),
+        "data": data!.toJson(),
       };
 }
 
 class Data {
-  String responseCode;
-  String responseMessage;
-  User user;
+  String? responseCode;
+  String? responseMessage;
+  User? user;
 
   Data({
     this.responseCode,
@@ -55,21 +55,21 @@ class Data {
   Map<String, dynamic> toJson() => {
         "ResponseCode": responseCode,
         "ResponseMessage": responseMessage,
-        "User": user.toJson(),
+        "User": user!.toJson(),
       };
 }
 
 class User {
-  String userName;
-  String adUsername;
-  int employeeId;
-  String branch;
-  int branchNumber;
-  bool isActive;
-  String role;
-  bool hasError;
-  String errorMessage;
-  String token;
+  String? userName;
+  String? adUsername;
+  int? employeeId;
+  String? branch;
+  int? branchNumber;
+  bool? isActive;
+  String? role;
+  bool? hasError;
+  String? errorMessage;
+  String? token;
 
   User({
     this.userName,

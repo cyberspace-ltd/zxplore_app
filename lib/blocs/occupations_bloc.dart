@@ -27,8 +27,8 @@ class OccupationsBloc extends BlocBase {
   Stream<List<OccupationEntity>> get occupationCategories => _occupationsCategoryController.stream;
 
   // Input stream for adding new notes. We'll call this from our pages.
-  final _addOccupationController = StreamController<List<OccupationMenu>>.broadcast();
-  StreamSink<List<OccupationMenu>> get inAddOccupations => _addOccupationController.sink;
+  final _addOccupationController = StreamController<List<OccupationMenu>?>.broadcast();
+  StreamSink<List<OccupationMenu>?> get inAddOccupations => _addOccupationController.sink;
 
 
   OccupationsBloc() {
@@ -58,9 +58,9 @@ class OccupationsBloc extends BlocBase {
   }
 
 
-  void _handleAddOccupations(List<OccupationMenu> values) async {
+  void _handleAddOccupations(List<OccupationMenu>? values) async {
     // Create the note in the database
-     DBProvider.db.insertOccupations(values);
+     DBProvider.db.insertOccupations(values!);
 
     // Retrieve all the notes again after one is added.
     // This allows our pages to update properly and display the

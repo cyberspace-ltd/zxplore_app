@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/cities_bloc.dart';
@@ -21,11 +22,11 @@ class ContactDetailsStep extends StatefulWidget {
 
 class _ContactDetailsState extends State<ContactDetailsStep>
     with AutomaticKeepAliveClientMixin<ContactDetailsStep> {
-  AccountFormBloc accountFormBloc;
-  OccupationsBloc _occupationsBloc;
-  CountriesBloc _countriesBloc;
-  StatesBloc statesBloc;
-  CitiesBloc _citiesBloc;
+  AccountFormBloc? accountFormBloc;
+  late OccupationsBloc _occupationsBloc;
+  late CountriesBloc _countriesBloc;
+  late StatesBloc statesBloc;
+  late CitiesBloc _citiesBloc;
   String _selectedAccFilter = "";
 
   final TextEditingController _othersOccupationController =
@@ -75,13 +76,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     'Western ',
     'Western North '
   ];
-  TextEditingController _emailController;
-  TextEditingController _phoneController;
-  TextEditingController _nextOfKinController;
-  TextEditingController _address1Controller;
-  TextEditingController _address2Controller;
-  TextEditingController _cityOfResidenceController;
-  TextEditingController _occupationCategoryController;
+  TextEditingController? _emailController;
+  TextEditingController? _phoneController;
+  TextEditingController? _nextOfKinController;
+  TextEditingController? _address1Controller;
+  TextEditingController? _address2Controller;
+  TextEditingController? _cityOfResidenceController;
+  late TextEditingController _occupationCategoryController;
   @override
   void initState() {
     super.initState();
@@ -107,12 +108,12 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     _countriesBloc.dispose();
     _occupationsBloc.dispose();
     _citiesBloc.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _nextOfKinController.dispose();
-    _address1Controller.dispose();
-    _address2Controller.dispose();
-    _cityOfResidenceController.dispose();
+    _emailController!.dispose();
+    _phoneController!.dispose();
+    _nextOfKinController!.dispose();
+    _address1Controller!.dispose();
+    _address2Controller!.dispose();
+    _cityOfResidenceController!.dispose();
     _occupationCategoryController.dispose();
 
     super.dispose();
@@ -120,25 +121,25 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _emailTextField() {
     return StreamBuilder(
-        stream: accountFormBloc.email,
+        stream: accountFormBloc!.email,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _emailController.value = TextEditingValue(
+            _emailController!.value = TextEditingValue(
                 text: snapshot.data.toString(),
-                selection: _emailController.selection);
+                selection: _emailController!.selection);
           }
 
           return TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            onChanged: accountFormBloc.changeEmail,
+            onChanged: accountFormBloc!.changeEmail,
             maxLength: 40,
 //            enabled: accountFormBloc.bvnEmail,
             maxLines: null,
             maxLengthEnforced: true,
             decoration: InputDecoration(
               labelText: 'Email',
-              errorText: snapshot.error,
+              errorText: snapshot.error as String?,
             ),
           );
         });
@@ -146,24 +147,24 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _phoneTextField() {
     return StreamBuilder(
-        stream: accountFormBloc.phoneNumber,
+        stream: accountFormBloc!.phoneNumber,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _phoneController.value = TextEditingValue(
+            _phoneController!.value = TextEditingValue(
                 text: snapshot.data.toString(),
-                selection: _phoneController.selection);
+                selection: _phoneController!.selection);
           }
           return TextField(
             controller: _phoneController,
             keyboardType: TextInputType.phone,
-            onChanged: accountFormBloc.changePhone,
+            onChanged: accountFormBloc!.changePhone,
             maxLength: 11,
 //            enabled: accountFormBloc.bvnPhone,
             decoration: InputDecoration(
               labelText: 'Phone',
               prefixText: '+233',
               helperText: "* Required",
-              errorText: snapshot.error,
+              errorText: snapshot.error as String?,
             ),
           );
         });
@@ -171,26 +172,26 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _nextOfKinTextField() {
     return StreamBuilder(
-        stream: accountFormBloc.nextOfKin,
+        stream: accountFormBloc!.nextOfKin,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _nextOfKinController.value = TextEditingValue(
+            _nextOfKinController!.value = TextEditingValue(
                 text: snapshot.data.toString(),
-                selection: _nextOfKinController.selection);
+                selection: _nextOfKinController!.selection);
           }
 
           return TextField(
             controller: _nextOfKinController,
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.text,
-            onChanged: accountFormBloc.changeNextOfKin,
+            onChanged: accountFormBloc!.changeNextOfKin,
             maxLength: 50,
             maxLines: null,
             maxLengthEnforced: true,
             decoration: InputDecoration(
               labelText: 'Next of Kin',
               helperText: '* Required',
-              errorText: snapshot.error,
+              errorText: snapshot.error as String?,
             ),
           );
         });
@@ -198,25 +199,25 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _address1TextField() {
     return StreamBuilder(
-        stream: accountFormBloc.address1,
+        stream: accountFormBloc!.address1,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _address1Controller.value = TextEditingValue(
+            _address1Controller!.value = TextEditingValue(
                 text: snapshot.data.toString(),
-                selection: _address1Controller.selection);
+                selection: _address1Controller!.selection);
           }
           return TextField(
             controller: _address1Controller,
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.multiline,
-            onChanged: accountFormBloc.changeAddress1,
+            onChanged: accountFormBloc!.changeAddress1,
             maxLength: 40,
             maxLines: null,
             maxLengthEnforced: true,
             decoration: InputDecoration(
               labelText: 'Address 1',
               helperText: '* Required',
-              errorText: snapshot.error,
+              errorText: snapshot.error as String?,
             ),
           );
         });
@@ -224,31 +225,31 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _address2TextField() {
     return StreamBuilder(
-        stream: accountFormBloc.address2,
+        stream: accountFormBloc!.address2,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _address2Controller.value = TextEditingValue(
+            _address2Controller!.value = TextEditingValue(
                 text: snapshot.data.toString(),
-                selection: _address2Controller.selection);
+                selection: _address2Controller!.selection);
           }
           return TextField(
             controller: _address2Controller,
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.multiline,
-            onChanged: accountFormBloc.changeAddress2,
+            onChanged: accountFormBloc!.changeAddress2,
             maxLength: 40,
             maxLengthEnforced: true,
             decoration: InputDecoration(
               labelText: 'Address 2',
-              errorText: snapshot.error,
+              errorText: snapshot.error as String?,
             ),
           );
         });
   }
 
   Widget _countryOfResidenceTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.countryOfResidence,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.countryOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -257,13 +258,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               decoration: InputDecoration(
                   labelText: 'Country Of Residence',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                 value: snapshot.data,
                 isDense: true,
-                onChanged: accountFormBloc.changeCountryOfResidence,
+                onChanged: accountFormBloc!.changeCountryOfResidence,
                 items: _country.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -279,13 +280,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _buildStateOfResidence() {
-    return StreamBuilder(
-        stream: accountFormBloc.bvnStateOfResidences,
+    return StreamBuilder<bool>(
+        stream: accountFormBloc!.bvnStateOfResidences,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return _stateOfResidenceTextField();
           }
-          if (snapshot.data) {
+          if (snapshot.data!) {
             return _stateOfResidenceTextField();
           } else
             return _stateOfResidenceField();
@@ -294,7 +295,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _stateOfResidenceField() {
     return StreamBuilder(
-      stream: accountFormBloc.stateOfResidence,
+      stream: accountFormBloc!.stateOfResidence,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _stateOfResidenceController.value = TextEditingValue(
@@ -304,16 +305,16 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         return TextField(
           controller: _stateOfResidenceController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeStateOfResidence,
+          onChanged: accountFormBloc!.changeStateOfResidence,
           keyboardType: TextInputType.text,
           maxLength: 40,
-          enabled: accountFormBloc.bvnStateOfResidence,
+          enabled: accountFormBloc!.bvnStateOfResidence,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
             labelText: 'Region of Residence',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -321,8 +322,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _stateOfResidenceTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.stateOfResidence,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.stateOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -331,13 +332,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               decoration: InputDecoration(
                   labelText: 'Region of Residence',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
 //              isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.hasData
                       ? Helper.returnValidStateRegionSelectedItem(
-                          snapshot.data, _stateRegion)
+                          snapshot.data!, _stateRegion)
                       : null,
                   isDense: true,
                   onChanged: (value) {
@@ -348,8 +349,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         _selectedAccFilter = value.toUpperCase();
                       print(_selectedAccFilter);
                     });
-                    accountFormBloc.updateStateRegion(value);
-                    accountFormBloc.updateMMDA(null);
+                    accountFormBloc!.updateStateRegion(value);
+                    accountFormBloc!.updateMMDA(null);
                   },
                   items: _stateRegion.map((String value) {
                     return DropdownMenuItem<String>(
@@ -371,7 +372,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: statesBloc.states,
       builder: (context, listSnapshot) {
         return StreamBuilder(
-            stream: accountFormBloc.mmda,
+            stream: accountFormBloc!.mmda,
             builder: (context, itemSnapshot) {
               return FormField<String>(
                 autovalidate: true,
@@ -380,24 +381,24 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     decoration: InputDecoration(
                         labelText: 'MMDA',
                         helperText: "* Required",
-                        errorText: itemSnapshot.error),
+                        errorText: itemSnapshot.error as String?),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: _getAccountTypeValue(itemSnapshot, listSnapshot),
                         isExpanded: true,
                         isDense: true,
                         items: listSnapshot.hasData
-                            ? listSnapshot.data
-                                .where((x) => x.stateName
+                            ? listSnapshot.data!
+                                .where((x) => x.stateName!
                                     .toUpperCase()
                                     .startsWith(_selectedAccFilter))
                                 .map((StateEntity entity) {
                                 return DropdownMenuItem<String>(
-                                  value: entity.mmda.toUpperCase().toString(),
+                                  value: entity.mmda!.toUpperCase().toString(),
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      entity.mmda.toUpperCase().toString(),
+                                      entity.mmda!.toUpperCase().toString(),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -405,7 +406,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                               }).toList()
                             : null,
                         onChanged: (value) {
-                          accountFormBloc.updateMMDA(value);
+                          accountFormBloc!.updateMMDA(value);
                         },
                       ),
                     ),
@@ -417,15 +418,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     );
   }
 
-  String _getAccountTypeValue(AsyncSnapshot itemSnapshot,
+  String? _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<StateEntity>> listSnapshot) {
     var data = (listSnapshot.hasData &&
-            listSnapshot.data.length > 0 &&
-            listSnapshot.data.firstWhere(
-                    (x) =>
-                        x.mmda.toUpperCase() ==
-                        itemSnapshot.data.toString().toUpperCase(),
-                    orElse: () => null) !=
+            listSnapshot.data!.length > 0 &&
+            listSnapshot.data!.firstWhereOrNull((x) =>
+                    x.mmda!.toUpperCase() ==
+                    itemSnapshot.data.toString().toUpperCase()) !=
                 null)
         ? itemSnapshot.data.toString().toUpperCase()
         : null;
@@ -433,15 +432,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return data;
   }
 
-  String _getOccupationValue(AsyncSnapshot itemSnapshot,
+  String? _getOccupationValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<OccupationEntity>> listSnapshot) {
     var data = (listSnapshot.hasData &&
-            listSnapshot.data.length > 0 &&
-            listSnapshot.data.firstWhere(
-                    (x) =>
-                        x.occupationName.toUpperCase() ==
-                        itemSnapshot.data.toString().toUpperCase(),
-                    orElse: () => null) !=
+            listSnapshot.data!.length > 0 &&
+            listSnapshot.data!.firstWhereOrNull((x) =>
+                    x.occupationName!.toUpperCase() ==
+                    itemSnapshot.data.toString().toUpperCase()) !=
                 null)
         ? itemSnapshot.data.toString().toUpperCase()
         : null;
@@ -451,17 +448,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _cityOfResidenceTextField() {
     return StreamBuilder(
-      stream: accountFormBloc.cityOfResidence,
+      stream: accountFormBloc!.cityOfResidence,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _cityOfResidenceController.value = TextEditingValue(
+          _cityOfResidenceController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _cityOfResidenceController.selection);
+              selection: _cityOfResidenceController!.selection);
         }
         return TextField(
           controller: _cityOfResidenceController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeCityOfResidence,
+          onChanged: accountFormBloc!.changeCityOfResidence,
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
@@ -469,7 +466,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           decoration: InputDecoration(
             labelText: 'CITY/TOWN OF RESIDENCE',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -477,13 +474,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _buildGender() {
-    return StreamBuilder(
-        stream: accountFormBloc.bvnGenders,
+    return StreamBuilder<bool>(
+        stream: accountFormBloc!.bvnGenders,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return _genderTextField();
           }
-          if (snapshot.data) {
+          if (snapshot.data!) {
             return _genderTextField();
           } else {
             return _genderField();
@@ -493,7 +490,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   Widget _genderField() {
     return StreamBuilder(
-      stream: accountFormBloc.gender,
+      stream: accountFormBloc!.gender,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _genderController.value = TextEditingValue(
@@ -503,16 +500,16 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         return TextField(
           controller: _genderController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeGender,
+          onChanged: accountFormBloc!.changeGender,
           keyboardType: TextInputType.text,
           maxLength: 40,
-          enabled: accountFormBloc.bvnGender,
+          enabled: accountFormBloc!.bvnGender,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
             labelText: 'Gender',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -520,8 +517,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _genderTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.gender,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.gender,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -530,16 +527,16 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               decoration: InputDecoration(
                   labelText: 'Gender',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.hasData
                       ? Helper.returnValidGenderSelectedItem(
-                          snapshot.data, _genders)
+                          snapshot.data!, _genders)
                       : null,
                   isDense: true,
-                  onChanged: accountFormBloc.changeGender,
+                  onChanged: accountFormBloc!.changeGender,
                   items: _genders.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -558,7 +555,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   // ignore: non_constant_identifier_names
   Widget _other_occupationField() {
     return StreamBuilder(
-      stream: accountFormBloc.otherOccupation,
+      stream: accountFormBloc!.otherOccupation,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _othersOccupationController.value = TextEditingValue(
@@ -568,7 +565,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         return TextField(
           controller: _othersOccupationController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeOtherOccupation,
+          onChanged: accountFormBloc!.changeOtherOccupation,
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
@@ -576,7 +573,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           decoration: InputDecoration(
             labelText: 'Other Occupation',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -584,8 +581,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _occupationCategoryField() {
-    return StreamBuilder(
-      stream: accountFormBloc.occupationCategory,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.occupationCategory,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -594,7 +591,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               decoration: InputDecoration(
                   labelText: 'Occupation Group',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: StreamBuilder<List<OccupationEntity>>(
@@ -610,17 +607,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         child: DropdownButton<String>(
                           value: snapshot.data,
                           items:
-                              shot.data.toSet().map((OccupationEntity value) {
+                              shot.data!.toSet().map((OccupationEntity value) {
                             return DropdownMenuItem<String>(
                               value: value.sironCode,
-                              child: Text(value.groupName.toUpperCase(),
+                              child: Text(value.groupName!.toUpperCase(),
                                   overflow: TextOverflow.ellipsis),
                             );
                           }).toList(),
                           onChanged: (value) {
                             if (value == null) {
                               _selectedOccupationGroup = "";
-                              accountFormBloc.updateOccupationCategory(null);
+                              accountFormBloc!.updateOccupationCategory(null);
                             } else {
                               setState(() {
                                 if (value == null) {
@@ -630,8 +627,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                                       value.toUpperCase();
                                 print(_selectedOccupationGroup);
                               });
-                              accountFormBloc.updateOccupationCategory(value);
-                              accountFormBloc.updateOccupation(null);
+                              accountFormBloc!.updateOccupationCategory(value);
+                              accountFormBloc!.updateOccupation(null);
                             }
                           },
 
@@ -652,7 +649,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         stream: _occupationsBloc.occupations,
         builder: (context, listSnapshot) {
           return StreamBuilder(
-            stream: accountFormBloc.occupation,
+            stream: accountFormBloc!.occupation,
             builder: (context, itemSnapshot) {
               return FormField<String>(
                 autovalidate: true,
@@ -661,7 +658,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     decoration: InputDecoration(
                         labelText: 'Occupation',
                         helperText: "* Required",
-                        errorText: itemSnapshot.error),
+                        errorText: itemSnapshot.error as String?),
                     isEmpty: itemSnapshot.data == '',
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
@@ -669,19 +666,19 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         isExpanded: true,
                         isDense: true,
                         items: listSnapshot.hasData
-                            ? listSnapshot.data
-                                .where((x) => x.sironCode
+                            ? listSnapshot.data!
+                                .where((x) => x.sironCode!
                                     .toUpperCase()
                                     .startsWith(_selectedOccupationGroup))
                                 .map((OccupationEntity entity) {
                                 return DropdownMenuItem<String>(
-                                  value: entity.occupationName
+                                  value: entity.occupationName!
                                       .toUpperCase()
                                       .toString(),
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                        entity.occupationName
+                                        entity.occupationName!
                                             .toUpperCase()
                                             .toString(),
                                         overflow: TextOverflow.ellipsis),
@@ -707,7 +704,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                               }
                             }
                           });
-                          accountFormBloc.updateOccupation(value);
+                          accountFormBloc!.updateOccupation(value);
                         },
                       ),
                     ),
@@ -762,8 +759,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   // }
 
   Widget _maritalStatusField() {
-    return StreamBuilder(
-      stream: accountFormBloc.maritalStatus,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.maritalStatus,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -772,16 +769,16 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               decoration: InputDecoration(
                   labelText: 'Marital Status',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.hasData
                       ? Helper.returnValidMaritalStatusSelectedItem(
-                          snapshot.data, _maritalStatus)
+                          snapshot.data!, _maritalStatus)
                       : null,
                   isDense: true,
-                  onChanged: accountFormBloc.changeMaritalStatus,
+                  onChanged: accountFormBloc!.changeMaritalStatus,
                   items: _maritalStatus.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

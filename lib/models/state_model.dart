@@ -12,9 +12,9 @@ class State {
     this.menu,
   });
 
-  String responseCode;
-  String responseMessage;
-  List<Menu> menu;
+  String? responseCode;
+  String? responseMessage;
+  List<Menu>? menu;
 
   factory State.fromJson(Map<String, dynamic> json) => State(
     responseCode: json["ResponseCode"],
@@ -25,7 +25,7 @@ class State {
   Map<String, dynamic> toJson() => {
     "ResponseCode": responseCode,
     "ResponseMessage": responseMessage,
-    "Menu": List<dynamic>.from(menu.map((x) => x.toJson())),
+    "Menu": List<dynamic>.from(menu!.map((x) => x.toJson())),
   };
 }
 
@@ -36,9 +36,9 @@ class Menu {
     this.mmda,
   });
 
-  int srn;
-  String stateName;
-  String mmda;
+  int? srn;
+  String? stateName;
+  String? mmda;
 
   factory Menu.fromJson(Map<String, dynamic> json) => Menu(
     srn: json["Srn"],

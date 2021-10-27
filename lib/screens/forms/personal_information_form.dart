@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/utils/const.dart';
 
-
 class PersonalInformationStep extends StatefulWidget {
   @override
   _PersonalInformationState createState() => _PersonalInformationState();
@@ -29,21 +28,21 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     'Nana'
   ];
 
-  AccountFormBloc accountFormBloc;
+  AccountFormBloc? accountFormBloc;
 
-  CountriesBloc countriesBloc;
+  late CountriesBloc countriesBloc;
 
-  StatesBloc statesBloc;
+  late StatesBloc statesBloc;
 
-  TextEditingController _bvnController;
-  TextEditingController _firstNameController;
-  TextEditingController _titleController;
-  TextEditingController _surnameController;
-  TextEditingController _otherNameController;
-  TextEditingController _mothersMaidenNameController;
-  TextEditingController _dateOfBirthController;
-  TextEditingController _placeOfBirthController;
-  TextEditingController _countryOfOriginController;
+  TextEditingController? _bvnController;
+  TextEditingController? _firstNameController;
+  late TextEditingController _titleController;
+  TextEditingController? _surnameController;
+  TextEditingController? _otherNameController;
+  TextEditingController? _mothersMaidenNameController;
+  TextEditingController? _dateOfBirthController;
+  TextEditingController? _placeOfBirthController;
+  late TextEditingController _countryOfOriginController;
 
   @override
   bool get wantKeepAlive => true;
@@ -69,22 +68,22 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   void dispose() {
     statesBloc.dispose();
     countriesBloc.dispose();
-    _firstNameController.dispose();
-    _bvnController.dispose();
+    _firstNameController!.dispose();
+    _bvnController!.dispose();
     _titleController.dispose();
-    _surnameController.dispose();
-    _otherNameController.dispose();
-    _mothersMaidenNameController.dispose();
-    _dateOfBirthController.dispose();
-    _placeOfBirthController.dispose();
+    _surnameController!.dispose();
+    _otherNameController!.dispose();
+    _mothersMaidenNameController!.dispose();
+    _dateOfBirthController!.dispose();
+    _placeOfBirthController!.dispose();
     _countryOfOriginController.dispose();
 
     super.dispose();
   }
 
   Widget titleTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.title,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.title,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -93,13 +92,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
               decoration: InputDecoration(
                   labelText: 'Title',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.data,
                   isDense: true,
-                  onChanged: accountFormBloc.changeTitle,
+                  onChanged: accountFormBloc!.changeTitle,
                   items: _titles.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -117,23 +116,23 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _tinField() {
     return StreamBuilder(
-        stream: accountFormBloc.tin,
+        stream: accountFormBloc!.tin,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _bvnController.value = TextEditingValue(
+            _bvnController!.value = TextEditingValue(
                 text: snapshot.data.toString(),
-                selection: _bvnController.selection);
+                selection: _bvnController!.selection);
           }
           return TextField(
             controller: _bvnController,
             obscureText: false,
             keyboardType: TextInputType.text,
-            onChanged: accountFormBloc.changeTin,
+            onChanged: accountFormBloc!.changeTin,
             decoration: InputDecoration(
               labelText: 'TIN (Tax Identification Number)',
               // helperText:
               //     'Click the verify TIN button to populate account form.',
-              errorText: snapshot.error,
+              errorText: snapshot.error as String?,
             ),
           );
         });
@@ -141,17 +140,17 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _surnameField() {
     return StreamBuilder(
-      stream: accountFormBloc.surname,
+      stream: accountFormBloc!.surname,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _surnameController.value = TextEditingValue(
+          _surnameController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _surnameController.selection);
+              selection: _surnameController!.selection);
         }
         return TextField(
           controller: _surnameController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeSurname,
+          onChanged: accountFormBloc!.changeSurname,
           keyboardType: TextInputType.text,
           maxLength: 40,
 //          enabled: accountFormBloc.bvnlastNameValue,
@@ -160,7 +159,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           decoration: InputDecoration(
             labelText: 'Surname',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -171,26 +170,26 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _firstNameField() {
     return StreamBuilder(
-      stream: accountFormBloc.firstName,
+      stream: accountFormBloc!.firstName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _firstNameController.value = TextEditingValue(
+          _firstNameController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _firstNameController.selection);
+              selection: _firstNameController!.selection);
         }
         return TextField(
           controller: _firstNameController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeFirstName,
+          onChanged: accountFormBloc!.changeFirstName,
           keyboardType: TextInputType.text,
           maxLength: 40,
-          enabled: accountFormBloc.bvnFirstName,
+          enabled: accountFormBloc!.bvnFirstName,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
             labelText: 'First Name',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -199,25 +198,25 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _otherNameField() {
     return StreamBuilder(
-      stream: accountFormBloc.otherName,
+      stream: accountFormBloc!.otherName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _otherNameController.value = TextEditingValue(
+          _otherNameController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _otherNameController.selection);
+              selection: _otherNameController!.selection);
         }
         return TextField(
           controller: _otherNameController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeOtherName,
+          onChanged: accountFormBloc!.changeOtherName,
           keyboardType: TextInputType.text,
           maxLength: 40,
-          enabled: accountFormBloc.bvnOtherName,
+          enabled: accountFormBloc!.bvnOtherName,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
             labelText: 'Other Name',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -226,17 +225,17 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _mothersMaidenNameField() {
     return StreamBuilder(
-      stream: accountFormBloc.mothersMaidenName,
+      stream: accountFormBloc!.mothersMaidenName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _mothersMaidenNameController.value = TextEditingValue(
+          _mothersMaidenNameController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _mothersMaidenNameController.selection);
+              selection: _mothersMaidenNameController!.selection);
         }
         return TextField(
           controller: _mothersMaidenNameController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeMothersMaidenName,
+          onChanged: accountFormBloc!.changeMothersMaidenName,
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
@@ -244,7 +243,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           decoration: InputDecoration(
             labelText: 'Mother\'s Maiden Name',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -253,26 +252,26 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _dateOfBirthTextField() {
     return StreamBuilder(
-      stream: accountFormBloc.dateOfBirth,
+      stream: accountFormBloc!.dateOfBirth,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _dateOfBirthController.value = TextEditingValue(
+          _dateOfBirthController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _dateOfBirthController.selection);
+              selection: _dateOfBirthController!.selection);
         }
         return TextField(
           controller: _dateOfBirthController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeDateOfBirth,
+          onChanged: accountFormBloc!.changeDateOfBirth,
           keyboardType: TextInputType.text,
           maxLength: 40,
-          enabled: accountFormBloc.bvnDateOfBirths,
+          enabled: accountFormBloc!.bvnDateOfBirths,
           maxLines: null,
           maxLengthEnforced: true,
           decoration: InputDecoration(
             labelText: 'Date of Birth',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -281,17 +280,17 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _dateOfBirthField() {
     return StreamBuilder(
-      stream: accountFormBloc.dateOfBirth,
+      stream: accountFormBloc!.dateOfBirth,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _dateOfBirthController.value = TextEditingValue(
+          _dateOfBirthController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _dateOfBirthController.selection);
+              selection: _dateOfBirthController!.selection);
         }
         return GestureDetector(
             onTap: () async {
               FocusScope.of(context).unfocus();
-              DateTime picked = await showDatePicker(
+              DateTime? picked = await showDatePicker(
                   context: context,
                   initialDate: new DateTime(DateTime.now().year - 13),
                   firstDate: new DateTime(1900),
@@ -301,20 +300,20 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                 var formatter = new DateFormat('dd-MMM-yy');
                 var dob = formatter.format(picked);
 
-                _dateOfBirthController.text = dob;
-                accountFormBloc.changeDateOfBirth(dob);
+                _dateOfBirthController!.text = dob;
+                accountFormBloc!.changeDateOfBirth(dob);
               }
             },
             child: AbsorbPointer(
               child: TextField(
                 controller: _dateOfBirthController,
-                onChanged: accountFormBloc.changeDateOfBirth,
+                onChanged: accountFormBloc!.changeDateOfBirth,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   labelText: 'Date of Birth',
                   helperText: "* Required",
                   suffixIcon: Icon(Icons.date_range),
-                  errorText: snapshot.error,
+                  errorText: snapshot.error as String?,
                 ),
               ),
             ));
@@ -324,17 +323,17 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
   Widget _stateOfOriginTextField() {
     return StreamBuilder(
-      stream: accountFormBloc.placeOfBirth,
+      stream: accountFormBloc!.placeOfBirth,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _placeOfBirthController.value = TextEditingValue(
+          _placeOfBirthController!.value = TextEditingValue(
               text: snapshot.data.toString(),
-              selection: _placeOfBirthController.selection);
+              selection: _placeOfBirthController!.selection);
         }
         return TextField(
           controller: _placeOfBirthController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changePlaceOfBirth,
+          onChanged: accountFormBloc!.changePlaceOfBirth,
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
@@ -342,15 +341,15 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           decoration: InputDecoration(
               labelText: 'Place of Birth',
               helperText: "* Required",
-              errorText: snapshot.error),
+              errorText: snapshot.error as String?),
         );
       },
     );
   }
 
   Widget _countryOfOriginTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.countryOfOrigin,
+    return StreamBuilder<String>(
+      stream: accountFormBloc!.countryOfOrigin,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -359,12 +358,12 @@ class _PersonalInformationState extends State<PersonalInformationStep>
               decoration: InputDecoration(
                   labelText: 'Country of Origin',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                 value: snapshot.data,
                 isDense: true,
-                onChanged: accountFormBloc.changeCountryOfOrigin,
+                onChanged: accountFormBloc!.changeCountryOfOrigin,
                 items: COUNTRY_LIST.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -380,13 +379,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _buildDateOfBirth() {
-    return StreamBuilder(
-        stream: accountFormBloc.bvnDateOfBirth,
+    return StreamBuilder<bool>(
+        stream: accountFormBloc!.bvnDateOfBirth,
         builder: (context, snapShot) {
           if (!snapShot.hasData) {
             return _dateOfBirthField();
           }
-          if (snapShot.data) {
+          if (snapShot.data!) {
             return _dateOfBirthField();
           } else
             return _dateOfBirthTextField();

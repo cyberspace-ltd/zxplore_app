@@ -18,7 +18,7 @@ class LoginBloc extends Object with Validators {
       _passwordController.stream.transform(validatePassword);
 
   Stream<bool> get submitValid =>
-      Observable.combineLatest2(username, password, (e, p) => true);
+      Rx.combineLatest2(username, password, (dynamic e, dynamic p) => true);
 
   // change data
   Function(String) get changeUserName => _userNameController.sink.add;
@@ -45,15 +45,15 @@ class LoginBloc extends Object with Validators {
     await _loginRepository
         .attemptLogin(userName, password)
         .then((response) async {
-      if (response.status) {
+      if (response.status!) {
         await SecureStorage.saveAgentInformation(
-            response?.data?.user?.token,
-            response?.data?.user?.employeeId?.toString(),
-            response?.data?.user?.branchNumber.toString());
+            response.data!.user!.token!,
+            response.data!.user!.employeeId.toString(),
+            response.data!.user!.branchNumber.toString());
 
         _subjectLoginResponse.sink.add(response);
       } else {
-        _subjectLoginResponse.sink.addError(response?.data?.responseMessage);
+        _subjectLoginResponse.sink.addError(response.data!.responseMessage!);
       }
     }).catchError((error) {
       _subjectLoginResponse.sink.addError(error);

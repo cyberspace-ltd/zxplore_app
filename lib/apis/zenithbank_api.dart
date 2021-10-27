@@ -11,7 +11,6 @@ import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/cities_model.dart';
 import 'package:zxplore_app/models/country_model.dart';
-import 'package:zxplore_app/models/driver_license.dart';
 import 'package:zxplore_app/models/login_response.dart';
 import 'package:zxplore_app/models/occupation_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
@@ -21,7 +20,7 @@ import 'package:zxplore_app/models/verify_account_response.dart';
 import 'package:zxplore_app/models/verify_id_response.dart';
 
 class ZenithBankApi {
-  Future<Occupation> fetchOccupations(String token) async {
+  Future<Occupation> fetchOccupations(String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -38,13 +37,13 @@ class ZenithBankApi {
       response = await dio.get("${Endpoints.getOccupationUrl()}");
       print(response);
       return Occupation.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
 
-  Future<AccountClass> fetchAccountClasses(String token) async {
+  Future<AccountClass> fetchAccountClasses(String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -60,7 +59,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getAccountClassesUrl());
       return AccountClass.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -82,13 +81,13 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getTitlesUrl());
       return Title.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
 
-  Future<State> fetchStates(String token) async {
+  Future<State> fetchStates(String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -104,13 +103,13 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getStatesUrl());
       return State.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
 
-  Future<Cities> fetchCities(String token) async {
+  Future<Cities> fetchCities(String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -126,7 +125,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getCitiesUrl());
       return Cities.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -144,7 +143,7 @@ class ZenithBankApi {
 //    }
   }
 
-  Future<Country> fetchCountries(String token) async {
+  Future<Country> fetchCountries(String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -160,7 +159,7 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getCountriesUrl());
       return Country.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
@@ -199,20 +198,20 @@ class ZenithBankApi {
       }
       if (response.statusCode == 400) {
         var value = LoginResponse.fromJson(response.data);
-        throw CleanerException(value.data.responseMessage);
+        throw CleanerException(value.data!.responseMessage);
       } else {
         throw CleanerException('login failed.');
       }
     } on DioError catch (error) {
       if (error is DioError) {
         if (error.response != null &&
-            error.response.data != null &&
-            error.response.data['message'] != null) {
-          throw CleanerException(error.response.data['message']);
+            error.response!.data != null &&
+            error.response!.data['message'] != null) {
+          throw CleanerException(error.response!.data['message']);
         } else if (error.response != null &&
-            error.response.data != null &&
-            error.response.data['Message'] != null) {
-          throw CleanerException(error.response.data['Message']);
+            error.response!.data != null &&
+            error.response!.data['Message'] != null) {
+          throw CleanerException(error.response!.data['Message']);
         } else if (error.response?.statusCode == 502) {
           var value = LoginResponse.fromJson(error.response?.data);
           throw CleanerException(value.message);
@@ -227,7 +226,7 @@ class ZenithBankApi {
   }
 
   Future<AccountsResponse> getAllAccountsByRsmId(
-      String rsmId, String token) async {
+      String? rsmId, String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -244,14 +243,14 @@ class ZenithBankApi {
       response =
           await dio.get("${Endpoints.getAccountsByRsmIdUrl()}$rsmId/All");
       return AccountsResponse.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
 //      print("Exception occured: $error stackTrace: $stacktrace");
       throw CleanerException(_handleError(error));
     }
   }
 
   Future<AccountDetailsResponse> getAccountsDetailsByReference(
-      String referenceId, String token) async {
+      String? referenceId, String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -269,13 +268,13 @@ class ZenithBankApi {
       response =
           await dio.get("${Endpoints.getAccountDetailsUrl()}$referenceId");
       return AccountDetailsResponse.fromJson(response.data);
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
       throw CleanerException(_handleError(error));
     }
   }
 
   Future<VerifyAccountResponse> verifyAccountsByRefId(
-      String referenceId, String token) async {
+      String? referenceId, String? token) async {
     HttpClient client = new HttpClient();
     client.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
@@ -298,7 +297,7 @@ class ZenithBankApi {
   }
 
   Future<SaveAccountResponse> attemptSaveAccounts(
-      String encodedJson, String token) async {
+      String encodedJson, String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -324,7 +323,7 @@ class ZenithBankApi {
       } else {
         return SaveAccountResponse.fromJson(response.data);
       }
-    } catch (error, stacktrace) {
+    } on DioError catch (error, stacktrace) {
       if (error is DioError) {
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
@@ -346,7 +345,7 @@ class ZenithBankApi {
     return await rootBundle.loadString('assets/server_certificate.crt');
   }
 
-  Future<BvnResponse> verifyBvn(String encodedBvn, String token) async {
+  Future<BvnResponse> verifyBvn(String encodedBvn, String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -374,7 +373,7 @@ class ZenithBankApi {
         throw CleanerException(
             'BVN Verification failed in connecting to the server.');
       }
-    } catch (error) {
+    } on DioError catch (error) {
       if (error is DioError) {
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
@@ -393,7 +392,7 @@ class ZenithBankApi {
   }
 
   Future<VerifyIdResponse> verifyIdentity(
-      String identityNumber, int idType, String token) async {
+      String? identityNumber, int idType, String? token) async {
     Response response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -421,7 +420,7 @@ class ZenithBankApi {
         throw CleanerException(
             'Verification failed in connecting to the server.');
       }
-    } catch (error) {
+    } on DioError catch (error) {
       if (error is DioError) {
         if (error.response?.statusCode == 400) {
           var value = SaveAccountResponse.fromJson(error.response?.data);
@@ -443,29 +442,28 @@ class ZenithBankApi {
     String errorDescription = "";
     if (error is DioError) {
       switch (error.type) {
-        case DioErrorType.CANCEL:
+        case DioErrorType.cancel:
           errorDescription = "Request to API server was cancelled";
           break;
-        case DioErrorType.CONNECT_TIMEOUT:
+        case DioErrorType.connectTimeout:
           errorDescription = "Connection timeout with API server";
           break;
-        case DioErrorType.DEFAULT:
+        case DioErrorType.other:
           errorDescription =
               "Connection to API server failed due to internet connection";
           break;
-        case DioErrorType.RECEIVE_TIMEOUT:
+        case DioErrorType.receiveTimeout:
           errorDescription = "Receive timeout in connection with API server";
           break;
-        case DioErrorType.RESPONSE:
+        case DioErrorType.response:
           if (error.response?.statusCode == 401) {
             errorDescription = "Session expired. Kindly login again.";
           } else {
             errorDescription =
-                "Received invalid status code: ${error.response.statusCode}";
+                "Received invalid status code: ${error.response!.statusCode}";
           }
-
           break;
-        case DioErrorType.SEND_TIMEOUT:
+        case DioErrorType.sendTimeout:
           errorDescription = "Send timeout in connection with API server";
           break;
       }
@@ -477,12 +475,12 @@ class ZenithBankApi {
 }
 
 class CleanerException implements Exception {
-  String cause;
+  String? cause;
 
   CleanerException(this.cause);
 
   @override
   String toString() {
-    return cause;
+    return cause!;
   }
 }

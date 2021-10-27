@@ -10,9 +10,9 @@ AccountClass accountClassFromJson(String str) =>
 String accountClassToJson(AccountClass data) => json.encode(data.toJson());
 
 class AccountClass {
-  String responseCode;
-  String responseMessage;
-  List<AccountClassCode> accountClassCodes;
+  String? responseCode;
+  String? responseMessage;
+  List<AccountClassCode>? accountClassCodes;
 
   AccountClass({
     this.responseCode,
@@ -31,14 +31,14 @@ class AccountClass {
         "ResponseCode": responseCode,
         "ResponseMessage": responseMessage,
         "AccountClassCodes":
-            new List<dynamic>.from(accountClassCodes.map((x) => x.toJson())),
+            new List<dynamic>.from(accountClassCodes!.map((x) => x.toJson())),
       };
 }
 
 class AccountClassCode {
-  String classCode;
-  String description;
-  String classType;
+  String? classCode;
+  String? description;
+  String? classType;
 
   AccountClassCode({
     this.classCode,

@@ -60,7 +60,7 @@ class Validators {
   final validateSurname =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
         Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
-        RegExp regex = new RegExp(pattern);
+        RegExp regex = new RegExp(pattern as String);
     if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
       sink.add(arg);
     } else if(arg.isEmpty){
@@ -73,7 +73,7 @@ class Validators {
   final validateFirstName =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
         Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
-        RegExp regex = new RegExp(pattern);
+        RegExp regex = new RegExp(pattern as String);
     if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
       sink.add(arg);
     } else if(arg.isEmpty) {
@@ -87,7 +87,7 @@ class Validators {
   final validateOtherName =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink){
         Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
-        RegExp regex = new RegExp(pattern);
+        RegExp regex = new RegExp(pattern as String);
         if(!regex.hasMatch(arg)){
           sink.add(arg);
         } else {
@@ -98,7 +98,7 @@ class Validators {
   final validateMothersMaidenName =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
         Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
-        RegExp regex = new RegExp(pattern);
+        RegExp regex = new RegExp(pattern as String);
     if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
       sink.add(arg);
     } else if(arg.isEmpty)  {
@@ -185,7 +185,7 @@ class Validators {
   final validateNextOfKin =
       StreamTransformer<String, String>.fromHandlers(handleData: (arg, sink) {
         Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';
-        RegExp regex = new RegExp(pattern);
+        RegExp regex = new RegExp(pattern as String);
         if (arg.isNotEmpty && arg.length > 2 && !regex.hasMatch(arg)) {
           sink.add(arg);
         } else if(arg.isEmpty)  {

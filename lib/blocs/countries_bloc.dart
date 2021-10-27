@@ -18,8 +18,8 @@ class CountriesBloc extends BlocBase {
 
 
   // Input stream for adding new notes. We'll call this from our pages.
-  final _addCountryController = StreamController<List<String>>.broadcast();
-  StreamSink<List<String>> get inAddCountries => _addCountryController.sink;
+  final _addCountryController = StreamController<List<String>?>.broadcast();
+  StreamSink<List<String>?> get inAddCountries => _addCountryController.sink;
 
 
   CountriesBloc() {
@@ -47,9 +47,9 @@ class CountriesBloc extends BlocBase {
   }
 
 
-  void _handleAddCountries(List<String> values) async {
+  void _handleAddCountries(List<String>? values) async {
     // Create the note in the database
-     DBProvider.db.insertCountries(values);
+     DBProvider.db.insertCountries(values!);
 
     // Retrieve all the notes again after one is added.
     // This allows our pages to update properly and display the

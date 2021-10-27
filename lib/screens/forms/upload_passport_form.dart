@@ -19,26 +19,25 @@ class UploadPassportStep extends StatefulWidget {
 
 class _UploadPassportState extends State<UploadPassportStep>
     with AutomaticKeepAliveClientMixin<UploadPassportStep> {
-  File _imageFile;
-  String _retrieveDataError;
+  XFile? _imageFile;
+  String? _retrieveDataError;
   dynamic _pickImageError;
-  AccountFormBloc accountFormBloc;
+  AccountFormBloc? accountFormBloc;
   ByteData _img = ByteData(0);
+  ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
-    accountFormBloc.uploadPassportController.listen((base64Signature){
-      if(_img.lengthInBytes == 0){
-        var imageData = base64Decode(base64Signature);
+    accountFormBloc!.uploadPassportController.listen((base64Signature) {
+      if (_img.lengthInBytes == 0) {
+        var imageData = base64Decode(base64Signature!);
 
         setState(() {
           _img = imageData.buffer.asByteData();
         });
-
       }
-
     });
   }
 
@@ -86,6 +85,10 @@ class _UploadPassportState extends State<UploadPassportStep>
                               );
                             }
                         }
+                        return Text(
+                          'Click either the gallery or camera icon to upload a picture of your utility Bill',
+                          textAlign: TextAlign.center,
+                        );
                       },
                     )
                   : (_img.buffer.lengthInBytes == 0
@@ -128,22 +131,20 @@ class _UploadPassportState extends State<UploadPassportStep>
     );
   }
 
-
-
   Future _convertImagesToByte() async {
-    List<int> imageBytes = await _imageFile.readAsBytes();
+    List<int> imageBytes = await _imageFile!.readAsBytes();
     var imgBytes = new Uint8List.fromList(imageBytes);
 
     String base64Image = base64Encode(imageBytes);
 
     _img = imgBytes.buffer.asByteData();
 
-    accountFormBloc.setUploadPassportForm(base64Image);
+    accountFormBloc!.setUploadPassportForm(base64Image);
 //    print(base64Image);
   }
 
   Future<void> retrieveLostData() async {
-    final LostDataResponse response = await ImagePicker.retrieveLostData();
+    final LostDataResponse response = await _picker.retrieveLostData();
     if (response.isEmpty) {
       return;
     }
@@ -153,13 +154,13 @@ class _UploadPassportState extends State<UploadPassportStep>
         _convertImagesToByte();
       });
     } else {
-      _retrieveDataError = response.exception.code;
+      _retrieveDataError = response.exception!.code;
     }
   }
 
   void _onImageButtonPressed(ImageSource source) async {
     try {
-      _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 350);
+      _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte();
     } catch (e) {
       _pickImageError = e;

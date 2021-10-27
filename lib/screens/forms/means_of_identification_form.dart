@@ -69,14 +69,14 @@ class _MeansOfIdentificationStepStepState
     'SSNIT',
     'OTHERS'
   ];
-  String _selectedIdentityType;
-  String _selectedIdentityIssuer;
+  String? _selectedIdentityType;
+  String? _selectedIdentityIssuer;
   int _selectedIdFilter = 99;
   bool others = false;
 
-  AccountFormBloc accountFormBloc;
+  AccountFormBloc? accountFormBloc;
 
-  StatesBloc statesBloc;
+  late StatesBloc statesBloc;
 
   @override
   void initState() {
@@ -86,8 +86,8 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _idTypeTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.idType,
+    return StreamBuilder<String?>(
+      stream: accountFormBloc!.idType,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
@@ -96,7 +96,7 @@ class _MeansOfIdentificationStepStepState
               decoration: InputDecoration(
                   labelText: 'ID Type',
                   helperText: "* Required",
-                  errorText: snapshot.error),
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -123,7 +123,7 @@ class _MeansOfIdentificationStepStepState
                         _selectedIdFilter = 99;
                       }
                     });
-                    accountFormBloc.updateIdentityType(value);
+                    accountFormBloc!.updateIdentityType(value);
                   },
                   items: _idTypes.map((String value) {
                     return DropdownMenuItem<String>(
@@ -141,8 +141,8 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _idIssuerTextField() {
-    return StreamBuilder(
-      stream: accountFormBloc.idIssuer,
+    return StreamBuilder<String?>(
+      stream: accountFormBloc!.idIssuer,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _idIssuerController.value = TextEditingValue(
@@ -156,7 +156,7 @@ class _MeansOfIdentificationStepStepState
               decoration: InputDecoration(
                 labelText: 'ID Issuer',
                 helperText: '* Required',
-                errorText: snapshot.error,
+                errorText: snapshot.error as String?,
               ),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
@@ -173,7 +173,7 @@ class _MeansOfIdentificationStepStepState
                       }
                     });
 
-                    accountFormBloc.updateIDIssuerType(value);
+                    accountFormBloc!.updateIDIssuerType(value);
                   },
                   items: _idIssuer.map((String value) {
                     return DropdownMenuItem<String>(
@@ -192,7 +192,7 @@ class _MeansOfIdentificationStepStepState
 
   Widget _otherIdIssuerTextField() {
     return StreamBuilder(
-      stream: accountFormBloc.idOthersIssuer,
+      stream: accountFormBloc!.idOthersIssuer,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _idIssuerOthersController.value = TextEditingValue(
@@ -202,7 +202,7 @@ class _MeansOfIdentificationStepStepState
         return TextField(
           controller: _idIssuerOthersController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeIdOtherIssuer,
+          onChanged: accountFormBloc!.changeIdOtherIssuer,
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
@@ -210,7 +210,7 @@ class _MeansOfIdentificationStepStepState
           decoration: InputDecoration(
             labelText: 'ID Other Issuer',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -219,7 +219,7 @@ class _MeansOfIdentificationStepStepState
 
   Widget _idNumberTextField() {
     return StreamBuilder(
-      stream: accountFormBloc.idNumber,
+      stream: accountFormBloc!.idNumber,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           _idNumberController.value = TextEditingValue(
@@ -229,7 +229,7 @@ class _MeansOfIdentificationStepStepState
         return TextField(
           controller: _idNumberController,
           textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc.changeIdNumber,
+          onChanged: accountFormBloc!.changeIdNumber,
           keyboardType: TextInputType.text,
           maxLength: 20,
           maxLines: null,
@@ -237,7 +237,7 @@ class _MeansOfIdentificationStepStepState
           decoration: InputDecoration(
             labelText: 'ID Number',
             helperText: '* Required',
-            errorText: snapshot.error,
+            errorText: snapshot.error as String?,
           ),
         );
       },
@@ -245,24 +245,25 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _idPlaceOfIssue() {
-    return StreamBuilder(
-      stream: accountFormBloc.idPlaceOfIssue,
+    return StreamBuilder<String?>(
+      stream: accountFormBloc!.idPlaceOfIssue,
       builder: (context, snapshot) {
         return FormField<String>(
           autovalidate: true,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
-                  labelText: 'ID Place of Issue', errorText: snapshot.error),
+                  labelText: 'ID Place of Issue',
+                  errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: snapshot.hasData
                       ? Helper.returnValidStateRegionSelectedItem(
-                          snapshot.data, _stateRegion)
+                          snapshot.data!, _stateRegion)
                       : null,
                   isDense: true,
-                  onChanged: accountFormBloc.changePlaceOfIssue,
+                  onChanged: accountFormBloc!.changePlaceOfIssue,
                   items: _stateRegion.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value.toUpperCase(),
@@ -301,11 +302,11 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _scan_to_pay_checkBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isScanToPay,
+    return StreamBuilder<bool?>(
+        stream: accountFormBloc!.isScanToPay,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsScanToPay,
+            onChanged: accountFormBloc!.changeIsScanToPay,
             title: new Text('Scan To Pay'),
             controlAffinity: ListTileControlAffinity.leading,
             activeColor: Colors.red,
@@ -316,11 +317,11 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _z_mobile_checkBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isZMobile,
+    return StreamBuilder<bool?>(
+        stream: accountFormBloc!.isZMobile,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsZMobile,
+            onChanged: accountFormBloc!.changeIsZMobile,
             title: new Text('Z - Mobile'),
             controlAffinity: ListTileControlAffinity.leading,
             activeColor: Colors.red,
@@ -331,11 +332,11 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _z_prompt_checkBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isZPrompt,
+    return StreamBuilder<bool?>(
+        stream: accountFormBloc!.isZPrompt,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsZPrompt,
+            onChanged: accountFormBloc!.changeIsZPrompt,
             title: new Text('Z - Prompt'),
             controlAffinity: ListTileControlAffinity.leading,
             activeColor: Colors.red,
@@ -346,11 +347,11 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _statement_via_email_CheckBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isStatementViaEmail,
+    return StreamBuilder<bool?>(
+        stream: accountFormBloc!.isStatementViaEmail,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsStatementViaEmail,
+            onChanged: accountFormBloc!.changeIsStatementViaEmail,
             title: new Text('Statement Via Email'),
             controlAffinity: ListTileControlAffinity.leading,
             activeColor: Colors.red,
@@ -361,11 +362,11 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _ussd_checkBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isUssd,
+    return StreamBuilder<bool?>(
+        stream: accountFormBloc!.isUssd,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsUssd,
+            onChanged: accountFormBloc!.changeIsUssd,
             title: new Text('USSD'),
             controlAffinity: ListTileControlAffinity.leading,
             activeColor: Colors.red,
@@ -376,11 +377,11 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _bank_to_wallet_checkBox() {
-    return StreamBuilder(
-        stream: accountFormBloc.isBankToWallet,
+    return StreamBuilder<bool?>(
+        stream: accountFormBloc!.isBankToWallet,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            onChanged: accountFormBloc.changeIsBankToWallet,
+            onChanged: accountFormBloc!.changeIsBankToWallet,
             title: new Text('Bank to Wallet'),
             controlAffinity: ListTileControlAffinity.leading,
             activeColor: Colors.red,
@@ -410,7 +411,7 @@ class _MeansOfIdentificationStepStepState
           ? false
           : true,
       child: StreamBuilder(
-        stream: accountFormBloc.idIssueDate,
+        stream: accountFormBloc!.idIssueDate,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _idIssueDateController.value = TextEditingValue(
@@ -419,7 +420,7 @@ class _MeansOfIdentificationStepStepState
           }
           return GestureDetector(
               onTap: () async {
-                DateTime picked = await showDatePicker(
+                DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: new DateTime(DateTime.now().year - 25),
@@ -431,19 +432,19 @@ class _MeansOfIdentificationStepStepState
                   var date = formatter.format(picked);
 
                   _idIssueDateController.text = date;
-                  accountFormBloc.changeIssueDate(date);
+                  accountFormBloc!.changeIssueDate(date);
                 }
               },
               child: AbsorbPointer(
                 child: TextField(
                   controller: _idIssueDateController,
-                  onChanged: accountFormBloc.changeIssueDate,
+                  onChanged: accountFormBloc!.changeIssueDate,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: 'ID Issue Date',
                     helperText: "* Required",
                     suffixIcon: Icon(Icons.date_range),
-                    errorText: snapshot.error,
+                    errorText: snapshot.error as String?,
                   ),
                 ),
               ));
@@ -461,7 +462,7 @@ class _MeansOfIdentificationStepStepState
           ? false
           : true,
       child: StreamBuilder(
-        stream: accountFormBloc.idExpiryDate,
+        stream: accountFormBloc!.idExpiryDate,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             _idExpiryDateController.value = TextEditingValue(
@@ -470,7 +471,7 @@ class _MeansOfIdentificationStepStepState
           }
           return GestureDetector(
               onTap: () async {
-                DateTime picked = await showDatePicker(
+                DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: new DateTime.now(),
@@ -482,19 +483,19 @@ class _MeansOfIdentificationStepStepState
                   var date = formatter.format(picked);
 
                   _idExpiryDateController.text = date;
-                  accountFormBloc.changeExpiryDate(date);
+                  accountFormBloc!.changeExpiryDate(date);
                 }
               },
               child: AbsorbPointer(
                 child: TextField(
                   controller: _idExpiryDateController,
-                  onChanged: accountFormBloc.changeExpiryDate,
+                  onChanged: accountFormBloc!.changeExpiryDate,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     labelText: 'ID Expiry Date',
                     helperText: "* Required",
                     suffixIcon: Icon(Icons.date_range),
-                    errorText: snapshot.error,
+                    errorText: snapshot.error as String?,
                   ),
                 ),
               ));
@@ -548,16 +549,17 @@ class _MeansOfIdentificationStepStepState
                                     message: "Verifying ID please wait...",
                                     linearProgressIndicator: null);
                                 loadingBar..show(context);
-                                accountFormBloc.verifyNumber(_selectedIdFilter);
-                                accountFormBloc
+                                accountFormBloc!
+                                    .verifyNumber(_selectedIdFilter);
+                                accountFormBloc!
                                     .driverLicenseVerificationResponse
                                     .listen((response) {
                                   loadingBar.dismiss();
                                   showSuccessVerificationBottomsheet(
                                     context: context,
                                     image: response.photo,
-                                    name:
-                                        CryptoHelper.decrypt(response.fullName),
+                                    name: CryptoHelper.decrypt(
+                                        response.fullName!),
                                   );
                                 }).onError((error) {
                                   loadingBar.dismiss();
@@ -627,7 +629,7 @@ class _MeansOfIdentificationStepStepState
     );
   }
 
-  Widget getImagenBase64(String imagen) {
+  Widget getImagenBase64(String? imagen) {
     var _imageBase64 = imagen;
     const Base64Codec base64 = Base64Codec();
     if (_imageBase64 == null) return new Container();
@@ -639,9 +641,9 @@ class _MeansOfIdentificationStepStepState
   }
 
   showSuccessVerificationBottomsheet(
-      {@required BuildContext context,
-      @required String image,
-      @required String name}) {
+      {required BuildContext context,
+      required String? image,
+      required String name}) {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.white,
@@ -663,8 +665,8 @@ class _MeansOfIdentificationStepStepState
                 ),
                 Center(
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 18),
                     decoration: BoxDecoration(
                       color: Colors.green.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(28),
@@ -673,7 +675,7 @@ class _MeansOfIdentificationStepStepState
                       'The ID number provided is valid',
                       style: Theme.of(context)
                           .textTheme
-                          .caption
+                          .caption!
                           .apply(color: Colors.green, fontWeightDelta: 2),
                     ),
                   ),

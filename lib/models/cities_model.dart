@@ -9,9 +9,9 @@ Cities citiesFromJson(String str) => Cities.fromJson(json.decode(str));
 String citiesToJson(Cities data) => json.encode(data.toJson());
 
 class Cities {
-  String responseCode;
-  String responseMessage;
-  List<String> menu;
+  String? responseCode;
+  String? responseMessage;
+  List<String>? menu;
 
   Cities({
     this.responseCode,
@@ -28,6 +28,6 @@ class Cities {
   Map<String, dynamic> toJson() => {
     "ResponseCode": responseCode,
     "ResponseMessage": responseMessage,
-    "Menu": new List<dynamic>.from(menu.map((x) => x)),
+    "Menu": new List<dynamic>.from(menu!.map((x) => x)),
   };
 }

@@ -5,7 +5,7 @@ import 'package:zxplore_app/screens/page_2_onboarding_screen.dart';
 import 'package:zxplore_app/screens/page_3_onboarding_screen.dart';
 
 class OnboardingMainPage extends StatefulWidget {
-  OnboardingMainPage({Key key}) : super(key: key);
+  OnboardingMainPage({Key? key}) : super(key: key);
 
   @override
   _OnboardingMainPageState createState() => new _OnboardingMainPageState();

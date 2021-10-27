@@ -11,24 +11,24 @@ String votersResponseToJson(VotersResponse data) => json.encode(data.toJson());
 
 class VotersResponse {
   VotersResponse({
-    @required this.responseCode,
-    @required this.pollingStation,
-    @required this.voterId,
-    @required this.age,
-    @required this.sex,
-    @required this.regDate,
-    @required this.fullname,
-    @required this.picture,
+    required this.responseCode,
+    required this.pollingStation,
+    required this.voterId,
+    required this.age,
+    required this.sex,
+    required this.regDate,
+    required this.fullname,
+    required this.picture,
   });
 
-  final String responseCode;
-  final String pollingStation;
-  final String voterId;
-  final String age;
-  final String sex;
-  final String regDate;
-  final String fullname;
-  final String picture;
+  final String? responseCode;
+  final String? pollingStation;
+  final String? voterId;
+  final String? age;
+  final String? sex;
+  final String? regDate;
+  final String? fullname;
+  final String? picture;
 
   factory VotersResponse.fromJson(Map<String, dynamic> json) => VotersResponse(
     responseCode: json["ResponseCode"] == null ? null : json["ResponseCode"],

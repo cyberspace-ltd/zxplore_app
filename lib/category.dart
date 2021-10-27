@@ -6,8 +6,8 @@ class Category {
   final int id;
 
   const Category({
-    @required this.name,
-    @required this.id
+    required this.name,
+    required this.id
 
   })  : assert(name != null);
 

@@ -12,84 +12,84 @@ AccountForm accountFormFromJson(String str) =>
 String accountFormToJson(AccountForm data) => json.encode(data.toJson());
 
 class AccountForm {
-  String accountType;
-  String accountNumber;
-  String accountHolderType;
-  String classCode;
-  String branchNumber;
-  String phoneNumber;
-  String rsmId;
-  String accountName;
-  String tin;
-  String registrationNumber;
-  String sex;
-  String title;
-  String dateOfBirth;
-  String dateOfIncorporation;
-  String businessNature;
-  String sector;
-  String industry;
-  String riskRank;
-  String addressLine1;
-  String city;
-  String state;
-  String countryOfOrigin;
+  String? accountType;
+  String? accountNumber;
+  String? accountHolderType;
+  String? classCode;
+  String? branchNumber;
+  String? phoneNumber;
+  String? rsmId;
+  String? accountName;
+  String? tin;
+  String? registrationNumber;
+  String? sex;
+  String? title;
+  String? dateOfBirth;
+  String? dateOfIncorporation;
+  String? businessNature;
+  String? sector;
+  String? industry;
+  String? riskRank;
+  String? addressLine1;
+  String? city;
+  String? state;
+  String? countryOfOrigin;
   List<SignatoryDetail> signatoryDetails;
-  String refId;
+  String? refId;
 //  String alertZRequest;
-  String masterCardRequest;
-  String visaCardRequest;
-  String verveCardRequest;
+  String? masterCardRequest;
+  String? visaCardRequest;
+  String? verveCardRequest;
 //  String tokenRequest;
 //  String ibankRequest;
-  String scanToPay;
-  String zMobileRequest;
-  String zPromptRequest;
-  String statementByEmailRequest;
-  String uSSDRequest;
-  String bankWalletRequest;
-  double latitude;
-  double longitude;
+  String? scanToPay;
+  String? zMobileRequest;
+  String? zPromptRequest;
+  String? statementByEmailRequest;
+  String? uSSDRequest;
+  String? bankWalletRequest;
+  double? latitude;
+  double? longitude;
 
   AccountForm({
-    @required this.accountType,
+    required this.accountType,
     this.accountNumber,
-    @required this.accountHolderType,
-    @required this.classCode,
-    @required this.branchNumber,
-    @required this.phoneNumber,
-    @required this.rsmId,
-    @required this.accountName,
-    @required this.tin,
+    required this.accountHolderType,
+    required this.classCode,
+    required this.branchNumber,
+    required this.phoneNumber,
+    required this.rsmId,
+    required this.accountName,
+    required this.tin,
     this.registrationNumber,
-    @required this.sex,
-    @required this.title,
-    @required this.dateOfBirth,
-    @required this.dateOfIncorporation,
-    @required this.businessNature,
-    @required this.sector,
-    @required this.industry,
-    @required this.riskRank,
-    @required this.addressLine1,
-    @required this.city,
-    @required this.state,
-    @required this.countryOfOrigin,
-    @required this.signatoryDetails,
-    @required this.refId,
+    required this.sex,
+    required this.title,
+    required this.dateOfBirth,
+    required this.dateOfIncorporation,
+    required this.businessNature,
+    required this.sector,
+    required this.industry,
+    required this.riskRank,
+    required this.addressLine1,
+    required this.city,
+    required this.state,
+    required this.countryOfOrigin,
+    required this.signatoryDetails,
+    required this.refId,
 //    @required this.alertZRequest,
-    @required this.masterCardRequest,
-    @required this.visaCardRequest,
-    @required this.verveCardRequest,
-    @required this.scanToPay,
+    required this.masterCardRequest,
+    required this.visaCardRequest,
+    required this.verveCardRequest,
+    required this.scanToPay,
 //    @required this.tokenRequest,
 //    @required this.ibankRequest,
-    @required this.zMobileRequest,
-    @required this.zPromptRequest,
-    @required this.statementByEmailRequest,
-    @required this.uSSDRequest,
-    @required this.bankWalletRequest,
-    @required this.latitude,
-    @required this.longitude,
+    required this.zMobileRequest,
+    required this.zPromptRequest,
+    required this.statementByEmailRequest,
+    required this.uSSDRequest,
+    required this.bankWalletRequest,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory AccountForm.fromJson(Map<String, dynamic> json) => new AccountForm(
@@ -179,57 +179,57 @@ class AccountForm {
 
 class SignatoryDetail {
   @required
-  String firstName;
-  String middleName;
-  String lastName;
-  String sex;
-  String dateOfBirth;
-  String motherMaidenName;
-  String title;
-  String stateOfOrigin;
-  String countryOfOrigin;
-  String meansOfId;
-  String idNumber;
-  String idIssuer;
-  String idPlaceOfIssue;
-  String idIssueDate;
-  String idExpiryDate;
-  String occupation;
-  String addressLine1;
-  String addressLine2;
-  String city;
-  String state;
-  String emailAddress;
-  String phoneNumber;
-  String fax;
-  String tin;
-  String permitType;
-  String cerpacRpIdNo;
-  String cerpacRPplaceofIssue;
-  String cerpacRpIssueAuth;
-  String visaNo;
-  String arrivalDate;
-  String permitValidFrom;
-  String permitValidTo;
-  String foreignAddress1;
-  String foreignAddress2;
-  String studentLevel;
-  String yearOfGraduation;
-  String faculty;
-  String department;
-  String amlCustType;
-  String amlCustNature;
-  String amlCustNatureBusiness;
-  String useEmailForStatement;
-  String passportUrl;
-  String signatureUrl;
-  String utilityUrl;
-  String bvn;
-  String maritalStatus;
-  String nextOfKin;
-  List<Attachment> attachments;
-  String mmda;
-  String placeOfBirth;
+  String? firstName;
+  String? middleName;
+  String? lastName;
+  String? sex;
+  String? dateOfBirth;
+  String? motherMaidenName;
+  String? title;
+  String? stateOfOrigin;
+  String? countryOfOrigin;
+  String? meansOfId;
+  String? idNumber;
+  String? idIssuer;
+  String? idPlaceOfIssue;
+  String? idIssueDate;
+  String? idExpiryDate;
+  String? occupation;
+  String? addressLine1;
+  String? addressLine2;
+  String? city;
+  String? state;
+  String? emailAddress;
+  String? phoneNumber;
+  String? fax;
+  String? tin;
+  String? permitType;
+  String? cerpacRpIdNo;
+  String? cerpacRPplaceofIssue;
+  String? cerpacRpIssueAuth;
+  String? visaNo;
+  String? arrivalDate;
+  String? permitValidFrom;
+  String? permitValidTo;
+  String? foreignAddress1;
+  String? foreignAddress2;
+  String? studentLevel;
+  String? yearOfGraduation;
+  String? faculty;
+  String? department;
+  String? amlCustType;
+  String? amlCustNature;
+  String? amlCustNatureBusiness;
+  String? useEmailForStatement;
+  String? passportUrl;
+  String? signatureUrl;
+  String? utilityUrl;
+  String? bvn;
+  String? maritalStatus;
+  String? nextOfKin;
+  List<Attachment>? attachments;
+  String? mmda;
+  String? placeOfBirth;
 
   SignatoryDetail({
     this.firstName,
@@ -393,13 +393,13 @@ class SignatoryDetail {
         "MaritalStatus": maritalStatus,
         "NextOfKin": nextOfKin,
         "Attachments":
-            new List<dynamic>.from(attachments.map((x) => x.toJson())),
+            new List<dynamic>.from(attachments!.map((x) => x.toJson())),
       };
 }
 
 class Attachment {
-  String encodedImage;
-  String type;
+  String? encodedImage;
+  String? type;
 
   Attachment({
     this.encodedImage,

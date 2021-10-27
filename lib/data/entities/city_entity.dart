@@ -4,7 +4,7 @@ final String columnCityName = 'name';
 
 class CityEntity {
   //database fields
-  String name;
+  String? name;
 
   CityEntity({
     this.name,

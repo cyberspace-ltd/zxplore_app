@@ -17,11 +17,11 @@ class VerifyIdResponse {
         this.photo,
     });
 
-    String responseCode;
-    String message;
-    String id;
-    String fullName;
-    String photo;
+    String? responseCode;
+    String? message;
+    String? id;
+    String? fullName;
+    String? photo;
 
     factory VerifyIdResponse.fromJson(Map<String, dynamic> json) => VerifyIdResponse(
         responseCode: json["ResponseCode"] == null ? null : json["ResponseCode"],

@@ -5,11 +5,11 @@ final String columnAccountClassCode = 'id';
 final String columnAccountClassType = 'type';
 final String columnAccountClassDescription = 'name';
 
-class AccountClassEntity extends Equatable{
+class AccountClassEntity extends Equatable {
   //database fields
-  int id;
-  String name;
-  String type;
+  int? id;
+  String? name;
+  String? type;
 
   AccountClassEntity({this.id, this.name, this.type});
 
@@ -27,5 +27,7 @@ class AccountClassEntity extends Equatable{
           name: json[columnAccountClassDescription],
           type: json[columnAccountClassType]);
 
-
+  @override
+  // TODO: implement props
+  List<Object> get props => throw UnimplementedError();
 }

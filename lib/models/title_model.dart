@@ -5,9 +5,9 @@ Title titleFromJson(String str) => Title.fromJson(json.decode(str));
 String titleToJson(Title data) => json.encode(data.toJson());
 
 class Title {
-  String responseCode;
-  String responseMessage;
-  List<String> menu;
+  String? responseCode;
+  String? responseMessage;
+  List<String>? menu;
 
   Title({
     this.responseCode,
@@ -24,6 +24,6 @@ class Title {
   Map<String, dynamic> toJson() => {
     "ResponseCode": responseCode,
     "ResponseMessage": responseMessage,
-    "Menu": new List<dynamic>.from(menu.map((x) => x)),
+    "Menu": new List<dynamic>.from(menu!.map((x) => x)),
   };
 }

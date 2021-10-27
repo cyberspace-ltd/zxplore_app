@@ -18,11 +18,11 @@ final _borderRadius = BorderRadius.circular(_rowHeight / 2);
 /// A [CategoryTile] to display a [Category].
 class CategoryTile extends StatelessWidget {
   final Category category;
-  final ValueChanged<Category> onTap;
+  final ValueChanged<Category>? onTap;
 
   const CategoryTile({
-    Key key,
-    @required this.category,
+    Key? key,
+    required this.category,
     this.onTap,
   })  : assert(category != null),
         super(key: key);
@@ -31,7 +31,7 @@ class CategoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: new InkWell(
-      onTap: onTap == null ? null : () => onTap(category),
+      onTap: onTap == null ? null : () => onTap!(category),
       child: Container(
         padding: EdgeInsets.only(top: 40.0),
         color: ZxplorePrimaryColor,

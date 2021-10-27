@@ -28,7 +28,7 @@ class _ZxploreAppState extends State<ZxploreApp> {
   }
 }
 
-Route<dynamic> _getRoute(RouteSettings settings) {
+Route<dynamic>? _getRoute(RouteSettings settings) {
   if (settings.name != '/splash') {
     return null;
   }
@@ -66,12 +66,12 @@ ThemeData _buildZxploreTheme() {
 TextTheme _buildZxploreTextTheme(TextTheme base) {
   return base
       .copyWith(
-        headline5: base.headline6
+        headline5: base.headline6!
             .copyWith(fontWeight: FontWeight.w500, color: ZxplorePrimaryColor),
-        headline6: base.headline6.copyWith(fontSize: 18.0),
+        headline6: base.headline6!.copyWith(fontSize: 18.0),
         caption:
-            base.caption.copyWith(fontSize: 11.0, color: ZxplorePrimaryColor),
-        bodyText2: base.bodyText2.copyWith(
+            base.caption!.copyWith(fontSize: 11.0, color: ZxplorePrimaryColor),
+        bodyText2: base.bodyText2!.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 16.0,
         ),

@@ -15,8 +15,8 @@ class StatesBloc extends BlocBase {
   Stream<List<StateEntity>> get states => _statesController.stream;
 
 
-  final _addStateController = StreamController<List<Menu>>.broadcast();
-  StreamSink<List<Menu>> get inAddStates => _addStateController.sink;
+  final _addStateController = StreamController<List<Menu>?>.broadcast();
+  StreamSink<List<Menu>?> get inAddStates => _addStateController.sink;
 
 
   StatesBloc() {
@@ -40,8 +40,8 @@ class StatesBloc extends BlocBase {
   }
 
 
-  void _handleAddStates(List<Menu> values) async {
-    DBProvider.db.insertStates(values);
+  void _handleAddStates(List<Menu>? values) async {
+    DBProvider.db.insertStates(values!);
 
     getStates();
   }

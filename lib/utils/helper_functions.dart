@@ -7,13 +7,13 @@ class Helper {
     await SecureStorage.clearSecureInformation();
   }
 
-  static String returnValidStateSelectedItem(String sourceValue, List<String> matchingList) {
+  static String? returnValidStateSelectedItem(String sourceValue, List<String> matchingList) {
     sourceValue = sourceValue.toUpperCase();
     if (sourceValue.contains('STATE')) {
       sourceValue = sourceValue.replaceAll('STATE', '');
       sourceValue = sourceValue.trim();
     }
-    String validData;
+    String? validData;
 
     matchingList.forEach((value) {
       if (value.contains(sourceValue)) {
@@ -24,9 +24,9 @@ class Helper {
     return validData;
   }
 
-  static String returnValidMaritalStatusSelectedItem(String sourceValue, List<String> matchingList) {
+  static String? returnValidMaritalStatusSelectedItem(String sourceValue, List<String> matchingList) {
     sourceValue = sourceValue.toUpperCase();
-    String validData;
+    String? validData;
 
     matchingList.forEach((value) {
       if (value.contains(sourceValue)) {
@@ -36,9 +36,9 @@ class Helper {
 
     return validData;
   }
-  static String returnValidStateRegionSelectedItem(String sourceValue, List<String> matchingList) {
+  static String? returnValidStateRegionSelectedItem(String sourceValue, List<String> matchingList) {
     sourceValue = sourceValue.toUpperCase();
-    String validData;
+    String? validData;
 
     matchingList.forEach((value) {
       if (value.toUpperCase().contains(sourceValue)) {
@@ -49,9 +49,9 @@ class Helper {
     return validData;
   }
 
-    static String returnValidOccupationGroupSelecteditem(String sourceValue, List<String> matchingList) {
+    static String? returnValidOccupationGroupSelecteditem(String sourceValue, List<String> matchingList) {
     sourceValue = sourceValue.toUpperCase();
-    String validData;
+    String? validData;
 
     matchingList.forEach((value) {
       if (value.toUpperCase().contains(sourceValue)) {
@@ -62,9 +62,9 @@ class Helper {
     return validData;
   }
 
-  static String returnValidGenderSelectedItem(String sourceValue, List<String> matchingList) {
+  static String? returnValidGenderSelectedItem(String sourceValue, List<String> matchingList) {
     sourceValue = sourceValue.toUpperCase();
-    String validData;
+    String? validData;
 
 
     matchingList.forEach((value) {

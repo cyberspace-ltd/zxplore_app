@@ -26,14 +26,15 @@ class _SignatoryStepState extends State<SignatoryStep>
   var color = Colors.black;
   var strokeWidth = 5.0;
   final _sign = GlobalKey<SignatureState>();
+  ImagePicker _picker = ImagePicker();
 
-  AccountFormBloc accountFormBloc;
+  AccountFormBloc? accountFormBloc;
   var loadingBar;
-  bool _isButtonDisabled;
+  late bool _isButtonDisabled;
 
-  File _imageFile;
+  XFile? _imageFile;
   // ignore: unused_field
-  String _retrieveDataError;
+  String? _retrieveDataError;
   // ignore: unused_field
   dynamic _pickImageError;
 
@@ -45,8 +46,8 @@ class _SignatoryStepState extends State<SignatoryStep>
 
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
 
-    accountFormBloc.uploadSignatureController.listen((base64Signature) {
-      var imageData = base64Decode(base64Signature);
+    accountFormBloc!.uploadSignatureController.listen((base64Signature) {
+      var imageData = base64Decode(base64Signature!);
       setState(() {
         _img = imageData.buffer.asByteData();
       });
@@ -157,7 +158,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                       OutlineButton(
                         child: Text('Accept Signature.'),
                         onPressed: () async {
-                          final sign = _sign.currentState;
+                          final sign = _sign.currentState!;
                           if (sign.points.length == 0) {
                             FlushbarHelper.createError(
                                 message: "You have not signed this form")
@@ -166,14 +167,14 @@ class _SignatoryStepState extends State<SignatoryStep>
                           }
                           //retrieve image data, do whatever you want with it (send to server, save locally...)
                           final image = await sign.getData();
-                          var data = await image.toByteData(
-                              format: ui.ImageByteFormat.png);
+                          var data = await (image.toByteData(
+                              format: ui.ImageByteFormat.png));
                           sign.clear();
                           final encoded = base64
-                              .encode(data.buffer.asUint8ClampedList())
+                              .encode(data!.buffer.asUint8ClampedList())
                               .toString();
 
-                          accountFormBloc.setSignature(encoded);
+                          accountFormBloc!.setSignature(encoded);
 
                           setState(() {
                             _img = data;
@@ -188,9 +189,9 @@ class _SignatoryStepState extends State<SignatoryStep>
                           ),
                           textColor: ZxploreRedColor,
                           onPressed: () {
-                            final sign = _sign.currentState;
+                            final sign = _sign.currentState!;
                             sign.clear();
-                            accountFormBloc.setSignature(null);
+                            accountFormBloc!.setSignature(null);
                             setState(() {
                               _img = ByteData(0);
                               _isButtonDisabled = true;
@@ -226,11 +227,12 @@ class _SignatoryStepState extends State<SignatoryStep>
                 text: "Terms & Conditions",
                 style: Theme.of(context)
                     .textTheme
-                    .caption
+                    .caption!
                     .apply(color: Colors.pink, fontWeightDelta: 1),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
-                    const url = 'https://www.zenithbank.com.gh/terms-and-conditions/';
+                    const url =
+                        'https://www.zenithbank.com.gh/terms-and-conditions/';
                     launchURL(url);
                   }),
             TextSpan(
@@ -254,7 +256,7 @@ class _SignatoryStepState extends State<SignatoryStep>
 
   Widget submitButton() {
     return StreamBuilder(
-      stream: accountFormBloc.submitValid,
+      stream: accountFormBloc!.submitValid,
       builder: (context, snapshot) {
         return Padding(
           padding: const EdgeInsets.all(12.0),
@@ -280,9 +282,9 @@ class _SignatoryStepState extends State<SignatoryStep>
     setState(() {
       _isButtonDisabled = true;
     });
-    accountFormBloc.submit();
+    accountFormBloc!.submit();
 
-    accountFormBloc.subjectSaveAccountResponse.listen((response) {
+    accountFormBloc!.subjectSaveAccountResponse.listen((response) {
       loadingBar.dismiss(context);
 
       _showSuccessDialog(
@@ -327,19 +329,20 @@ class _SignatoryStepState extends State<SignatoryStep>
   }
 
   Future _convertImagesToByte() async {
-    List<int> imageBytes = await _imageFile.readAsBytes();
+    List<int> imageBytes = await _imageFile!.readAsBytes();
     var imgBytes = new Uint8List.fromList(imageBytes);
 
     String base64Image = base64Encode(imageBytes);
     _img = imgBytes.buffer.asByteData();
 
-    accountFormBloc.setSignature(base64Image);
+    accountFormBloc!.setSignature(base64Image);
 
 //    print(base64Image);
   }
 
   Future<void> retrieveLostData() async {
-    final LostDataResponse response = await ImagePicker.retrieveLostData();
+    var imagePicker = ImagePicker();
+    final LostDataResponse response = await imagePicker.retrieveLostData();
     if (response.isEmpty) {
       return;
     }
@@ -349,13 +352,13 @@ class _SignatoryStepState extends State<SignatoryStep>
         _convertImagesToByte();
       });
     } else {
-      _retrieveDataError = response.exception.code;
+      _retrieveDataError = response.exception!.code;
     }
   }
 
   void _onImageButtonPressed(ImageSource source) async {
     try {
-      _imageFile = await ImagePicker.pickImage(source: source, maxHeight: 350);
+      _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte();
     } catch (e) {
       _pickImageError = e;

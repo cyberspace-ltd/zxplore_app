@@ -6,15 +6,15 @@ import 'package:zxplore_app/screens/category_screen.dart';
 import '../colors.dart';
 
 class OfflineHomePage extends StatefulWidget {
-  OfflineHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  OfflineHomePage({Key? key, this.title}) : super(key: key);
+  final String? title;
 
   @override
   _OfflineHomeState createState() => _OfflineHomeState();
 }
 
 class _OfflineHomeState extends State<OfflineHomePage> {
-  AccountsBloc _accountsBloc;
+  late AccountsBloc _accountsBloc;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
     super.initState();
   }
 
-  Widget _buildErrorWidget(String error) {
+  Widget _buildErrorWidget(String? error) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -50,7 +50,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
     );
   }
 
-  Widget _actionChipError(String error) {
+  Widget _actionChipError(String? error) {
     return ActionChip(
         backgroundColor: ZxploreGrey,
         padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -212,13 +212,13 @@ class _OfflineHomeState extends State<OfflineHomePage> {
         stream: _accountsBloc.offlineAccounts,
         builder: (context, AsyncSnapshot<List<OfflineAccountEntity>> snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data.isEmpty) {
+            if (snapshot.data!.isEmpty) {
               //todo: make use of error.
               return _buildErrorWidget('No offline forms found');
             }
-            return makeBody(snapshot.data, context);
+            return makeBody(snapshot.data!, context);
           } else if (snapshot.hasError) {
-            return _buildErrorWidget(snapshot.error);
+            return _buildErrorWidget(snapshot.error as String?);
           }
           else {
             return Container();

@@ -17,9 +17,9 @@ class DBProvider {
   DBProvider._();
 
   static final DBProvider db = DBProvider._();
-  Database _database;
+  Database? _database;
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) {
       return _database;
     }
@@ -63,60 +63,59 @@ class DBProvider {
   Future<OfflineAccountEntity> insertOfflineAccount(
       OfflineAccountEntity account) async {
     final db = await database;
-    account.id = await db.insert(tableOfflineAccount, account.toMap());
+    account.id = await db!.insert(tableOfflineAccount, account.toMap());
     return account;
   }
 
   Future<List<OfflineAccountEntity>> getOfflineAccounts() async {
     final db = await database;
-    var res = await db.query(tableOfflineAccount);
+    var res = await db!.query(tableOfflineAccount);
     List<OfflineAccountEntity> list = res.isNotEmpty
         ? res.map((c) => OfflineAccountEntity.fromMap(c)).toList()
         : [];
     return list;
   }
 
-  Future<OfflineAccountEntity> getOfflineAccount(String refId) async {
+  Future<OfflineAccountEntity?> getOfflineAccount(String? refId) async {
     final db = await database;
-    List<Map> maps = await db.query(tableOfflineAccount,
+    List<Map> maps = await db!.query(tableOfflineAccount,
 //        columns: [columnOfflineTitle, columnOfflineSurname, columnOfflineBVN],
         where: '$columnOfflineReferenceId = ?',
         whereArgs: [refId]);
     if (maps.length > 0) {
-      return OfflineAccountEntity.fromMap(maps.first);
+      return OfflineAccountEntity.fromMap(maps.first as Map<String, dynamic>);
     }
     return null;
   }
 
   Future<int> updateOfflineAccount(OfflineAccountEntity account) async {
     final db = await database;
-    var result = await db.update(tableOfflineAccount, account.toMap(),
+    var result = await db!.update(tableOfflineAccount, account.toMap(),
         where: '$columnOfflineId = ?', whereArgs: [account.id]);
 
     return result;
   }
 
-  Future<int> deleteOfflineAccount(int id) async {
+  Future<int> deleteOfflineAccount(int? id) async {
     var db = await database;
-    return await db.delete(tableOfflineAccount,
+    return await db!.delete(tableOfflineAccount,
         where: '$columnOfflineId = ?', whereArgs: [id]);
   }
 
   void insertOccupations(List<OccupationMenu> occupations) async {
     final db = await database;
 
-    occupations.forEach((element) async =>
-        await db.insert(tableOccupation, {
+    occupations.forEach((element) async => await db!.insert(tableOccupation, {
           columnOccupationId: element.srn,
           columnOccupationName: element.occupationName,
           columnGroupName: element.groupName,
           columnSironCode: element.sironCode
-          }));
+        }));
   }
 
   Future<List<OccupationEntity>> getOccupations() async {
     final db = await database;
-    var res = await db.query(tableOccupation);
+    var res = await db!.query(tableOccupation);
     List<OccupationEntity> list = res.isNotEmpty
         ? res.map((c) => OccupationEntity.fromMap(c)).toList()
         : [];
@@ -127,12 +126,12 @@ class DBProvider {
     final db = await database;
 
     countries.forEach((element) async =>
-        await db.insert(tableCountry, {columnCountryName: element}));
+        await db!.insert(tableCountry, {columnCountryName: element}));
   }
 
   Future<List<CountryEntity>> getCountries() async {
     final db = await database;
-    var res = await db.query(tableCountry);
+    var res = await db!.query(tableCountry);
     List<CountryEntity> list =
         res.isNotEmpty ? res.map((c) => CountryEntity.fromMap(c)).toList() : [];
     return list;
@@ -141,16 +140,16 @@ class DBProvider {
   void insertStates(List<Menu> states) async {
     final db = await database;
 
-    states.forEach((element) async => await db.insert(tableState, {
-      columnStateId: element.srn,
-      columnStateName: element.stateName,
+    states.forEach((element) async => await db!.insert(tableState, {
+          columnStateId: element.srn,
+          columnStateName: element.stateName,
           columnSateMMDA: element.mmda,
         }));
   }
 
   Future<List<StateEntity>> getStates() async {
     final db = await database;
-    var res = await db.query(tableState);
+    var res = await db!.query(tableState);
     List<StateEntity> list =
         res.isNotEmpty ? res.map((c) => StateEntity.fromMap(c)).toList() : [];
     return list;
@@ -160,12 +159,12 @@ class DBProvider {
     final db = await database;
 
     cities.forEach((element) async =>
-        await db.insert(tableCity, {columnStateName: element}));
+        await db!.insert(tableCity, {columnStateName: element}));
   }
 
   Future<List<CityEntity>> getCities() async {
     final db = await database;
-    var res = await db.query(tableCity);
+    var res = await db!.query(tableCity);
     List<CityEntity> list =
         res.isNotEmpty ? res.map((c) => CityEntity.fromMap(c)).toList() : [];
     return list;
@@ -175,7 +174,7 @@ class DBProvider {
     final db = await database;
 
     accountClasses
-        .forEach((element) async => await db.insert(tableAccountClass, {
+        .forEach((element) async => await db!.insert(tableAccountClass, {
               columnAccountClassCode: element.classCode,
               columnAccountClassType: element.classType.toString(),
               columnAccountClassDescription: element.description
@@ -184,7 +183,7 @@ class DBProvider {
 
   Future<List<AccountClassEntity>> getAccountClasses() async {
     final db = await database;
-    var res = await db.query(tableAccountClass);
+    var res = await db!.query(tableAccountClass);
     List<AccountClassEntity> list = res.isNotEmpty
         ? res.map((c) => AccountClassEntity.fromMap(c)).toList()
         : [];
