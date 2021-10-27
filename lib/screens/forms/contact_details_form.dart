@@ -12,7 +12,7 @@ import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/generated/i18n.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class ContactDetailsStep extends StatefulWidget {
   @override
@@ -383,9 +383,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         errorText: itemSnapshot.error),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value:
-                            _getAccountTypeValue(itemSnapshot, listSnapshot),
-                            isExpanded: true,
+                        value: _getAccountTypeValue(itemSnapshot, listSnapshot),
+                        isExpanded: true,
                         isDense: true,
                         items: listSnapshot.hasData
                             ? listSnapshot.data
@@ -398,7 +397,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                        entity.mmda.toUpperCase().toString(), overflow: TextOverflow.ellipsis,),
+                                      entity.mmda.toUpperCase().toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 );
                               }).toList()
@@ -848,7 +849,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     _maritalStatusField(),
                   ],
                 ),
-            SizedBox(height: 120.0),
+                SizedBox(height: 120.0),
               ],
             ),
           ),
