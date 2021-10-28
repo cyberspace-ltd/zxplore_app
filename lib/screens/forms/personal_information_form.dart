@@ -129,7 +129,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             keyboardType: TextInputType.text,
             onChanged: accountFormBloc!.changeTin,
             decoration: InputDecoration(
-              labelText: 'TIN (Tax Identification Number)',
+              labelText: 'Ghana Card',
               // helperText:
               //     'Click the verify TIN button to populate account form.',
               errorText: snapshot.error as String?,
