@@ -114,7 +114,7 @@ class _AccountInformationState extends State<AccountInformationStep>
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data,
+                  value: snapshot.data ?? _accountHolderTypes[0],
                   isDense: true,
                   onChanged: accountFormBloc!.changeHolderType,
                   items: _accountHolderTypes.map((String value) {
