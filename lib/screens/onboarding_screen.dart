@@ -57,7 +57,7 @@ class _OnboardingMainPageState extends State<OnboardingMainPage> {
                   elevation: 0.0,
                   primary: false,
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text(
                         isDone ? 'DONE' : 'NEXT',
                         style: TextStyle(color: Colors.black),

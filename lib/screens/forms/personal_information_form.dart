@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/countries_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
@@ -86,7 +87,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc!.title,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -155,7 +156,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLength: 40,
 //          enabled: accountFormBloc.bvnlastNameValue,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'Surname',
             helperText: '* Required',
@@ -185,7 +186,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLength: 40,
           enabled: accountFormBloc!.bvnFirstName,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'First Name',
             helperText: '* Required',
@@ -213,7 +214,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLength: 40,
           enabled: accountFormBloc!.bvnOtherName,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'Other Name',
             errorText: snapshot.error as String?,
@@ -239,7 +240,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'Mother\'s Maiden Name',
             helperText: '* Required',
@@ -267,7 +268,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLength: 40,
           enabled: accountFormBloc!.bvnDateOfBirths,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'Date of Birth',
             helperText: '* Required',
@@ -337,7 +338,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
               labelText: 'Place of Birth',
               helperText: "* Required",
@@ -352,7 +353,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc!.countryOfOrigin,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(

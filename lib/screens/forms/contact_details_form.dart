@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/cities_bloc.dart';
 import 'package:zxplore_app/blocs/countries_bloc.dart';
@@ -132,7 +133,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLength: 40,
 //            enabled: accountFormBloc.bvnEmail,
             maxLines: null,
-            maxLengthEnforced: true,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
               labelText: 'Email',
               errorText: snapshot.error as String?,
@@ -183,7 +184,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             onChanged: accountFormBloc!.changeNextOfKin,
             maxLength: 50,
             maxLines: null,
-            maxLengthEnforced: true,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
               labelText: 'Next of Kin',
               helperText: '* Required',
@@ -209,7 +210,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             onChanged: accountFormBloc!.changeAddress1,
             maxLength: 40,
             maxLines: null,
-            maxLengthEnforced: true,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
               labelText: 'Address 1',
               helperText: '* Required',
@@ -234,7 +235,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             keyboardType: TextInputType.multiline,
             onChanged: accountFormBloc!.changeAddress2,
             maxLength: 40,
-            maxLengthEnforced: true,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
               labelText: 'Address 2',
               errorText: snapshot.error as String?,
@@ -248,7 +249,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc!.countryOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -306,7 +307,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           maxLength: 40,
           enabled: accountFormBloc!.bvnStateOfResidence,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'Region of Residence',
             helperText: '* Required',
@@ -322,7 +323,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc!.stateOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -371,7 +372,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             stream: accountFormBloc!.mmda,
             builder: (context, itemSnapshot) {
               return FormField<String>(
-                autovalidate: true,
+                autovalidateMode: AutovalidateMode.always,
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
                     decoration: InputDecoration(
@@ -458,7 +459,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'CITY/TOWN OF RESIDENCE',
             helperText: '* Required',
@@ -501,7 +502,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           maxLength: 40,
           enabled: accountFormBloc!.bvnGender,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'Gender',
             helperText: '* Required',
@@ -517,7 +518,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc!.gender,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -565,7 +566,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'Other Occupation',
             helperText: '* Required',
@@ -581,7 +582,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc!.occupationCategory,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -616,11 +617,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                               accountFormBloc!.updateOccupationCategory(null);
                             } else {
                               setState(() {
-                                if (value == null) {
-                                  _selectedOccupationGroup = "";
-                                } else
-                                  _selectedOccupationGroup =
-                                      value.toUpperCase();
+                                _selectedOccupationGroup = value.toUpperCase();
                                 print(_selectedOccupationGroup);
                               });
                               accountFormBloc!.updateOccupationCategory(value);
@@ -648,7 +645,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             stream: accountFormBloc!.occupation,
             builder: (context, itemSnapshot) {
               return FormField<String>(
-                autovalidate: true,
+                autovalidateMode: AutovalidateMode.always,
                 builder: (FormFieldState<String> occupations) {
                   return InputDecorator(
                     decoration: InputDecoration(
@@ -759,7 +756,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       stream: accountFormBloc!.maritalStatus,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(

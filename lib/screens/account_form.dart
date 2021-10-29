@@ -90,7 +90,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   }
 
   _getAccountDetailsFromDatabase(String? referenceId) {
-    var backButton = FlatButton(
+    var backButton = TextButton(
       onPressed: () {
         Navigator.pop(context);
       },
@@ -113,7 +113,7 @@ class _AccountFormPageState extends State<AccountFormPage>
 
   _getAccountDetailsByReferenceId(String? referenceId) {
     Future.delayed(const Duration(milliseconds: 500), () {
-      var backButton = FlatButton(
+      var backButton = TextButton(
         onPressed: () {
           Navigator.pop(context);
         },

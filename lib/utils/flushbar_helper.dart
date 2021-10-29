@@ -62,7 +62,7 @@ class FlushbarHelper {
   /// Get a flushbar that can receive a user action through a button.
   static Flushbar createAction(
       {required String message,
-      required FlatButton button,
+      required TextButton button,
       String? title,
       Duration duration = const Duration(seconds: 3)}) {
     return Flushbar(
@@ -75,7 +75,7 @@ class FlushbarHelper {
 
   static Flushbar createErrorAction(
       {required String message,
-      required FlatButton button,
+      required TextButton button,
       String? title,
       Duration duration = const Duration(seconds: 25)}) {
     return Flushbar(

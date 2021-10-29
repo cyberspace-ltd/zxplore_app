@@ -644,16 +644,28 @@ class _MyHomePageState extends State<MyHomePage> {
               "Are you sure you want to logout. You might lose offline data. Proceed?"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
-            new FlatButton(
+            new TextButton(
               child: new Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            OutlineButton(
+            OutlinedButton(
               child: Text('Yes Logout'),
-              textColor: Colors.red,
-              color: Colors.transparent,
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                  Colors.red.shade900,
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Colors.white,
+                ),
+                side: MaterialStateProperty.all<BorderSide>(
+                  BorderSide(color: Colors.red.shade900),
+                ),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(16),
+                ),
+              ),
               onPressed: () async {
                 await Helper.logout();
                 Navigator.pushAndRemoveUntil(

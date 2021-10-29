@@ -88,11 +88,16 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, snapshot) {
         return ButtonTheme(
           height: 60.0,
-          child: RaisedButton(
+          child: ElevatedButton(
             child: Text('Login'),
-            textColor: Color.fromRGBO(255, 255, 255, 1),
-            color: ZxplorePrimaryColor,
-            elevation: 8.0,
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+                Colors.white,
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                Colors.red.shade900,
+              ),
+            ),
             onPressed: snapshot.hasData
                 ? () async {
                     var loadingBar = FlushbarHelper.createLoading(
@@ -214,11 +219,11 @@ Future<bool> _exitApp(BuildContext context) {
         title: new Text('Do you want to exit this application?'),
         content: new Text('We hate to see you leave...'),
         actions: <Widget>[
-          new FlatButton(
+          new TextButton(
             onPressed: () => Navigator.of(context).pop(false),
             child: new Text('No'),
           ),
-          new FlatButton(
+          new TextButton(
             onPressed: () => exit(0),
             child: new Text('Yes'),
           ),
@@ -240,7 +245,6 @@ class AccentColorOverride extends StatelessWidget {
     return Theme(
       child: child!,
       data: Theme.of(context).copyWith(
-        accentColor: color,
         brightness: Brightness.dark,
       ),
     );

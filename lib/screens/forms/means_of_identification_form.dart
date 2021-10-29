@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
@@ -90,7 +91,7 @@ class _MeansOfIdentificationStepStepState
       stream: accountFormBloc!.idType,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -150,7 +151,7 @@ class _MeansOfIdentificationStepStepState
               selection: _idIssuerController.selection);
         }
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -206,7 +207,7 @@ class _MeansOfIdentificationStepStepState
           keyboardType: TextInputType.text,
           maxLength: 40,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'ID Other Issuer',
             helperText: '* Required',
@@ -233,7 +234,7 @@ class _MeansOfIdentificationStepStepState
           keyboardType: TextInputType.text,
           maxLength: 20,
           maxLines: null,
-          maxLengthEnforced: true,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
             labelText: 'ID Number',
             helperText: '* Required',
@@ -249,7 +250,7 @@ class _MeansOfIdentificationStepStepState
       stream: accountFormBloc!.idPlaceOfIssue,
       builder: (context, snapshot) {
         return FormField<String>(
-          autovalidate: true,
+          autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
@@ -540,10 +541,25 @@ class _MeansOfIdentificationStepStepState
                           Container(
                             alignment: Alignment(1.0, 0.0),
                             height: 60.0,
-                            child: OutlineButton(
+                            child: OutlinedButton(
                               child: Text('VERIFY ID NUMBER'),
-                              textColor: ZxplorePrimaryColor,
-                              color: Colors.transparent,
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Colors.red.shade900,
+                                ),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Colors.white,
+                                ),
+                                side: MaterialStateProperty.all<BorderSide>(
+                                  BorderSide(color: Colors.red.shade900),
+                                ),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  EdgeInsets.all(16),
+                                ),
+                              ),
                               onPressed: () {
                                 var loadingBar = FlushbarHelper.createLoading(
                                     message: "Verifying ID please wait...",

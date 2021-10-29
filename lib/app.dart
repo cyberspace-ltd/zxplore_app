@@ -45,11 +45,9 @@ final ThemeData _zXploreTheme = _buildZxploreTheme();
 ThemeData _buildZxploreTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-    accentColor: Colors.red,
     primaryColor: ZxplorePrimaryColor,
     scaffoldBackgroundColor: kShrineBackgroundWhite,
     cardColor: kShrineBackgroundWhite,
-    textSelectionColor: ZxplorePrimaryColor,
     errorColor: kShrineErrorRed,
     buttonTheme: base.buttonTheme.copyWith(
       buttonColor: ZxplorePrimaryColor,
@@ -59,7 +57,7 @@ ThemeData _buildZxploreTheme() {
     inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
     textTheme: _buildZxploreTextTheme(base.textTheme),
     primaryTextTheme: _buildZxploreTextTheme(base.primaryTextTheme),
-    accentTextTheme: _buildZxploreTextTheme(base.accentTextTheme),
+    colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.red),
   );
 }
 

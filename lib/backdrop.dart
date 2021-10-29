@@ -334,10 +334,22 @@ class _BackdropState extends State<Backdrop>
           content: new Text(message),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
-            OutlineButton(
+            OutlinedButton(
               child: Text('Done'),
-              textColor: Colors.green,
-              color: Colors.transparent,
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                  Colors.red.shade900,
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Colors.white,
+                ),
+                side: MaterialStateProperty.all<BorderSide>(
+                  BorderSide(color: Colors.red.shade900),
+                ),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(16),
+                ),
+              ),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,

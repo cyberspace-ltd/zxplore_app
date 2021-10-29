@@ -153,7 +153,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      OutlineButton(
+                      OutlinedButton(
                         child: Text('Accept Signature.'),
                         onPressed: () async {
                           final sign = _sign.currentState!;
@@ -181,11 +181,10 @@ class _SignatoryStepState extends State<SignatoryStep>
 //                        debugPrint("onPressed " + encoded);
                         },
                       ),
-                      FlatButton(
+                      TextButton(
                           child: Text(
                             'Clear Signature',
                           ),
-                          textColor: ZxploreRedColor,
                           onPressed: () {
                             final sign = _sign.currentState!;
                             sign.clear();
@@ -259,11 +258,16 @@ class _SignatoryStepState extends State<SignatoryStep>
         return Padding(
           padding: const EdgeInsets.all(12.0),
           child: Center(
-            child: new RaisedButton(
+            child: new ElevatedButton(
               child: Text('Submit Account'),
-              textColor: Color.fromRGBO(255, 255, 255, 1),
-              color: ZxplorePrimaryColor,
-              elevation: 8.0,
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                  Colors.white,
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Colors.red.shade900,
+                ),
+              ),
               onPressed: _isButtonDisabled ? null : submitAccount,
 //              onPressed: accountFormBloc.submit,
             ),
@@ -308,10 +312,22 @@ class _SignatoryStepState extends State<SignatoryStep>
           content: new Text(message),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
-            OutlineButton(
+            OutlinedButton(
               child: Text('Done'),
-              textColor: Colors.green,
-              color: Colors.transparent,
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                  Colors.green,
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Colors.white,
+                ),
+                side: MaterialStateProperty.all<BorderSide>(
+                  BorderSide(color: Colors.green),
+                ),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.all(16),
+                ),
+              ),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
