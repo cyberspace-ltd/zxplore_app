@@ -739,13 +739,14 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   submit() async {
-    var validRefenceId = _referenceIdController.value;
+    var validRefenceId = _referenceIdController.valueOrNull;
 
-    var validAccountType = _accountTypeController.value;
-    final validAccountHolderType = _accountHolderTypeController.value;
-    final validAccountRiskRank =
-        _riskRankController.value != null ? _riskRankController.value : '';
-    var validAccountCategory = _accountCategoryController.value;
+    var validAccountType = _accountTypeController.valueOrNull;
+    final validAccountHolderType = _accountHolderTypeController.valueOrNull;
+    final validAccountRiskRank = _riskRankController.valueOrNull != null
+        ? _riskRankController.value
+        : '';
+    String? validAccountCategory = _accountCategoryController.valueOrNull;
 
     List<AccountClassEntity> accountClasses =
         await DBProvider.db.getAccountClasses();
@@ -754,70 +755,72 @@ class AccountFormBloc extends BlocBase with Validators {
         .firstWhere((x) => x.name == validAccountCategory)
         .id
         .toString(); //hotfix: to solve issue of account category filter from account type
-    var validTIN = _tinController.value;
-    final validTitle = _titleController.value;
-    final validSurname = _surnameController.value;
-    final validFirstName = _firstNameController.value;
-    var validOtherName = _otherNameController.value;
-    final validMothersMaidenName = _mothersMaidenNameController.value;
-    final validDateOfBirth = _dateOfBirthController.value;
+    var validTIN = _tinController.valueOrNull;
+    final validTitle = _titleController.valueOrNull;
+    final validSurname = _surnameController.valueOrNull;
+    final validFirstName = _firstNameController.valueOrNull;
+    var validOtherName = _otherNameController.valueOrNull;
+    final validMothersMaidenName = _mothersMaidenNameController.valueOrNull;
+    final validDateOfBirth = _dateOfBirthController.valueOrNull;
 //    final validStateOfOrigin = _stateOfOriginController.value;
-    final validPlaceOfBirth = _placeOfBirthController.value;
+    final validPlaceOfBirth = _placeOfBirthController.valueOrNull;
 
-    var validMMDA = _mmdaController.value;
+    var validMMDA = _mmdaController.valueOrNull;
 
-    final validCountryOfOrigin = _countryOfOriginController.value == null
+    final validCountryOfOrigin = _countryOfOriginController.valueOrNull == null
         ? 'GHANA'
         : _countryOfOriginController.value; //workaround for bug
 
-    var validEmail = _emailController.value;
+    var validEmail = _emailController.valueOrNull;
     double validLatitude = double.parse(_latitudeController.value);
     double validLongitude = double.parse(_longitudeController.value);
-    final validPhone = _phoneNumberController.value;
-    final validNextOfKin = _nextOfKinController.value;
-    final validAddress1 = _address1Controller.value;
-    var validAddress2 = _address2Controller.value;
-    final validCountryOfResidence = _countryOfResidenceController.value == null
-        ? 'GHANA'
-        : _countryOfResidenceController.value; //workaround for bug
+    final validPhone = _phoneNumberController.valueOrNull;
+    final validNextOfKin = _nextOfKinController.valueOrNull;
+    final validAddress1 = _address1Controller.valueOrNull;
+    var validAddress2 = _address2Controller.valueOrNull;
+    final validCountryOfResidence =
+        _countryOfResidenceController.valueOrNull == null
+            ? 'GHANA'
+            : _countryOfResidenceController.value; //workaround for bug
 
-    final validStateOfResidence = _stateOfResidenceController.value;
-    final validCityOfResidence = _cityOfResidenceController.value;
-    final validGender = _genderController.value;
-    var validOccupation = occupationController.value;
+    final validStateOfResidence = _stateOfResidenceController.valueOrNull;
+    final validCityOfResidence = _cityOfResidenceController.valueOrNull;
+    final validGender = _genderController.valueOrNull;
+    var validOccupation = occupationController.valueOrNull;
     if (validOccupation == "OTHERS") {
-      validOccupation = othersOccupationController.value;
+      validOccupation = othersOccupationController.valueOrNull;
     }
-    final validMaritalStatus = _maritalStatusController.value;
+    final validMaritalStatus = _maritalStatusController.valueOrNull;
 
-    var validIdType = _idTypeController.value;
-    var validIdIssuer = _idIssuerController.value;
+    var validIdType = _idTypeController.valueOrNull;
+    var validIdIssuer = _idIssuerController.valueOrNull;
     if (validIdIssuer == "OTHERS") {
-      validIdIssuer = _idIssuerOthersController.value;
+      validIdIssuer = _idIssuerOthersController.valueOrNull;
     }
-    var validIdNumber = _idNumberController.value;
-    var validIdPlaceOfIssue = _idPlaceOfIssueController.value != null
-        ? _idPlaceOfIssueController.value
+    var validIdNumber = _idNumberController.valueOrNull;
+    var validIdPlaceOfIssue = _idPlaceOfIssueController.valueOrNull != null
+        ? _idPlaceOfIssueController.valueOrNull
         : '';
-    var validIdIssueDate = _idIssueDateController.value;
-    var validIdExpiryDate = _idExpiryDateController.value;
+    var validIdIssueDate = _idIssueDateController.valueOrNull;
+    var validIdExpiryDate = _idExpiryDateController.valueOrNull;
 //    final validIsSendEmail = _isSendEmailController.value;
 //    final validIsReceiveSms = _isReceiveSmsController.value;
 //    final validIsRequestHardwareToken = _isRequestHardwareTokenController.value;
 //    final validIsRequestInternetBanking =
 //        _isRequestInternetBankingController.value;
-    final validIsScanToPay = _isScanToPayController.value;
-    final validIsZMobile = _isZMobileController.value;
-    final validIsZPrompt = _isZPromptController.value;
-    final validIsStatementViaEmail = _isStatementViaEmailController.value;
-    final validUSSD = _isUssdController.value;
-    final validBankToWallet = _isBankToWalletController.value;
+    final validIsScanToPay = _isScanToPayController.valueOrNull;
+    final validIsZMobile = _isZMobileController.valueOrNull;
+    final validIsZPrompt = _isZPromptController.valueOrNull;
+    final validIsStatementViaEmail = _isStatementViaEmailController.valueOrNull;
+    final validUSSD = _isUssdController.valueOrNull;
+    final validBankToWallet = _isBankToWalletController.valueOrNull;
 
-    final validUploadIdImageInBase64 = _uploadIdImageController.value;
-    final validUploadPassportInBase64 = _uploadPassportController.value;
-    final validUploadUtilityBillInBase64 = _uploadUtilityBillController.value;
+    final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
+    final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
+    final validUploadUtilityBillInBase64 =
+        _uploadUtilityBillController.valueOrNull;
 
-    final validUploadSignatureInBase64 = _uploadSignatureController.value;
+    final validUploadSignatureInBase64 = _uploadSignatureController.valueOrNull;
 
     if (validAccountType == null) {
       _accountTypeController.addError("Field is required");
@@ -1280,7 +1283,7 @@ class AccountFormBloc extends BlocBase with Validators {
       SaveAccountResponse response =
           await _accountsRepository.attemptSubmitAccountToApi(encodedAccount);
 
-      var offlineId = _idController.value;
+      var offlineId = _idController.valueOrNull;
       if (offlineId != null) {
         await _accountsRepository.deleteOfflineAccount(offlineId);
       }
@@ -1291,7 +1294,7 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   verifyBvn() async {
-    var encodedBVN = CryptoHelper.encrypt(_tinController.value!);
+    var encodedBVN = CryptoHelper.encrypt(_tinController.valueOrNull!);
 
     await _accountsRepository.verifyBvn(encodedBVN).then((bvnResponse) {
       bvnVerificationResponse.add(bvnResponse);

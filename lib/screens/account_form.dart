@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/screens/forms/e_products_form.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 import '../category.dart';
@@ -52,28 +53,15 @@ class _AccountFormPageState extends State<AccountFormPage>
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   final List<Widget> _pages = <Widget>[
-    Container(
-      child: AccountInformationStep(),
-    ),
-    Container(
-      child: PersonalInformationStep(),
-    ),
-    Container(
-      child: ContactDetailsStep(),
-    ),
-    Container(
-      child: MeansOfIdentificationStep(),
-    ),
-    Container(
-      child: UploadIdStep(),
-    ),
+    Container(child: AccountInformationStep()),
+    Container(child: PersonalInformationStep()),
+    Container(child: ContactDetailsStep()),
+    Container(child: MeansOfIdentificationStep()),
+    Container(child: EProductsStep()),
+    Container(child: UploadIdStep()),
     Container(child: UploadPassportStep()),
-    Container(
-      child: UploadUtilityBillStep(),
-    ),
-    Container(
-      child: SignatoryStep(),
-    ),
+    Container(child: UploadUtilityBillStep()),
+    Container(child: SignatoryStep()),
   ];
 
   @override

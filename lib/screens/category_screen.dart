@@ -59,38 +59,15 @@ class _CategoryRouteState extends State<CategoryPage> {
     var categoryIndex = 0;
 
     setState(() {
-      _categories.add(Category(
-        id: 0,
-        name: 'Account Information',
-      ));
-      _categories.add(Category(
-        id: 1,
-        name: 'Personal Information',
-      ));
-      _categories.add(Category(
-        id: 2,
-        name: 'Contact Details',
-      ));
-      _categories.add(Category(
-        id: 3,
-        name: 'Means of Identification',
-      ));
-      _categories.add(Category(
-        id: 4,
-        name: 'ID Card Upload',
-      ));
-      _categories.add(Category(
-        id: 5,
-        name: 'Passport Upload',
-      ));
-      _categories.add(Category(
-        id: 6,
-        name: 'Utility Bill Upload',
-      ));
-      _categories.add(Category(
-        id: 7,
-        name: 'Signatory',
-      ));
+      _categories.add(Category(id: 0, name: 'Account Information'));
+      _categories.add(Category(id: 1, name: 'Personal Information'));
+      _categories.add(Category(id: 2, name: 'Contact Details'));
+      _categories.add(Category(id: 3, name: 'Means of Identification'));
+      _categories.add(Category(id: 4, name: 'E-Product List'));
+      _categories.add(Category(id: 5, name: 'ID Card Upload'));
+      _categories.add(Category(id: 6, name: 'Passport Upload'));
+      _categories.add(Category(id: 7, name: 'Utility Bill Upload'));
+      _categories.add(Category(id: 8, name: 'Signatory'));
 
       if (categoryIndex == 0) {
         _defaultCategory = _categories[0];
