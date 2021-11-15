@@ -143,33 +143,33 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Widget _buildDummyWidget() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.info_outline,
-              color: Colors.black54,
-              size: 60,
-            ),
-            SizedBox(height: 20),
-            Text(
-                "Click the Create Account button below to begin the instant account creation process",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontStyle: FontStyle.normal, fontSize: 14.0)),
-            SizedBox(height: 20),
-            Transform.scale(
-              scale: 1.2,
-//              child: _actionChipError(error),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+//   Widget _buildDummyWidget() {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(
+//               Icons.info_outline,
+//               color: Colors.black54,
+//               size: 60,
+//             ),
+//             SizedBox(height: 20),
+//             Text(
+//                 "Click the Create Account button below to begin the instant account creation process",
+//                 textAlign: TextAlign.center,
+//                 style: TextStyle(fontStyle: FontStyle.normal, fontSize: 14.0)),
+//             SizedBox(height: 20),
+//             Transform.scale(
+//               scale: 1.2,
+// //              child: _actionChipError(error),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
   Widget _buildErrorWidget(String error) {
     return Padding(

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +8,6 @@ import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 import 'package:zxplore_app/utils/zxplore_crypto_helper.dart';
-
-import '../../colors.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 
 class MeansOfIdentificationStep extends StatefulWidget {

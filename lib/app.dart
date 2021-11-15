@@ -1,3 +1,4 @@
+import 'package:catcher/catcher.dart';
 import 'package:flutter/material.dart';
 
 import 'colors.dart';
@@ -22,6 +23,7 @@ class _ZxploreAppState extends State<ZxploreApp> {
       title: 'Z-XPLORE GH',
       home: MyHomePage(title: 'Z-XPLORE Home Page'),
       initialRoute: '/splash',
+      navigatorKey: Catcher.navigatorKey,
       onGenerateRoute: _getRoute,
       theme: _zXploreTheme,
     );

@@ -128,7 +128,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                       color: color,
                       key: _sign,
                       onSign: () {
-                        final sign = _sign.currentState;
+                        // final sign = _sign.currentState;
                         setState(() {
                           isSignatureAcceptButtonVisible = true;
                         });
