@@ -22,94 +22,100 @@ class _EProductsStepState extends State<EProductsStep>
   @override
   bool get wantKeepAlive => true;
 
-  Widget _scan_to_pay_checkBox() {
+  Widget _scanToPayCheckBox() {
     return StreamBuilder<bool?>(
-        stream: accountFormBloc!.isScanToPay,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc!.changeIsScanToPay,
-            title: new Text('Scan To Pay'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
+      stream: accountFormBloc!.isScanToPay,
+      builder: (context, snapshot) {
+        return CheckboxListTile(
+          onChanged: accountFormBloc!.changeIsScanToPay,
+          title: new Text('Scan To Pay'),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Colors.red,
+          dense: true,
+          value: snapshot.hasData ? snapshot.data : false,
+        );
+      },
+    );
   }
 
-  Widget _z_mobile_checkBox() {
+  Widget _zMobileCheckBox() {
     return StreamBuilder<bool?>(
-        stream: accountFormBloc!.isZMobile,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc!.changeIsZMobile,
-            title: new Text('Z - Mobile'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
+      stream: accountFormBloc!.isZMobile,
+      builder: (context, snapshot) {
+        return CheckboxListTile(
+          onChanged: accountFormBloc!.changeIsZMobile,
+          title: new Text('Z - Mobile'),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Colors.red,
+          dense: true,
+          value: snapshot.hasData ? snapshot.data : false,
+        );
+      },
+    );
   }
 
-  Widget _z_prompt_checkBox() {
+  Widget _zPromptCheckBox() {
     return StreamBuilder<bool?>(
-        stream: accountFormBloc!.isZPrompt,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc!.changeIsZPrompt,
-            title: new Text('Z - Prompt'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
+      stream: accountFormBloc!.isZPrompt,
+      builder: (context, snapshot) {
+        return CheckboxListTile(
+          onChanged: accountFormBloc!.changeIsZPrompt,
+          title: new Text('Z - Prompt'),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Colors.red,
+          dense: true,
+          value: snapshot.hasData ? snapshot.data : false,
+        );
+      },
+    );
   }
 
-  Widget _statement_via_email_CheckBox() {
+  Widget _statementViaEmailCheckBox() {
     return StreamBuilder<bool?>(
-        stream: accountFormBloc!.isStatementViaEmail,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc!.changeIsStatementViaEmail,
-            title: new Text('Statement Via Email'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
+      stream: accountFormBloc!.isStatementViaEmail,
+      builder: (context, snapshot) {
+        return CheckboxListTile(
+          onChanged: accountFormBloc!.changeIsStatementViaEmail,
+          title: new Text('Statement Via Email'),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Colors.red,
+          dense: true,
+          value: snapshot.hasData ? snapshot.data : false,
+        );
+      },
+    );
   }
 
-  Widget _ussd_checkBox() {
+  Widget _ussdCheckBox() {
     return StreamBuilder<bool?>(
-        stream: accountFormBloc!.isUssd,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc!.changeIsUssd,
-            title: new Text('USSD'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
+      stream: accountFormBloc!.isUssd,
+      builder: (context, snapshot) {
+        return CheckboxListTile(
+          onChanged: accountFormBloc!.changeIsUssd,
+          title: new Text('USSD'),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Colors.red,
+          dense: true,
+          value: snapshot.hasData ? snapshot.data : false,
+        );
+      },
+    );
   }
 
-  Widget _bank_to_wallet_checkBox() {
+  Widget _bankToWalletCheckBox() {
     return StreamBuilder<bool?>(
-        stream: accountFormBloc!.isBankToWallet,
-        builder: (context, snapshot) {
-          return CheckboxListTile(
-            onChanged: accountFormBloc!.changeIsBankToWallet,
-            title: new Text('Bank to Wallet'),
-            controlAffinity: ListTileControlAffinity.leading,
-            activeColor: Colors.red,
-            dense: true,
-            value: snapshot.hasData ? snapshot.data : false,
-          );
-        });
+      stream: accountFormBloc!.isBankToWallet,
+      builder: (context, snapshot) {
+        return CheckboxListTile(
+          onChanged: accountFormBloc!.changeIsBankToWallet,
+          title: new Text('Bank to Wallet'),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Colors.red,
+          dense: true,
+          value: snapshot.hasData ? snapshot.data : false,
+        );
+      },
+    );
   }
 
   @override
@@ -146,12 +152,12 @@ class _EProductsStepState extends State<EProductsStep>
                       textAlign: TextAlign.start,
                     ),
                   ),
-                  _scan_to_pay_checkBox(),
-                  _z_mobile_checkBox(),
-                  _z_prompt_checkBox(),
-                  _statement_via_email_CheckBox(),
-                  _ussd_checkBox(),
-                  _bank_to_wallet_checkBox(),
+                  _scanToPayCheckBox(),
+                  _zMobileCheckBox(),
+                  _zPromptCheckBox(),
+                  _statementViaEmailCheckBox(),
+                  _ussdCheckBox(),
+                  _bankToWalletCheckBox(),
                 ],
               ),
               SizedBox(height: 120.0),
