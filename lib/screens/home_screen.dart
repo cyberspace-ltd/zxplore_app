@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _fetchOccupations(data);
         _fetchCities(data);
         _fetchCountries(data);
+        _fetchCardTypes(data);
       }
     });
 
@@ -758,5 +759,9 @@ class _MyHomePageState extends State<MyHomePage> {
         return;
       }
     });
+  }
+
+  Future _fetchCardTypes(String? token) async {
+    await ZenithBankApi().fetchCardTypes(token);
   }
 }

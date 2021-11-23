@@ -28,6 +28,7 @@ class _SignatoryStepState extends State<SignatoryStep>
 
   AccountFormBloc? accountFormBloc;
   var loadingBar;
+  bool isLoading = false;
   late bool _isButtonDisabled;
 
   XFile? _imageFile;
@@ -258,18 +259,28 @@ class _SignatoryStepState extends State<SignatoryStep>
         return Padding(
           padding: const EdgeInsets.all(12.0),
           child: Center(
-            child: new ElevatedButton(
-              child: Text('Submit Account'),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(
-                  Colors.white,
+            child: SizedBox(
+              height: 60,
+              width: 200,
+              child: new ElevatedButton(
+                child: (isLoading == false)
+                    ? Text('Submit Account')
+                    : CircularProgressIndicator(),
+                style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(
+                    Colors.white,
+                  ),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    Colors.red.shade900,
+                  ),
                 ),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.red.shade900,
-                ),
-              ),
-              onPressed: _isButtonDisabled ? null : submitAccount,
+                onPressed:
+                    (snapshot.hasData && !isLoading && !_isButtonDisabled)
+                        ? submitAccount
+                        : null,
+                // onPressed: _isButtonDisabled ? null : submitAccount,
 //              onPressed: accountFormBloc.submit,
+              ),
             ),
           ),
         );
@@ -278,24 +289,30 @@ class _SignatoryStepState extends State<SignatoryStep>
   }
 
   void submitAccount() async {
+    setState(() {
+      isLoading = true;
+      _isButtonDisabled = true;
+    });
     var loadingBar = FlushbarHelper.createLoading(
         message: "Attempting to submit account form....")
       ..show(context);
-    setState(() {
-      _isButtonDisabled = true;
-    });
     accountFormBloc!.submit();
 
-    accountFormBloc!.subjectSaveAccountResponse.listen((response) {
-      loadingBar.dismiss(context);
-
-      _showSuccessDialog(
-          'The created account was sent successfully, an account number will be generated shortly.');
-    }).onError((error) {
+    accountFormBloc!.subjectSaveAccountResponse.listen(
+      (response) {
+        loadingBar.dismiss(context);
+        setState(() {
+          isLoading = false;
+        });
+        _showSuccessDialog(
+            'The created account was sent successfully, an account number will be generated shortly.');
+      },
+    ).onError((error) {
       loadingBar.dismiss(context);
 
       FlushbarHelper.createError(message: error.toString())..show(context);
       setState(() {
+        isLoading = false;
         _isButtonDisabled = false;
       });
     });

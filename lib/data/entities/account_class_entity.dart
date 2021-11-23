@@ -23,11 +23,11 @@ class AccountClassEntity extends Equatable {
 
   factory AccountClassEntity.fromMap(Map<String, dynamic> json) =>
       new AccountClassEntity(
-          id: json[columnAccountClassCode],
-          name: json[columnAccountClassDescription],
-          type: json[columnAccountClassType]);
+        id: json[columnAccountClassCode],
+        name: json[columnAccountClassDescription],
+        type: json[columnAccountClassType],
+      );
 
   @override
-  // TODO: implement props
-  List<Object> get props => throw UnimplementedError();
+  List<Object?> get props => [id, name, type];
 }

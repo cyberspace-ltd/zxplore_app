@@ -340,4 +340,40 @@ class Validators {
       sink.addError('Invalid password, please enter more than 3 characters');
     }
   });
+
+  final validateCardType =
+      StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg != null && arg.isNotEmpty && arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('Card Type is required');
+    }
+  });
+
+  final validateRequestingBranch =
+      StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg != null && arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('Requesting branch is required');
+    }
+  });
+
+  final validateDestinationBranch =
+      StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg != null && arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('Destination branch is required');
+    }
+  });
+
+  final validatePreferredNameOnCard =
+      StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg != null && arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('Destination branch is required');
+    }
+  });
 }

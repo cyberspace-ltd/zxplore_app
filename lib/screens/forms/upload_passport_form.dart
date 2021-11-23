@@ -20,8 +20,8 @@ class UploadPassportStep extends StatefulWidget {
 class _UploadPassportState extends State<UploadPassportStep>
     with AutomaticKeepAliveClientMixin<UploadPassportStep> {
   XFile? _imageFile;
-  String? _retrieveDataError;
-  dynamic _pickImageError;
+  String? retrieveDataError;
+  dynamic pickImageError;
   AccountFormBloc? accountFormBloc;
   ByteData _img = ByteData(0);
   ImagePicker _picker = ImagePicker();
@@ -154,7 +154,7 @@ class _UploadPassportState extends State<UploadPassportStep>
         _convertImagesToByte();
       });
     } else {
-      _retrieveDataError = response.exception!.code;
+      retrieveDataError = response.exception!.code;
     }
   }
 
@@ -163,7 +163,7 @@ class _UploadPassportState extends State<UploadPassportStep>
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte();
     } catch (e) {
-      _pickImageError = e;
+      pickImageError = e;
     }
     setState(() {});
   }

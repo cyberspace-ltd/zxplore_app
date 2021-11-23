@@ -67,8 +67,8 @@ class _MeansOfIdentificationStepStepState
     'SSNIT',
     'OTHERS'
   ];
-  String? _selectedIdentityType;
-  String? _selectedIdentityIssuer;
+  String? selectedIdentityType;
+  String? selectedIdentityIssuer;
   int _selectedIdFilter = 99;
   bool others = false;
 
@@ -102,7 +102,7 @@ class _MeansOfIdentificationStepStepState
                   isDense: true,
                   onChanged: (value) {
                     setState(() {
-                      _selectedIdentityType = value;
+                      selectedIdentityType = value;
                       if (value == DRIVERS_LICENSE) {
                         _selectedIdFilter = 0;
                       } else if (value == INT_PASSPORT) {
@@ -163,7 +163,7 @@ class _MeansOfIdentificationStepStepState
                   isDense: true,
                   onChanged: (value) {
                     setState(() {
-                      _selectedIdentityIssuer = value;
+                      selectedIdentityIssuer = value;
                       if (value == OTHERS) {
                         others = true;
                       } else {

@@ -22,7 +22,7 @@ class AccountsBloc extends BlocBase {
   Stream<List<OfflineAccountEntity>> get offlineAccounts =>
       _offlineAccountsController.stream;
 
-  StreamSink<List<OfflineAccountEntity>> get _OfflineAccounts =>
+  StreamSink<List<OfflineAccountEntity>> get _offlineAccounts =>
       _offlineAccountsController.sink;
 
   getAccounts() async {
@@ -40,7 +40,7 @@ class AccountsBloc extends BlocBase {
   getOfflineAccounts() async {
     List<OfflineAccountEntity> offlineAcccounts =
         await DBProvider.db.getOfflineAccounts();
-    _OfflineAccounts.add(offlineAcccounts);
+    _offlineAccounts.add(offlineAcccounts);
   }
 
   deleteOfflineAccount(int? id) async {

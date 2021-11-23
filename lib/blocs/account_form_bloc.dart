@@ -90,6 +90,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _countryOfResidenceController = BehaviorSubject<String?>();
 
   final _stateOfResidenceController = BehaviorSubject<String?>();
+
   final _mmdaController = BehaviorSubject<String?>();
 
   final _cityOfResidenceController = BehaviorSubject<String?>();
@@ -97,6 +98,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _genderController = BehaviorSubject<String?>();
 
   final occupationController = BehaviorSubject<String?>();
+
   final occupationCategoryController = BehaviorSubject<String?>();
 
   final othersOccupationController = BehaviorSubject<String?>();
@@ -125,6 +127,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //
 //  final _isRequestInternetBankingController = BehaviorSubject<bool>();
 
+// E-PRODUCT LIST
   //TODO: GHANA SPECIFIC SERVICES STREAM
   final _isScanToPayController = BehaviorSubject<bool?>();
 
@@ -137,6 +140,16 @@ class AccountFormBloc extends BlocBase with Validators {
   final _isUssdController = BehaviorSubject<bool?>();
 
   final _isBankToWalletController = BehaviorSubject<bool?>();
+
+  final _isCardRequestController = BehaviorSubject<bool?>();
+
+  final cardTypeController = BehaviorSubject<String?>();
+
+  final _requestingBranchController = BehaviorSubject<String?>();
+
+  final _destinationBranchController = BehaviorSubject<String?>();
+
+  final _preferredNameOnCardController = BehaviorSubject<String?>();
 
   final _uploadIdImageController = BehaviorSubject<String?>();
 
@@ -335,6 +348,30 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<bool?> get isBankToWallet => _isBankToWalletController.stream;
 
+  Stream<bool?> get isCardRequest => _isCardRequestController.stream;
+
+  Stream<String?> get cardType => _isCardRequestController.valueOrNull ?? false
+      ? cardTypeController.stream.transform(validateCardType)
+      : cardTypeController.stream;
+
+  Stream<String?> get requestingBranch =>
+      _isCardRequestController.valueOrNull ?? false
+          ? _requestingBranchController.stream
+              .transform(validateRequestingBranch)
+          : _requestingBranchController.stream;
+
+  Stream<String?> get destinationBranch =>
+      _isCardRequestController.valueOrNull ?? false
+          ? _destinationBranchController.stream
+              .transform(validateDestinationBranch)
+          : _destinationBranchController.stream;
+
+  Stream<String?> get preferredNameOnCard =>
+      _isCardRequestController.valueOrNull ?? false
+          ? _preferredNameOnCardController.stream
+              .transform(validatePreferredNameOnCard)
+          : _preferredNameOnCardController.stream;
+
   Stream<String?> get idCard => _uploadIdImageController.stream;
 
   Stream<String?> get passport => _uploadPassportController.stream;
@@ -464,6 +501,19 @@ class AccountFormBloc extends BlocBase with Validators {
   Function(bool?) get changeIsBankToWallet =>
       _isBankToWalletController.sink.add;
 
+  Function(bool?) get changeIsCardRequest => _isCardRequestController.sink.add;
+
+  Function(String?) get changeCardType => cardTypeController.sink.add;
+
+  Function(String) get changeRequestingBranch =>
+      _requestingBranchController.sink.add;
+
+  Function(String) get changeDestinationBranch =>
+      _destinationBranchController.sink.add;
+
+  Function(String) get changePreferredNameOnCard =>
+      _preferredNameOnCardController.sink.add;
+
   Function(bool) get changeMaritalStatusValue =>
       _isMaritalStatusChangeController.sink.add;
 
@@ -522,12 +572,18 @@ class AccountFormBloc extends BlocBase with Validators {
     changeOccupationCategory;
   }
 
+  setCardType(String value) {
+    cardTypeController.sink.add(value);
+    changeCardType;
+  }
+
   saveOffline() async {
     var validId = _idController.valueOrNull;
     var validRefenceId = _referenceIdController.valueOrNull;
 
     var validAccountType = _accountTypeController.valueOrNull;
-    final validAccountHolderType = _accountHolderTypeController.valueOrNull;
+    final validAccountHolderType =
+        _accountHolderTypeController.valueOrNull ?? 'INDIVIDUAL';
     final validAccountRiskRank = _riskRankController.valueOrNull;
     final validAccountCategory = _accountCategoryController.valueOrNull;
 
@@ -589,6 +645,12 @@ class AccountFormBloc extends BlocBase with Validators {
     final validIsUssd = _isUssdController.valueOrNull;
     final validIsBankToWallet = _isBankToWalletController.valueOrNull;
 
+    final validIsCardRequest = _isCardRequestController.valueOrNull;
+    final validCardType = cardTypeController.valueOrNull;
+    final validRequestingBranch = _requestingBranchController.valueOrNull;
+    final validDestinationBranch = _destinationBranchController.valueOrNull;
+    final validPreferredNameOnCard = _preferredNameOnCardController.valueOrNull;
+
     final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
     final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
     final validUploadUtilityBillInBase64 =
@@ -609,62 +671,69 @@ class AccountFormBloc extends BlocBase with Validators {
     }
 
     OfflineAccountEntity _offlineAccount = OfflineAccountEntity(
-        id: validId,
-        referenceId: referenceId,
-        accountType: validAccountType,
-        accountHolderType: validAccountHolderType,
-        riskRank: validAccountRiskRank,
-        accountCategory: validAccountCategory,
-        tin: validTin,
-        title: validTitle,
-        surname: validSurname,
-        firstName: validFirstName,
-        otherName: validOtherName,
-        mothersMaidenName: validMothersMaidenName,
-        dateOfBirth: validDateOfBirth,
-        stateOfOrigin: "$validStateOfResidence REGION",
-        placeOfBirth: validPlaceOfBirth,
-        mmda: validMMDA,
-        countryOfOrigin: validCountryOfOrigin,
-        email: validEmail,
-        phone: validPhone,
-        nextOfKin: validNextOfKin,
-        address1: validAddress1,
-        address2: validAddress2,
-        countryOfResidence: validCountryOfResidence,
-        stateOfResidence: "$validStateOfResidence REGION",
-        cityOfResidence: validCityOfResidence,
-        gender: validGender,
-        latitude: validLatitude,
-        longitude: validLongitude,
-        occupation: validOccupation,
-        maritalStatus: validMaritalStatus,
-        idType: validIdType,
-        idIssuer: validIdIssuer,
-        idNumber: validIdNumber,
-        idPlaceOfIssue: validIdPlaceOfIssue,
-        idIssueDate: validIdIssueDate,
-        idExpiryDate: validIdExpiryDate,
+      id: validId,
+      referenceId: referenceId,
+      accountType: validAccountType,
+      accountHolderType: validAccountHolderType,
+      riskRank: validAccountRiskRank,
+      accountCategory: validAccountCategory,
+      tin: validTin,
+      title: validTitle,
+      surname: validSurname,
+      firstName: validFirstName,
+      otherName: validOtherName,
+      mothersMaidenName: validMothersMaidenName,
+      dateOfBirth: validDateOfBirth,
+      stateOfOrigin: "$validStateOfResidence REGION",
+      placeOfBirth: validPlaceOfBirth,
+      mmda: validMMDA,
+      countryOfOrigin: validCountryOfOrigin,
+      email: validEmail,
+      phone: validPhone,
+      nextOfKin: validNextOfKin,
+      address1: validAddress1,
+      address2: validAddress2,
+      countryOfResidence: validCountryOfResidence,
+      stateOfResidence: "$validStateOfResidence REGION",
+      cityOfResidence: validCityOfResidence,
+      gender: validGender,
+      latitude: validLatitude,
+      longitude: validLongitude,
+      occupation: validOccupation,
+      maritalStatus: validMaritalStatus,
+      idType: validIdType,
+      idIssuer: validIdIssuer,
+      idNumber: validIdNumber,
+      idPlaceOfIssue: validIdPlaceOfIssue,
+      idIssueDate: validIdIssueDate,
+      idExpiryDate: validIdExpiryDate,
 //        isSendEmail: validIsSendEmail,
 //        isReceiveAlert: validIsReceiveSms,
 //        isRequestHardwareToken: validIsRequestHardwareToken,
 //        isRequestInternetBanking: validIsRequestInternetBanking,
-        isScanToPay: validIsScanToPay,
-        //  == true ? "Y" : "N",
-        isZMobile: validIsZMobile,
-        // == true ? "Y" : "N",
-        isZPrompt: validIsZPrompt,
-        // == true ? "Y" : "N",
-        isStatementViaEmail: validIsStatementViaEmail,
-        // == true ? "Y" : "N",
-        isUSSD: validIsUssd,
-        // == true ? "Y" : "N",
-        isBankToWallet: validIsBankToWallet,
-        // == true ? "Y" : "N",
-        idCard: validUploadIdImageInBase64,
-        passport: validUploadPassportInBase64,
-        utility: validUploadUtilityBillInBase64,
-        signature: validUploadSignatureInBase64);
+      isScanToPay: validIsScanToPay,
+      //  == true ? "Y" : "N",
+      isZMobile: validIsZMobile,
+      // == true ? "Y" : "N",
+      isZPrompt: validIsZPrompt,
+      // == true ? "Y" : "N",
+      isStatementViaEmail: validIsStatementViaEmail,
+      // == true ? "Y" : "N",
+      isUSSD: validIsUssd,
+      // == true ? "Y" : "N",
+      isBankToWallet: validIsBankToWallet,
+      // == true ? "Y" : "N",
+
+      isCardRequest: validIsCardRequest,
+      cardType: validIsCardRequest! ? validCardType : null,
+      requestingBranch: validIsCardRequest ? validRequestingBranch : null,
+      destinationBranch: validIsCardRequest ? validDestinationBranch : null,
+      preferredNameOnCard: validIsCardRequest ? validPreferredNameOnCard : null,
+      idCard: validUploadIdImageInBase64,
+      passport: validUploadPassportInBase64,
+      utility: validUploadUtilityBillInBase64,
+      signature: validUploadSignatureInBase64,
+    );
 
     insertFormOffline(_offlineAccount);
   }
@@ -744,7 +813,8 @@ class AccountFormBloc extends BlocBase with Validators {
     var validRefenceId = _referenceIdController.valueOrNull;
 
     var validAccountType = _accountTypeController.valueOrNull;
-    final validAccountHolderType = _accountHolderTypeController.valueOrNull;
+    final validAccountHolderType =
+        _accountHolderTypeController.valueOrNull ?? 'INDIVIDUAL';
     final validAccountRiskRank = _riskRankController.valueOrNull != null
         ? _riskRankController.valueOrNull
         : '';
@@ -817,6 +887,13 @@ class AccountFormBloc extends BlocBase with Validators {
     final validUSSD = _isUssdController.valueOrNull;
     final validBankToWallet = _isBankToWalletController.valueOrNull;
 
+    final validIsCardRequest = _isCardRequestController.valueOrNull;
+    String? validCardType = cardTypeController.valueOrNull;
+    String? validRequestingBranch = _requestingBranchController.valueOrNull;
+    String? validDestinationBranch = _destinationBranchController.valueOrNull;
+    String? validPreferredNameOnCard =
+        _preferredNameOnCardController.valueOrNull;
+
     final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
     final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
     final validUploadUtilityBillInBase64 =
@@ -831,12 +908,13 @@ class AccountFormBloc extends BlocBase with Validators {
       return;
     }
 
-    if (validAccountHolderType == null) {
-      _accountHolderTypeController.addError("Field is required");
-      _subjectSaveAccountResponse
-          .addError("You have not selected a valid account holder type.");
-      return;
-    }
+    // ACCOUNT HOLDER TYPE DEFAULTS TO 'INDIVIDUAL'
+    // if (validAccountHolderType == null) {
+    //   _accountHolderTypeController.addError("Field is required");
+    //   _subjectSaveAccountResponse
+    //       .addError("You have not selected a valid account holder type.");
+    //   return;
+    // }
 
     if (validAccountRiskRank == null) {
       // _riskRankController.addError("Field is required");
@@ -845,7 +923,7 @@ class AccountFormBloc extends BlocBase with Validators {
       // return;
     }
 
-    if (validAccountCategory == null) {
+    if (validAccountCategory.isEmpty) {
       _accountCategoryController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected an account category.");
@@ -868,7 +946,7 @@ class AccountFormBloc extends BlocBase with Validators {
     }
     RegExp regex = new RegExp(pattern as String);
 
-    if (validSurname != null && regex.hasMatch(validSurname)) {
+    if (regex.hasMatch(validSurname)) {
       _surnameController.addError("Enter a valid surname");
       _subjectSaveAccountResponse
           .addError("You have not entered a valid surname");
@@ -883,7 +961,7 @@ class AccountFormBloc extends BlocBase with Validators {
       return;
     }
 
-    if (validFirstName != null && regex.hasMatch(validFirstName)) {
+    if (regex.hasMatch(validFirstName)) {
       _firstNameController.addError("Enter a valid first name");
       _subjectSaveAccountResponse
           .addError("You have not entered in a valid firstname");
@@ -899,8 +977,7 @@ class AccountFormBloc extends BlocBase with Validators {
       return;
     }
 
-    if (validMothersMaidenName != null &&
-        regex.hasMatch(validMothersMaidenName)) {
+    if (regex.hasMatch(validMothersMaidenName)) {
       _mothersMaidenNameController
           .addError("Enter a valid mother\'s maiden name");
       _subjectSaveAccountResponse.addError(
@@ -957,7 +1034,7 @@ class AccountFormBloc extends BlocBase with Validators {
       return;
     }
 
-    if (validNextOfKin != null && regex.hasMatch(validNextOfKin)) {
+    if (regex.hasMatch(validNextOfKin)) {
       _nextOfKinController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not filled in a valid next of kin");
@@ -1096,6 +1173,34 @@ class AccountFormBloc extends BlocBase with Validators {
       return;
     }
 
+    if (validIsCardRequest == true && validCardType == null) {
+      cardTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid card type");
+      return;
+    }
+
+    if (validIsCardRequest == true && validRequestingBranch == null) {
+      _requestingBranchController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid requesting branch");
+      return;
+    }
+
+    if (validIsCardRequest == true && validDestinationBranch == null) {
+      _destinationBranchController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid destination branch");
+      return;
+    }
+
+    if (validIsCardRequest == true && validPreferredNameOnCard == null) {
+      _preferredNameOnCardController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid preferred name on card");
+      return;
+    }
+
     validAccountType = validAccountType.startsWith('S') ? "SA" : "CA";
 
     validOtherName = validOtherName != null ? validOtherName : "";
@@ -1134,6 +1239,7 @@ class AccountFormBloc extends BlocBase with Validators {
     var isScanToPay = validIsScanToPay == true ? "Y" : "N";
     var isUssD = validUSSD == true ? "Y" : "N";
     var isBankToWallet = validBankToWallet == true ? "Y" : "N";
+    var isCardRequest = validIsCardRequest == true ? "Y" : "N";
 
     List<Attachment> _attachments = [];
 
@@ -1167,84 +1273,92 @@ class AccountFormBloc extends BlocBase with Validators {
     }
 
     SignatoryDetail _signatoryDetail = SignatoryDetail(
-        firstName: CryptoHelper.encrypt(validFirstName),
-        middleName: (validOtherName.isNotEmpty)
-            ? CryptoHelper.encrypt(validOtherName)
-            : '',
-        lastName: CryptoHelper.encrypt(validSurname),
-        sex: validSexAcronym,
-        dateOfBirth: CryptoHelper.encrypt(validDateOfBirth),
-        motherMaidenName: CryptoHelper.encrypt(validMothersMaidenName),
-        title: validTitle,
-        stateOfOrigin: validStateOfResidence,
-        countryOfOrigin: validCountryOfOrigin,
-        mmda: validMMDA,
-        placeOfBirth: validPlaceOfBirth,
-        meansOfId: validIdType,
-        idNumber: validIdNumber,
-        idIssuer: validIdIssuer,
-        idPlaceOfIssue: validIdPlaceOfIssue,
-        idIssueDate: validIdIssueDate,
-        idExpiryDate: validIdExpiryDate,
-        occupation: validOccupation,
-        addressLine1: CryptoHelper.encrypt(validAddress1),
-        addressLine2: (validAddress2.isNotEmpty)
-            ? CryptoHelper.encrypt(validAddress2)
-            : '',
-        city: validCityOfResidence,
-        state: validStateOfResidence,
-        emailAddress:
-            (validEmail.isNotEmpty) ? CryptoHelper.encrypt(validEmail) : '',
-        phoneNumber: CryptoHelper.encrypt(validPhone),
-        amlCustType: '10',
-        amlCustNatureBusiness: '4',
-        amlCustNature: '14',
-        useEmailForStatement: isIsStatementViaEmail,
-        bvn: (validTIN.isNotEmpty) ? CryptoHelper.encrypt(validTIN) : '',
-        maritalStatus: validMaritalStatus,
-        nextOfKin: CryptoHelper.encrypt(validNextOfKin),
-        attachments: _attachments);
+      firstName: CryptoHelper.encrypt(validFirstName),
+      middleName: (validOtherName.isNotEmpty)
+          ? CryptoHelper.encrypt(validOtherName)
+          : '',
+      lastName: CryptoHelper.encrypt(validSurname),
+      sex: validSexAcronym,
+      dateOfBirth: CryptoHelper.encrypt(validDateOfBirth),
+      motherMaidenName: CryptoHelper.encrypt(validMothersMaidenName),
+      title: validTitle,
+      stateOfOrigin: validStateOfResidence,
+      countryOfOrigin: validCountryOfOrigin,
+      mmda: validMMDA,
+      placeOfBirth: validPlaceOfBirth,
+      meansOfId: validIdType,
+      idNumber: validIdNumber,
+      idIssuer: validIdIssuer,
+      idPlaceOfIssue: validIdPlaceOfIssue,
+      idIssueDate: validIdIssueDate,
+      idExpiryDate: validIdExpiryDate,
+      occupation: validOccupation,
+      addressLine1: CryptoHelper.encrypt(validAddress1),
+      addressLine2:
+          (validAddress2.isNotEmpty) ? CryptoHelper.encrypt(validAddress2) : '',
+      city: validCityOfResidence,
+      state: validStateOfResidence,
+      emailAddress:
+          (validEmail.isNotEmpty) ? CryptoHelper.encrypt(validEmail) : '',
+      phoneNumber: CryptoHelper.encrypt(validPhone),
+      amlCustType: '10',
+      amlCustNatureBusiness: '4',
+      amlCustNature: '14',
+      useEmailForStatement: isIsStatementViaEmail,
+      bvn: (validTIN.isNotEmpty) ? CryptoHelper.encrypt(validTIN) : '',
+      maritalStatus: validMaritalStatus,
+      nextOfKin: CryptoHelper.encrypt(validNextOfKin),
+      attachments: _attachments,
+    );
 
     List<SignatoryDetail> _signatoryDetails = [];
     _signatoryDetails.add(_signatoryDetail);
 
     AccountForm _accountForm = AccountForm(
-        accountType: validAccountType,
-        accountHolderType: validAccountHolderType,
-        classCode: validAccountCategory,
-        branchNumber: validBranchNumber,
-        phoneNumber: CryptoHelper.encrypt(validPhone),
-        rsmId: employeeId,
-        accountName: encryptedAccountName,
-        sex: validSexAcronym,
-        title: validTitle,
-        dateOfBirth: CryptoHelper.encrypt(validDateOfBirth),
-        dateOfIncorporation: '',
-        businessNature: '',
-        sector: '',
-        industry: '',
-        tin: validTIN,
-        riskRank: validAccountRiskRank,
-        addressLine1: CryptoHelper.encrypt(validAddress1),
-        city: validCityOfResidence,
-        state: validStateOfResidence,
-        countryOfOrigin: validCountryOfOrigin,
-        signatoryDetails: _signatoryDetails,
-        refId: referenceId,
+      accountType: validAccountType,
+      accountHolderType: validAccountHolderType,
+      classCode: validAccountCategory,
+      branchNumber: validBranchNumber,
+      phoneNumber: CryptoHelper.encrypt(validPhone),
+      rsmId: employeeId,
+      accountName: encryptedAccountName,
+      sex: validSexAcronym,
+      title: validTitle,
+      dateOfBirth: CryptoHelper.encrypt(validDateOfBirth),
+      dateOfIncorporation: '',
+      businessNature: '',
+      sector: '',
+      industry: '',
+      tin: validTIN,
+      riskRank: validAccountRiskRank,
+      addressLine1: CryptoHelper.encrypt(validAddress1),
+      city: validCityOfResidence,
+      state: validStateOfResidence,
+      countryOfOrigin: validCountryOfOrigin,
+      signatoryDetails: _signatoryDetails,
+      refId: referenceId,
 //        alertZRequest: isAlertRequest,
-        masterCardRequest: 'N',
-        visaCardRequest: 'N',
-        verveCardRequest: 'N',
+      masterCardRequest: 'N',
+      visaCardRequest: 'N',
+      verveCardRequest: 'N',
 //        tokenRequest: isTokenRequest,
 //        ibankRequest: isIBankRequest,
-        scanToPay: isScanToPay,
-        zPromptRequest: isZprompt,
-        statementByEmailRequest: isIsStatementViaEmail,
-        zMobileRequest: isZMobile,
-        uSSDRequest: isUssD,
-        bankWalletRequest: isBankToWallet,
-        latitude: validLatitude,
-        longitude: validLongitude);
+      scanToPay: isScanToPay,
+      zPromptRequest: isZprompt,
+      statementByEmailRequest: isIsStatementViaEmail,
+      zMobileRequest: isZMobile,
+      uSSDRequest: isUssD,
+      bankWalletRequest: isBankToWallet,
+
+      cardRequest: isCardRequest,
+      cardType: isCardRequest == "Y" ? validCardType : null,
+      requestingBranch: isCardRequest == "Y" ? validRequestingBranch : null,
+      destinationBranch: isCardRequest == "Y" ? validDestinationBranch : null,
+      preferredNameOnCard:
+          isCardRequest == "Y" ? validPreferredNameOnCard : null,
+      latitude: validLatitude,
+      longitude: validLongitude,
+    );
 
     String json = jsonEncode(_accountForm);
 
@@ -1342,7 +1456,7 @@ class AccountFormBloc extends BlocBase with Validators {
         if (bvnResponse.phoneNumber != null &&
             bvnResponse.phoneNumber!.isNotEmpty) {
           var decryptedPhone = CryptoHelper.decrypt(bvnResponse.phoneNumber!);
-          if (decryptedPhone != null && decryptedPhone.startsWith('0')) {
+          if (decryptedPhone.startsWith('0')) {
             decryptedPhone = decryptedPhone.replaceFirst('0', '');
             _phoneNumberController.add(decryptedPhone);
             bvnPhone = bvnResponse.phoneNumber!.isNotEmpty ? false : true;
@@ -1508,6 +1622,12 @@ class AccountFormBloc extends BlocBase with Validators {
     _isStatementViaEmailController.close();
     _isUssdController.close();
     _isBankToWalletController.close();
+
+    _isCardRequestController.close();
+    cardTypeController.close();
+    _requestingBranchController.close();
+    _destinationBranchController.close();
+    _preferredNameOnCardController.close();
     _uploadIdImageController.close();
     _uploadPassportController.close();
     _uploadUtilityBillController.close();
@@ -1691,6 +1811,12 @@ class AccountFormBloc extends BlocBase with Validators {
         _isStatementViaEmailController.add(offlineAccount.isStatementViaEmail);
         _isUssdController.add(offlineAccount.isUSSD);
         _isBankToWalletController.add(offlineAccount.isBankToWallet);
+
+        _isCardRequestController.add(offlineAccount.isCardRequest);
+        cardTypeController.add(offlineAccount.cardType);
+        _requestingBranchController.add(offlineAccount.requestingBranch);
+        _destinationBranchController.add(offlineAccount.destinationBranch);
+        _preferredNameOnCardController.add(offlineAccount.preferredNameOnCard);
         _isScanToPayController.add(offlineAccount.isScanToPay);
 
         if (offlineAccount.idCard != null &&
@@ -1757,7 +1883,8 @@ class AccountFormBloc extends BlocBase with Validators {
                 .mmda
                 .toString(); //hotfix: to solve issue of mmda  filter from state on edit
 
-            if (mmda != null) _mmdaController.add(mmda);
+            // if (mmda != null)
+            _mmdaController.add(mmda);
           } catch (err) {
             _mmdaController.add(accountResponse.data!.classCode);
           }
@@ -1780,8 +1907,8 @@ class AccountFormBloc extends BlocBase with Validators {
                 .name
                 .toString(); //hotfix: to solve issue of account category filter from account type on edit
 
-            if (accountCategory != null)
-              _accountCategoryController.add(accountCategory);
+            // if (accountCategory != null)
+            _accountCategoryController.add(accountCategory);
           } catch (err) {
             _accountCategoryController.add(accountResponse.data!.classCode);
           }
@@ -2028,25 +2155,21 @@ class AccountFormBloc extends BlocBase with Validators {
               .where((i) => i.type == 'Signatory')
               .toList();
 
-          if (_idCardAttachment.length != 0 &&
-              _idCardAttachment.first != null) {
+          if (_idCardAttachment.isNotEmpty) {
             _uploadIdImageController.add(_idCardAttachment.first.encodedImage);
           }
 
-          if (_passportAttachment.length != 0 &&
-              _passportAttachment.first != null) {
+          if (_passportAttachment.isNotEmpty) {
             _uploadPassportController
                 .add(_passportAttachment.first.encodedImage);
           }
 
-          if (_utilityBillAttachment.length != 0 &&
-              _utilityBillAttachment.first != null) {
+          if (_utilityBillAttachment.isNotEmpty) {
             _uploadUtilityBillController
                 .add(_utilityBillAttachment.first.encodedImage);
           }
 
-          if (_signatoryAttachment.length != 0 &&
-              _signatoryAttachment.first != null) {
+          if (_signatoryAttachment.isNotEmpty) {
             _uploadSignatureController
                 .add(_signatoryAttachment.first.encodedImage);
           }

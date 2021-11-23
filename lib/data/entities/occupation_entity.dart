@@ -48,6 +48,5 @@ class OccupationEntity extends Equatable {
       );
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [sironCode];
+  List<Object?> get props => [srn, occupationName, sironCode, groupName];
 }

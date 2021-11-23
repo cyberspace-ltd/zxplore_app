@@ -35,17 +35,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   @override
   bool get wantKeepAlive => true;
 
-  final TextEditingController _countryOfResidenceController =
-      TextEditingController();
+  // final TextEditingController _countryOfResidenceController =
+  //     TextEditingController();
   final TextEditingController _stateOfResidenceController =
       TextEditingController();
 
   final TextEditingController _genderController = TextEditingController();
 
-  final TextEditingController _occupationController = TextEditingController();
+  // final TextEditingController _occupationController = TextEditingController();
 
-  final TextEditingController _maritalStatusController =
-      TextEditingController();
+  // final TextEditingController _maritalStatusController =
+  //     TextEditingController();
 
   final _genders = ['MALE', 'FEMALE'];
 

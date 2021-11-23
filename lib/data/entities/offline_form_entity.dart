@@ -43,6 +43,12 @@ final String columnOfflineIsZPrompt = "isZPrompt";
 final String columnOfflineIsStatementViaEmail = "isStatementViaEmail";
 final String columnOfflineIsUSSD = "isUSSD";
 final String columnOfflineIsBankToWallet = "isBankToWallet";
+
+final String columnOfflineIsCardRequest = "isCardRequest";
+final String columnOfflineCardType = "cardType";
+final String columnOfflineRequestingBranch = "requestingBranch";
+final String columnOfflineDestinationBranch = "destinationBranch";
+final String columnOfflinePreferredNameOnCard = "preferredNameOnCard";
 final String columnOfflineIdCard = "idCard";
 final String columnOfflinePassport = "passport";
 final String columnOfflineLongitude = "longitude";
@@ -96,6 +102,11 @@ class OfflineAccountEntity {
   bool? isStatementViaEmail;
   bool? isUSSD;
   bool? isBankToWallet;
+  bool? isCardRequest;
+  String? cardType;
+  String? requestingBranch;
+  String? destinationBranch;
+  String? preferredNameOnCard;
   String? longitude;
   String? latitude;
   String? idCard;
@@ -103,57 +114,63 @@ class OfflineAccountEntity {
   String? utility;
   String? signature;
 
-  OfflineAccountEntity(
-      {this.id,
-      this.referenceId,
-      this.accountType,
-      this.accountHolderType,
-      this.riskRank,
-      this.accountCategory,
-      this.tin,
-      this.title,
-      this.surname,
-      this.firstName,
-      this.otherName,
-      this.mothersMaidenName,
-      this.dateOfBirth,
-      this.stateOfOrigin,
-      this.placeOfBirth,
-      this.mmda,
-      this.countryOfOrigin,
-      this.email,
-      this.phone,
-      this.latitude,
-      this.longitude,
-      this.nextOfKin,
-      this.address1,
-      this.address2,
-      this.countryOfResidence,
-      this.stateOfResidence,
-      this.cityOfResidence,
-      this.gender,
-      this.occupation,
-      this.maritalStatus,
-      this.idType,
-      this.idIssuer,
-      this.idNumber,
-      this.idPlaceOfIssue,
-      this.idIssueDate,
-      this.idExpiryDate,
+  OfflineAccountEntity({
+    this.id,
+    this.referenceId,
+    this.accountType,
+    this.accountHolderType,
+    this.riskRank,
+    this.accountCategory,
+    this.tin,
+    this.title,
+    this.surname,
+    this.firstName,
+    this.otherName,
+    this.mothersMaidenName,
+    this.dateOfBirth,
+    this.stateOfOrigin,
+    this.placeOfBirth,
+    this.mmda,
+    this.countryOfOrigin,
+    this.email,
+    this.phone,
+    this.latitude,
+    this.longitude,
+    this.nextOfKin,
+    this.address1,
+    this.address2,
+    this.countryOfResidence,
+    this.stateOfResidence,
+    this.cityOfResidence,
+    this.gender,
+    this.occupation,
+    this.maritalStatus,
+    this.idType,
+    this.idIssuer,
+    this.idNumber,
+    this.idPlaceOfIssue,
+    this.idIssueDate,
+    this.idExpiryDate,
 //      this.isSendEmail,
 //      this.isReceiveAlert,
 //      this.isRequestHardwareToken,
 //      this.isRequestInternetBanking,
-      this.isScanToPay,
-      this.isZMobile,
-      this.isZPrompt,
-      this.isStatementViaEmail,
-      this.isUSSD,
-      this.isBankToWallet,
-      this.idCard,
-      this.passport,
-      this.utility,
-      this.signature});
+    this.isScanToPay,
+    this.isZMobile,
+    this.isZPrompt,
+    this.isStatementViaEmail,
+    this.isUSSD,
+    this.isBankToWallet,
+    this.isCardRequest,
+    this.cardType,
+    this.requestingBranch,
+    this.destinationBranch,
+    this.preferredNameOnCard,
+    this.idCard,
+    this.passport,
+    this.utility,
+    this.signature,
+  });
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
@@ -201,6 +218,12 @@ class OfflineAccountEntity {
     map[columnOfflineIsStatementViaEmail] = isStatementViaEmail;
     map[columnOfflineIsUSSD] = isUSSD;
     map[columnOfflineIsBankToWallet] = isBankToWallet;
+
+    map[columnOfflineIsCardRequest] = isCardRequest;
+    map[columnOfflineCardType] = cardType;
+    map[columnOfflineRequestingBranch] = requestingBranch;
+    map[columnOfflineDestinationBranch] = destinationBranch;
+    map[columnOfflinePreferredNameOnCard] = preferredNameOnCard;
     map[columnOfflineIdCard] = idCard;
     map[columnOfflinePassport] = passport;
     map[columnOfflineUtility] = utility;
@@ -211,55 +234,62 @@ class OfflineAccountEntity {
 
   factory OfflineAccountEntity.fromMap(Map<String, dynamic> json) =>
       new OfflineAccountEntity(
-          id: json[columnOfflineId],
-          referenceId: json[columnOfflineReferenceId],
-          accountType: json[columnOfflineAccountType],
-          accountHolderType: json[columnOfflineAccountHolderType],
-          riskRank: json[columnOfflineRiskRank],
-          accountCategory: json[columnOfflineAccountCategory],
-          tin: json[columnOfflineTIN],
-          title: json[columnOfflineTitle],
-          surname: json[columnOfflineSurname],
-          firstName: json[columnOfflineFirstName],
-          mothersMaidenName: json[columnOfflineMothersMaidenName],
-          dateOfBirth: json[columnOfflineMothersMaidenName],
-          stateOfOrigin: json[columnOfflineStateOfOrigin],
-          placeOfBirth: json[columnOfflinePlaceOfBirth],
-          mmda: json[columnOfflineMMDA],
-          countryOfOrigin: json[columnOfflineCountryOfOrigin],
-          email: json[columnOfflineEmail],
-          phone: json[columnOfflinePhone],
-          nextOfKin: json[columnOfflineNextOfKin],
-          address1: json[columnOfflineAddress1],
-          address2: json[columnOfflineAddress2],
-          countryOfResidence: json[columnOfflineCityOfResidence],
-          stateOfResidence: json[columnOfflineStateOfResidence],
-          cityOfResidence: json[columnOfflineCityOfResidence],
-          gender: json[columnOfflineGender],
-          occupation: json[columnOfflineOccupation],
-          maritalStatus: json[columnOfflineMaritalStatus],
-          idType: json[columnOfflineIdType],
-          longitude: json[columnOfflineLongitude],
-          latitude: json[columnOfflineLatitude],
-          idNumber: json[columnOfflineIdNumber],
-          idPlaceOfIssue: json[columnOfflineIdPlaceOfIssue],
-          idIssueDate: json[columnOfflineIdIssueDate],
-          idExpiryDate: json[columnOfflineIdExpiryDate],
+        id: json[columnOfflineId],
+        referenceId: json[columnOfflineReferenceId],
+        accountType: json[columnOfflineAccountType],
+        accountHolderType: json[columnOfflineAccountHolderType],
+        riskRank: json[columnOfflineRiskRank],
+        accountCategory: json[columnOfflineAccountCategory],
+        tin: json[columnOfflineTIN],
+        title: json[columnOfflineTitle],
+        surname: json[columnOfflineSurname],
+        firstName: json[columnOfflineFirstName],
+        mothersMaidenName: json[columnOfflineMothersMaidenName],
+        dateOfBirth: json[columnOfflineMothersMaidenName],
+        stateOfOrigin: json[columnOfflineStateOfOrigin],
+        placeOfBirth: json[columnOfflinePlaceOfBirth],
+        mmda: json[columnOfflineMMDA],
+        countryOfOrigin: json[columnOfflineCountryOfOrigin],
+        email: json[columnOfflineEmail],
+        phone: json[columnOfflinePhone],
+        nextOfKin: json[columnOfflineNextOfKin],
+        address1: json[columnOfflineAddress1],
+        address2: json[columnOfflineAddress2],
+        countryOfResidence: json[columnOfflineCityOfResidence],
+        stateOfResidence: json[columnOfflineStateOfResidence],
+        cityOfResidence: json[columnOfflineCityOfResidence],
+        gender: json[columnOfflineGender],
+        occupation: json[columnOfflineOccupation],
+        maritalStatus: json[columnOfflineMaritalStatus],
+        idType: json[columnOfflineIdType],
+        longitude: json[columnOfflineLongitude],
+        latitude: json[columnOfflineLatitude],
+        idNumber: json[columnOfflineIdNumber],
+        idPlaceOfIssue: json[columnOfflineIdPlaceOfIssue],
+        idIssueDate: json[columnOfflineIdIssueDate],
+        idExpiryDate: json[columnOfflineIdExpiryDate],
 //          isSendEmail: json[columnOfflineIsSendEmail] == 0 ? false : true,
 //          isReceiveAlert: json[columnOfflineIsReceiveAlert] == 0 ? false : true,
 //          isRequestHardwareToken:
 //              json[columnOfflineIsRequestHardwareToken] == 0 ? false : true,
 //          isRequestInternetBanking:
 //              json[columnOfflineIsRequestInternetBanking] == 0 ? false : true,
-          isScanToPay: json[columnOfflineIsScanToPay]  == 0 ? false : true,
-          isZMobile: json[columnOfflineIsZMobile]  == 0 ? false : true,
-          isZPrompt: json[columnOfflineIsZPrompt]  == 0 ? false : true,
-          isStatementViaEmail:
-              json[columnOfflineIsStatementViaEmail]  == 0 ? false : true,
-          isUSSD: json[columnOfflineIsUSSD]  == 0 ? false : true,
-          isBankToWallet: json[columnOfflineIsBankToWallet]  == 0 ? false : true,
-          idCard: json[columnOfflineIdCard],
-          passport: json[columnOfflinePassport],
-          utility: json[columnOfflineUtility],
-          signature: json[columnOfflineSignature]);
+        isScanToPay: json[columnOfflineIsScanToPay] == 0 ? false : true,
+        isZMobile: json[columnOfflineIsZMobile] == 0 ? false : true,
+        isZPrompt: json[columnOfflineIsZPrompt] == 0 ? false : true,
+        isStatementViaEmail:
+            json[columnOfflineIsStatementViaEmail] == 0 ? false : true,
+        isUSSD: json[columnOfflineIsUSSD] == 0 ? false : true,
+        isBankToWallet: json[columnOfflineIsBankToWallet] == 0 ? false : true,
+
+        isCardRequest: json[columnOfflineIsCardRequest] == 0 ? false : true,
+        cardType: json[columnOfflineCardType],
+        requestingBranch: json[columnOfflineRequestingBranch],
+        destinationBranch: json[columnOfflineDestinationBranch],
+        preferredNameOnCard: json[columnOfflinePreferredNameOnCard],
+        idCard: json[columnOfflineIdCard],
+        passport: json[columnOfflinePassport],
+        utility: json[columnOfflineUtility],
+        signature: json[columnOfflineSignature],
+      );
 }

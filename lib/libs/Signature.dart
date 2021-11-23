@@ -23,16 +23,17 @@ class Signature extends StatefulWidget {
 }
 
 class _SignaturePainter extends CustomPainter {
-  Size? _lastSize;
+  Size? lastSize;
   final double strokeWidth;
   final List<Offset?> points;
   final Color strokeColor;
   late Paint _linePaint;
 
-  _SignaturePainter(
-      {required this.points,
-      required this.strokeColor,
-      required this.strokeWidth}) {
+  _SignaturePainter({
+    required this.points,
+    required this.strokeColor,
+    required this.strokeWidth,
+  }) {
     _linePaint = Paint()
       ..color = strokeColor
       ..strokeWidth = strokeWidth
@@ -41,7 +42,7 @@ class _SignaturePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size? size) {
-    _lastSize = size;
+    lastSize = size;
     for (int i = 0; i < points.length - 1; i++) {
       if (points[i] != null && points[i + 1] != null)
         canvas.drawLine(points[i]!, points[i + 1]!, _linePaint);
@@ -55,7 +56,7 @@ class _SignaturePainter extends CustomPainter {
 class SignatureState extends State<Signature> {
   List<Offset?> _points = <Offset?>[];
   _SignaturePainter? _painter;
-  Size? _lastSize;
+  Size? lastSize;
 
   SignatureState();
 
@@ -94,14 +95,14 @@ class SignatureState extends State<Signature> {
     var recorder = ui.PictureRecorder();
     var origin = Offset(0.0, 0.0);
     var paintBounds = Rect.fromPoints(
-        _lastSize!.topLeft(origin), _lastSize!.bottomRight(origin));
+        lastSize!.topLeft(origin), lastSize!.bottomRight(origin));
     var canvas = Canvas(recorder, paintBounds);
     if (widget.backgroundPainter != null) {
-      widget.backgroundPainter!.paint(canvas, _lastSize!);
+      widget.backgroundPainter!.paint(canvas, lastSize!);
     }
-    _painter!.paint(canvas, _lastSize);
+    _painter!.paint(canvas, lastSize);
     var picture = recorder.endRecording();
-    return picture.toImage(_lastSize!.width.round(), _lastSize!.height.round());
+    return picture.toImage(lastSize!.width.round(), lastSize!.height.round());
   }
 
   void clear() {
@@ -115,6 +116,6 @@ class SignatureState extends State<Signature> {
   List<Offset?> get points => _points;
 
   afterFirstLayout(BuildContext context) {
-    _lastSize = context.size;
+    lastSize = context.size;
   }
 }

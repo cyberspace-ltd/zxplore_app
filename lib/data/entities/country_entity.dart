@@ -1,15 +1,14 @@
+import 'package:equatable/equatable.dart';
+
 final String tableCountry = 'Country';
 final String columnCountryId = 'id';
 final String columnCountryName = 'name';
 
-class CountryEntity {
+class CountryEntity extends Equatable {
   //database fields
-  String? name;
+  final String? name;
 
-  CountryEntity({
-    this.name,
-  });
-
+  CountryEntity({this.name});
 
   Map<String, dynamic> toMapForDb() {
     var map = Map<String, dynamic>();
@@ -17,10 +16,10 @@ class CountryEntity {
     return map;
   }
 
-
   factory CountryEntity.fromMap(Map<String, dynamic> json) => new CountryEntity(
-    name: json[columnCountryName],
-  );
+        name: json[columnCountryName],
+      );
 
-
+  @override
+  List<Object?> get props => [name];
 }

@@ -20,8 +20,8 @@ class UploadUtilityBillStep extends StatefulWidget {
 class _UploadUtilityBillState extends State<UploadUtilityBillStep>
     with AutomaticKeepAliveClientMixin<UploadUtilityBillStep> {
   XFile? _imageFile;
-  String? _retrieveDataError;
-  dynamic _pickImageError;
+  String? retrieveDataError;
+  dynamic pickImageError;
   AccountFormBloc? accountFormBloc;
   ByteData _img = ByteData(0);
   ImagePicker _picker = ImagePicker();
@@ -183,7 +183,7 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
         _convertImagesToByte();
       });
     } else {
-      _retrieveDataError = response.exception!.code;
+      retrieveDataError = response.exception!.code;
     }
   }
 
@@ -192,7 +192,7 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte();
     } catch (e) {
-      _pickImageError = e;
+      pickImageError = e;
     }
     setState(() {});
   }

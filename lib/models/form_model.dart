@@ -48,6 +48,11 @@ class AccountForm {
   String? statementByEmailRequest;
   String? uSSDRequest;
   String? bankWalletRequest;
+  String? cardRequest;
+  String? cardType;
+  String? requestingBranch;
+  String? destinationBranch;
+  String? preferredNameOnCard;
   double? latitude;
   double? longitude;
 
@@ -88,6 +93,11 @@ class AccountForm {
     required this.statementByEmailRequest,
     required this.uSSDRequest,
     required this.bankWalletRequest,
+    required this.cardRequest,
+    required this.cardType,
+    required this.requestingBranch,
+    required this.destinationBranch,
+    required this.preferredNameOnCard,
     required this.latitude,
     required this.longitude,
   });
@@ -130,6 +140,11 @@ class AccountForm {
         statementByEmailRequest: json["StatementByEmailRequest"],
         uSSDRequest: json["USSDRequest"],
         bankWalletRequest: json["BankWalletRequest"],
+        cardRequest: json["CardRequest"],
+        cardType: json["CardType"],
+        requestingBranch: json["RequestingBranch"],
+        destinationBranch: json["DestinationBranch"],
+        preferredNameOnCard: json["PreferredNameOnCard"],
         latitude: json["Latitude"].toDouble(),
         longitude: json["Longitude"].toDouble(),
       );
@@ -174,6 +189,11 @@ class AccountForm {
         "StatementByEmailRequest": statementByEmailRequest,
         "USSDRequest": uSSDRequest,
         "BankWalletRequest": bankWalletRequest,
+        "CardRequest": cardRequest,
+        "CardType": cardType,
+        "RequestingBranch": requestingBranch,
+        "DestinationBranch": destinationBranch,
+        "PreferredNameOnCard": preferredNameOnCard,
       };
 }
 

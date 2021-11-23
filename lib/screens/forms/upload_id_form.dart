@@ -17,8 +17,8 @@ class UploadIdStep extends StatefulWidget {
 class _UploadIdStepState extends State<UploadIdStep>
     with AutomaticKeepAliveClientMixin<UploadIdStep> {
   XFile? _imageFile;
-  String? _retrieveDataError;
-  dynamic _pickImageError;
+  String? retrieveDataError;
+  dynamic pickImageError;
   AccountFormBloc? accountFormBloc;
   ByteData _img = ByteData(0);
   ImagePicker _picker = ImagePicker();
@@ -153,7 +153,7 @@ class _UploadIdStepState extends State<UploadIdStep>
         _convertImagesToByte();
       });
     } else {
-      _retrieveDataError = response.exception!.code;
+      retrieveDataError = response.exception!.code;
     }
   }
 
@@ -162,7 +162,7 @@ class _UploadIdStepState extends State<UploadIdStep>
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
       _convertImagesToByte();
     } catch (e) {
-      _pickImageError = e;
+      pickImageError = e;
     }
 
     setState(() {});

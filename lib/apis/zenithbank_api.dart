@@ -9,6 +9,7 @@ import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/accounts_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
+// import 'package:zxplore_app/models/card_type_model.dart';
 import 'package:zxplore_app/models/cities_model.dart';
 import 'package:zxplore_app/models/country_model.dart';
 import 'package:zxplore_app/models/login_response.dart';
@@ -18,6 +19,7 @@ import 'package:zxplore_app/models/state_model.dart';
 import 'package:zxplore_app/models/title_model.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
 import 'package:zxplore_app/models/verify_id_response.dart';
+import 'package:zxplore_app/utils/preferences.dart';
 
 class ZenithBankApi {
   Future<Occupation> fetchOccupations(String? token) async {
@@ -175,6 +177,33 @@ class ZenithBankApi {
 //    } else {
 //      throw CleanerException('Failed to load countries');
 //    }
+  }
+
+  Future<void> fetchCardTypes(String? token) async {
+    Response<String> response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response = await dio.get(Endpoints.getCardTypesUrl());
+      if (response.data != null) {
+        var prefs = Preference();
+        await prefs.load();
+        prefs.setString("CARDTYPES", response.data!);
+      }
+      // return CardTypes.fromJson(response.data);
+    } on DioError catch (error) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
+    }
   }
 
   Future<LoginResponse> attemptLogin(String username, String password) async {

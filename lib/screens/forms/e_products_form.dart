@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/models/card_type_model.dart';
+import 'package:zxplore_app/utils/preferences.dart';
 
 class EProductsStep extends StatefulWidget {
   const EProductsStep({Key? key}) : super(key: key);
@@ -12,15 +15,44 @@ class EProductsStep extends StatefulWidget {
 class _EProductsStepState extends State<EProductsStep>
     with AutomaticKeepAliveClientMixin<EProductsStep> {
   AccountFormBloc? accountFormBloc;
+  Preference? prefs;
+  List<String> _cardTypes = ["MASTER CARD", "VISA", "VERVE"];
+
+  TextEditingController? _requestingBranchController;
+  TextEditingController? _destinationBranchController;
+  TextEditingController? _preferredNameOnCardController;
 
   @override
   void initState() {
     super.initState();
+    prefs = Preference();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
+    _requestingBranchController = TextEditingController();
+    _destinationBranchController = TextEditingController();
+    _preferredNameOnCardController = TextEditingController();
+    setCardTypes();
+  }
+
+  @override
+  void dispose() {
+    _requestingBranchController!.dispose();
+    _destinationBranchController!.dispose();
+    _preferredNameOnCardController!.dispose();
+
+    super.dispose();
   }
 
   @override
   bool get wantKeepAlive => true;
+
+  void setCardTypes() async {
+    await prefs!.load();
+    final json = prefs!.getString("CARDTYPES");
+    final newCardTypes = cardTypeFromJson(json).menu;
+    if (newCardTypes != null) {
+      _cardTypes = newCardTypes;
+    }
+  }
 
   Widget _scanToPayCheckBox() {
     return StreamBuilder<bool?>(
@@ -118,9 +150,185 @@ class _EProductsStepState extends State<EProductsStep>
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  Widget _cardRequestCheckBox() {
+    return StreamBuilder<bool?>(
+      stream: accountFormBloc!.isCardRequest,
+      builder: (context, snapshot) {
+        return CheckboxListTile(
+          onChanged: accountFormBloc!.changeIsCardRequest,
+          title: new Text('Request a Debit Card'),
+          controlAffinity: ListTileControlAffinity.leading,
+          activeColor: Colors.red,
+          dense: true,
+          value: snapshot.hasData ? snapshot.data : false,
+        );
+      },
+    );
+  }
+
+  Widget _cardTypeDropdownField() {
+    return StreamBuilder<bool?>(
+      stream: accountFormBloc!.isCardRequest,
+      builder: (context, boolSnapshot) {
+        if (boolSnapshot.hasData && boolSnapshot.data!) {
+          return StreamBuilder<String?>(
+            stream: accountFormBloc!.cardType,
+            builder: (context, snapshot) {
+              return FormField<String>(
+                autovalidateMode: AutovalidateMode.always,
+                builder: (FormFieldState<String> state) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: 'Card Type',
+                        helperText: "* Required",
+                        errorText: snapshot.error as String?,
+                      ),
+                      isEmpty: snapshot.data == '',
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: snapshot.data,
+                          isDense: true,
+                          onChanged: accountFormBloc!.changeCardType,
+                          items: _cardTypes.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        }
+        return SizedBox();
+      },
+    );
+  }
+
+  Widget _requestingBranchTextField() {
+    return StreamBuilder<bool?>(
+      stream: accountFormBloc!.isCardRequest,
+      builder: (context, boolSnapshot) {
+        if (boolSnapshot.hasData && boolSnapshot.data!) {
+          return StreamBuilder<String?>(
+            stream: accountFormBloc!.requestingBranch,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _requestingBranchController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _requestingBranchController!.selection,
+                );
+              }
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: TextField(
+                  controller: _requestingBranchController,
+                  textCapitalization: TextCapitalization.characters,
+                  keyboardType: TextInputType.text,
+                  onChanged: accountFormBloc!.changeRequestingBranch,
+                  maxLength: 50,
+                  maxLines: null,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: InputDecoration(
+                    labelText: 'Requesting Branch',
+                    helperText: '* Required',
+                    errorText: snapshot.error as String?,
+                  ),
+                ),
+              );
+            },
+          );
+        }
+        return SizedBox();
+      },
+    );
+  }
+
+  Widget _destinationBranchTextField() {
+    return StreamBuilder<bool?>(
+      stream: accountFormBloc!.isCardRequest,
+      builder: (context, boolSnapshot) {
+        if (boolSnapshot.hasData && boolSnapshot.data!) {
+          return StreamBuilder<String?>(
+            stream: accountFormBloc!.destinationBranch,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _destinationBranchController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _destinationBranchController!.selection,
+                );
+              }
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: TextField(
+                  controller: _destinationBranchController,
+                  textCapitalization: TextCapitalization.characters,
+                  keyboardType: TextInputType.text,
+                  onChanged: accountFormBloc!.changeDestinationBranch,
+                  maxLength: 50,
+                  maxLines: null,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: InputDecoration(
+                    labelText: 'Destination Branch',
+                    helperText: '* Required',
+                    errorText: snapshot.error as String?,
+                  ),
+                ),
+              );
+            },
+          );
+        }
+        return SizedBox();
+      },
+    );
+  }
+
+  Widget _preferredNameOnCardTextField() {
+    return StreamBuilder<bool?>(
+      stream: accountFormBloc!.isCardRequest,
+      builder: (context, boolSnapshot) {
+        if (boolSnapshot.hasData && boolSnapshot.data!) {
+          return StreamBuilder<String?>(
+            stream: accountFormBloc!.preferredNameOnCard,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                _preferredNameOnCardController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _preferredNameOnCardController!.selection,
+                );
+              }
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: TextField(
+                  controller: _preferredNameOnCardController,
+                  textCapitalization: TextCapitalization.characters,
+                  keyboardType: TextInputType.text,
+                  onChanged: accountFormBloc!.changePreferredNameOnCard,
+                  maxLength: 50,
+                  maxLines: null,
+                  maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                  decoration: InputDecoration(
+                    labelText: 'Preferred Name On Card',
+                    helperText: '* Required',
+                    errorText: snapshot.error as String?,
+                  ),
+                ),
+              );
+            },
+          );
+        }
+        return SizedBox();
+      },
+    );
   }
 
   @override
@@ -158,6 +366,11 @@ class _EProductsStepState extends State<EProductsStep>
                   _statementViaEmailCheckBox(),
                   _ussdCheckBox(),
                   _bankToWalletCheckBox(),
+                  _cardRequestCheckBox(),
+                  _cardTypeDropdownField(),
+                  _requestingBranchTextField(),
+                  _destinationBranchTextField(),
+                  _preferredNameOnCardTextField(),
                 ],
               ),
               SizedBox(height: 120.0),
