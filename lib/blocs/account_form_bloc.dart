@@ -213,52 +213,52 @@ class AccountFormBloc extends BlocBase with Validators {
   bool lsIssueDate = true;
   bool expiryDate = true;
 
-  Stream<String> get accountType =>
+  Stream<String?> get accountType =>
       _accountTypeController.stream.transform(validateAccountType);
 
-  Stream<String> get accountHolderType =>
+  Stream<String?> get accountHolderType =>
       _accountHolderTypeController.stream.transform(validateAccountHolderType);
 
-  Stream<String> get riskRankType =>
+  Stream<String?> get riskRankType =>
       _riskRankController.stream.transform(validateRiskRank);
 
-  Stream<String> get accountCategoryType =>
+  Stream<String?> get accountCategoryType =>
       _accountCategoryController.stream.transform(validateAccountCategory);
 
   Stream<String?> get tin => _tinController.stream;
 
-  Stream<String> get title => _titleController.stream.transform(validateTitle);
+  Stream<String?> get title => _titleController.stream.transform(validateTitle);
 
-  Stream<String> get surname =>
+  Stream<String?> get surname =>
       _surnameController.stream.transform(validateSurname);
 
-  Stream<String> get firstName =>
+  Stream<String?> get firstName =>
       _firstNameController.stream.transform(validateFirstName);
 
-  Stream<String> get otherName =>
+  Stream<String?> get otherName =>
       _otherNameController.stream.transform(validateOtherName);
 
-  Stream<String> get mothersMaidenName =>
+  Stream<String?> get mothersMaidenName =>
       _mothersMaidenNameController.stream.transform(validateMothersMaidenName);
 
-  Stream<String> get dateOfBirth =>
+  Stream<String?> get dateOfBirth =>
       _dateOfBirthController.stream.transform(validateDateOfBirth);
 
-  Stream<String> get placeOfBirth =>
+  Stream<String?> get placeOfBirth =>
       _placeOfBirthController.stream.transform(validatePlaceOfBirth);
 
-  Stream<String> get mmda => _mmdaController.stream.transform(validateMMDA);
+  Stream<String?> get mmda => _mmdaController.stream.transform(validateMMDA);
 
-  Stream<String> get countryOfOrigin =>
+  Stream<String?> get countryOfOrigin =>
       _countryOfOriginController.stream.transform(validateCountryOfOrigin);
 
-  Stream<String> get phoneNumber =>
+  Stream<String?> get phoneNumber =>
       _phoneNumberController.stream.transform(validatePhoneNumber);
 
-  Stream<String> get nextOfKin =>
+  Stream<String?> get nextOfKin =>
       _nextOfKinController.stream.transform(validateNextOfKin);
 
-  Stream<String> get email => _emailController.stream.transform(validateEmail);
+  Stream<String?> get email => _emailController.stream.transform(validateEmail);
 
   BehaviorSubject<LocationData> get subjectLocationResponse => _subjectLocation;
 
@@ -269,33 +269,33 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String> get longitude => _longitudeController.stream;
 
-  Stream<String> get address1 =>
+  Stream<String?> get address1 =>
       _address1Controller.stream.transform(validateAddress1);
 
   Stream<String?> get address2 => _address2Controller.stream;
 
-  Stream<String> get countryOfResidence => _countryOfResidenceController.stream
+  Stream<String?> get countryOfResidence => _countryOfResidenceController.stream
       .transform(validateCountryOfResidence);
 
-  Stream<String> get stateOfResidence =>
+  Stream<String?> get stateOfResidence =>
       _stateOfResidenceController.stream.transform(validateStateOfResidence);
 
-  Stream<String> get cityOfResidence =>
+  Stream<String?> get cityOfResidence =>
       _cityOfResidenceController.stream.transform(validateCityOfResidence);
 
-  Stream<String> get gender =>
+  Stream<String?> get gender =>
       _genderController.stream.transform(validateGender);
 
-  Stream<String> get occupation =>
+  Stream<String?> get occupation =>
       occupationController.stream.transform(validateOccupation);
 
-  Stream<String> get occupationCategory =>
+  Stream<String?> get occupationCategory =>
       occupationCategoryController.stream.transform(validateOccupation);
 
-  Stream<String> get otherOccupation =>
+  Stream<String?> get otherOccupation =>
       othersOccupationController.stream.transform(validateOccupation);
 
-  Stream<String> get maritalStatus =>
+  Stream<String?> get maritalStatus =>
       _maritalStatusController.stream.transform(validateMaritalStatus);
 
   Stream<String?> get idType =>
@@ -392,7 +392,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
   // change data
 
-  Function(String) get changeAccountType => _accountTypeController.sink.add;
+  Function(String?) get changeAccountType => _accountTypeController.sink.add;
 
   Function(String) get changeLatitude => _latitudeController.sink.add;
 
@@ -406,81 +406,82 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String?) get changeRiskRank => _riskRankController.sink.add;
 
-  Function(String) get changeAccountCategory =>
+  Function(String?) get changeAccountCategory =>
       _accountCategoryController.sink.add;
 
-  Function(String) get changeTin => _tinController.sink.add;
+  Function(String?) get changeTin => _tinController.sink.add;
 
   Function(String?) get changeTitle => _titleController.sink.add;
 
-  Function(String) get changeSurname => _surnameController.sink.add;
+  Function(String?) get changeSurname => _surnameController.sink.add;
 
-  Function(String) get changeFirstName => _firstNameController.sink.add;
+  Function(String?) get changeFirstName => _firstNameController.sink.add;
 
-  Function(String) get changeOtherName => _otherNameController.sink.add;
+  Function(String?) get changeOtherName => _otherNameController.sink.add;
 
-  Function(String) get changeMothersMaidenName =>
+  Function(String?) get changeMothersMaidenName =>
       _mothersMaidenNameController.sink.add;
 
-  Function(String) get changeDateOfBirth => _dateOfBirthController.sink.add;
+  Function(String?) get changeDateOfBirth => _dateOfBirthController.sink.add;
 
-  Function(String) get changePlaceOfBirth => _placeOfBirthController.sink.add;
+  Function(String?) get changePlaceOfBirth => _placeOfBirthController.sink.add;
 
-  Function(String) get changeMMDA => _mmdaController.sink.add;
+  Function(String?) get changeMMDA => _mmdaController.sink.add;
 
   Function(String?) get changeCountryOfOrigin =>
       _countryOfOriginController.sink.add;
 
-  Function(String) get changeEmail => _emailController.sink.add;
+  Function(String?) get changeEmail => _emailController.sink.add;
 
-  Function(String) get changePhone => _phoneNumberController.sink.add;
+  Function(String?) get changePhone => _phoneNumberController.sink.add;
 
-  Function(String) get changeNextOfKin => _nextOfKinController.sink.add;
+  Function(String?) get changeNextOfKin => _nextOfKinController.sink.add;
 
-  Function(String) get changeAddress1 => _address1Controller.sink.add;
+  Function(String?) get changeAddress1 => _address1Controller.sink.add;
 
-  Function(String) get changeAddress2 => _address2Controller.sink.add;
+  Function(String?) get changeAddress2 => _address2Controller.sink.add;
 
   Function(String?) get changeCountryOfResidence =>
       _countryOfResidenceController.sink.add;
 
-  Function(String) get changeStateOfResidence =>
+  Function(String?) get changeStateOfResidence =>
       _stateOfResidenceController.sink.add;
 
   updateStateRegion(String? value) {
     _stateOfResidenceController.sink.add(value);
   }
 
-  Function(String) get changeCityOfResidence =>
+  Function(String?) get changeCityOfResidence =>
       _cityOfResidenceController.sink.add;
 
   Function(String?) get changeGender => _genderController.sink.add;
 
-  Function(String) get changeOccupation => occupationController.sink.add;
+  Function(String?) get changeOccupation => occupationController.sink.add;
 
-  Function(String) get changeOccupationCategory =>
+  Function(String?) get changeOccupationCategory =>
       occupationCategoryController.sink.add;
 
-  Function(String) get changeOtherOccupation =>
+  Function(String?) get changeOtherOccupation =>
       othersOccupationController.sink.add;
+
   Function(String?) get changeMaritalStatus =>
       _maritalStatusController.sink.add;
 
-  Function(String) get changeIdType => _idTypeController.sink.add;
+  Function(String?) get changeIdType => _idTypeController.sink.add;
 
-  Function(String) get changeIdIssuer => _idIssuerController.sink.add;
+  Function(String?) get changeIdIssuer => _idIssuerController.sink.add;
 
-  Function(String) get changeIdOtherIssuer =>
+  Function(String?) get changeIdOtherIssuer =>
       _idIssuerOthersController.sink.add;
 
-  Function(String) get changeIdNumber => _idNumberController.sink.add;
+  Function(String?) get changeIdNumber => _idNumberController.sink.add;
 
   Function(String?) get changePlaceOfIssue =>
       _idPlaceOfIssueController.sink.add;
 
-  Function(String) get changeIssueDate => _idIssueDateController.sink.add;
+  Function(String?) get changeIssueDate => _idIssueDateController.sink.add;
 
-  Function(String) get changeExpiryDate => _idExpiryDateController.sink.add;
+  Function(String?) get changeExpiryDate => _idExpiryDateController.sink.add;
 
 //  Function(bool) get changeIsSendEmail => _isSendEmailController.sink.add;
 //
@@ -505,13 +506,13 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String?) get changeCardType => cardTypeController.sink.add;
 
-  Function(String) get changeRequestingBranch =>
+  Function(String?) get changeRequestingBranch =>
       _requestingBranchController.sink.add;
 
-  Function(String) get changeDestinationBranch =>
+  Function(String?) get changeDestinationBranch =>
       _destinationBranchController.sink.add;
 
-  Function(String) get changePreferredNameOnCard =>
+  Function(String?) get changePreferredNameOnCard =>
       _preferredNameOnCardController.sink.add;
 
   Function(bool) get changeMaritalStatusValue =>
@@ -525,35 +526,35 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Function(String?) get changeSignature => _uploadSignatureController.sink.add;
 
-  setAccountType(String value) {
+  setAccountType(String? value) {
     _accountTypeController.sink.add(value);
   }
 
-  setAccountHolderType(String value) {
+  setAccountHolderType(String? value) {
     _accountHolderTypeController.sink.add(value);
   }
 
-  setRiskRankType(String value) {
+  setRiskRankType(String? value) {
     _riskRankController.sink.add(value);
   }
 
-  setAccountCategory(String value) {
+  setAccountCategory(String? value) {
     _accountCategoryController.sink.add(value);
   }
 
-  setDateOfBirth(String value) {
+  setDateOfBirth(String? value) {
     _dateOfBirthController.sink.add(value);
   }
 
-  setUploadIdForm(String value) {
+  setUploadIdForm(String? value) {
     _uploadIdImageController.sink.add(value);
   }
 
-  setUploadPassportForm(String value) {
+  setUploadPassportForm(String? value) {
     _uploadPassportController.sink.add(value);
   }
 
-  setUploadUtilityBillForm(String value) {
+  setUploadUtilityBillForm(String? value) {
     _uploadUtilityBillController.sink.add(value);
   }
 
@@ -562,17 +563,17 @@ class AccountFormBloc extends BlocBase with Validators {
     changeSignature(value);
   }
 
-  setOccupation(String value) {
+  setOccupation(String? value) {
     occupationController.sink.add(value);
     changeOccupation;
   }
 
-  setOccupationCategory(String value) {
+  setOccupationCategory(String? value) {
     occupationCategoryController.sink.add(value);
     changeOccupationCategory;
   }
 
-  setCardType(String value) {
+  setCardType(String? value) {
     cardTypeController.sink.add(value);
     changeCardType;
   }

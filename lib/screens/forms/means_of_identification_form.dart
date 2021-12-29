@@ -189,7 +189,7 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _otherIdIssuerTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.idOthersIssuer,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -216,7 +216,7 @@ class _MeansOfIdentificationStepStepState
   }
 
   Widget _idNumberTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.idNumber,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -408,7 +408,7 @@ class _MeansOfIdentificationStepStepState
               _selectedIdFilter == 3
           ? false
           : true,
-      child: StreamBuilder(
+      child: StreamBuilder<String?>(
         stream: accountFormBloc!.idIssueDate,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -459,7 +459,7 @@ class _MeansOfIdentificationStepStepState
               _selectedIdFilter == 3
           ? false
           : true,
-      child: StreamBuilder(
+      child: StreamBuilder<String?>(
         stream: accountFormBloc!.idExpiryDate,
         builder: (context, snapshot) {
           if (snapshot.hasData) {

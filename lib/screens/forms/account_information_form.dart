@@ -53,7 +53,7 @@ class _AccountInformationState extends State<AccountInformationStep>
   }
 
   Widget accountTypeField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.accountType,
       builder: (context, snapshot) {
         return FormField<String>(
@@ -100,7 +100,7 @@ class _AccountInformationState extends State<AccountInformationStep>
   }
 
   Widget accountHolderTypeField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.accountHolderType,
       builder: (context, snapshot) {
         return FormField<String>(
@@ -133,7 +133,7 @@ class _AccountInformationState extends State<AccountInformationStep>
   }
 
   Widget riskRankField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.riskRankType,
       builder: (context, snapshot) {
         return FormField<String>(

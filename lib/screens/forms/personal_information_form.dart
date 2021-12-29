@@ -83,7 +83,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget titleTextField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.title,
       builder: (context, snapshot) {
         return FormField<String>(
@@ -116,7 +116,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _tinField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
         stream: accountFormBloc!.tin,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -140,7 +140,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _surnameField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.surname,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -170,7 +170,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   //Workaround for this issue on text TextFields: https://github.com/flutter/flutter/issues/11416
 
   Widget _firstNameField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.firstName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -198,7 +198,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _otherNameField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.otherName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -225,7 +225,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _mothersMaidenNameField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.mothersMaidenName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -252,7 +252,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _dateOfBirthTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.dateOfBirth,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -280,7 +280,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _dateOfBirthField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.dateOfBirth,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -323,7 +323,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _stateOfOriginTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.placeOfBirth,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -349,7 +349,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   }
 
   Widget _countryOfOriginTextField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.countryOfOrigin,
       builder: (context, snapshot) {
         return FormField<String>(

@@ -59,154 +59,144 @@ class _SignatoryStepState extends State<SignatoryStep>
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8),
-              child: Text(
-                'Upload your Signature by clicking either the gallery or camera icon',
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                FloatingActionButton(
-                  onPressed: () {
-                    _onImageButtonPressed(ImageSource.gallery);
-                    _isButtonDisabled = false;
-                    setState(() {
-                      isSignatureAcceptButtonVisible = false;
-                    });
-                  },
-                  heroTag: 'image0',
-                  backgroundColor: ZxplorePrimaryColor,
-                  tooltip: 'Pick Image from gallery',
-                  child: const Icon(Icons.photo_library),
-                ),
-                FloatingActionButton(
-                  onPressed: () {
-                    _onImageButtonPressed(ImageSource.camera);
-                    _isButtonDisabled = false;
-                    setState(() {
-                      isSignatureAcceptButtonVisible = false;
-                    });
-                  },
-                  backgroundColor: ZxplorePrimaryColor,
-                  heroTag: 'image1',
-                  tooltip: 'Take a Photo',
-                  child: const Icon(Icons.camera_alt),
-                ),
-              ],
-            ),
-            Text(
-              'Or',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Text(
-              'Sign Below',
-              textAlign: TextAlign.center,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: LimitedBox(
-                maxHeight: 300,
-                maxWidth: 350,
-                child: Container(
-                  color: Colors.black12,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Signature(
-                      color: color,
-                      key: _sign,
-                      onSign: () {
-                        // final sign = _sign.currentState;
-                        setState(() {
-                          isSignatureAcceptButtonVisible = true;
-                        });
-                        // debugPrint(
-                        //     '${sign.points.length} points in the signature');
-                      },
-                      strokeWidth: strokeWidth,
+        child: isLoading
+            ? LinearProgressIndicator()
+            : ListBody(
+                children: <Widget>[
+                  SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
+                    child: Text(
+                      'Upload your Signature by clicking either the gallery or camera icon',
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-              ),
-            ),
-            _img.buffer.lengthInBytes == 0
-                ? Container()
-                : LimitedBox(
-                    maxHeight: 200.0,
-                    child: Image.memory(_img.buffer.asUint8List())),
-            Column(
-              children: <Widget>[
-                Visibility(
-                  visible: isSignatureAcceptButtonVisible,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      OutlinedButton(
-                        child: Text('Accept Signature.'),
-                        onPressed: () async {
-                          final sign = _sign.currentState!;
-                          if (sign.points.length == 0) {
-                            FlushbarHelper.createError(
-                                message: "You have not signed this form")
-                              ..show(context);
-                            return;
-                          }
-                          //retrieve image data, do whatever you want with it (send to server, save locally...)
-                          final image = await sign.getData();
-                          var data = await (image.toByteData(
-                              format: ui.ImageByteFormat.png));
-                          sign.clear();
-                          final encoded = base64
-                              .encode(data!.buffer.asUint8ClampedList())
-                              .toString();
-
-                          accountFormBloc!.setSignature(encoded);
-
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      FloatingActionButton(
+                        onPressed: () {
+                          _onImageButtonPressed(ImageSource.gallery);
+                          _isButtonDisabled = false;
                           setState(() {
-                            _img = data;
-                            _isButtonDisabled = false;
+                            isSignatureAcceptButtonVisible = false;
                           });
-//                        debugPrint("onPressed " + encoded);
                         },
+                        heroTag: 'image0',
+                        backgroundColor: ZxplorePrimaryColor,
+                        tooltip: 'Pick Image from gallery',
+                        child: const Icon(Icons.photo_library),
                       ),
-                      TextButton(
-                          child: Text(
-                            'Clear Signature',
-                          ),
-                          onPressed: () {
-                            final sign = _sign.currentState!;
-                            sign.clear();
-                            accountFormBloc!.setSignature(null);
-                            setState(() {
-                              _img = ByteData(0);
-                              _isButtonDisabled = true;
-                              isSignatureAcceptButtonVisible = false;
-                            });
-                          }),
+                      FloatingActionButton(
+                        onPressed: () {
+                          _onImageButtonPressed(ImageSource.camera);
+                          _isButtonDisabled = false;
+                          setState(() {
+                            isSignatureAcceptButtonVisible = false;
+                          });
+                        },
+                        backgroundColor: ZxplorePrimaryColor,
+                        heroTag: 'image1',
+                        tooltip: 'Take a Photo',
+                        child: const Icon(Icons.camera_alt),
+                      ),
                     ],
                   ),
-                ),
-                SizedBox(height: 16.0),
-                disclaimerText(),
-                submitButton(),
-                SizedBox(height: 60.0),
-              ],
-            )
-          ],
-        ),
+                  Text('Or', textAlign: TextAlign.center),
+                  SizedBox(height: 16),
+                  Text('Sign Below', textAlign: TextAlign.center),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: LimitedBox(
+                      maxHeight: 300,
+                      maxWidth: 350,
+                      child: Container(
+                        color: Colors.black12,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Signature(
+                            color: color,
+                            key: _sign,
+                            onSign: () {
+                              // final sign = _sign.currentState;
+                              setState(() {
+                                isSignatureAcceptButtonVisible = true;
+                              });
+                              // debugPrint(
+                              //     '${sign.points.length} points in the signature');
+                            },
+                            strokeWidth: strokeWidth,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  _img.buffer.lengthInBytes == 0
+                      ? Container()
+                      : LimitedBox(
+                          maxHeight: 200.0,
+                          child: Image.memory(_img.buffer.asUint8List()),
+                        ),
+                  Column(
+                    children: <Widget>[
+                      Visibility(
+                        visible: isSignatureAcceptButtonVisible,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            OutlinedButton(
+                              child: Text('ACCEPT'),
+                              onPressed: () async {
+                                final sign = _sign.currentState!;
+                                if (sign.points.length == 0) {
+                                  FlushbarHelper.createError(
+                                      message: "You have not signed this form")
+                                    ..show(context);
+                                  return;
+                                }
+                                //retrieve image data, do whatever you want with it (send to server, save locally...)
+                                final image = await sign.getData();
+                                var data = await (image.toByteData(
+                                    format: ui.ImageByteFormat.png));
+                                sign.clear();
+                                final encoded = base64
+                                    .encode(data!.buffer.asUint8ClampedList())
+                                    .toString();
+
+                                accountFormBloc!.setSignature(encoded);
+
+                                setState(() {
+                                  _img = data;
+                                  _isButtonDisabled = false;
+                                });
+//                        debugPrint("onPressed " + encoded);
+                              },
+                            ),
+                            TextButton(
+                              child: Text('ClEAR'),
+                              onPressed: () {
+                                final sign = _sign.currentState!;
+                                sign.clear();
+                                accountFormBloc!.setSignature(null);
+                                setState(() {
+                                  _img = ByteData(0);
+                                  _isButtonDisabled = true;
+                                  isSignatureAcceptButtonVisible = false;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                      disclaimerText(),
+                      submitButton(),
+                      SizedBox(height: 60.0),
+                    ],
+                  )
+                ],
+              ),
       ),
     );
   }
@@ -263,9 +253,7 @@ class _SignatoryStepState extends State<SignatoryStep>
               height: 60,
               width: 200,
               child: new ElevatedButton(
-                child: (isLoading == false)
-                    ? Text('Submit Account')
-                    : CircularProgressIndicator(),
+                child: Text('Submit Account'),
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(
                     Colors.white,
@@ -274,10 +262,11 @@ class _SignatoryStepState extends State<SignatoryStep>
                     Colors.red.shade900,
                   ),
                 ),
-                onPressed:
-                    (snapshot.hasData && !isLoading && !_isButtonDisabled)
-                        ? submitAccount
-                        : null,
+                onPressed: (snapshot.hasData &&
+                        isLoading == false &&
+                        _isButtonDisabled == false)
+                    ? submitAccount
+                    : null,
                 // onPressed: _isButtonDisabled ? null : submitAccount,
 //              onPressed: accountFormBloc.submit,
               ),
@@ -303,6 +292,7 @@ class _SignatoryStepState extends State<SignatoryStep>
         loadingBar.dismiss(context);
         setState(() {
           isLoading = false;
+          _isButtonDisabled = false;
         });
         _showSuccessDialog(
             'The created account was sent successfully, an account number will be generated shortly.');

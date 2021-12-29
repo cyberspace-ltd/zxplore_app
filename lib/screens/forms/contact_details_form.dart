@@ -117,7 +117,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _emailTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
         stream: accountFormBloc!.email,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -143,7 +143,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _phoneTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
         stream: accountFormBloc!.phoneNumber,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -168,7 +168,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _nextOfKinTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
         stream: accountFormBloc!.nextOfKin,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -195,7 +195,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _address1TextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
         stream: accountFormBloc!.address1,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -221,7 +221,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _address2TextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
         stream: accountFormBloc!.address2,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -245,7 +245,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _countryOfResidenceTextField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.countryOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
@@ -291,7 +291,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _stateOfResidenceField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.stateOfResidence,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -319,7 +319,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _stateOfResidenceTextField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.stateOfResidence,
       builder: (context, snapshot) {
         return FormField<String>(
@@ -444,7 +444,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _cityOfResidenceTextField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.cityOfResidence,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -486,7 +486,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _genderField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.gender,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -514,7 +514,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _genderTextField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.gender,
       builder: (context, snapshot) {
         return FormField<String>(
@@ -551,7 +551,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   // ignore: non_constant_identifier_names
   Widget _other_occupationField() {
-    return StreamBuilder(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.otherOccupation,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -578,7 +578,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   }
 
   Widget _occupationCategoryField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.occupationCategory,
       builder: (context, snapshot) {
         return FormField<String>(
@@ -752,7 +752,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   // }
 
   Widget _maritalStatusField() {
-    return StreamBuilder<String>(
+    return StreamBuilder<String?>(
       stream: accountFormBloc!.maritalStatus,
       builder: (context, snapshot) {
         return FormField<String>(
