@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_class_bloc.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
@@ -17,22 +16,16 @@ class _AccountInformationState extends State<AccountInformationStep>
   AccountFormBloc? accountFormBloc;
   late AccountClassBloc _accountClassBloc;
 
-  @override
-  bool get wantKeepAlive => true;
-
+  final _accountHolderTypes = ['INDIVIDUAL'];
+  final _riskRanks = ['HIGH', 'LOW', 'MEDIUM'];
   final _accountTypes = [SAVINGS_ACCOUNT, CURRENT_ACCOUNT];
 
   String? _selectedAccountType;
-
   String _selectedAccFilter = "";
-  final _accountHolderTypes = ['INDIVIDUAL', 'CHEQUE', 'SAVINGS'];
-
-  final _riskRanks = [
-    'HIGH',
-    'LOW',
-    'MEDIUM',
-  ];
   List<AccountClassEntity>? accountClasses;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void dispose() {

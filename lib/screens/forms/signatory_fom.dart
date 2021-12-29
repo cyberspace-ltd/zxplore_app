@@ -1,17 +1,17 @@
+import 'dart:convert';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:zxplore_app/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/libs/Signature.dart';
-import 'package:zxplore_app/utils/flushbar_helper.dart';
-
-import '../../colors.dart';
-import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:zxplore_app/screens/home_screen.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
+import 'package:zxplore_app/blocs/account_form_bloc.dart';
 
 class SignatoryStep extends StatefulWidget {
   @override
@@ -380,7 +380,12 @@ class _SignatoryStepState extends State<SignatoryStep>
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
-      _convertImagesToByte();
+      if (_imageFile != null) {
+        _convertImagesToByte();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signature Uploaded')),
+        );
+      }
     } catch (e) {
       _pickImageError = e;
     }

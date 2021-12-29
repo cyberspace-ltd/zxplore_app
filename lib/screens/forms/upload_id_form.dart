@@ -1,13 +1,13 @@
-import 'dart:convert';
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
-import 'dart:async';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:zxplore_app/blocs/account_form_bloc.dart';
-import 'package:zxplore_app/blocs/provider.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'dart:typed_data';
 
-import '../../colors.dart';
+import 'package:flutter/material.dart';
+import 'package:zxplore_app/colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/blocs/account_form_bloc.dart';
 
 class UploadIdStep extends StatefulWidget {
   @override
@@ -160,7 +160,12 @@ class _UploadIdStepState extends State<UploadIdStep>
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
-      _convertImagesToByte();
+      if (_imageFile != null) {
+        _convertImagesToByte();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Identification Uploaded')),
+        );
+      }
     } catch (e) {
       pickImageError = e;
     }

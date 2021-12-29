@@ -1,11 +1,11 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:zxplore_app/blocs/account_form_bloc.dart';
-import 'package:zxplore_app/blocs/countries_bloc.dart';
-import 'package:zxplore_app/blocs/provider.dart';
-import 'package:intl/intl.dart';
-import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/utils/const.dart';
+import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/blocs/states_bloc.dart';
+import 'package:zxplore_app/blocs/countries_bloc.dart';
+import 'package:zxplore_app/blocs/account_form_bloc.dart';
 
 class PersonalInformationStep extends StatefulWidget {
   @override
@@ -130,7 +130,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             keyboardType: TextInputType.text,
             onChanged: accountFormBloc!.changeTin,
             decoration: InputDecoration(
-              labelText: 'Ghana Card',
+              labelText: 'Ghana Card Number',
               // helperText:
               //     'Click the verify TIN button to populate account form.',
               errorText: snapshot.error as String?,

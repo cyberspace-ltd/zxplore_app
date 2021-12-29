@@ -232,25 +232,23 @@ class ZenithBankApi {
         throw CleanerException('login failed.');
       }
     } on DioError catch (error) {
-      if (error is DioError) {
-        if (error.response != null &&
-            error.response!.data != null &&
-            error.response!.data['message'] != null) {
-          throw CleanerException(error.response!.data['message']);
-        } else if (error.response != null &&
-            error.response!.data != null &&
-            error.response!.data['Message'] != null) {
-          throw CleanerException(error.response!.data['Message']);
-        } else if (error.response?.statusCode == 502) {
-          var value = LoginResponse.fromJson(error.response?.data);
-          throw CleanerException(value.message);
-        } else {
-          throw CleanerException(_handleError(error));
-        }
+      if (error.response != null &&
+          error.response!.data != null &&
+          error.response!.data['message'] != null) {
+        throw CleanerException(error.response!.data['message']);
+      } else if (error.response != null &&
+          error.response!.data != null &&
+          error.response!.data['Message'] != null) {
+        throw CleanerException(error.response!.data['Message']);
+      } else if (error.response?.statusCode == 502) {
+        var value = LoginResponse.fromJson(error.response?.data);
+        throw CleanerException(value.message);
       } else {
-        throw CleanerException(
-            'We are having issues sending the account to the server. Try again later. ');
+        throw CleanerException(_handleError(error));
       }
+    } on Exception catch (_) {
+      throw CleanerException(
+          'We are having issues sending the account to the server. Try again later. ');
     }
   }
 
@@ -353,20 +351,18 @@ class ZenithBankApi {
         return SaveAccountResponse.fromJson(response.data);
       }
     } on DioError catch (error) {
-      if (error is DioError) {
-        if (error.response?.statusCode == 400) {
-          var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw CleanerException(value.message);
-        } else if (error.response?.statusCode == 502) {
-          var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw CleanerException(value.message);
-        } else {
-          throw CleanerException(_handleError(error));
-        }
+      if (error.response?.statusCode == 400) {
+        var value = SaveAccountResponse.fromJson(error.response?.data);
+        throw CleanerException(value.message);
+      } else if (error.response?.statusCode == 502) {
+        var value = SaveAccountResponse.fromJson(error.response?.data);
+        throw CleanerException(value.message);
       } else {
-        throw CleanerException(
-            'We are having issues sending the account to the server. Try again later. ');
+        throw CleanerException(_handleError(error));
       }
+    } on Exception catch (_) {
+      throw CleanerException(
+          'We are having issues sending the account to the server. Try again later.');
     }
   }
 
@@ -403,20 +399,18 @@ class ZenithBankApi {
             'BVN Verification failed in connecting to the server.');
       }
     } on DioError catch (error) {
-      if (error is DioError) {
-        if (error.response?.statusCode == 400) {
-          var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw CleanerException(value.message);
-        } else if (error.response?.statusCode == 502) {
-          var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw CleanerException(value.message);
-        } else {
-          throw CleanerException(_handleError(error));
-        }
+      if (error.response?.statusCode == 400) {
+        var value = SaveAccountResponse.fromJson(error.response?.data);
+        throw CleanerException(value.message);
+      } else if (error.response?.statusCode == 502) {
+        var value = SaveAccountResponse.fromJson(error.response?.data);
+        throw CleanerException(value.message);
       } else {
-        throw CleanerException(
-            'We are having issues sending the account to the server. Try again later. ');
+        throw CleanerException(_handleError(error));
       }
+    } on Exception catch (_) {
+      throw CleanerException(
+          'We are having issues sending the account to the server. Try again later. ');
     }
   }
 
@@ -450,55 +444,50 @@ class ZenithBankApi {
             'Verification failed in connecting to the server.');
       }
     } on DioError catch (error) {
-      if (error is DioError) {
-        if (error.response?.statusCode == 400) {
-          var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw CleanerException(value.message);
-        } else if (error.response?.statusCode == 502) {
-          var value = SaveAccountResponse.fromJson(error.response?.data);
-          throw CleanerException(value.message);
-        } else {
-          throw CleanerException(_handleError(error));
-        }
+      if (error.response?.statusCode == 400) {
+        var value = SaveAccountResponse.fromJson(error.response?.data);
+        throw CleanerException(value.message);
+      } else if (error.response?.statusCode == 502) {
+        var value = SaveAccountResponse.fromJson(error.response?.data);
+        throw CleanerException(value.message);
       } else {
-        throw CleanerException(
-            'We are having issues sending the account to the server. Try again later. ');
+        throw CleanerException(_handleError(error));
       }
+    } on Exception catch (_) {
+      throw CleanerException(
+          'We are having issues sending the account to the server. Try again later. ');
     }
   }
 
   String _handleError(DioError error) {
     String errorDescription = "";
-    if (error is DioError) {
-      switch (error.type) {
-        case DioErrorType.cancel:
-          errorDescription = "Request to API server was cancelled";
-          break;
-        case DioErrorType.connectTimeout:
-          errorDescription = "Connection timeout with API server";
-          break;
-        case DioErrorType.other:
+    switch (error.type) {
+      case DioErrorType.cancel:
+        errorDescription = "Request to API server was cancelled";
+        break;
+      case DioErrorType.connectTimeout:
+        errorDescription = "Connection timeout with API server";
+        break;
+      case DioErrorType.other:
+        errorDescription =
+            "Connection to API server failed due to internet connection";
+        break;
+      case DioErrorType.receiveTimeout:
+        errorDescription = "Receive timeout in connection with API server";
+        break;
+      case DioErrorType.response:
+        if (error.response?.statusCode == 401) {
+          errorDescription = "Session expired. Kindly login again.";
+        } else {
           errorDescription =
-              "Connection to API server failed due to internet connection";
-          break;
-        case DioErrorType.receiveTimeout:
-          errorDescription = "Receive timeout in connection with API server";
-          break;
-        case DioErrorType.response:
-          if (error.response?.statusCode == 401) {
-            errorDescription = "Session expired. Kindly login again.";
-          } else {
-            errorDescription =
-                "Received invalid status code: ${error.response!.statusCode}";
-          }
-          break;
-        case DioErrorType.sendTimeout:
-          errorDescription = "Send timeout in connection with API server";
-          break;
-      }
-    } else {
-      errorDescription = "Unexpected error occured";
+              "Received invalid status code: ${error.response!.statusCode}";
+        }
+        break;
+      case DioErrorType.sendTimeout:
+        errorDescription = "Send timeout in connection with API server";
+        break;
     }
+
     return errorDescription;
   }
 }

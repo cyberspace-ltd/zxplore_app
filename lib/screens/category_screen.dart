@@ -65,7 +65,7 @@ class _CategoryRouteState extends State<CategoryPage> {
       _categories.add(Category(id: 3, name: 'Means of Identification'));
       _categories.add(Category(id: 4, name: 'E-Product List'));
       _categories.add(Category(id: 5, name: 'ID Card Upload'));
-      _categories.add(Category(id: 6, name: 'Passport Upload'));
+      _categories.add(Category(id: 6, name: 'Passport Picture Upload'));
       _categories.add(Category(id: 7, name: 'Utility Bill Upload'));
       _categories.add(Category(id: 8, name: 'Signatory'));
 

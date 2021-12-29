@@ -1,16 +1,13 @@
+import 'dart:io';
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-
-import 'dart:async';
-import 'dart:io';
-
+import 'package:zxplore_app/colors.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
-
-import '../../colors.dart';
+import 'package:zxplore_app/blocs/account_form_bloc.dart';
 
 class UploadPassportStep extends StatefulWidget {
   @override
@@ -161,7 +158,12 @@ class _UploadPassportState extends State<UploadPassportStep>
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
-      _convertImagesToByte();
+      if (_imageFile != null) {
+        _convertImagesToByte();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Picture Uploaded')),
+        );
+      }
     } catch (e) {
       pickImageError = e;
     }
