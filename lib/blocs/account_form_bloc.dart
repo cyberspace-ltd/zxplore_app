@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:location/location.dart';
+import 'package:zxplore_app/apis/zenithbank_api.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/category.dart';
 import 'package:zxplore_app/data/database.dart';
@@ -10,6 +11,7 @@ import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/form_model.dart';
+import 'package:zxplore_app/models/place_prediction.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/verify_id_response.dart';
 import 'package:zxplore_app/repositories/accounts_repository.dart';
@@ -77,7 +79,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final _latitudeController = BehaviorSubject<String>();
 
-  final _longitudeController = BehaviorSubject<String>();
+    final _longitudeController = BehaviorSubject<String>();
 
   final _phoneNumberController = BehaviorSubject<String?>();
 
@@ -811,6 +813,7 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   submit() async {
+
     var validRefenceId = _referenceIdController.valueOrNull;
 
     var validAccountType = _accountTypeController.valueOrNull;
@@ -845,8 +848,11 @@ class AccountFormBloc extends BlocBase with Validators {
         : _countryOfOriginController.valueOrNull; //workaround for bug
 
     var validEmail = _emailController.valueOrNull;
-    double validLatitude = double.parse(_latitudeController.value);
-    double validLongitude = double.parse(_longitudeController.value);
+
+    double validLatitude = double.parse(_latitudeController.hasValue ? _latitudeController.value : "0");
+    
+    double validLongitude = double.parse(_longitudeController.hasValue? _longitudeController.value: "0");
+    
     final validPhone = _phoneNumberController.valueOrNull;
     final validNextOfKin = _nextOfKinController.valueOrNull;
     final validAddress1 = _address1Controller.valueOrNull;
@@ -876,6 +882,30 @@ class AccountFormBloc extends BlocBase with Validators {
         : '';
     var validIdIssueDate = _idIssueDateController.valueOrNull;
     var validIdExpiryDate = _idExpiryDateController.valueOrNull;
+
+    bool idBool = idTypesWithDates.contains(validIdType) ;
+
+    if(idBool && (validIdIssueDate == null
+    || validIdExpiryDate == null)){
+
+    _idIssueDateController.addError("Field is required");
+    _idExpiryDateController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("Ensure you enter a valid ID card issue and expiry date");
+      return;
+
+    }
+
+     if(validIdType == 'VOTER\'S ID CARD' && validIdIssueDate == null){
+
+    _idIssueDateController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("Ensure you enter a valid ID card issue date");
+      return;
+      
+    }
+    
+
 //    final validIsSendEmail = _isSendEmailController.value;
 //    final validIsReceiveSms = _isReceiveSmsController.value;
 //    final validIsRequestHardwareToken = _isRequestHardwareTokenController.value;
@@ -1504,6 +1534,23 @@ class AccountFormBloc extends BlocBase with Validators {
     _currentFormCategoryController.sink.add(category);
   }
 
+  final _placeController = BehaviorSubject<List<Prediction>>();
+  Stream<List<Prediction>> get place => _placeController.stream;
+
+ getPlaces(String place) async {
+   try{ 
+    List<Prediction> prediction = await ZenithBankApi().fetchPlaces(place);
+    if(prediction.length != 0){
+      _placeController.sink.add(prediction);
+     }
+   }catch(ex){
+     print(ex);
+   }
+  }
+
+
+
+
   Future<void> getCurrentLocation() async {
     try {
       final Location location = Location();
@@ -1642,6 +1689,9 @@ class AccountFormBloc extends BlocBase with Validators {
     _idController.close();
     _subjectDeleteOfflineAccountResponse.close();
     _currentFormCategoryController.close();
+
+    _placeController.close();
+
   }
 
   final PublishSubject<String> _subjectOfflineDetailsResponse =

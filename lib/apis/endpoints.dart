@@ -3,8 +3,13 @@ class Endpoints {
 
   // static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
 
-  static const String GATEWAY_BASE_API_URL =
-      "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/"; //Live Environment
+ static const googleKey = 'AIzaSyCUECofQTpcRO46CnOHL1q4bmKH8dvmIyA';
+
+  static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/";  //Live Environment
+
+      
+
+
   static String getOccupationUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/Occupations';
@@ -89,4 +94,9 @@ class Endpoints {
     return '$GATEWAY_BASE_API_URL'
         'accounts/GetAccountByRefID/';
   }
+
+  static String getPlaces(String placeName) {
+    return 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input= $placeName&components=country:Gh&key=$googleKey';
+  }
+
 }

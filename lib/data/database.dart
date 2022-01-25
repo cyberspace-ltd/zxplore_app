@@ -37,7 +37,7 @@ class DBProvider {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onOpen: (db) async {},
       onCreate: (Database db, int version) async {
         await db.execute(

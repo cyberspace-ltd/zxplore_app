@@ -14,6 +14,7 @@ import 'package:zxplore_app/models/cities_model.dart';
 import 'package:zxplore_app/models/country_model.dart';
 import 'package:zxplore_app/models/login_response.dart';
 import 'package:zxplore_app/models/occupation_model.dart';
+import 'package:zxplore_app/models/place_prediction.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/state_model.dart';
 import 'package:zxplore_app/models/title_model.dart';
@@ -414,6 +415,31 @@ class ZenithBankApi {
     }
   }
 
+
+
+
+Future<List<Prediction>> fetchPlaces(String placeName) async {
+   Response response;
+    List<Prediction> placePredictions = [];
+    try {
+         Dio dio = new Dio();
+    response = await dio.post(Endpoints.getPlaces(placeName));
+
+      if (response.statusCode == 200)  {
+        var data = response.data;
+        if (data["status"] == "OK") {
+          var predictions = data["predictions"] as List;
+           placePredictions = predictions.map((e) => Prediction.fromJson(e)).toList();
+        }
+      } 
+    } catch (ex) {
+      print(ex.toString());
+    }
+   return placePredictions;
+  }
+
+
+
   Future<VerifyIdResponse> verifyIdentity(
       String? identityNumber, int idType, String? token) async {
     Response response;
@@ -490,6 +516,8 @@ class ZenithBankApi {
 
     return errorDescription;
   }
+
+
 }
 
 class CleanerException implements Exception {

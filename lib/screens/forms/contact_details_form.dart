@@ -7,8 +7,11 @@ import 'package:zxplore_app/blocs/countries_bloc.dart';
 import 'package:zxplore_app/blocs/occupations_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
+import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/data/entities/occupation_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
+import 'package:zxplore_app/models/place_prediction.dart';
+import 'package:zxplore_app/screens/forms/address_form.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 
@@ -30,6 +33,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       TextEditingController();
 
   bool others = false;
+  bool bottomSheetIsOpen = false;
 
   String _selectedOccupationGroup = '';
   @override
@@ -50,6 +54,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   final _genders = ['MALE', 'FEMALE'];
 
   final _maritalStatus = ['SINGLE', 'MARRIED', 'SEPARATED', 'DIVORCED'];
+
+   List<Prediction> places = [];
 
   final _country = [
     "GHANA",
@@ -77,6 +83,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   TextEditingController? _phoneController;
   TextEditingController? _nextOfKinController;
   TextEditingController? _address1Controller;
+  TextEditingController? _bottomSheetAddress1Controller;
+
   TextEditingController? _address2Controller;
   TextEditingController? _cityOfResidenceController;
   late TextEditingController _occupationCategoryController;
@@ -89,11 +97,18 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     statesBloc.getStates();
     _citiesBloc = CitiesBloc();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
+  
+
+
     _occupationsBloc.getOccupations();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
     _nextOfKinController = TextEditingController();
+
     _address1Controller = TextEditingController();
+    _bottomSheetAddress1Controller = TextEditingController();
+  //  _bottomSheetAddress1Controller!.addListener(placePrediction);
+
     _address2Controller = TextEditingController();
     _cityOfResidenceController = TextEditingController();
     _occupationCategoryController = TextEditingController();
@@ -112,6 +127,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     _address2Controller!.dispose();
     _cityOfResidenceController!.dispose();
     _occupationCategoryController.dispose();
+    _bottomSheetAddress1Controller!.dispose();
 
     super.dispose();
   }
@@ -194,7 +210,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         });
   }
 
-  Widget _address1TextField() {
+  Widget _address1TextField(BuildContext buildContext) {
     return StreamBuilder<String?>(
         stream: accountFormBloc!.address1,
         builder: (context, snapshot) {
@@ -208,8 +224,13 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.multiline,
             onChanged: accountFormBloc!.changeAddress1,
-            maxLength: 40,
+            maxLength: 100,
             maxLines: null,
+            onTap: (){
+              if(!bottomSheetIsOpen){
+                showAddresses(buildContext);
+              }
+            },
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
               labelText: 'Address 1',
@@ -791,6 +812,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   Widget build(BuildContext context) {
     super.build(context);
 
+   accountFormBloc!.place.listen((event) { 
+      if(event.length != 0){
+        //  showAddresses(context, event);
+        setState(() {
+          places = event;
+        });
+      }
+    });
+
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -815,7 +845,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     SizedBox(height: 30.0),
                     _nextOfKinTextField(),
                     SizedBox(height: 30.0),
-                    _address1TextField(),
+                    _address1TextField(context),
                     SizedBox(height: 30.0),
                     _address2TextField(),
                     SizedBox(height: 30.0),
@@ -847,4 +877,32 @@ class _ContactDetailsState extends State<ContactDetailsStep>
       ),
     );
   }
+
+
+showAddresses( BuildContext context){
+ 
+showModalBottomSheet(
+    elevation: 0,
+      barrierColor: Colors.black.withAlpha(1),
+      isScrollControlled: true,
+  context: context,
+  builder: (context) {
+
+      return AddressFormPage(address1Controller: _address1Controller!,
+      cityOfResidenceController: _cityOfResidenceController!,
+      accountFormBloc: accountFormBloc!);
+
+});
+}
+
+
+  void placePrediction() {
+    String val = _bottomSheetAddress1Controller!.text;
+    if(val.isNotEmpty){
+    accountFormBloc!.getPlaces(val);
+    }
+
+  }
+
+
 }

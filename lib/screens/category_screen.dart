@@ -20,6 +20,7 @@ import 'account_form.dart';
 /// While it is named CategoryRoute, a more apt name would be CategoryScreen,
 /// because it is responsible for the UI at the route's destination.
 class CategoryPage extends StatefulWidget {
+  
   final String? accountReferenceId;
   final bool isEditAccount;
   const CategoryPage({this.accountReferenceId, this.isEditAccount = false});
@@ -127,7 +128,6 @@ class _CategoryRouteState extends State<CategoryPage> {
     if (_categories.isEmpty) {
       _getCategories();
     }
-
     // Based on the device size, figure out how to best lay out the list
     // You can also use MediaQuery.of(context).size to calculate the orientation
     assert(debugCheckHasMediaQuery(context));
@@ -139,6 +139,7 @@ class _CategoryRouteState extends State<CategoryPage> {
       ),
       child: _buildCategoryWidgets(MediaQuery.of(context).orientation),
     );
+    
     return Backdrop(
       accountFormBloc: accountFormBloc!,
       currentCategory:

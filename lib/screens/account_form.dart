@@ -177,7 +177,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    
     return BlocProvider<AccountFormBloc>(
       child: Form(
         key: this._formKey,

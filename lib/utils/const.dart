@@ -4,7 +4,8 @@ const CURRENT_ACCOUNT = 'CURRENT ACCOUNT';
 
 const DRIVERS_LICENSE = 'DRIVER\'S LICENSE';
 const VOTERS_CARD = 'VOTER\'S ID CARD';
-const INT_PASSPORT = 'INT\'L PASSPORT';
+// const INT_PASSPORT = 'INT\'L PASSPORT';
+const INT_PASSPORT = 'INTERNATIONAL PASSPORT';
 const SSNIT_CARD = 'SSNIT CARD';
 const OTHERS = 'OTHERS';
 
@@ -15,6 +16,26 @@ const ASPIRE_ACCOUNT = 'ASPIRE ACCOUNT';
 const PLATINUM_ACCOUNT = 'PLATINUM ACCOUNT';
 
 const PLEASE_SPECIFY = 'PLEASE SPECIFY';
+
+final idTypes = [
+    'DRIVER\'S LICENSE',
+   // 'INT\'L PASSPORT',
+   'INTERNATIONAL PASSPORT',
+    'NATIONAL ID CARD',
+    'VOTER\'S ID CARD',
+    'STUDENT ID',
+    'SSNIT CARD',
+    'OTHERS'
+  ];
+
+// ID types with issuers date and expiry daye
+final idTypesWithDates = [
+    'DRIVER\'S LICENSE',
+   'INTERNATIONAL PASSPORT',
+    'NATIONAL ID CARD',
+    'STUDENT ID',
+  ];
+
 
 const COUNTRY_LIST = [
   "GHANA",

@@ -30,15 +30,22 @@ class _MeansOfIdentificationStepStepState
       TextEditingController();
   final TextEditingController _idNumberController = TextEditingController();
 
+
+  final _idTypes = idTypes;
+
+/*
   final _idTypes = [
     'DRIVER\'S LICENSE',
-    'INT\'L PASSPORT',
+   // 'INT\'L PASSPORT',
+   'INTERNATIONAL PASSPORT',
     'NATIONAL ID CARD',
     'VOTER\'S ID CARD',
     'STUDENT ID',
     'SSNIT CARD',
     'OTHERS'
   ];
+
+  */
 
   List<String> _stateRegion = [
     'Ahafo Region',
@@ -61,10 +68,13 @@ class _MeansOfIdentificationStepStepState
 
   final _idIssuer = [
     'ELECTORAL COMMISSION',
-    'DVLA',
+   //  'DVLA',
+    'DRIVER AND VEHICLE LICENSING AUTHORITY',
     'MINISTRY OF FOREIGN AFFAIRS',
-    'NIA',
-    'SSNIT',
+   // 'NIA',
+   'NATIONAL IDENTIFICATION AUTHORITY',
+   // 'SSNIT',
+   'SOCIAL SECURITY AND NATIONAL INSURANCE\nTRUST',
     'OTHERS'
   ];
   String? selectedIdentityType;
@@ -161,6 +171,7 @@ class _MeansOfIdentificationStepStepState
                 child: DropdownButton<String>(
                   value: snapshot.data,
                   isDense: true,
+                  isExpanded: true,
                   onChanged: (value) {
                     setState(() {
                       selectedIdentityIssuer = value;
@@ -176,7 +187,7 @@ class _MeansOfIdentificationStepStepState
                   items: _idIssuer.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(value, overflow: TextOverflow.ellipsis),
                     );
                   }).toList(),
                 ),
@@ -403,9 +414,10 @@ class _MeansOfIdentificationStepStepState
 
   Widget _idIssueDateField() {
     return Visibility(
-      visible: _selectedIdFilter == 6 ||
-              _selectedIdFilter == 4 ||
-              _selectedIdFilter == 3
+      visible: 
+             _selectedIdFilter == 2 ||
+              _selectedIdFilter == 4 
+         //   ||  _selectedIdFilter == 3
           ? false
           : true,
       child: StreamBuilder<String?>(
@@ -453,8 +465,9 @@ class _MeansOfIdentificationStepStepState
 
   Widget _idExpiryDateField() {
     return Visibility(
-      visible: _selectedIdFilter == 6 ||
-              _selectedIdFilter == 1 ||
+      visible: 
+            _selectedIdFilter == 2 ||
+            //  _selectedIdFilter == 1 ||
               _selectedIdFilter == 4 ||
               _selectedIdFilter == 3
           ? false
