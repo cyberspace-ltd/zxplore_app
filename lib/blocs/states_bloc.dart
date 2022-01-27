@@ -14,7 +14,6 @@ class StatesBloc extends BlocBase {
 
   Stream<List<StateEntity>> get states => _statesController.stream;
 
-
   final _addStateController = StreamController<List<Menu>?>.broadcast();
   StreamSink<List<Menu>?> get inAddStates => _addStateController.sink;
 

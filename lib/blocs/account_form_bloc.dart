@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:location/location.dart';
 import 'package:zxplore_app/apis/zenithbank_api.dart';
 import 'package:zxplore_app/blocs/provider.dart';
@@ -227,8 +228,8 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<String?> get accountCategoryType =>
       _accountCategoryController.stream.transform(validateAccountCategory);
 
-  Stream<String?> get tin => _tinController.stream;
-
+  Stream<String?> get tin => _tinController.stream.transform(validateBvn);
+// validateBvn
   Stream<String?> get title => _titleController.stream.transform(validateTitle);
 
   Stream<String?> get surname =>
@@ -1707,6 +1708,8 @@ class AccountFormBloc extends BlocBase with Validators {
         .getOfflineAccountByRefId(referenceId)
         .then((offlineAccount) {
       if (offlineAccount != null) {
+       // print("REPORT");
+        inspect(offlineAccount);
         _idController.add(offlineAccount.id);
         _subjectOfflineDetailsResponse.add("Account retrieved successfully.");
         if (offlineAccount.accountType == 'SA') {
@@ -1902,6 +1905,7 @@ class AccountFormBloc extends BlocBase with Validators {
     await _accountsRepository
         .getAccountsDetailsByReference(referenceId)
         .then((accountResponse) async {
+          inspect(accountResponse);
       subjectAccountsDetailsResponse.add(accountResponse);
       if (accountResponse.status!) {
 //        if (accountResponse.data.refId != null &&
@@ -1928,6 +1932,7 @@ class AccountFormBloc extends BlocBase with Validators {
           try {
             List<StateEntity> states = await DBProvider.db.getStates();
 
+/*
             var mmda = states
                 .firstWhere(
                     (x) => x.srn.toString() == accountResponse.data!.state)
@@ -1935,7 +1940,14 @@ class AccountFormBloc extends BlocBase with Validators {
                 .toString(); //hotfix: to solve issue of mmda  filter from state on edit
 
             // if (mmda != null)
-            _mmdaController.add(mmda);
+            print("REPORT "+ mmda);
+            
+            */
+              print("REPORT "+  accountResponse.data!.state!);
+              
+            _mmdaController.add(accountResponse.data!.state != null?
+            accountResponse.data!.state! : "" );
+
           } catch (err) {
             _mmdaController.add(accountResponse.data!.classCode);
           }
@@ -1966,7 +1978,8 @@ class AccountFormBloc extends BlocBase with Validators {
         }
         if (accountResponse.data!.tin != null &&
             accountResponse.data!.tin.isNotEmpty) {
-          _tinController.add(CryptoHelper.decrypt(accountResponse.data!.tin));
+         //     print("TIN " + accountResponse.data!.tin);
+          _tinController.add(accountResponse.data!.tin);
         }
 
         if (accountResponse.data!.title != null &&
@@ -2025,8 +2038,9 @@ class AccountFormBloc extends BlocBase with Validators {
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.stateOfOrigin!.isNotEmpty) {
-          _stateOfResidenceController
-              .add(accountResponse.data!.signatoryDetails!.first.stateOfOrigin);
+              //    print("REPORT " + accountResponse.data!.signatoryDetails!.first.stateOfOrigin!);
+          _placeOfBirthController
+              .add(accountResponse.data!.signatoryDetails!.first.stateOfOrigin!);
         }
         _countryOfOriginController.add('GHANA');
 

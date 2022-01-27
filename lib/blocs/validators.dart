@@ -41,10 +41,10 @@ class Validators {
 
   final validateBvn =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.isNotEmpty && arg.length >= 11) {
+    if (arg != null && arg.isNotEmpty ) {
       sink.add(arg);
     } else {
-      sink.addError('A valid BVN is required');
+      sink.addError('A valid Ghana card mumber is required');
     }
   });
 

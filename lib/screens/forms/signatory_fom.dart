@@ -174,7 +174,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                               },
                             ),
                             TextButton(
-                              child: Text('ClEAR'),
+                              child: Text('CLEAR'),
                               onPressed: () {
                                 final sign = _sign.currentState!;
                                 sign.clear();

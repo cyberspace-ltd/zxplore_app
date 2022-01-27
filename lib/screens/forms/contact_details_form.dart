@@ -53,6 +53,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   final _genders = ['MALE', 'FEMALE'];
 
+  String ? test;
+
   final _maritalStatus = ['SINGLE', 'MARRIED', 'SEPARATED', 'DIVORCED'];
 
    List<Prediction> places = [];
@@ -91,6 +93,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   @override
   void initState() {
     super.initState();
+    test ="USA";
     _countriesBloc = CountriesBloc();
     _occupationsBloc = OccupationsBloc();
     statesBloc = StatesBloc();
@@ -389,7 +392,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     return StreamBuilder<List<StateEntity>>(
       stream: statesBloc.states,
       builder: (context, listSnapshot) {
-        return StreamBuilder(
+        return StreamBuilder<String?>(
             stream: accountFormBloc!.mmda,
             builder: (context, itemSnapshot) {
               return FormField<String>(
@@ -402,7 +405,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         errorText: itemSnapshot.error as String?),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value: _getAccountTypeValue(itemSnapshot, listSnapshot),
+                        value:  itemSnapshot.data ?? test,
+                        // _getAccountTypeValue(itemSnapshot, listSnapshot),
                         isExpanded: true,
                         isDense: true,
                         items: listSnapshot.hasData
@@ -438,6 +442,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   String? _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<StateEntity>> listSnapshot) {
+
     var data = (listSnapshot.hasData &&
             listSnapshot.data!.length > 0 &&
             listSnapshot.data!.firstWhereOrNull((x) =>
@@ -447,7 +452,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         ? itemSnapshot.data.toString().toUpperCase()
         : null;
 
-    return data;
+     return data;
   }
 
   String? _getOccupationValue(AsyncSnapshot itemSnapshot,
