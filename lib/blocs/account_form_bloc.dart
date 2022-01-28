@@ -1900,6 +1900,7 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
   getAccountsDetailsByReferenceId(String? referenceId) async {
+
     _referenceIdController.add(referenceId);
 
     await _accountsRepository
@@ -1940,13 +1941,10 @@ class AccountFormBloc extends BlocBase with Validators {
                 .toString(); //hotfix: to solve issue of mmda  filter from state on edit
 
             // if (mmda != null)
-            print("REPORT "+ mmda);
-            
             */
-              print("REPORT "+  accountResponse.data!.state!);
+            print("REPORT "+ accountResponse.data!.signatoryDetails!.first.mmda!);
               
-            _mmdaController.add(accountResponse.data!.state != null?
-            accountResponse.data!.state! : "" );
+            _mmdaController.add(accountResponse.data?.signatoryDetails?.first.mmda!);
 
           } catch (err) {
             _mmdaController.add(accountResponse.data!.classCode);

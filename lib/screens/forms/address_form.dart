@@ -109,8 +109,10 @@ bool addressIsSelected = true;
                             onTap: (){
                               bottomSheetAddress1Controller!.text = "";
                               bottomSheetAddress1Controller!.text = places[index].description.toUpperCase();
-                              widget.address1Controller.text = places[index].description.toUpperCase();
-                              widget.cityOfResidenceController.text = places[index].mainText.toUpperCase();
+                               widget.accountFormBloc.changeAddress1(places[index].description.toUpperCase());
+                                 widget.accountFormBloc.changeCityOfResidence(places[index].mainText.toUpperCase());
+                            //  widget.address1Controller.text = places[index].description.toUpperCase();
+                            //  widget.cityOfResidenceController.text = places[index].mainText.toUpperCase();
                               addressIsSelected = false;
                           //    setState(() {
                                 places =[]; 
