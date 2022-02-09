@@ -21,6 +21,9 @@ class Validators {
     }
   });
 
+
+
+
   final validateRiskRank =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
     if (arg != null && arg.length > 2) {
@@ -295,6 +298,18 @@ class Validators {
       sink.addError('ID issuer is required');
     }
   });
+
+    final validateAdmNo =
+      StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg != null && arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('Admission Number is required');
+    }
+  });
+
+
+  
 
   final validateIdNumber =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {

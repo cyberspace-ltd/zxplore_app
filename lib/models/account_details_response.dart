@@ -68,7 +68,23 @@ class AccountDetailsData {
   String? destinationBranch;
   String? preferredNameOnCard;
 
+    String? scanToPayRequest;
+  String? zMobileRequest;
+  String? zPromptRequest;
+  String? statementByEmailRequest;
+  String? uSSDRequest;
+  String? bankWalletRequest;
+
+
+
   AccountDetailsData({
+    this.scanToPayRequest,
+    this.zMobileRequest,
+    this.zPromptRequest,
+    this.statementByEmailRequest,
+    this.uSSDRequest,
+    this.bankWalletRequest,
+
     this.accountType,
     this.accountNumber,
     this.accountHolderType,
@@ -127,6 +143,16 @@ class AccountDetailsData {
         industry: json["Industry"],
         riskRank: json["RiskRank"],
         addressLine1: json["AddressLine1"],
+
+           scanToPayRequest: json["ScanToPayRequest"],
+        zMobileRequest: json["ZMobileRequest"],
+        zPromptRequest: json["ZPromptRequest"],
+        statementByEmailRequest: json["StatementByEmailRequest"],
+        uSSDRequest: json["USSDRequest"],
+        bankWalletRequest: json["BankWalletRequest"],
+
+
+
         city: json["City"],
         state: json["State"],
         countryOfOrigin: json["CountryOfOrigin"],
@@ -167,6 +193,15 @@ class AccountDetailsData {
         "Industry": industry,
         "RiskRank": riskRank,
         "AddressLine1": addressLine1,
+      
+              "ScanToPayRequest": scanToPayRequest,
+        "ZMobileRequest": zMobileRequest,
+        "ZPromptRequest": zPromptRequest,
+        "StatementByEmailRequest": statementByEmailRequest,
+        "USSDRequest": uSSDRequest,
+        "BankWalletRequest": bankWalletRequest,
+
+
         "City": city,
         "State": state,
         "CountryOfOrigin": countryOfOrigin,

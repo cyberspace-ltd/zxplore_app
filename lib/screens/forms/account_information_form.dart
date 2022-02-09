@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zxplore_app/blocs/account_class_bloc.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
@@ -23,7 +24,7 @@ class _AccountInformationState extends State<AccountInformationStep>
   String? _selectedAccountType;
   String _selectedAccFilter = "";
   List<AccountClassEntity>? accountClasses;
-
+  SharedPreferences? prefs;
   @override
   bool get wantKeepAlive => true;
 
@@ -39,10 +40,15 @@ class _AccountInformationState extends State<AccountInformationStep>
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
     _accountClassBloc = AccountClassBloc();
     _accountClassBloc.getAccountClasses();
+      getSharedPref();
     _accountClassBloc.accountClasses.listen((data) {
       accountClasses = data;
     });
     accountFormBloc!.getCurrentLocation();
+  }
+
+  getSharedPref()async{
+    prefs = await SharedPreferences.getInstance();
   }
 
   Widget accountTypeField() {
@@ -188,6 +194,8 @@ class _AccountInformationState extends State<AccountInformationStep>
                             : null,
                         onChanged: (value) {
                           accountFormBloc!.updateAccountCategoryType(value);
+                     //    prefs!.setString('AccountCategory', value ?? "NA") ;
+                    //    prefs != null?  prefs!.setString('AccountCategory', value ?? "NA") : getInfo();
                         },
                       ),
                     ),
@@ -199,6 +207,7 @@ class _AccountInformationState extends State<AccountInformationStep>
     );
   }
 
+  getInfo(){}
   String? _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<AccountClassEntity>> listSnapshot) {
     var data = (listSnapshot.hasData &&

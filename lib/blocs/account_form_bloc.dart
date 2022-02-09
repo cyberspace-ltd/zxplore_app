@@ -114,6 +114,10 @@ class AccountFormBloc extends BlocBase with Validators {
   final _idIssuerController = BehaviorSubject<String?>();
   final _idIssuerOthersController = BehaviorSubject<String?>();
 
+  final _admissionNoController = BehaviorSubject<String?>();
+
+  
+
   final _idNumberController = BehaviorSubject<String?>();
 
   final _idPlaceOfIssueController = BehaviorSubject<String?>();
@@ -155,8 +159,13 @@ class AccountFormBloc extends BlocBase with Validators {
   final _preferredNameOnCardController = BehaviorSubject<String?>();
 
   final _uploadIdImageController = BehaviorSubject<String?>();
+   final _uploadIdImageController2 = BehaviorSubject<String?>();
 
   final _uploadPassportController = BehaviorSubject<String?>();
+
+  final uploadAdmissionLetterController = BehaviorSubject<String?>();
+
+  
 
   final _uploadUtilityBillController = BehaviorSubject<String?>();
 
@@ -227,6 +236,10 @@ class AccountFormBloc extends BlocBase with Validators {
 
   Stream<String?> get accountCategoryType =>
       _accountCategoryController.stream.transform(validateAccountCategory);
+
+String? bvv(){
+  return _accountCategoryController.valueOrNull;
+}
 
   Stream<String?> get tin => _tinController.stream.transform(validateBvn);
 // validateBvn
@@ -316,6 +329,13 @@ class AccountFormBloc extends BlocBase with Validators {
           ? _idIssuerOthersController.stream
           : _idIssuerOthersController.stream.transform(validateIdIssuer);
 
+
+  Stream<String?> get admissionNo =>
+      _accountCategoryController.valueOrNull == easy_classic
+          ? _admissionNoController.stream
+          : _admissionNoController.stream.transform(validateAdmNo);
+
+
   Stream<String?> get idNumber =>
       _accountCategoryController.valueOrNull == easy_classic
           ? _idNumberController.stream
@@ -376,8 +396,13 @@ class AccountFormBloc extends BlocBase with Validators {
           : _preferredNameOnCardController.stream;
 
   Stream<String?> get idCard => _uploadIdImageController.stream;
+   Stream<String?> get idCard2 => _uploadIdImageController2.stream;
 
   Stream<String?> get passport => _uploadPassportController.stream;
+
+   Stream<String?> get admissionLetter => uploadAdmissionLetterController.stream;
+
+  
 
   Stream<String?> get signature => _uploadSignatureController.stream;
 
@@ -477,6 +502,12 @@ class AccountFormBloc extends BlocBase with Validators {
   Function(String?) get changeIdOtherIssuer =>
       _idIssuerOthersController.sink.add;
 
+       Function(String?) get changeAdmissionNo =>
+      _admissionNoController.sink.add;
+
+
+
+
   Function(String?) get changeIdNumber => _idNumberController.sink.add;
 
   Function(String?) get changePlaceOfIssue =>
@@ -553,9 +584,20 @@ class AccountFormBloc extends BlocBase with Validators {
     _uploadIdImageController.sink.add(value);
   }
 
+ setUploadIdForm2(String? value) {
+    _uploadIdImageController2.sink.add(value);
+  }
+
+
   setUploadPassportForm(String? value) {
     _uploadPassportController.sink.add(value);
   }
+
+   setUploadAdmissionLetter(String? value) {
+    uploadAdmissionLetterController.sink.add(value);
+  }
+
+  
 
   setUploadUtilityBillForm(String? value) {
     _uploadUtilityBillController.sink.add(value);
@@ -630,6 +672,10 @@ class AccountFormBloc extends BlocBase with Validators {
     if (validIdIssuer == "OTHERS") {
       validIdIssuer = _idIssuerOthersController.valueOrNull;
     }
+
+    
+    final admmissionNumber = _admissionNoController.valueOrNull;
+    
     final validIdNumber = _idNumberController.valueOrNull;
     final validIdPlaceOfIssue = _idPlaceOfIssueController.valueOrNull;
     final validIdIssueDate = _idIssueDateController.valueOrNull;
@@ -656,7 +702,16 @@ class AccountFormBloc extends BlocBase with Validators {
     final validPreferredNameOnCard = _preferredNameOnCardController.valueOrNull;
 
     final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
+  //  final validUploadIdImage2InBase64 = _uploadIdImageController2.valueOrNull;
+
     final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
+
+     final validUploadAdmissionLetterInBase64 = uploadAdmissionLetterController.valueOrNull;
+
+
+  
+
+
     final validUploadUtilityBillInBase64 =
         _uploadUtilityBillController.valueOrNull;
 
@@ -877,6 +932,9 @@ class AccountFormBloc extends BlocBase with Validators {
     if (validIdIssuer == "OTHERS") {
       validIdIssuer = _idIssuerOthersController.valueOrNull;
     }
+ var admissionNo = _admissionNoController.valueOrNull;
+
+
     var validIdNumber = _idNumberController.valueOrNull;
     var validIdPlaceOfIssue = _idPlaceOfIssueController.valueOrNull != null
         ? _idPlaceOfIssueController.valueOrNull
@@ -927,7 +985,16 @@ class AccountFormBloc extends BlocBase with Validators {
         _preferredNameOnCardController.valueOrNull;
 
     final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
+     final validUploadIdImage2InBase64 = _uploadIdImageController2.valueOrNull;
+
+
     final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
+
+    final validUploadAdmissionLetterInBase64 = uploadAdmissionLetterController.valueOrNull;
+
+    
+
+
     final validUploadUtilityBillInBase64 =
         _uploadUtilityBillController.valueOrNull;
 
@@ -959,6 +1026,13 @@ class AccountFormBloc extends BlocBase with Validators {
       _accountCategoryController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected an account category.");
+      return;
+    }
+
+     if (validAccountCategory == 'ASPIRE ACCOUNT' && admissionNo==null) {
+      _admissionNoController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("enter Admission number");
       return;
     }
 
@@ -1276,9 +1350,11 @@ class AccountFormBloc extends BlocBase with Validators {
     List<Attachment> _attachments = [];
 
     Attachment _idCardAttachment;
+     Attachment _idCard2Attachment;
     Attachment _passportAttachment;
     Attachment _utilityBillAttachment;
     Attachment _signatoryAttachment;
+     Attachment _admissionLetterAttachment;
 
     if (validUploadIdImageInBase64 != null) {
       _idCardAttachment = new Attachment(
@@ -1286,11 +1362,26 @@ class AccountFormBloc extends BlocBase with Validators {
       _attachments.add(_idCardAttachment);
     }
 
+     if (validUploadIdImage2InBase64 != null) {
+      _idCard2Attachment = new Attachment(
+          encodedImage: validUploadIdImage2InBase64, type: 'IdentityCard2');
+      _attachments.add(_idCard2Attachment);
+    }
+
     if (validUploadPassportInBase64 != null) {
       _passportAttachment = new Attachment(
           encodedImage: validUploadPassportInBase64, type: 'PassportPhoto');
       _attachments.add(_passportAttachment);
     }
+
+     if (validUploadAdmissionLetterInBase64 != null) {
+      _admissionLetterAttachment = new Attachment(
+          encodedImage: validUploadAdmissionLetterInBase64, type: 'AdmissionLetter');
+      _attachments.add(_admissionLetterAttachment);
+    }
+
+
+
 
     if (validUploadUtilityBillInBase64 != null) {
       _utilityBillAttachment = new Attachment(
@@ -1324,6 +1415,7 @@ class AccountFormBloc extends BlocBase with Validators {
       idPlaceOfIssue: validIdPlaceOfIssue,
       idIssueDate: validIdIssueDate,
       idExpiryDate: validIdExpiryDate,
+      tin: admissionNo,
       occupation: validOccupation,
       addressLine1: CryptoHelper.encrypt(validAddress1),
       addressLine2:
@@ -1417,11 +1509,20 @@ class AccountFormBloc extends BlocBase with Validators {
   BehaviorSubject<String?> get uploadIdImageController =>
       _uploadIdImageController;
 
+   BehaviorSubject<String?> get uploadIdImageController2 =>
+      _uploadIdImageController2;
+
+
   BehaviorSubject<String?> get uploadUtilityBillController =>
       _uploadUtilityBillController;
 
   BehaviorSubject<String?> get uploadPassportController =>
       _uploadPassportController;
+
+        BehaviorSubject<String?> get uploadAdmLetterController =>
+      uploadAdmissionLetterController;
+
+      
 
   BehaviorSubject<String?> get uploadSignatureController =>
       _uploadSignatureController;
@@ -1550,8 +1651,6 @@ class AccountFormBloc extends BlocBase with Validators {
   }
 
 
-
-
   Future<void> getCurrentLocation() async {
     try {
       final Location location = Location();
@@ -1660,6 +1759,8 @@ class AccountFormBloc extends BlocBase with Validators {
     _idTypeController.close();
     _idIssuerController.close();
     _idIssuerOthersController.close();
+      _admissionNoController.close();
+    
     othersOccupationController.close();
     _idNumberController.close();
     _idPlaceOfIssueController.close();
@@ -1678,7 +1779,9 @@ class AccountFormBloc extends BlocBase with Validators {
     _destinationBranchController.close();
     _preferredNameOnCardController.close();
     _uploadIdImageController.close();
+     _uploadIdImageController2.close();
     _uploadPassportController.close();
+    uploadAdmissionLetterController.close();
     _uploadUtilityBillController.close();
     _uploadSignatureController.close();
     bvnVerificationResponse.close();
@@ -1702,6 +1805,7 @@ class AccountFormBloc extends BlocBase with Validators {
       _subjectOfflineDetailsResponse;
 
   getOfflineAccountDetailsByRefId(String? referenceId) async {
+   
     _isEditModeController.add(true);
 
     await _accountsRepository
@@ -1878,10 +1982,26 @@ class AccountFormBloc extends BlocBase with Validators {
           _uploadIdImageController.add(offlineAccount.idCard);
         }
 
+/*
+         if (offlineAccount.idCard2 != null &&
+            offlineAccount.idCard2!.isNotEmpty) {
+          _uploadIdImageController2.add(offlineAccount.idCard2);
+        }
+        */
+
         if (offlineAccount.passport != null &&
             offlineAccount.passport!.isNotEmpty) {
           _uploadPassportController.add(offlineAccount.passport);
         }
+
+/*
+         if (offlineAccount.admissionLetter != null &&
+            offlineAccount.admissionLetter!.isNotEmpty) {
+          uploadAdmissionLetterController.add(offlineAccount.passport);
+        }
+        */
+
+
         if (offlineAccount.utility != null &&
             offlineAccount.utility!.isNotEmpty) {
           _uploadUtilityBillController.add(offlineAccount.utility);
@@ -1906,7 +2026,9 @@ class AccountFormBloc extends BlocBase with Validators {
     await _accountsRepository
         .getAccountsDetailsByReference(referenceId)
         .then((accountResponse) async {
+          print("RESPONSE");
           inspect(accountResponse);
+          
       subjectAccountsDetailsResponse.add(accountResponse);
       if (accountResponse.status!) {
 //        if (accountResponse.data.refId != null &&
@@ -1997,6 +2119,15 @@ class AccountFormBloc extends BlocBase with Validators {
               accountResponse.data!.signatoryDetails!.first.firstName!));
         }
 
+
+     if (accountResponse.data!.signatoryDetails?.first.tin != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.tin!.isNotEmpty) {
+        
+          _admissionNoController.add(
+              accountResponse.data!.signatoryDetails!.first.tin!);   
+        }
+
         if (accountResponse.data!.signatoryDetails?.first.middleName != null &&
             accountResponse
                 .data!.signatoryDetails!.first.middleName!.isNotEmpty) {
@@ -2040,6 +2171,19 @@ class AccountFormBloc extends BlocBase with Validators {
           _placeOfBirthController
               .add(accountResponse.data!.signatoryDetails!.first.stateOfOrigin!);
         }
+
+
+  if (accountResponse.data!.signatoryDetails?.first.stateOfOrigin !=
+                null &&
+            accountResponse
+                .data!.signatoryDetails!.first.stateOfOrigin!.isNotEmpty) {
+              //    print("REPORT " + accountResponse.data!.signatoryDetails!.first.stateOfOrigin!);
+          _placeOfBirthController
+              .add(accountResponse.data!.signatoryDetails!.first.stateOfOrigin!);
+        }
+
+
+
         _countryOfOriginController.add('GHANA');
 
         if (accountResponse.data!.signatoryDetails?.first.emailAddress !=
@@ -2087,6 +2231,32 @@ class AccountFormBloc extends BlocBase with Validators {
               .add(accountResponse.data!.signatoryDetails!.first.state);
         }
 
+
+
+        if (accountResponse.data!.cardType != null &&
+            accountResponse.data!.cardType!.isNotEmpty) {
+          cardTypeController
+              .add(accountResponse.data!.cardType);
+        }
+
+        if (accountResponse.data!.requestingBranch != null &&
+            accountResponse.data!.requestingBranch!.isNotEmpty) {
+          _requestingBranchController
+              .add(accountResponse.data!.requestingBranch);
+        }
+
+           if (accountResponse.data!.destinationBranch != null &&
+            accountResponse.data!.destinationBranch!.isNotEmpty) {
+          _destinationBranchController
+              .add(accountResponse.data!.destinationBranch);
+        }
+
+          if (accountResponse.data!.preferredNameOnCard != null &&
+            accountResponse.data!.preferredNameOnCard!.isNotEmpty) {
+          _preferredNameOnCardController
+              .add(accountResponse.data!.preferredNameOnCard);
+        }
+
         if (accountResponse.data!.signatoryDetails?.first.city != null &&
             accountResponse.data!.signatoryDetails!.first.city!.isNotEmpty) {
           _cityOfResidenceController
@@ -2125,6 +2295,8 @@ class AccountFormBloc extends BlocBase with Validators {
                 .data!.signatoryDetails!.first.idIssuer!.isNotEmpty) {
           _idIssuerController
               .add(accountResponse.data!.signatoryDetails!.first.idIssuer);
+              
+              _idIssuerOthersController.add(accountResponse.data!.signatoryDetails!.first.idIssuer);
         }
         if (accountResponse.data!.signatoryDetails?.first.idNumber != null &&
             accountResponse
@@ -2197,15 +2369,101 @@ class AccountFormBloc extends BlocBase with Validators {
           }
         }
 
+//----------E-product List--------------------------------------------
+
+                    if (accountResponse
+                    .data!.uSSDRequest !=
+                null &&
+            accountResponse.data!.uSSDRequest!.isNotEmpty) {
+          if (accountResponse
+                  .data!.uSSDRequest! ==
+              "Y") {
+            _isUssdController.add(true);
+          }
+        }
+
+             if (accountResponse
+                    .data!.scanToPayRequest !=
+                null &&
+            accountResponse.data!.scanToPayRequest!.isNotEmpty) {
+          if (accountResponse
+                  .data!.scanToPayRequest! ==
+              "Y") {
+            _isScanToPayController.add(true);
+          }
+        }
+
+         if (accountResponse
+                    .data!.zMobileRequest !=
+                null &&
+            accountResponse.data!.zMobileRequest!.isNotEmpty) {
+          if (accountResponse
+                  .data!.zMobileRequest! ==
+              "Y") {
+            _isZMobileController.add(true);
+          }
+        }
+
+         if (accountResponse
+                    .data!.zPromptRequest !=
+                null &&
+            accountResponse.data!.zPromptRequest!.isNotEmpty) {
+          if (accountResponse
+                  .data!.zPromptRequest! ==
+              "Y") {
+            _isZPromptController.add(true);
+          }
+        }
+
+         if (accountResponse
+                    .data!.statementByEmailRequest !=
+                null &&
+            accountResponse.data!.statementByEmailRequest!.isNotEmpty) {
+          if (accountResponse
+                  .data!.statementByEmailRequest! ==
+              "Y") {
+            _isStatementViaEmailController.add(true);
+          }
+        }
+
+         if (accountResponse
+                    .data!.bankWalletRequest !=
+                null &&
+            accountResponse.data!.bankWalletRequest!.isNotEmpty) {
+          if (accountResponse
+                  .data!.bankWalletRequest! ==
+              "Y") {
+            _isBankToWalletController.add(true);
+          }
+        }
+
+
+
+
+
+
         if (accountResponse.data!.signatoryDetails?.first.attachments != null) {
+
           var _idCardAttachment = accountResponse
               .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'IdentityCard')
               .toList();
 
+
+          var _idCard2Attachment = accountResponse
+              .data!.signatoryDetails!.first.attachments!
+              .where((i) => i.type == 'IdentityCard2')
+              .toList();
+            
+
           var _passportAttachment = accountResponse
               .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'PassportPhoto')
+              .toList();
+
+          var _admissionLetterAttachment =  accountResponse
+              .data!.signatoryDetails!.first.attachments!
+              .where((i) => i.type == 'AdmissionLetter')
               .toList();
 
           var _utilityBillAttachment = accountResponse
@@ -2218,14 +2476,31 @@ class AccountFormBloc extends BlocBase with Validators {
               .where((i) => i.type == 'Signatory')
               .toList();
 
+
+                if (_idCard2Attachment.isNotEmpty) {
+            _uploadIdImageController2.add(_idCard2Attachment.first.encodedImage);
+          }
+
           if (_idCardAttachment.isNotEmpty) {
             _uploadIdImageController.add(_idCardAttachment.first.encodedImage);
           }
+
+            if (_admissionLetterAttachment.isNotEmpty) {
+            uploadAdmissionLetterController.add(_admissionLetterAttachment.first.encodedImage);
+          }
+
 
           if (_passportAttachment.isNotEmpty) {
             _uploadPassportController
                 .add(_passportAttachment.first.encodedImage);
           }
+
+             if (_admissionLetterAttachment.isNotEmpty) {
+            uploadAdmissionLetterController
+                .add(_admissionLetterAttachment.first.encodedImage);
+          }
+
+          
 
           if (_utilityBillAttachment.isNotEmpty) {
             _uploadUtilityBillController
@@ -2241,7 +2516,8 @@ class AccountFormBloc extends BlocBase with Validators {
         _subjectAccountsDetailsResponse.addError(accountResponse.message!);
       }
     }).catchError((error) {
-      _subjectAccountsDetailsResponse.addError(error);
+      print(error);
+    //  _subjectAccountsDetailsResponse.addError(error);
     });
   }
 }

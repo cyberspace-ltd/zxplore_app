@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
+import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/card_type_model.dart';
 import 'package:zxplore_app/utils/preferences.dart';
 
@@ -22,6 +23,10 @@ class _EProductsStepState extends State<EProductsStep>
   TextEditingController? _destinationBranchController;
   TextEditingController? _preferredNameOnCardController;
 
+  var scanToPayCheckBoxStream,zMobileCheckBoxStream,zPromptCheckBoxStream;
+
+   
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +35,12 @@ class _EProductsStepState extends State<EProductsStep>
     _requestingBranchController = TextEditingController();
     _destinationBranchController = TextEditingController();
     _preferredNameOnCardController = TextEditingController();
+
+    scanToPayCheckBoxStream = accountFormBloc!.changeIsScanToPay;
+    zMobileCheckBoxStream =accountFormBloc!.isZMobile;
+    zPromptCheckBoxStream = accountFormBloc!.isZPrompt;
+
+
     setCardTypes();
   }
 
@@ -58,8 +69,9 @@ class _EProductsStepState extends State<EProductsStep>
     return StreamBuilder<bool?>(
       stream: accountFormBloc!.isScanToPay,
       builder: (context, snapshot) {
+
         return CheckboxListTile(
-          onChanged: accountFormBloc!.changeIsScanToPay,
+          onChanged: scanToPayCheckBoxStream,
           title: new Text('Scan To Pay'),
           controlAffinity: ListTileControlAffinity.leading,
           activeColor: Colors.red,
@@ -72,15 +84,16 @@ class _EProductsStepState extends State<EProductsStep>
 
   Widget _zMobileCheckBox() {
     return StreamBuilder<bool?>(
-      stream: accountFormBloc!.isZMobile,
+      stream: zMobileCheckBoxStream,
       builder: (context, snapshot) {
+      
         return CheckboxListTile(
           onChanged: accountFormBloc!.changeIsZMobile,
           title: new Text('Z - Mobile'),
           controlAffinity: ListTileControlAffinity.leading,
           activeColor: Colors.red,
           dense: true,
-          value: snapshot.hasData ? snapshot.data : false,
+          value:  snapshot.hasData ? snapshot.data : false,
         );
       },
     );
@@ -88,7 +101,7 @@ class _EProductsStepState extends State<EProductsStep>
 
   Widget _zPromptCheckBox() {
     return StreamBuilder<bool?>(
-      stream: accountFormBloc!.isZPrompt,
+      stream: zPromptCheckBoxStream,
       builder: (context, snapshot) {
         return CheckboxListTile(
           onChanged: accountFormBloc!.changeIsZPrompt,
@@ -106,6 +119,10 @@ class _EProductsStepState extends State<EProductsStep>
     return StreamBuilder<bool?>(
       stream: accountFormBloc!.isStatementViaEmail,
       builder: (context, snapshot) {
+         if(snapshot.hasData){
+              int g=10;
+              int sum = g+20;
+        }
         return CheckboxListTile(
           onChanged: accountFormBloc!.changeIsStatementViaEmail,
           title: new Text('Statement Via Email'),
@@ -117,11 +134,13 @@ class _EProductsStepState extends State<EProductsStep>
       },
     );
   }
-
+bool aa =false;
   Widget _ussdCheckBox() {
     return StreamBuilder<bool?>(
       stream: accountFormBloc!.isUssd,
       builder: (context, snapshot) {
+      
+        
         return CheckboxListTile(
           onChanged: accountFormBloc!.changeIsUssd,
           title: new Text('USSD'),
@@ -156,7 +175,7 @@ class _EProductsStepState extends State<EProductsStep>
       builder: (context, snapshot) {
         return CheckboxListTile(
           onChanged: accountFormBloc!.changeIsCardRequest,
-          title: new Text('Request a Debit Card'),
+          title: new Text('Request For Cards'),
           controlAffinity: ListTileControlAffinity.leading,
           activeColor: Colors.red,
           dense: true,
@@ -220,10 +239,12 @@ class _EProductsStepState extends State<EProductsStep>
             stream: accountFormBloc!.requestingBranch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if(_requestingBranchController!.text != snapshot.data.toString()){
                 _requestingBranchController!.value = TextEditingValue(
                   text: snapshot.data.toString(),
                   selection: _requestingBranchController!.selection,
                 );
+                }
               }
 
               return Padding(
@@ -260,10 +281,12 @@ class _EProductsStepState extends State<EProductsStep>
             stream: accountFormBloc!.destinationBranch,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if(_destinationBranchController!.text != snapshot.data.toString()){
                 _destinationBranchController!.value = TextEditingValue(
                   text: snapshot.data.toString(),
                   selection: _destinationBranchController!.selection,
                 );
+                }
               }
 
               return Padding(
@@ -300,10 +323,12 @@ class _EProductsStepState extends State<EProductsStep>
             stream: accountFormBloc!.preferredNameOnCard,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if(_preferredNameOnCardController!.text != snapshot.data.toString()){
                 _preferredNameOnCardController!.value = TextEditingValue(
                   text: snapshot.data.toString(),
                   selection: _preferredNameOnCardController!.selection,
                 );
+                }
               }
 
               return Padding(
@@ -367,10 +392,13 @@ class _EProductsStepState extends State<EProductsStep>
                   _ussdCheckBox(),
                   _bankToWalletCheckBox(),
                   _cardRequestCheckBox(),
+                  selectAllButton(),
+
                   _cardTypeDropdownField(),
                   _requestingBranchTextField(),
                   _destinationBranchTextField(),
                   _preferredNameOnCardTextField(),
+                  
                 ],
               ),
               SizedBox(height: 120.0),
@@ -380,4 +408,23 @@ class _EProductsStepState extends State<EProductsStep>
       ),
     );
   }
+
+  Widget selectAllButton()=> Align(
+                      alignment: Alignment.topRight,
+                    child: TextButton(  
+                  child: Text('Select All', style: TextStyle(fontSize: 14.0, color: ZxplorePrimaryColor),),  
+                  style: ButtonStyle(),
+                  onPressed: () {
+                    accountFormBloc!.changeIsScanToPay(true);
+                    accountFormBloc!.changeIsZMobile(true);
+                    accountFormBloc!.changeIsZPrompt(true);
+                    accountFormBloc!.changeIsStatementViaEmail(true);
+                    accountFormBloc!.changeIsUssd(true);
+                    accountFormBloc!.changeIsBankToWallet(true);
+                    accountFormBloc!.changeIsCardRequest(true);
+                    
+                                      },  
+                ),
+  );
+
 }

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zxplore_app/colors.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zxplore_app/blocs/provider.dart';
@@ -22,11 +23,21 @@ class _UploadPassportState extends State<UploadPassportStep>
   AccountFormBloc? accountFormBloc;
   ByteData _img = ByteData(0);
   ImagePicker _picker = ImagePicker();
+  SharedPreferences? prefs;
+
+   XFile? _imageAdmFile;
+  String? retrieveAdmDataError;
+  dynamic pickImageAdmError;
+  ByteData _imgAdm = ByteData(0);
+ // ImagePicker _pickerAdm = ImagePicker();
+  String ? acctCategory;
+
 
   @override
   void initState() {
     super.initState();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
+       getSharedPref();
     accountFormBloc!.uploadPassportController.listen((base64Signature) {
       if (_img.lengthInBytes == 0) {
         var imageData = base64Decode(base64Signature!);
@@ -36,11 +47,30 @@ class _UploadPassportState extends State<UploadPassportStep>
         });
       }
     });
+  
+    accountFormBloc!.uploadAdmissionLetterController.listen((base64Signature) {
+      if (_imgAdm.lengthInBytes == 0) {
+        var imageData = base64Decode(base64Signature!);
+
+        setState(() {
+          _imgAdm = imageData.buffer.asByteData();
+        });
+      }
+    });
+  
+  
   }
+
+    getSharedPref()async{
+    prefs = await SharedPreferences.getInstance();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+ //  getAcctType();
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -121,7 +151,102 @@ class _UploadPassportState extends State<UploadPassportStep>
                 ),
               ],
             ),
-            SizedBox(height: 40.0),
+            SizedBox(height: 80.0),
+
+    
+                    StreamBuilder<String?>(
+                      stream: accountFormBloc!.accountCategoryType,
+                      builder: (context, snapshot) {
+                        return snapshot.data == null? SizedBox():
+                        snapshot.data == "ASPIRE ACCOUNT"?
+                    
+                         Column(
+                         children: [
+                           Text("2. Admission Letter"),
+                              SizedBox(height: 15.0),
+                           Container(
+                                 child: Platform.isAndroid
+                              ? FutureBuilder<void>(
+                                  future: retrieveLostDataAdm(),
+                                  builder:
+                                      (BuildContext context, AsyncSnapshot<void> snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.none:
+                                      case ConnectionState.waiting:
+                                        return const Text(
+                                          'Click either the gallery or camera icon to upload your admission letter',
+                                          textAlign: TextAlign.center,
+                                        );
+                                      case ConnectionState.done:
+                                        return (_imgAdm.buffer.lengthInBytes == 0
+                                            ? const Text(
+                                                'Click either the gallery or camera icon to upload your admission letter',
+                                                textAlign: TextAlign.center,
+                                              )
+                                            : LimitedBox(
+                                                maxHeight: 600.0,
+                                                child: Image.memory(
+                                                    _imgAdm.buffer.asUint8List())));
+                                      default:
+                                        if (snapshot.hasError) {
+                                          return Text(
+                                            'Pick image error: ${snapshot.error}}',
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } else {
+                                          const Text(
+                                            'Click either the gallery or camera icon to upload your admission letter',
+                                            textAlign: TextAlign.center,
+                                          );
+                                        }
+                                    }
+                                    return Text(
+                                      'Click either the gallery or camera icon to upload a picture of your utility Bill',
+                                      textAlign: TextAlign.center,
+                                    );
+                                  },
+                                )
+                              : (_imgAdm.buffer.lengthInBytes == 0
+                                  ? const Text(
+                                      'Click either the gallery or camera icon to upload your admission letter',
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : LimitedBox(
+                                      maxHeight: 600.0,
+                                      child: Image.memory(_imgAdm.buffer.asUint8List()))),
+                               ),
+                               SizedBox(height: 30.0),
+                               Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                 children: <Widget>[
+                            FloatingActionButton(
+                              onPressed: () {
+                                _onImageAdmButtonPressed(ImageSource.gallery);
+                              },
+                              heroTag: 'image0',
+                              backgroundColor: ZxplorePrimaryColor,
+                              tooltip: 'Pick Image from gallery',
+                              child: const Icon(Icons.photo_library),
+                            ),
+                            FloatingActionButton(
+                              onPressed: () {
+                                _onImageAdmButtonPressed(ImageSource.camera);
+                              },
+                              backgroundColor: ZxplorePrimaryColor,
+                              heroTag: 'image1',
+                              tooltip: 'Take a Photo',
+                              child: const Icon(Icons.camera_alt),
+                            ),
+                                 ],
+                               ),
+                               SizedBox(height: 100.0),
+                         ],
+                                       )
+                     : SizedBox();
+                      }
+                    )
+       
+
           ],
         ),
       ),
@@ -140,6 +265,21 @@ class _UploadPassportState extends State<UploadPassportStep>
 //    print(base64Image);
   }
 
+
+  Future _convertAdmImagesToByte() async {
+    List<int> imageBytes = await _imageAdmFile!.readAsBytes();
+    var imgBytes = new Uint8List.fromList(imageBytes);
+
+    String base64Image = base64Encode(imageBytes);
+
+    _imgAdm = imgBytes.buffer.asByteData();
+
+    accountFormBloc!.setUploadAdmissionLetter(base64Image);
+//    print(base64Image);
+  }
+
+
+
   Future<void> retrieveLostData() async {
     final LostDataResponse response = await _picker.retrieveLostData();
     if (response.isEmpty) {
@@ -155,6 +295,23 @@ class _UploadPassportState extends State<UploadPassportStep>
     }
   }
 
+
+  Future<void> retrieveLostDataAdm() async {
+    final LostDataResponse response = await _picker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        _imageAdmFile = response.file;
+        _convertAdmImagesToByte();
+      });
+    } else {
+      retrieveAdmDataError = response.exception!.code;
+    }
+  }
+
+
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
@@ -169,6 +326,24 @@ class _UploadPassportState extends State<UploadPassportStep>
     }
     setState(() {});
   }
+
+
+
+  void _onImageAdmButtonPressed(ImageSource source) async {
+    try {
+      _imageAdmFile = await _picker.pickImage(source: source, maxHeight: 350);
+      if (_imageAdmFile != null) {
+        _convertAdmImagesToByte();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Admission letter Uploaded')),
+        );
+      }
+    } catch (e) {
+      pickImageAdmError = e;
+    }
+    setState(() {});
+  }
+
 
   @override
   bool get wantKeepAlive => true;

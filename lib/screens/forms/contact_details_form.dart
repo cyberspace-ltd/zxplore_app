@@ -229,9 +229,18 @@ var addressStream;
           
           if (snapshot.hasData) {
      
-            _address1Controller!.value = TextEditingValue(
+              if( _address1Controller!.text != snapshot.data.toString()){
+                  String value = snapshot.data.toString();
+                _address1Controller!.text = value;
+             _address1Controller!.selection = _address1Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
+
+                /*
+                 _address1Controller!.value = TextEditingValue(
                 text: snapshot.data.toString(),
                 selection: _address1Controller!.selection);
+                */
+              }
+           
       
           }
           
@@ -243,8 +252,8 @@ var addressStream;
            
            onChanged: (value){
             accountFormBloc!.changeAddress1(value);
-             _address1Controller!.text = value;
-             _address1Controller!.selection = _address1Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
+          //   _address1Controller!.text = value;
+            // _address1Controller!.selection = _address1Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
            },
            
             maxLength: 30,
@@ -529,15 +538,12 @@ var cityOfResidenceStream;
       builder: (context, snapshot) {
 
         if (snapshot.hasData) {
-        //  s2++;
-      //   if(s2<3){
-          _cityOfResidenceController!.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _cityOfResidenceController!.selection);
-              
-    //      }
-        //    _cityOfResidenceController!.text = snapshot.data.toString();
-        //  _cityOfResidenceController!.selection = _cityOfResidenceController!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
+      
+      if(_cityOfResidenceController!.text != snapshot.data.toString()){
+                 _cityOfResidenceController!.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _cityOfResidenceController!.selection);
+              }
         }
         
         return TextField(
