@@ -379,6 +379,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
+
   Widget _buildDateOfBirth() {
     return StreamBuilder<bool>(
         stream: accountFormBloc!.bvnDateOfBirth,

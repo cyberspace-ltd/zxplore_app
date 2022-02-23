@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
@@ -23,6 +24,7 @@ import 'package:zxplore_app/models/verify_id_response.dart';
 import 'package:zxplore_app/utils/preferences.dart';
 
 class ZenithBankApi {
+
   Future<Occupation> fetchOccupations(String? token) async {
     Response response;
     Dio dio = new Dio();
@@ -195,6 +197,7 @@ class ZenithBankApi {
         };
       };
       response = await dio.get(Endpoints.getCardTypesUrl());
+      inspect(response);
       if (response.data != null) {
         var prefs = Preference();
         await prefs.load();

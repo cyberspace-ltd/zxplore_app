@@ -683,6 +683,40 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
     );
   }
 
+
+  Widget _countryOfOriginTextField() {
+    return StreamBuilder<String?>(
+      stream: accountFormBloc!.countryOfOrigin,
+      builder: (context, snapshot) {
+        return FormField<String>(
+          autovalidateMode: AutovalidateMode.always,
+          builder: (FormFieldState<String> state) {
+            return InputDecorator(
+              decoration: InputDecoration(
+                  labelText: 'ID Country of Issue',
+                  helperText: "* Required",
+                  errorText: snapshot.error as String?),
+              child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                value: snapshot.data,
+                isDense: true,
+                onChanged: accountFormBloc!.changeCountryIDIssue,
+                items: COUNTRY_LIST.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value.toUpperCase()),
+                  );
+                }).toList(),
+              )),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -792,6 +826,12 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
                       ),
                     ),
               
+                  SizedBox(height: 15.0),
+
+                    _countryOfOriginTextField(),
+
+                 //    SizedBox(height: 30.0),
+
                    Visibility(
                         visible: showAdmNo
                         , child: _admissionNumberTextField()),
@@ -827,6 +867,9 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
       ),
     );
   }
+
+
+
 
   Widget getImagenBase64(String? imagen) {
     var _imageBase64 = imagen;

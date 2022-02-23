@@ -73,6 +73,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _placeOfBirthController = BehaviorSubject<String?>();
 
   final _countryOfOriginController = BehaviorSubject<String?>();
+  final _countryOfIDCountryIssueController = BehaviorSubject<String?>();
 
   //Contact Details
 
@@ -268,6 +269,11 @@ String? bvv(){
   Stream<String?> get countryOfOrigin =>
       _countryOfOriginController.stream.transform(validateCountryOfOrigin);
 
+       Stream<String?> get countryIDIssuer =>
+      _countryOfIDCountryIssueController.stream.transform(validateCountryOfOrigin);
+
+    //  _countryOfIDCountryIssueController
+
   Stream<String?> get phoneNumber =>
       _phoneNumberController.stream.transform(validatePhoneNumber);
 
@@ -459,6 +465,9 @@ String? bvv(){
   Function(String?) get changeCountryOfOrigin =>
       _countryOfOriginController.sink.add;
 
+       Function(String?) get changeCountryIDIssue =>
+      _countryOfIDCountryIssueController.sink.add;
+
   Function(String?) get changeEmail => _emailController.sink.add;
 
   Function(String?) get changePhone => _phoneNumberController.sink.add;
@@ -645,6 +654,10 @@ String? bvv(){
     final validCountryOfOrigin = _countryOfOriginController.valueOrNull == null
         ? 'GHANA'
         : _countryOfOriginController.valueOrNull; //workaround for bug
+
+          final countryIDIssuer = _countryOfIDCountryIssueController.valueOrNull == null
+        ? 'GHANA'
+        : _countryOfIDCountryIssueController.valueOrNull; 
 
     var validEmail = _emailController.valueOrNull;
     final validPhone = _phoneNumberController.valueOrNull;
@@ -903,6 +916,10 @@ String? bvv(){
         ? 'GHANA'
         : _countryOfOriginController.valueOrNull; //workaround for bug
 
+         final countryIDIssuer = _countryOfIDCountryIssueController.valueOrNull == null
+        ? 'GHANA'
+        : _countryOfIDCountryIssueController.valueOrNull; 
+
     var validEmail = _emailController.valueOrNull;
 
     double validLatitude = double.parse(_latitudeController.hasValue ? _latitudeController.value : "0");
@@ -1123,6 +1140,16 @@ String? bvv(){
 
       return;
     }
+
+      if (countryIDIssuer == null) {
+      _countryOfIDCountryIssueController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid country of origin");
+
+      return;
+    }
+
+    
 
     if (validPhone == null) {
       _phoneNumberController.addError("Field is required");
@@ -1741,6 +1768,8 @@ String? bvv(){
     _placeOfBirthController.close();
     _mmdaController.close();
     _countryOfOriginController.close();
+    _countryOfIDCountryIssueController.close();
+
     _emailController.close();
     _phoneNumberController.close();
     _nextOfKinController.close();

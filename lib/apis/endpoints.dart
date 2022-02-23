@@ -5,7 +5,7 @@ class Endpoints {
 
  static const googleKey = 'AIzaSyCUECofQTpcRO46CnOHL1q4bmKH8dvmIyA';
 
-//  static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/";  //Live Environment
+ // static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/";  //Live Environment
 
       
 

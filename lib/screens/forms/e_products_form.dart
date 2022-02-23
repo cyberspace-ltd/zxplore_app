@@ -17,7 +17,13 @@ class _EProductsStepState extends State<EProductsStep>
     with AutomaticKeepAliveClientMixin<EProductsStep> {
   AccountFormBloc? accountFormBloc;
   Preference? prefs;
-  List<String> _cardTypes = ["MASTER CARD", "VISA", "VERVE"];
+  // List<String> _cardTypes = ["MASTER CARD", "VISA", "VERVE"];
+  List<String> _cardTypes = [
+    "VISA DEBIT", "VISA PREPAID",
+     "VISA CREDIT","MASTERCARD DEBIT",
+     "MASTERCARD PREPAID", "MASTERCARD CREDIT",
+     "EASYPAY DUAL GH-LINK CARD"
+     ];
 
   TextEditingController? _requestingBranchController;
   TextEditingController? _destinationBranchController;
