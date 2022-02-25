@@ -23,6 +23,14 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
   ByteData _img = ByteData(0);
   ImagePicker _picker = ImagePicker();
 
+
+  // Resident permit
+  XFile? _imageFile2;
+  String? retrieveDataError2;
+  dynamic pickImageError2;
+  ByteData _img2 = ByteData(0);
+  ImagePicker _picker2 = ImagePicker();
+
   @override
   void initState() {
     super.initState();
@@ -36,11 +44,26 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
         });
       }
     });
+
+    // Resident Permit
+    accountFormBloc!.uploadResidentPermitController.listen((base64Signature) {
+      if (_img2.lengthInBytes == 0) {
+        var imageData = base64Decode(base64Signature!);
+
+        setState(() {
+          _img2 = imageData.buffer.asByteData();
+        });
+      }
+    });
+
+
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -105,7 +128,7 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
                   onPressed: () {
                     _onImageButtonPressed(ImageSource.gallery);
                   },
-                  heroTag: 'image0',
+                  heroTag: 'image10',
                   backgroundColor: ZxplorePrimaryColor,
                   tooltip: 'Pick Image from gallery',
                   child: const Icon(Icons.photo_library),
@@ -115,13 +138,106 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
                     _onImageButtonPressed(ImageSource.camera);
                   },
                   backgroundColor: ZxplorePrimaryColor,
-                  heroTag: 'image1',
+                  heroTag: 'image11',
                   tooltip: 'Take a Photo',
                   child: const Icon(Icons.camera_alt),
                 ),
               ],
             ),
-            SizedBox(height: 40.0),
+            SizedBox(height: 60.0),
+
+
+
+
+              // Resident permit for non-Ghanian
+(accountFormBloc!.countryOfResident != "GHANA" && accountFormBloc!.countryOfResident != null)?
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("2"),
+                      SizedBox(height: 30.0),
+                       Text("Resident Permit"),
+                         SizedBox(height: 15.0),
+                  Container(
+                  child: Platform.isAndroid
+                      ? FutureBuilder<void>(
+                          future: retrieveLostData2(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot<void> snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.none:
+                              case ConnectionState.waiting:
+                                return const Text(
+                                  'Click either the gallery or camera icon to upload a picture of your resident permit',
+                                  textAlign: TextAlign.center,
+                                );
+                              case ConnectionState.done:
+                                return (_img2.buffer.lengthInBytes == 0
+                                    ? const Text(
+                                        'Click either the gallery or camera icon to upload a picture of your resident permit',
+                                        textAlign: TextAlign.center,
+                                      )
+                                    : LimitedBox(
+                                        maxHeight: 600.0,
+                                        child: Image.memory(
+                                            _img2.buffer.asUint8List())));
+                              default:
+                                if (snapshot.hasError) {
+                                  return Text(
+                                    'Pick image error: ${snapshot.error}}',
+                                    textAlign: TextAlign.center,
+                                  );
+                                } else {
+                                  const Text(
+                                    'Click either the gallery or camera icon to upload a picture of your resident permit',
+                                    textAlign: TextAlign.center,
+                                  );
+                                }
+                            }
+                            return Text(
+                              'Click either the gallery or camera icon to upload a picture of your resident permit',
+                              textAlign: TextAlign.center,
+                            );
+                          },
+                        )
+                      : (_img2.buffer.lengthInBytes == 0
+                          ? const Text(
+                              'Click either the gallery or camera icon to upload a picture of your resident permit',
+                              textAlign: TextAlign.center,
+                            )
+                          : LimitedBox(
+                              maxHeight: 600.0,
+                              child: Image.memory(_img2.buffer.asUint8List()))),
+            ),
+            SizedBox(height: 30.0),
+            Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    FloatingActionButton(
+                      onPressed: () {
+                        _onImageButtonPressed2(ImageSource.gallery);
+                      },
+                      heroTag: 'image12',
+                      backgroundColor: ZxplorePrimaryColor,
+                      tooltip: 'Pick Image from gallery',
+                      child: const Icon(Icons.photo_library),
+                    ),
+                    FloatingActionButton(
+                      onPressed: () {
+                        _onImageButtonPressed2(ImageSource.camera);
+                      },
+                      backgroundColor: ZxplorePrimaryColor,
+                      heroTag: 'image13',
+                      tooltip: 'Take a Photo',
+                      child: const Icon(Icons.camera_alt),
+                    ),
+                  ],
+            ),
+            SizedBox(height: 70.0),
+                ],
+              )
+              : SizedBox(),
+
           ],
         ),
       ),
@@ -169,6 +285,17 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
 //    print(base64Image);
   }
 
+  Future _convertImagesToByte2() async {
+    List<int> imageBytes = await _imageFile2!.readAsBytes();
+    var imgBytes = new Uint8List.fromList(imageBytes);
+
+    String base64Image = base64Encode(imageBytes);
+    _img2 = imgBytes.buffer.asByteData();
+
+    accountFormBloc!.setUploadResidentPermit(base64Image);
+//    print(base64Image);
+  }
+
   Future<void> retrieveLostData() async {
     final LostDataResponse response = await _picker.retrieveLostData();
     if (response.isEmpty) {
@@ -184,6 +311,24 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
     }
   }
 
+
+
+  Future<void> retrieveLostData2() async {
+    final LostDataResponse response = await _picker2.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        _imageFile2 = response.file;
+        _convertImagesToByte();
+      });
+    } else {
+      retrieveDataError = response.exception!.code;
+    }
+  }
+
+
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
@@ -195,6 +340,21 @@ class _UploadUtilityBillState extends State<UploadUtilityBillStep>
       }
     } catch (e) {
       pickImageError = e;
+    }
+    setState(() {});
+  }
+
+   void _onImageButtonPressed2(ImageSource source) async {
+    try {
+      _imageFile2 = await _picker2.pickImage(source: source, maxHeight: 350);
+      if (_imageFile2 != null) {
+        _convertImagesToByte2();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Resident permit Uploaded')),
+        );
+      }
+    } catch (e) {
+      pickImageError2 = e;
     }
     setState(() {});
   }

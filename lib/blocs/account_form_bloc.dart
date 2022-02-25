@@ -169,6 +169,7 @@ class AccountFormBloc extends BlocBase with Validators {
   
 
   final _uploadUtilityBillController = BehaviorSubject<String?>();
+  final   _uploadResidentPermitController = BehaviorSubject<String?>();
 
   final _uploadSignatureController = BehaviorSubject<String?>();
 
@@ -462,8 +463,14 @@ String? bvv(){
 
   Function(String?) get changeMMDA => _mmdaController.sink.add;
 
-  Function(String?) get changeCountryOfOrigin =>
-      _countryOfOriginController.sink.add;
+ // Function(String?) get changeCountryOfOrigin =>
+   //   _countryOfOriginController.sink.add;
+String? countryOfResident;
+      changeCountryOfOrigin(String? value) {
+   // _idTypeController.sink.add(value);
+   countryOfResident = value;
+   _countryOfOriginController.sink.add(value);
+  }
 
        Function(String?) get changeCountryIDIssue =>
       _countryOfIDCountryIssueController.sink.add;
@@ -612,6 +619,12 @@ String? bvv(){
     _uploadUtilityBillController.sink.add(value);
   }
 
+    setUploadResidentPermit(String? value) {
+    _uploadResidentPermitController.sink.add(value);
+  }
+
+
+
   setSignature(String? value) {
     _uploadSignatureController.sink.add(value);
     changeSignature(value);
@@ -655,7 +668,7 @@ String? bvv(){
         ? 'GHANA'
         : _countryOfOriginController.valueOrNull; //workaround for bug
 
-          final countryIDIssuer = _countryOfIDCountryIssueController.valueOrNull == null
+    final countryIDIssuer = _countryOfIDCountryIssueController.valueOrNull == null
         ? 'GHANA'
         : _countryOfIDCountryIssueController.valueOrNull; 
 
@@ -727,6 +740,11 @@ String? bvv(){
 
     final validUploadUtilityBillInBase64 =
         _uploadUtilityBillController.valueOrNull;
+
+     final validUploadResidentPermitInBase64 =
+        _uploadResidentPermitController.valueOrNull;
+
+        
 
     final validUploadSignatureInBase64 = _uploadSignatureController.valueOrNull;
 
@@ -916,9 +934,7 @@ String? bvv(){
         ? 'GHANA'
         : _countryOfOriginController.valueOrNull; //workaround for bug
 
-         final countryIDIssuer = _countryOfIDCountryIssueController.valueOrNull == null
-        ? 'GHANA'
-        : _countryOfIDCountryIssueController.valueOrNull; 
+    final countryIDIssuer =  _countryOfIDCountryIssueController.valueOrNull; 
 
     var validEmail = _emailController.valueOrNull;
 
@@ -955,7 +971,7 @@ String? bvv(){
     var validIdNumber = _idNumberController.valueOrNull;
     var validIdPlaceOfIssue = _idPlaceOfIssueController.valueOrNull != null
         ? _idPlaceOfIssueController.valueOrNull
-        : '';
+        : null;
     var validIdIssueDate = _idIssueDateController.valueOrNull;
     var validIdExpiryDate = _idExpiryDateController.valueOrNull;
 
@@ -1014,6 +1030,12 @@ String? bvv(){
 
     final validUploadUtilityBillInBase64 =
         _uploadUtilityBillController.valueOrNull;
+
+     final validUploadResidentPermitInBase64 =
+        _uploadResidentPermitController.valueOrNull;    
+
+
+        
 
     final validUploadSignatureInBase64 = _uploadSignatureController.valueOrNull;
 
@@ -1258,9 +1280,11 @@ String? bvv(){
       // _subjectSaveAccountResponse
       //     .addError("You have not selected a valid id place of issue");
       // return;
+    //  validIdPlaceOfIssue = countryIDIssuer;
+
     } else if (validIdPlaceOfIssue == null &&
         validAccountCategory == easy_classic) {
-      validIdPlaceOfIssue = "";
+    //  validIdPlaceOfIssue = countryIDIssuer;
     }
 
     if (validIdIssueDate == null &&
@@ -1382,6 +1406,15 @@ String? bvv(){
     Attachment _utilityBillAttachment;
     Attachment _signatoryAttachment;
      Attachment _admissionLetterAttachment;
+       Attachment _residentPermitAttachment;
+
+    //  validUploadResidentPermitInBase64
+
+     if (validUploadResidentPermitInBase64 != null) {
+      _residentPermitAttachment = new Attachment(
+          encodedImage: validUploadResidentPermitInBase64, type: 'ResidentPermit');
+      _attachments.add(_residentPermitAttachment);
+    }
 
     if (validUploadIdImageInBase64 != null) {
       _idCardAttachment = new Attachment(
@@ -1440,6 +1473,7 @@ String? bvv(){
       idNumber: validIdNumber,
       idIssuer: validIdIssuer,
       idPlaceOfIssue: validIdPlaceOfIssue,
+      foreignAddress1: countryIDIssuer,
       idIssueDate: validIdIssueDate,
       idExpiryDate: validIdExpiryDate,
       tin: admissionNo,
@@ -1542,6 +1576,10 @@ String? bvv(){
 
   BehaviorSubject<String?> get uploadUtilityBillController =>
       _uploadUtilityBillController;
+
+        BehaviorSubject<String?> get uploadResidentPermitController =>
+      _uploadResidentPermitController;
+
 
   BehaviorSubject<String?> get uploadPassportController =>
       _uploadPassportController;
@@ -1812,6 +1850,7 @@ String? bvv(){
     _uploadPassportController.close();
     uploadAdmissionLetterController.close();
     _uploadUtilityBillController.close();
+    _uploadResidentPermitController.close();
     _uploadSignatureController.close();
     bvnVerificationResponse.close();
     _subjectAccountsDetailsResponse.close();
@@ -2050,6 +2089,8 @@ String? bvv(){
 
   getAccountsDetailsByReferenceId(String? referenceId) async {
 
+    // _countryOfIDCountryIssueController
+
     _referenceIdController.add(referenceId);
 
     await _accountsRepository
@@ -2213,7 +2254,18 @@ String? bvv(){
 
 
 
-        _countryOfOriginController.add('GHANA');
+     //   _countryOfOriginController.add('GHANA');
+
+        if (accountResponse.data!.countryOfOrigin != null &&
+            accountResponse.data!.countryOfOrigin!.isNotEmpty) {
+         //     print("TIN " + accountResponse.data!.tin);
+         countryOfResident = accountResponse.data!.countryOfOrigin;
+          _countryOfOriginController.add(accountResponse.data!.countryOfOrigin);
+        }
+
+
+
+        
 
         if (accountResponse.data!.signatoryDetails?.first.emailAddress !=
                 null &&
@@ -2337,9 +2389,25 @@ String? bvv(){
                 null &&
             accountResponse
                 .data!.signatoryDetails!.first.idPlaceOfIssue!.isNotEmpty) {
-          _idPlaceOfIssueController.add(
-              accountResponse.data!.signatoryDetails!.first.idPlaceOfIssue);
+
+                       _idPlaceOfIssueController.add(
+                             accountResponse.data!.signatoryDetails!.first.idPlaceOfIssue);
+                  
         }
+
+
+         if (accountResponse.data!.signatoryDetails?.first.foreignAddress1 !=
+                null &&
+            accountResponse
+                .data!.signatoryDetails!.first.foreignAddress1!.isNotEmpty) {
+
+                 
+                    _countryOfIDCountryIssueController.add(
+                             accountResponse.data!.signatoryDetails!.first.foreignAddress1);
+                  
+        }
+
+
         if (accountResponse.data!.signatoryDetails?.first.idIssueDate != null &&
             accountResponse
                 .data!.signatoryDetails!.first.idIssueDate!.isNotEmpty) {
@@ -2500,6 +2568,11 @@ String? bvv(){
               .where((i) => i.type == 'UtilityBill')
               .toList();
 
+           var _residentPermitAttachment = accountResponse
+              .data!.signatoryDetails!.first.attachments!
+              .where((i) => i.type == 'ResidentPermit')
+              .toList();
+
           var _signatoryAttachment = accountResponse
               .data!.signatoryDetails!.first.attachments!
               .where((i) => i.type == 'Signatory')
@@ -2535,6 +2608,13 @@ String? bvv(){
             _uploadUtilityBillController
                 .add(_utilityBillAttachment.first.encodedImage);
           }
+         
+          if (_residentPermitAttachment.isNotEmpty) {
+            _uploadResidentPermitController
+                .add(_residentPermitAttachment.first.encodedImage);
+          }
+
+          
 
           if (_signatoryAttachment.isNotEmpty) {
             _uploadSignatureController

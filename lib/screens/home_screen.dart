@@ -370,6 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+
   ListTile makeListTile(Datum form, BuildContext _context) => ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
         leading: Container(
@@ -463,7 +464,6 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
                 flex: 1,
                 child: Container(
-                  // tag: 'hero',
                   child: _statusWidget(form),
                 )),
           ],
@@ -591,6 +591,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    
       body: StreamBuilder<AccountsResponse>(
         stream: _accountsBloc.subjectAccountsResponse.stream,
         builder: (context, AsyncSnapshot<AccountsResponse> snapshot) {

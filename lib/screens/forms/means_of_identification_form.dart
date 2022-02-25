@@ -94,6 +94,8 @@ class _MeansOfIdentificationStepStepState
 
   bool showAdmNo = false;
 
+  bool showIdIssuePlace =true;
+
   AccountFormBloc? accountFormBloc;
 
   late StatesBloc statesBloc;
@@ -684,10 +686,23 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
   }
 
 
-  Widget _countryOfOriginTextField() {
+  Widget _countryOfIssueIDTextField() {
     return StreamBuilder<String?>(
-      stream: accountFormBloc!.countryOfOrigin,
+      stream: accountFormBloc!.countryIDIssuer,
       builder: (context, snapshot) {
+
+           if(snapshot.hasData){
+
+        if(snapshot.data == "GHANA"){
+                             showIdIssuePlace =true;
+                   
+      }else{
+             showIdIssuePlace =false;
+      }
+       buildState!=null? buildState!.addPostFrameCallback((_) => setState(() {})) : act();
+
+      }
+
         return FormField<String>(
           autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
@@ -699,12 +714,13 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
               child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                 value: snapshot.data,
+                isExpanded: true,  
                 isDense: true,
                 onChanged: accountFormBloc!.changeCountryIDIssue,
                 items: COUNTRY_LIST.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value.toUpperCase()),
+                    child: Text(value.toUpperCase(),overflow: TextOverflow.ellipsis),
                   );
                 }).toList(),
               )),
@@ -825,19 +841,21 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
                         ],
                       ),
                     ),
-              
-                  SizedBox(height: 15.0),
-
-                    _countryOfOriginTextField(),
-
-                 //    SizedBox(height: 30.0),
-
+             
                    Visibility(
                         visible: showAdmNo
                         , child: _admissionNumberTextField()),
                  
                     SizedBox(height: 30.0),
-                    _idPlaceOfIssue(),
+
+                    _countryOfIssueIDTextField(),
+
+                      SizedBox(height: 30.0),
+
+                    Visibility(
+                      visible: showIdIssuePlace,
+                      child: _idPlaceOfIssue()),
+
                     SizedBox(height: 30.0),
                     _idIssueDateField(),
                     SizedBox(height: 30.0),

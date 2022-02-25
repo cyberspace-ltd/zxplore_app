@@ -211,11 +211,16 @@ class _AccountFormPageState extends State<AccountFormPage>
                             icon: Icon(Icons.navigate_before,
                                 color: Colors.white),
                             onPressed: () {
+
                               _controller.previousPage(
                                   duration: _kDuration, curve: _kCurve);
+
+                            if(_controller.page!.toInt() != 0 ){
                               widget.accountFormBloc!.setCurrentFormCategory(
                                   widget.categories[
                                       _controller.page!.toInt() - 1]);
+                            }
+
                             }),
                         Center(
                           child: DotsIndicator(
@@ -236,9 +241,13 @@ class _AccountFormPageState extends State<AccountFormPage>
                             onPressed: () {
                               _controller.nextPage(
                                   duration: _kDuration, curve: _kCurve);
+
+                            if(_controller.page!.toInt() < 8 ){
                               widget.accountFormBloc!.setCurrentFormCategory(
                                   widget.categories[
                                       _controller.page!.toInt() + 1]);
+                            }
+
                             }),
                       ],
                     ),

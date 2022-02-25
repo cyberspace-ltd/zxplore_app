@@ -135,7 +135,7 @@ class _UploadPassportState extends State<UploadPassportStep>
                   onPressed: () {
                     _onImageButtonPressed(ImageSource.gallery);
                   },
-                  heroTag: 'image0',
+                  heroTag: 'image6',
                   backgroundColor: ZxplorePrimaryColor,
                   tooltip: 'Pick Image from gallery',
                   child: const Icon(Icons.photo_library),
@@ -145,7 +145,7 @@ class _UploadPassportState extends State<UploadPassportStep>
                     _onImageButtonPressed(ImageSource.camera);
                   },
                   backgroundColor: ZxplorePrimaryColor,
-                  heroTag: 'image1',
+                  heroTag: 'image7',
                   tooltip: 'Take a Photo',
                   child: const Icon(Icons.camera_alt),
                 ),
@@ -223,7 +223,7 @@ class _UploadPassportState extends State<UploadPassportStep>
                               onPressed: () {
                                 _onImageAdmButtonPressed(ImageSource.gallery);
                               },
-                              heroTag: 'image0',
+                              heroTag: 'image8',
                               backgroundColor: ZxplorePrimaryColor,
                               tooltip: 'Pick Image from gallery',
                               child: const Icon(Icons.photo_library),
@@ -233,7 +233,7 @@ class _UploadPassportState extends State<UploadPassportStep>
                                 _onImageAdmButtonPressed(ImageSource.camera);
                               },
                               backgroundColor: ZxplorePrimaryColor,
-                              heroTag: 'image1',
+                              heroTag: 'image9',
                               tooltip: 'Take a Photo',
                               child: const Icon(Icons.camera_alt),
                             ),

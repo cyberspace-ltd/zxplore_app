@@ -363,6 +363,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
               child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                 value: snapshot.data,
+                isExpanded: true,  
                 isDense: true,
                 onChanged: accountFormBloc!.changeCountryOfOrigin,
                 items: COUNTRY_LIST.map((String value) {

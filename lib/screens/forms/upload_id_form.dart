@@ -127,7 +127,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                   onPressed: () {
                     _onImageButtonPressed(ImageSource.gallery);
                   },
-                  heroTag: 'image0',
+                  heroTag: 'image2',
                   backgroundColor: ZxplorePrimaryColor,
                   tooltip: 'Pick Image from gallery',
                   child: const Icon(Icons.photo_library),
@@ -137,7 +137,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                     _onImageButtonPressed(ImageSource.camera);
                   },
                   backgroundColor: ZxplorePrimaryColor,
-                  heroTag: 'image1',
+                  heroTag: 'image3',
                   tooltip: 'Take a Photo',
                   child: const Icon(Icons.camera_alt),
                 ),
@@ -211,7 +211,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                   onPressed: () {
                     _onImageButtonPressed2(ImageSource.gallery);
                   },
-                  heroTag: 'image0',
+                  heroTag: 'image4',
                   backgroundColor: ZxplorePrimaryColor,
                   tooltip: 'Pick Image from gallery',
                   child: const Icon(Icons.photo_library),
@@ -221,7 +221,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                     _onImageButtonPressed2(ImageSource.camera);
                   },
                   backgroundColor: ZxplorePrimaryColor,
-                  heroTag: 'image1',
+                  heroTag: 'image5',
                   tooltip: 'Take a Photo',
                   child: const Icon(Icons.camera_alt),
                 ),
