@@ -4,6 +4,9 @@
 
 import 'dart:convert';
 
+import 'package:zxplore_app/models/account_purposes.dart';
+import 'package:zxplore_app/models/transaction_type.dart';
+
 AccountDetailsResponse accountDetailsResponseFromJson(String str) =>
     AccountDetailsResponse.fromJson(json.decode(str));
 
@@ -75,6 +78,12 @@ class AccountDetailsData {
   String? uSSDRequest;
   String? bankWalletRequest;
 
+  List<TransactionTypes>? transTypes;
+  List<AccountPurposes>? acctPurpose;
+  List<SourceOfFundsObj>? sourceOfFunds;
+  String? employmentTypes;
+    String? monthlyIncome;
+
 
 
   AccountDetailsData({
@@ -120,6 +129,12 @@ class AccountDetailsData {
     this.requestingBranch,
     this.destinationBranch,
     this.preferredNameOnCard,
+
+    this.acctPurpose,
+    this.employmentTypes,
+    this.monthlyIncome,
+    this.sourceOfFunds,
+    this.transTypes
   });
 
   factory AccountDetailsData.fromJson(Map<String, dynamic> json) =>
@@ -171,6 +186,15 @@ class AccountDetailsData {
         requestingBranch: json["RequestingBranch"],
         destinationBranch: json["DestinationBranch"],
         preferredNameOnCard: json["PreferredNameOnCard"],
+
+        monthlyIncome: json["MonthlyIncome"],
+        employmentTypes: json["EmploymentTypes"],
+        acctPurpose : List<AccountPurposes>.from(json['AccountPurposes'].map((x) => AccountPurposes.fromJson(x))) ,
+        transTypes : List<TransactionTypes>.from(json['TransactionTypes'].map((x) => TransactionTypes.fromJson(x))) ,
+        sourceOfFunds : List<SourceOfFundsObj>.from(json['SourceOfFunds'].map((x) => SourceOfFundsObj.fromJson(x))) ,
+
+
+
       );
 
   Map<String, dynamic> toJson() => {
@@ -219,6 +243,13 @@ class AccountDetailsData {
         "RequestingBranch": requestingBranch,
         "DestinationBranch": destinationBranch,
         "PreferredNameOnCard": preferredNameOnCard,
+
+        "MonthlyIncome": monthlyIncome,  
+        "EmploymentTypes": employmentTypes,  
+        "AccountPurposes": new List<dynamic>.from(acctPurpose!.map((x) => x.toJson())),
+        "TransactionTypes": new List<dynamic>.from(transTypes!.map((x) => x.toJson())),
+        "SourceOfFundsObj": new List<dynamic>.from(sourceOfFunds!.map((x) => x.toJson())),
+        
       };
 }
 
@@ -271,8 +302,15 @@ class AccountDetailsSignatoryDetail {
   dynamic signatureUrl;
   dynamic utilityUrl;
   String? maritalStatus;
+
   String? nextOfKin;
-  List<AccountDetailsAttachment>? attachments;
+  String? nextOfKinPhone;
+  String? nextOfKinRelationship;
+  String? nextOfKinGender;
+  String? homeTown;
+
+
+List<AccountDetailsAttachment>? attachments;
 
   AccountDetailsSignatoryDetail({
     this.firstName,
@@ -323,8 +361,15 @@ class AccountDetailsSignatoryDetail {
     this.signatureUrl,
     this.utilityUrl,
     this.maritalStatus,
-    this.nextOfKin,
     this.attachments,
+
+
+    this.nextOfKin,
+    this.nextOfKinGender,
+    this.nextOfKinPhone,
+    this.nextOfKinRelationship,
+    this.homeTown,
+  //  this.monthlyIncome
   });
 
   factory AccountDetailsSignatoryDetail.fromJson(Map<String, dynamic> json) =>
@@ -377,7 +422,15 @@ class AccountDetailsSignatoryDetail {
         signatureUrl: json["SignatureUrl"],
         utilityUrl: json["UtilityUrl"],
         maritalStatus: json["MaritalStatus"],
+
         nextOfKin: json["NextOfKin"],
+        nextOfKinPhone: json["NextOfKinPhone"],
+        nextOfKinRelationship: json["NextOfKinRelationship"],
+        nextOfKinGender: json["NextOfKinGender"],
+        homeTown:json["HomeTown"],
+
+    //     monthlyIncome:json["MonthlyIncome"],
+
         attachments: new List<AccountDetailsAttachment>.from(json["Attachments"]
             .map((x) => AccountDetailsAttachment.fromJson(x))),
       );
@@ -431,7 +484,13 @@ class AccountDetailsSignatoryDetail {
         "SignatureUrl": signatureUrl,
         "UtilityUrl": utilityUrl,
         "MaritalStatus": maritalStatus,
+   //     "MonthlyIncome" : monthlyIncome,
         "NextOfKin": nextOfKin,
+        "NextOfKinPhone": nextOfKinPhone,
+        "NextOfKinRelationship": nextOfKinRelationship,
+        "NextOfKinGender": nextOfKinGender,
+        "HomeTown": homeTown,
+
         "Attachments":
             new List<dynamic>.from(attachments!.map((x) => x.toJson())),
       };

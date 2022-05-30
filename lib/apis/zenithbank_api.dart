@@ -210,6 +210,192 @@ class ZenithBankApi {
     }
   }
 
+
+   Future<void> fetchEmploymentTypes(String? token) async {
+    Response<String> response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response = await dio.get(Endpoints.getEmploymentTypesUrl());
+      if (response.data != null) {
+       var resp = jsonDecode(response.data!);
+        String responseCode = resp["ResponseCode"];
+        if(responseCode == "00"){
+      //  var menu = resp["Menu"] as List;
+        var prefs = Preference();
+        await prefs.load();
+        prefs.setString("EmploymentTypes", response.data!);
+        }
+             }
+    } on DioError catch (error) {
+      throw CleanerException(_handleError(error));
+    }
+  }
+
+   Future<void> fetchMonthlyAllowanceUrl(String? token) async {
+    Response<String> response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response = await dio.get(Endpoints.getMonthlyAllowanceUrl());
+      if (response.data != null) {
+       var resp = jsonDecode(response.data!);
+        String responseCode = resp["ResponseCode"];
+        if(responseCode == "00"){
+      //  var menu = resp["Menu"] as List;
+        var prefs = Preference();
+        await prefs.load();
+        prefs.setString("MonthlyAllowance", response.data!);
+        }
+             }
+    } on DioError catch (error) {
+      throw CleanerException(_handleError(error));
+    }
+  }
+
+   Future<void> fetchPurposeOfAcctUrl(String? token) async {
+    Response<String> response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response = await dio.get(Endpoints.getPurposeOfAcctUrl());
+       if (response.data != null) {
+       var resp = jsonDecode(response.data!);
+        String responseCode = resp["ResponseCode"];
+        if(responseCode == "00"){
+      //  var menu = resp["Menu"] as List;
+        var prefs = Preference();
+        await prefs.load();
+        prefs.setString("PurposeOfAcct",response.data!);
+        }
+             }
+    } on DioError catch (error) {
+      throw CleanerException(_handleError(error));
+    }
+  }
+
+
+   Future<void> fetchSourceOfFundUrl(String? token) async {
+    Response<String> response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response = await dio.get(Endpoints.getSourceOfFundUrl());
+          if (response.data != null) {
+       var resp = jsonDecode(response.data!);
+        String responseCode = resp["ResponseCode"];
+        if(responseCode == "00"){
+       // var menu = resp["Menu"] as List;
+        var prefs = Preference();
+        await prefs.load();
+        prefs.setString("SourceOfFund", response.data!);
+        }
+             }
+    } on DioError catch (error) {
+      throw CleanerException(_handleError(error));
+    }
+  }
+
+
+   Future<void> fetchTransactionTypeUrl(String? token) async {
+    Response<String> response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response = await dio.get(Endpoints.getTransactionTypeUrl());
+         if (response.data != null) {
+       var resp = jsonDecode(response.data!);
+        String responseCode = resp["ResponseCode"];
+        if(responseCode == "00"){
+      //  var menu = resp["Menu"] as List;
+        var prefs = Preference();
+        await prefs.load();
+        prefs.setString("TransactionType", response.data!);
+        }
+             }
+    } on DioError catch (error) {
+      throw CleanerException(_handleError(error));
+    }
+  }
+
+
+   Future<void> fetchNoOfTransactionUrl(String? token) async {
+    Response<String> response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response = await dio.get(Endpoints.getNoOfTransactionUrl());
+      if (response.data != null) {
+       var resp = jsonDecode(response.data!);
+        String responseCode = resp["ResponseCode"];
+        if(responseCode == "00"){
+      //  var menu = resp["Menu"] as List;
+        var prefs = Preference();
+        await prefs.load();
+        prefs.setString("NoOfTransaction",response.data!);
+        }
+             }
+    } on DioError catch (error) {
+      throw CleanerException(_handleError(error));
+    }
+  }
+
+
+
   Future<LoginResponse> attemptLogin(String username, String password) async {
     Response response;
     Dio dio = new Dio();

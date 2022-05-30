@@ -118,18 +118,10 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
     buildState = WidgetsBinding.instance;
    
-   // idTypeTextFieldStream = accountFormBloc!.idType;
-  //  idIssuerTextFieldStream = accountFormBloc!.idIssuer;
     otherIdIssuerTextFieldStream = accountFormBloc!.idOthersIssuer;
-    admissionNumberTextFieldStream = accountFormBloc!.admissionNo;
-  //  idNumberTextFieldStream = accountFormBloc!.idNumber;
-//  accountFormBloc!.idOthersIssuer
-
-  //  idPlaceOfIssueStream = accountFormBloc!.idPlaceOfIssue;
-
- 
-    
+    admissionNumberTextFieldStream = accountFormBloc!.admissionNo; 
   }
+  
   String? idVal;
   Widget _idTypeTextField() {
     return StreamBuilder<String?>(
@@ -330,7 +322,6 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
         _idIssuerOthersController.selection = TextSelection.fromPosition(TextPosition(offset: _idIssuerOthersController.text.length));
 
           }
-
           /*
           _idIssuerOthersController.value = TextEditingValue(
               text: snapshot.data.toString(),

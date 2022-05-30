@@ -45,7 +45,8 @@ class _SignaturePainter extends CustomPainter {
     lastSize = size;
     for (int i = 0; i < points.length - 1; i++) {
       if (points[i] != null && points[i + 1] != null)
-        canvas.drawLine(points[i]!, points[i + 1]!, _linePaint);
+             canvas.drawLine(points[i]!, points[i + 1]!, _linePaint);
+        
     }
   }
 
@@ -64,10 +65,12 @@ class SignatureState extends State<Signature> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance!
         .addPostFrameCallback((_) => afterFirstLayout(context));
+
     _painter = _SignaturePainter(
         points: _points,
         strokeColor: widget.color,
         strokeWidth: widget.strokeWidth);
+      
     return ClipRect(
       child: CustomPaint(
         painter: widget.backgroundPainter,

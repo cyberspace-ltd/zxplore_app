@@ -145,8 +145,6 @@ bool aa =false;
     return StreamBuilder<bool?>(
       stream: accountFormBloc!.isUssd,
       builder: (context, snapshot) {
-      
-        
         return CheckboxListTile(
           onChanged: accountFormBloc!.changeIsUssd,
           title: new Text('USSD'),

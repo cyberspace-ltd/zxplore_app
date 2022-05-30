@@ -53,6 +53,7 @@ class _CategoryRouteState extends State<CategoryPage> {
     setState(() {
       accountReferenceId = widget.accountReferenceId;
       _isEditAccount = widget.isEditAccount;
+      accountFormBloc!.setFormStatus(_isEditAccount);
     });
   }
 

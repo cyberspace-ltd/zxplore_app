@@ -47,7 +47,7 @@ class CryptoHelper {
 
       return encrypter.decrypt64(secret, iv: iv);
     } catch (error) {
-//      print(error);
+      print(error);
       return '';
     }
   }

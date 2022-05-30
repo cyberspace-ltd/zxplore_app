@@ -64,6 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
         _fetchCities(data);
         _fetchCountries(data);
         _fetchCardTypes(data);
+
+
+      //  _fetchEmploymentTypes(data);
+      //  _fetchMonthlyAllowanceUrl(data);
+      //  _fetchPurposeOfAcctUrl(data);
+      //  _fetchSourceOfFundUrl(data);
+        
+      //   _fetchTransactionTypeUrl(data);
+     //   _fetchNoOfTransactionUrl(data);
+
       }
     });
 
@@ -370,7 +380,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-
   ListTile makeListTile(Datum form, BuildContext _context) => ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
         leading: Container(
@@ -507,7 +516,7 @@ class _MyHomePageState extends State<MyHomePage> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      CategoryPage(accountReferenceId: form.refId)),
+                      CategoryPage(accountReferenceId: form.refId, isEditAccount: form.status=="Saved")),
             );
           });
     }
@@ -766,5 +775,36 @@ class _MyHomePageState extends State<MyHomePage> {
   Future _fetchCardTypes(String? token) async {
     await ZenithBankApi().fetchCardTypes(token);
   }
+
+/*
+
+  Future _fetchEmploymentTypes(String? token) async {
+    await ZenithBankApi().fetchEmploymentTypes(token);
+  }
+
+  Future _fetchMonthlyAllowanceUrl(String? token) async {
+    await ZenithBankApi().fetchMonthlyAllowanceUrl(token);
+  }
+
+  Future _fetchPurposeOfAcctUrl(String? token) async {
+    await ZenithBankApi().fetchPurposeOfAcctUrl(token);
+  }
+
+  
+
+  Future _fetchSourceOfFundUrl(String? token) async {
+    await ZenithBankApi().fetchSourceOfFundUrl(token);
+  }
+
+  Future _fetchTransactionTypeUrl(String? token) async {
+    await ZenithBankApi().fetchTransactionTypeUrl(token);
+  }
+
+  Future _fetchNoOfTransactionUrl(String? token) async {
+    await ZenithBankApi().fetchNoOfTransactionUrl(token);
+  }
+*/
+  
+
   
 }

@@ -70,13 +70,15 @@ class _AccountFormPageState extends State<AccountFormPage>
 
     _setDefaults();
 
+/*
     if (_isEditAccount! && accountReferenceId != null) {
       _getAccountDetailsFromDatabase(accountReferenceId);
     } else {
+      */
       if (accountReferenceId != null) {
         _getAccountDetailsByReferenceId(accountReferenceId);
       }
-    }
+ //   }
   }
 
   void _setDefaults() {

@@ -5,6 +5,8 @@
 import 'dart:convert';
 
 import 'package:meta/meta.dart';
+import 'package:zxplore_app/models/account_purposes.dart';
+import 'package:zxplore_app/models/transaction_type.dart';
 
 AccountForm accountFormFromJson(String str) =>
     AccountForm.fromJson(json.decode(str));
@@ -55,6 +57,15 @@ class AccountForm {
   String? preferredNameOnCard;
   double? latitude;
   double? longitude;
+   String? monthlyIncome;
+
+
+  String? employmentTypes;
+  List<TransactionTypes> transactionTypes;
+  List<AccountPurposes> accountPurposes;
+  List<SourceOfFundsObj> sourceOfFunds;
+
+
 
   AccountForm({
     required this.accountType,
@@ -100,6 +111,11 @@ class AccountForm {
     required this.preferredNameOnCard,
     required this.latitude,
     required this.longitude,
+    required this.employmentTypes,
+    required this.accountPurposes,
+    required this.sourceOfFunds,
+    required this.transactionTypes,
+    required this.monthlyIncome
   });
 
   factory AccountForm.fromJson(Map<String, dynamic> json) => new AccountForm(
@@ -147,6 +163,18 @@ class AccountForm {
         preferredNameOnCard: json["PreferredNameOnCard"],
         latitude: json["Latitude"].toDouble(),
         longitude: json["Longitude"].toDouble(),
+
+        employmentTypes: json["EmploymentTypes"],
+        monthlyIncome: json["MonthlyIncome"],
+        transactionTypes: new List<TransactionTypes>.from(
+            json["TransactionTypes"].map((x) => TransactionTypes.fromJson(x))),
+        
+        accountPurposes: new List<AccountPurposes>.from(
+            json["AccountPurposes"].map((x) => AccountPurposes.fromJson(x))),
+        
+        sourceOfFunds: new List<SourceOfFundsObj>.from(
+            json["SourceOfFunds"].map((x) => SourceOfFundsObj.fromJson(x))),
+
       );
 
   Map<String, dynamic> toJson() => {
@@ -194,6 +222,15 @@ class AccountForm {
         "RequestingBranch": requestingBranch,
         "DestinationBranch": destinationBranch,
         "PreferredNameOnCard": preferredNameOnCard,
+           "MonthlyIncome": monthlyIncome,
+
+         "EmploymentTypes": employmentTypes,
+
+          "TransactionTypes": new List<dynamic>.from(transactionTypes.map((x) => x.toJson())),
+          "AccountPurposes": new List<dynamic>.from(accountPurposes.map((x) => x.toJson())),
+          "SourceOfFunds": new List<dynamic>.from(sourceOfFunds.map((x) => x.toJson())),
+
+
       };
 }
 
@@ -247,9 +284,14 @@ class SignatoryDetail {
   String? bvn;
   String? maritalStatus;
   String? nextOfKin;
+  String? nextOfKinPhone;
+  String? nextOfKinRelationship;
+  String? nextOfKinGender;
+ // String? monthlyIncome;
   List<Attachment>? attachments;
   String? mmda;
   String? placeOfBirth;
+  String? homeTown;
 
   SignatoryDetail({
     this.firstName,
@@ -303,6 +345,11 @@ class SignatoryDetail {
     this.maritalStatus,
     this.nextOfKin,
     this.attachments,
+    this.nextOfKinGender,
+    this.nextOfKinPhone,
+    this.nextOfKinRelationship,
+    this.homeTown,
+  //  this.monthlyIncome
   });
 
   factory SignatoryDetail.fromJson(Map<String, dynamic> json) =>
@@ -356,9 +403,16 @@ class SignatoryDetail {
         utilityUrl: json["UtilityUrl"],
         bvn: json["Bvn"],
         maritalStatus: json["MaritalStatus"],
+
         nextOfKin: json["NextOfKin"],
-        attachments: new List<Attachment>.from(
-            json["Attachments"].map((x) => Attachment.fromJson(x))),
+         nextOfKinRelationship: json["NextOfKinRelationship"],
+          nextOfKinPhone: json["NextOfKinPhone"],
+           nextOfKinGender: json["NextOfKinGender"],
+
+          homeTown: json["HomeTown"],
+
+        attachments:  json["Attachments"] != null? new List<Attachment>.from(
+            json["Attachments"].map((x) => Attachment.fromJson(x))) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -412,8 +466,14 @@ class SignatoryDetail {
         "Bvn": bvn,
         "MaritalStatus": maritalStatus,
         "NextOfKin": nextOfKin,
-        "Attachments":
-            new List<dynamic>.from(attachments!.map((x) => x.toJson())),
+     //    "MonthlyIncome": monthlyIncome,
+         "NextOfKinRelationship": nextOfKinRelationship,
+          "NextOfKinPhone": nextOfKinPhone,
+           "NextOfKinGender": nextOfKinGender,
+            "HomeTown" :homeTown,
+
+        "Attachments": attachments != null?
+            new List<dynamic>.from(attachments!.map((x) => x.toJson())) : null,
       };
 }
 

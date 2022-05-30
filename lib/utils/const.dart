@@ -36,6 +36,54 @@ final idTypesWithDates = [
     'STUDENT ID',
   ];
 
+  final employmentTypeList = [
+    'EMPLOYED',
+   'SELF-EMPLOYED',
+    'UN-EMPLOYED',
+    'RETIRED',
+     'STUDENT',
+  ];
+
+   final purposeOfAcct = [
+    'Salary processing',
+   'Access to banking Services',
+    'Business/Transactional',
+    'Facilitation of a single transaction',
+     'Security/Safekeeping',
+     'Savings & Investment',
+     'Receipt of inflows for Personal upkeep',
+     'Other'
+  ];
+  
+   final sourceOfAcct = [
+    'Salary',
+   'Rental Income',
+    'Personal Savings',
+    'Family & Friends',
+     'Dividends',
+     'Commissions',
+     'Business Proceeds',
+     'Other'
+  ];
+
+
+
+   final monthlyIncomeList = [
+    '< GHS 1,000.00',
+   '< GHS 1,001.00 - 5,000.00',
+    '< GHS 5,001.00 – 10,000.00',
+    '> GHS 10,000.00',
+  ];
+
+
+  final noOfTransaction = [
+   "0 - 10","11 - 25","26 - 50","> 50"
+  ];
+
+  final amountOfTransaction = [
+   "0 - 2000","2001 - 10000","10001 - 20000","above 20000"
+  ];
+
 
 const COUNTRY_LIST = [
   "GHANA",

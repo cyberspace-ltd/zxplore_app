@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 import 'package:location/location.dart';
 import 'package:zxplore_app/apis/zenithbank_api.dart';
 import 'package:zxplore_app/blocs/provider.dart';
@@ -10,10 +11,12 @@ import 'package:zxplore_app/data/entities/account_class_entity.dart';
 import 'package:zxplore_app/data/entities/offline_form_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
+import 'package:zxplore_app/models/account_purposes.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
 import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/models/place_prediction.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
+import 'package:zxplore_app/models/transaction_type.dart';
 import 'package:zxplore_app/models/verify_id_response.dart';
 import 'package:zxplore_app/repositories/accounts_repository.dart';
 import 'package:zxplore_app/utils/const.dart';
@@ -58,6 +61,50 @@ class AccountFormBloc extends BlocBase with Validators {
   final _tinController = BehaviorSubject<String?>();
 
   final _titleController = BehaviorSubject<String?>();
+  
+  final _purposeOfAcctController = BehaviorSubject<List<String>>();
+
+  final _anticipatedNoTranController = BehaviorSubject<String?>();
+  final _anticipatedAmountController = BehaviorSubject<String?>();
+
+    final _anticipatedWithdrawTranController = BehaviorSubject<String?>();
+  final _anticipatedAmountWithdrawController = BehaviorSubject<String?>();
+
+// Purpose of account
+  final _salaryProcessingController = BehaviorSubject<bool?>();
+  final _bankingServiceController = BehaviorSubject<bool?>();
+  final _businessController = BehaviorSubject<bool?>();
+  final _singleTransactionController = BehaviorSubject<bool?>();
+  final _safeKeepingController = BehaviorSubject<bool?>();
+  final _savingAndInvestmentController = BehaviorSubject<bool?>();
+  final _receiptController = BehaviorSubject<bool?>();
+  final _othersController = BehaviorSubject<bool?>();
+  final othersPurposeController = BehaviorSubject<String?>();
+
+// Source of funds
+  final _salaryController = BehaviorSubject<bool?>();
+  final _rentalIncomeController = BehaviorSubject<bool?>();
+  final _personalSavingController = BehaviorSubject<bool?>();
+  final _familyFriendController = BehaviorSubject<bool?>();
+  final _dividendsController = BehaviorSubject<bool?>();
+  final _commissionController = BehaviorSubject<bool?>();
+  final _businessProceedController = BehaviorSubject<bool?>();
+  final _otherSourceController = BehaviorSubject<bool?>();
+  final enterOtherSourceController = BehaviorSubject<String?>();
+
+   final _showOtherOccupationController = BehaviorSubject<bool?>();
+
+
+  // Edit form
+   final _editableFormController = BehaviorSubject<bool?>();
+  
+
+    final _employmentTypeController = BehaviorSubject<String?>();
+
+     final _monthlyIncomeController = BehaviorSubject<String?>();
+     final _sourceOfFundController = BehaviorSubject<List<String>>();
+
+  final _transactionTypeController = BehaviorSubject<String?>();
 
   final _surnameController = BehaviorSubject<String?>();
 
@@ -69,7 +116,7 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final _dateOfBirthController = BehaviorSubject<String?>();
 
-//  final _stateOfOriginController = BehaviorSubject<String>();
+  final _homeTownController = BehaviorSubject<String?>();
   final _placeOfBirthController = BehaviorSubject<String?>();
 
   final _countryOfOriginController = BehaviorSubject<String?>();
@@ -86,6 +133,11 @@ class AccountFormBloc extends BlocBase with Validators {
   final _phoneNumberController = BehaviorSubject<String?>();
 
   final _nextOfKinController = BehaviorSubject<String?>();
+  final _nextOfKinPhoneController = BehaviorSubject<String?>();
+  final _nextOfKinRelationshipController = BehaviorSubject<String?>();
+  final _nextOfKinGenderController = BehaviorSubject<String?>();
+
+  
 
   final _address1Controller = BehaviorSubject<String?>();
 
@@ -247,6 +299,56 @@ String? bvv(){
 // validateBvn
   Stream<String?> get title => _titleController.stream.transform(validateTitle);
 
+  Stream<List<String>> get purposeAcct => _purposeOfAcctController.stream;
+
+  Stream<String?> get anticipatedNoTran => _anticipatedNoTranController.stream;
+  Stream<String?> get anticipatedAmountTran => _anticipatedAmountController.stream;
+
+  Stream<String?> get anticipatedNoWithdraw => _anticipatedWithdrawTranController.stream;
+  Stream<String?> get anticipatedAmountWithdraw => _anticipatedAmountWithdrawController.stream;
+
+
+  // Purpose of account
+  Stream<bool?> get salaryProcessing => _salaryProcessingController.stream;
+  Stream<bool?> get bankingService => _bankingServiceController.stream;
+  Stream<bool?> get business => _businessController.stream;
+  Stream<bool?> get singleTransaction => _singleTransactionController.stream;
+  Stream<bool?> get safeKeeping => _safeKeepingController.stream;
+  Stream<bool?> get savingAndInvestment => _savingAndInvestmentController.stream;
+  Stream<bool?> get receipt => _receiptController.stream;
+  Stream<bool?> get others => _othersController.stream;
+   Stream<String?> get othersPurpose => othersPurposeController.stream;
+
+  // Source of funds
+
+  Stream<bool?> get salary => _salaryController.stream;
+  Stream<bool?> get rentalIncome => _rentalIncomeController.stream;
+  Stream<bool?> get personalSaving => _personalSavingController.stream;
+  Stream<bool?> get familyFriend => _familyFriendController.stream;
+  Stream<bool?> get dividends => _dividendsController.stream;
+  Stream<bool?> get commission => _commissionController.stream;
+  Stream<bool?> get businessProceed => _businessProceedController.stream;
+  Stream<bool?> get otherSource => _otherSourceController.stream;
+
+   Stream<String?> get enteredOtherSource => enterOtherSourceController.stream;
+
+ // Stream<String?> get otherspurpose => othersPurposeController.stream;
+
+  Stream<String?> get employmentType => _employmentTypeController.stream;
+
+  Stream<String?> get monthlyIncome => _monthlyIncomeController.stream;
+ // Stream<List<String>> get sourceOfFund => _sourceOfFundController.stream;
+  
+  //.transform(validateAccountPurpose);
+
+  Stream<String?> get transactionType => _transactionTypeController.stream.transform(validateTitle);
+
+    Stream<bool?> get formIsEditable => _editableFormController.stream;
+
+  
+  
+  
+
   Stream<String?> get surname =>
       _surnameController.stream.transform(validateSurname);
 
@@ -265,6 +367,9 @@ String? bvv(){
   Stream<String?> get placeOfBirth =>
       _placeOfBirthController.stream.transform(validatePlaceOfBirth);
 
+    Stream<String?> get homeTown =>
+      _homeTownController.stream.transform(validatePlaceOfBirth);
+
   Stream<String?> get mmda => _mmdaController.stream.transform(validateMMDA);
 
   Stream<String?> get countryOfOrigin =>
@@ -280,6 +385,17 @@ String? bvv(){
 
   Stream<String?> get nextOfKin =>
       _nextOfKinController.stream.transform(validateNextOfKin);
+
+   Stream<String?> get nextOfKinPhone =>
+      _nextOfKinPhoneController.stream.transform(validatePhoneNumber);    
+
+   Stream<String?> get nextOfKinRelationShip =>
+      _nextOfKinRelationshipController.stream.transform(validateNextOfKin); 
+
+   Stream<String?> get nextOfKinGender =>
+      _nextOfKinGenderController.stream.transform(validateNextOfKin);   
+
+
 
   Stream<String?> get email => _emailController.stream.transform(validateEmail);
 
@@ -448,6 +564,91 @@ String? bvv(){
 
   Function(String?) get changeTitle => _titleController.sink.add;
 
+
+  List<String>? _purposeOfAcct;
+   List<String>? get purposeOfAcct => _purposeOfAcct;
+
+   bool? formStatus;
+   bool? get getFormStatus => formStatus;
+
+  void setChangeOtherOccupation(bool otherOccup){
+    _showOtherOccupationController.sink.add(otherOccup);
+  }
+  Stream<bool?> getChangeOtherOccupation(){
+    return _showOtherOccupationController.stream;
+  }
+
+  void setPurposeOfAcct(List<String> list) {
+    _purposeOfAcctController.sink.add(list);
+  }
+
+  void setAnticipatedNoTransaction(String list) {
+    _anticipatedNoTranController.sink.add(list);
+  }
+  void setAnticipatedAmountTransaction(String list) {
+    _anticipatedAmountController.sink.add(list);
+  }
+
+ Function(String?) get setAnticipatedNoWithdraw => _anticipatedWithdrawTranController.sink.add;
+  Function(String?) get setAnticipatedAmountWithdraw => _anticipatedAmountWithdrawController.sink.add;
+
+
+
+   void setEmploymentType(String list) {
+    _employmentTypeController.sink.add(list);
+  }
+
+   void setFormStatus(bool? list) {
+    _editableFormController.sink.add(list);
+  }
+
+  bool? getFormStatusBeforeSubmission(){
+   return  _editableFormController.valueOrNull;
+  }
+  
+  
+ // Function(String?) get setEmploymentType => _employmentTypeController.sink.add;
+
+   void setMonthlyIncome(String list) {
+    _monthlyIncomeController.sink.add(list);
+  }
+   void setSourceOfFund(List<String> list) {
+    _sourceOfFundController.sink.add(list);
+  }
+   // Purpose of account
+   Function(bool?) get changeSalaryProcessing => _salaryProcessingController.sink.add;
+   Function(bool?) get changeBankingService => _bankingServiceController.sink.add;
+   Function(bool?) get changeBusiness => _businessController.sink.add;
+   Function(bool?) get changeSingleTransaction => _singleTransactionController.sink.add;
+   Function(bool?) get changeSafeKeeping => _safeKeepingController.sink.add;
+   Function(bool?) get changeSavingAndInvestment => _savingAndInvestmentController.sink.add;
+   Function(bool?) get changeReceipt => _receiptController.sink.add;
+   Function(bool?) get changeOthers => _othersController.sink.add;
+   Function(String?) get changeOthersPurpose => othersPurposeController.sink.add;
+
+   // Source of funds
+  Function(bool?) get changeSalary => _salaryController.sink.add;
+   Function(bool?) get changeRentalIncome => _rentalIncomeController.sink.add;
+   Function(bool?) get changePersonalSaving => _personalSavingController.sink.add;
+   Function(bool?) get changeFamilyFriend => _familyFriendController.sink.add;
+   Function(bool?) get changeDividends => _dividendsController.sink.add;
+   Function(bool?) get changeCommission => _commissionController.sink.add;
+   Function(bool?) get changeBusinessProceed => _businessProceedController.sink.add;
+   Function(bool?) get changeOtherSource => _otherSourceController.sink.add;
+
+
+  
+
+   Function(String?) get changeEnterOtherSource => enterOtherSourceController.sink.add;
+
+
+
+
+
+
+
+  Function(String?) get changeTransactionType => _transactionTypeController.sink.add;
+
   Function(String?) get changeSurname => _surnameController.sink.add;
 
   Function(String?) get changeFirstName => _firstNameController.sink.add;
@@ -461,12 +662,19 @@ String? bvv(){
 
   Function(String?) get changePlaceOfBirth => _placeOfBirthController.sink.add;
 
+  Function(String?) get changeHomeTown => _homeTownController.sink.add;
+
+  
+
   Function(String?) get changeMMDA => _mmdaController.sink.add;
+
+
 
  // Function(String?) get changeCountryOfOrigin =>
    //   _countryOfOriginController.sink.add;
 String? countryOfResident;
-      changeCountryOfOrigin(String? value) {
+      
+  changeCountryOfOrigin(String? value) {
    // _idTypeController.sink.add(value);
    countryOfResident = value;
    _countryOfOriginController.sink.add(value);
@@ -480,6 +688,9 @@ String? countryOfResident;
   Function(String?) get changePhone => _phoneNumberController.sink.add;
 
   Function(String?) get changeNextOfKin => _nextOfKinController.sink.add;
+   Function(String?) get changeNextOfKinPhone => _nextOfKinPhoneController.sink.add;
+    Function(String?) get changeNextOfKinRelationShip => _nextOfKinRelationshipController.sink.add;
+     Function(String?) get changeNextOfKinGender => _nextOfKinGenderController.sink.add;
 
   Function(String?) get changeAddress1 => _address1Controller.sink.add;
 
@@ -899,6 +1110,8 @@ String? countryOfResident;
     }
   }
 
+
+
   submit() async {
 
     var validRefenceId = _referenceIdController.valueOrNull;
@@ -943,7 +1156,18 @@ String? countryOfResident;
     double validLongitude = double.parse(_longitudeController.hasValue? _longitudeController.value: "0");
     
     final validPhone = _phoneNumberController.valueOrNull;
-    final validNextOfKin = _nextOfKinController.valueOrNull;
+
+       final validNextOfKin = _nextOfKinController.valueOrNull;
+    final validNextOfKinPhone = _nextOfKinPhoneController.valueOrNull;
+     final validNextOfKinRelationship = _nextOfKinRelationshipController.valueOrNull;
+      final nextOfKinGender = _nextOfKinGenderController.valueOrNull;
+      
+
+      final monthlyIncome = _monthlyIncomeController.valueOrNull;
+      final homeTown = _homeTownController.valueOrNull;
+  
+
+
     final validAddress1 = _address1Controller.valueOrNull;
     var validAddress2 = _address2Controller.valueOrNull;
     final validCountryOfResidence =
@@ -955,8 +1179,9 @@ String? countryOfResident;
     final validCityOfResidence = _cityOfResidenceController.valueOrNull;
     final validGender = _genderController.valueOrNull;
     var validOccupation = occupationController.valueOrNull;
-    if (validOccupation == "OTHERS") {
-      validOccupation = othersOccupationController.valueOrNull;
+    var validOtherOccupation = othersOccupationController.valueOrNull;
+    if (validOccupation == "OTHER (PLEASE SPECIFY)") {
+      validOccupation = validOccupation! +"-"+ (validOtherOccupation ?? " ");
     }
     final validMaritalStatus = _maritalStatusController.valueOrNull;
 
@@ -1032,10 +1257,7 @@ String? countryOfResident;
         _uploadUtilityBillController.valueOrNull;
 
      final validUploadResidentPermitInBase64 =
-        _uploadResidentPermitController.valueOrNull;    
-
-
-        
+        _uploadResidentPermitController.valueOrNull;       
 
     final validUploadSignatureInBase64 = _uploadSignatureController.valueOrNull;
 
@@ -1045,6 +1267,22 @@ String? countryOfResident;
           .addError("You have not selected an account type.");
       return;
     }
+
+        if (monthlyIncome == null) {
+      _accountTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected an monthly income");
+      return;
+    }
+
+        if (homeTown == null) {
+      _homeTownController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not entered home town");
+      return;
+    }
+
+
 
     // ACCOUNT HOLDER TYPE DEFAULTS TO 'INDIVIDUAL'
     // if (validAccountHolderType == null) {
@@ -1086,9 +1324,156 @@ String? countryOfResident;
     if (validSurname == null) {
       _surnameController.addError("Field is required");
       _subjectSaveAccountResponse.addError("You have not filled in a surname");
-
       return;
     }
+
+
+
+
+  final anticipatedNoDepositTran = _anticipatedNoTranController.valueOrNull;
+
+    if (anticipatedNoDepositTran == null) {
+      _anticipatedNoTranController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled in a Anticipated number of deposit transaction");
+      return;
+    }
+  final anticipatedAmountDepositTran = _anticipatedAmountController.valueOrNull;
+
+ if (anticipatedAmountDepositTran == null) {
+      _anticipatedAmountController.addError("Field is required");
+      _anticipatedAmountController.addError("You have not filled in a Anticipated amount of deposit transaction");
+      return;
+    }
+
+  final anticipatedNoWithdraw = _anticipatedWithdrawTranController.valueOrNull;
+
+  if (anticipatedNoWithdraw == null) {
+      _anticipatedWithdrawTranController.addError("Field is required");
+      _anticipatedWithdrawTranController.addError("You have not filled in a Anticipated number of withdrawal transaction");
+      return;
+    }
+  final anticipatedAmountWithdraw = _anticipatedAmountWithdrawController.valueOrNull;
+
+if (anticipatedAmountWithdraw == null) {
+      _anticipatedAmountWithdrawController.addError("Field is required");
+      _anticipatedAmountWithdrawController.addError("You have not filled in a Anticipated amount of deposit transaction");
+      return;
+    }
+
+  List<TransactionTypes> transactionTypesList = [];
+    TransactionTypes transactionTypes = TransactionTypes(
+       transactionType : "Deposit",
+       transactionCount : anticipatedNoDepositTran.toString(),
+       expectedAmount: anticipatedAmountDepositTran.toString(),
+    );
+transactionTypesList.add(transactionTypes);
+     TransactionTypes withdrawalTransactionTypes = TransactionTypes(
+       transactionType : "Withdraw",
+       transactionCount : anticipatedNoWithdraw.toString(),
+       expectedAmount: anticipatedAmountWithdraw.toString(),
+    );
+
+    transactionTypesList.add(withdrawalTransactionTypes);
+
+// Account Purposes
+
+ final salaryProcessing = _salaryProcessingController.valueOrNull;
+ final bankingService = _bankingServiceController.valueOrNull;
+ final business = _businessController.valueOrNull;
+ final singleTransaction = _singleTransactionController.valueOrNull;
+ final safeKeeping = _safeKeepingController.valueOrNull;
+ final savingAndInvestment = _savingAndInvestmentController.valueOrNull;
+ final receipt = _receiptController.valueOrNull;
+  final others = _othersController.valueOrNull;
+ final othersPurpose = othersPurposeController.valueOrNull;
+ 
+ List<AccountPurposes> accountPurposeList = [];
+if(salaryProcessing != null && salaryProcessing == true){
+  accountPurposeList.add(AccountPurposes("Salary processing"));
+}
+if(bankingService != null && bankingService == true){
+  accountPurposeList.add(AccountPurposes("Access to banking services"));
+}
+if(business != null && business == true){
+  accountPurposeList.add(AccountPurposes("Business/Transactional"));
+}
+if(singleTransaction != null && singleTransaction == true){
+  accountPurposeList.add(AccountPurposes("Facilitation of a single transaction"));
+}
+if(safeKeeping != null && safeKeeping == true){
+  accountPurposeList.add(AccountPurposes("Security/Safekeeping"));
+}
+if(savingAndInvestment != null && savingAndInvestment == true){
+  accountPurposeList.add(AccountPurposes("Savings & Investment"));
+}
+if(receipt != null && receipt == true){
+  accountPurposeList.add(AccountPurposes("Receipt of inflows for Personal upkeep"));
+}
+
+if(others != null && others == true){
+  accountPurposeList.add(AccountPurposes("Other"));
+}
+
+if(others != null && others == true){
+  if(othersPurpose != null){
+    accountPurposeList.add(AccountPurposes("Other-$othersPurpose"));
+  }
+
+}
+
+
+
+ 
+// Source of funds
+
+ final salary = _salaryController.valueOrNull;
+ final rental = _rentalIncomeController.valueOrNull;
+ final personalS = _personalSavingController.valueOrNull;
+ final familyFriend = _familyFriendController.valueOrNull;
+ final dividends = _dividendsController.valueOrNull;
+ final commission = _commissionController.valueOrNull;
+ final businessProceed = _businessProceedController.valueOrNull;
+  final otherSource = _otherSourceController.valueOrNull;
+ final enterOther = enterOtherSourceController.valueOrNull;
+
+ final employmentType = _employmentTypeController.valueOrNull;
+ 
+ List<SourceOfFundsObj> sourceList = [];
+if(salary != null && salary == true){
+  sourceList.add(SourceOfFundsObj("Salary"));
+}
+if(rental != null && rental == true){
+  sourceList.add(SourceOfFundsObj("Rental Income"));
+}
+if(personalS != null && personalS == true){
+  sourceList.add(SourceOfFundsObj("Personal Savings"));
+}
+if(familyFriend != null && familyFriend == true){
+  sourceList.add(SourceOfFundsObj("Family & Friends"));
+}
+if(dividends != null && dividends == true){
+  sourceList.add(SourceOfFundsObj("Dividends"));
+}
+if(commission != null && commission == true){
+  sourceList.add(SourceOfFundsObj("Commissions"));
+}
+if(businessProceed != null && businessProceed == true){
+  sourceList.add(SourceOfFundsObj("Business Proceeds"));
+}
+
+if(otherSource != null && otherSource == true){
+  sourceList.add(SourceOfFundsObj("Other"));
+}
+
+
+if(otherSource != null && otherSource == true){
+  if(enterOther != null){
+    sourceList.add(SourceOfFundsObj("Other-$enterOther"));
+  }
+  
+}
+
+
     RegExp regex = new RegExp(pattern as String);
 
     if (regex.hasMatch(validSurname)) {
@@ -1189,10 +1574,44 @@ String? countryOfResident;
       return;
     }
 
+      if (validNextOfKinPhone == null) {
+      _nextOfKinPhoneController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin phone number");
+
+      return;
+    }
+
+      if (validNextOfKinRelationship == null) {
+      _nextOfKinRelationshipController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin relationship");
+
+      return;
+    }
+
+      if (nextOfKinGender == null) {
+      _nextOfKinGenderController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin gender");
+
+      return;
+    }
+
+/*
     if (regex.hasMatch(validNextOfKin)) {
       _nextOfKinController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not filled in a valid next of kin");
+
+      return;
+    }
+    */
+
+    if(employmentType == null){
+       _employmentTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled a employment type");
 
       return;
     }
@@ -1276,11 +1695,6 @@ String? countryOfResident;
     }
 
     if (validIdPlaceOfIssue == null && validAccountCategory != easy_classic) {
-      // _idPlaceOfIssueController.addError("Field is required");
-      // _subjectSaveAccountResponse
-      //     .addError("You have not selected a valid id place of issue");
-      // return;
-    //  validIdPlaceOfIssue = countryIDIssuer;
 
     } else if (validIdPlaceOfIssue == null &&
         validAccountCategory == easy_classic) {
@@ -1301,19 +1715,6 @@ String? countryOfResident;
 
       return;
     }
-//    if (validIdIssueDate == null && validAccountCategory != easy_classic  &&
-//        (validIdType != STUDENT_ID ||
-//        validIdType != OTHERS ||
-//        validIdType != SSNIT_CARD)) {
-//      _idIssueDateController.addError("Field is required");
-//      _subjectSaveAccountResponse
-//          .addError("You have not selected a valid issue date");
-//
-//      return;
-//    } else if (validIdIssueDate == null &&
-//        validAccountCategory == easy_classic) {
-//      validIdIssueDate = "";
-//    }
 
     if (validIdExpiryDate == null &&
         (validIdType == STUDENT_ID ||
@@ -1493,8 +1894,15 @@ String? countryOfResident;
       bvn: (validTIN.isNotEmpty) ? CryptoHelper.encrypt(validTIN) : '',
       maritalStatus: validMaritalStatus,
       nextOfKin: CryptoHelper.encrypt(validNextOfKin),
+      nextOfKinPhone: CryptoHelper.encrypt(validNextOfKinPhone),
+      nextOfKinGender: nextOfKinGender,
+      nextOfKinRelationship: CryptoHelper.encrypt(validNextOfKinRelationship),
+      homeTown : homeTown, // temporary property
+     // temporary property
+    //   attachments: null
       attachments: _attachments,
     );
+
 
     List<SignatoryDetail> _signatoryDetails = [];
     _signatoryDetails.add(_signatoryDetail);
@@ -1543,8 +1951,13 @@ String? countryOfResident;
           isCardRequest == "Y" ? validPreferredNameOnCard : null,
       latitude: validLatitude,
       longitude: validLongitude,
+      employmentTypes: employmentType,
+       monthlyIncome : monthlyIncome,  
+      accountPurposes: accountPurposeList,
+      sourceOfFunds: sourceList,
+      transactionTypes: transactionTypesList
     );
-
+   // String bdh= _accountForm.toJson().toString();
     String json = jsonEncode(_accountForm);
 
     sendAccountsToApi(json);
@@ -1597,10 +2010,12 @@ String? countryOfResident;
       SaveAccountResponse response =
           await _accountsRepository.attemptSubmitAccountToApi(encodedAccount);
 
+
       var offlineId = _idController.valueOrNull;
       if (offlineId != null) {
         await _accountsRepository.deleteOfflineAccount(offlineId);
       }
+      
       _subjectSaveAccountResponse.sink.add(response);
     } catch (error) {
       _subjectSaveAccountResponse.sink.addError(error);
@@ -1798,19 +2213,63 @@ String? countryOfResident;
     _accountCategoryController.close();
     _tinController.close();
     _titleController.close();
+    _purposeOfAcctController.close();
+    _transactionTypeController.close();
+
+    _monthlyIncomeController.close();
+    _sourceOfFundController.close();
+    _showOtherOccupationController.close();
+    _editableFormController.close();
+    
+     _anticipatedNoTranController.close();
+     _employmentTypeController.close();
+     _anticipatedWithdrawTranController.close();
+     _anticipatedAmountWithdrawController.close();
+
     _surnameController.close();
     _firstNameController.close();
     _otherNameController.close();
     _mothersMaidenNameController.close();
     _dateOfBirthController.close();
     _placeOfBirthController.close();
+    _homeTownController.close();
     _mmdaController.close();
     _countryOfOriginController.close();
     _countryOfIDCountryIssueController.close();
 
+
+
+   _anticipatedAmountController.close();
+
+   _salaryProcessingController.close();
+   _rentalIncomeController.close();
+   _personalSavingController.close();
+   _familyFriendController.close();
+ _dividendsController.close();
+   _commissionController.close();
+   _businessProceedController.close();
+   _othersController.close();
+   othersPurposeController.close();
+_salaryProcessingController.close();
+  _businessController.close();
+   _singleTransactionController.close();
+   _safeKeepingController.close();
+   _savingAndInvestmentController.close();
+   _receiptController.close();
+  _salaryController.close();
+  _bankingServiceController.close();
+ _otherSourceController.close();
+  enterOtherSourceController.close();
+
+
     _emailController.close();
     _phoneNumberController.close();
     _nextOfKinController.close();
+    
+_nextOfKinRelationshipController.close();
+_nextOfKinPhoneController.close();
+_nextOfKinGenderController.close();
+
     _address1Controller.close();
     _subjectLocation.close();
     _latitudeController.close();
@@ -1871,6 +2330,9 @@ String? countryOfResident;
 
   PublishSubject<String> get subjectOfflineDetailsResponse =>
       _subjectOfflineDetailsResponse;
+
+
+
 
   getOfflineAccountDetailsByRefId(String? referenceId) async {
    
@@ -2211,6 +2673,52 @@ String? countryOfResident;
 //              accountResponse.data.signatoryDetails.first.middleName));
 //        }
 
+         if (accountResponse.data!.signatoryDetails?.first.nextOfKinPhone != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.nextOfKinPhone!.isNotEmpty) {
+
+            String dd = CryptoHelper.decrypt(accountResponse.data!.signatoryDetails!.first.nextOfKinPhone!);
+
+
+          _nextOfKinPhoneController.add(CryptoHelper.decrypt(
+              accountResponse.data!.signatoryDetails!.first.nextOfKinPhone!));
+        }
+
+        if (accountResponse.data!.signatoryDetails?.first.nextOfKinRelationship != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.nextOfKinRelationship!.isNotEmpty) {
+
+                   String dd = CryptoHelper.decrypt(accountResponse.data!.signatoryDetails!.first.nextOfKinRelationship!);
+
+          _nextOfKinRelationshipController.add(CryptoHelper.decrypt(
+              accountResponse.data!.signatoryDetails!.first.nextOfKinRelationship!));
+        }
+
+        if (accountResponse.data!.signatoryDetails?.first.nextOfKinGender != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.nextOfKinGender!.isNotEmpty) {
+          _nextOfKinGenderController.add(
+              accountResponse.data!.signatoryDetails!.first.nextOfKinGender!);
+        }
+
+
+
+          if (accountResponse.data!.monthlyIncome != null &&
+            accountResponse
+                .data!.monthlyIncome!.isNotEmpty) {
+          _monthlyIncomeController.add(
+              accountResponse.data!.monthlyIncome!);
+        }
+
+          if (accountResponse.data!.signatoryDetails?.first.homeTown != null &&
+            accountResponse
+                .data!.signatoryDetails!.first.homeTown!.isNotEmpty) {
+          _homeTownController.add(
+              accountResponse.data!.signatoryDetails!.first.homeTown!);
+        }
+
+
+
         if (accountResponse.data!.signatoryDetails?.first.motherMaidenName !=
                 null &&
             accountResponse
@@ -2252,8 +2760,6 @@ String? countryOfResident;
               .add(accountResponse.data!.signatoryDetails!.first.stateOfOrigin!);
         }
 
-
-
      //   _countryOfOriginController.add('GHANA');
 
         if (accountResponse.data!.countryOfOrigin != null &&
@@ -2262,10 +2768,6 @@ String? countryOfResident;
          countryOfResident = accountResponse.data!.countryOfOrigin;
           _countryOfOriginController.add(accountResponse.data!.countryOfOrigin);
         }
-
-
-
-        
 
         if (accountResponse.data!.signatoryDetails?.first.emailAddress !=
                 null &&
@@ -2278,6 +2780,8 @@ String? countryOfResident;
         if (accountResponse.data!.signatoryDetails?.first.phoneNumber != null &&
             accountResponse
                 .data!.signatoryDetails!.first.phoneNumber!.isNotEmpty) {
+
+                  String bgd = CryptoHelper.decrypt(accountResponse.data!.signatoryDetails!.first.phoneNumber!);
           _phoneNumberController.add(CryptoHelper.decrypt(
               accountResponse.data!.signatoryDetails!.first.phoneNumber!));
         }
@@ -2285,6 +2789,9 @@ String? countryOfResident;
         if (accountResponse.data!.signatoryDetails?.first.nextOfKin != null &&
             accountResponse
                 .data!.signatoryDetails!.first.nextOfKin!.isNotEmpty) {
+
+                    String ggds= CryptoHelper.decrypt(accountResponse.data!.signatoryDetails!.first.nextOfKin!);
+
           _nextOfKinController.add(CryptoHelper.decrypt(
               accountResponse.data!.signatoryDetails!.first.nextOfKin!));
         }
@@ -2312,8 +2819,6 @@ String? countryOfResident;
               .add(accountResponse.data!.signatoryDetails!.first.state);
         }
 
-
-
         if (accountResponse.data!.cardType != null &&
             accountResponse.data!.cardType!.isNotEmpty) {
           cardTypeController
@@ -2326,6 +2831,101 @@ String? countryOfResident;
               .add(accountResponse.data!.requestingBranch);
         }
 
+         if (accountResponse.data!.employmentTypes != null &&
+            accountResponse.data!.employmentTypes!.isNotEmpty) {
+          _employmentTypeController
+              .add(accountResponse.data!.employmentTypes);
+        }
+
+    List<AccountPurposes>? acctPurposes = accountResponse.data!.acctPurpose;
+            if(acctPurposes != null){
+            
+            for(AccountPurposes acct in acctPurposes){
+
+                switch(acct.accountPurpose!.toLowerCase()){
+
+                  case 'salary processing' : _salaryProcessingController.add(true);
+                                            break;
+                  case 'access to banking services' : _bankingServiceController.add(true);
+                                            break;
+                  case  'business/transactional' :  _businessController.add(true);
+                                            break;
+                  case 'facilitation of a single transaction' :  _singleTransactionController.add(true);
+                                            break;
+                  case 'security/safekeeping' :  _safeKeepingController.add(true);
+                                            break;
+                  case  'savings & investment' :  _savingAndInvestmentController.add(true);
+                                            break;
+                  case 'receipt of inflows for personal upkeep' :  _receiptController.add(true);
+                                            break;   
+                  case 'other' :  _othersController.add(true);
+                                            break ;                         
+                   default:   {
+                              if(acct.accountPurpose!.toLowerCase().contains("other-")){
+                                      List otherP=  acct.accountPurpose!.split('-');
+                                      othersPurposeController.add(otherP[1]);
+                              }
+                   }                                                                                                                           
+
+                }
+            }
+
+            }
+
+    List<SourceOfFundsObj>? sourceFunds = accountResponse.data!.sourceOfFunds;
+       if(sourceFunds != null){
+
+           for(SourceOfFundsObj srcF in sourceFunds){
+
+
+               switch(srcF.sourceOfFunds!.toLowerCase()){
+
+                  case 'salary' : _salaryController.add(true);
+                                            break;
+                  case 'rental income' : _rentalIncomeController.add(true);
+                                            break;
+                  case  'personal savings' :  _personalSavingController.add(true);
+                                            break;
+                  case 'family & friends' :  _familyFriendController.add(true);
+                                            break;
+                  case 'dividends' :  _dividendsController.add(true);
+                                            break;
+                  case  'commissions' :  _commissionController.add(true);
+                                            break;
+                  case 'business proceeds' :  _businessProceedController.add(true);
+                                            break;   
+                  case 'other' :  _otherSourceController.add(true);
+                                            break ;                         
+                   default:          
+                                {
+                              if(srcF.sourceOfFunds!.toLowerCase().contains("other-")){
+                                      List otherP=  srcF.sourceOfFunds!.split('-');
+                                      enterOtherSourceController.add(otherP[1]);
+                              }
+                   }                                                                                                                    
+
+                }
+
+
+           }
+            
+          }
+
+    List<TransactionTypes>? transTypes = accountResponse.data!.transTypes;
+    if(transTypes != null){
+
+            for(TransactionTypes trans in transTypes){
+
+                  if(trans.transactionType!.toLowerCase() == "deposit"){
+              _anticipatedNoTranController.add(trans.transactionCount);
+              _anticipatedAmountController.add(trans.expectedAmount);
+         }else{
+              _anticipatedWithdrawTranController.add(trans.transactionCount);
+              _anticipatedAmountWithdrawController.add(trans.expectedAmount);
+         }
+
+            }
+    }
            if (accountResponse.data!.destinationBranch != null &&
             accountResponse.data!.destinationBranch!.isNotEmpty) {
           _destinationBranchController
@@ -2354,9 +2954,22 @@ String? countryOfResident;
         if (accountResponse.data!.signatoryDetails?.first.occupation != null &&
             accountResponse
                 .data!.signatoryDetails!.first.occupation!.isNotEmpty) {
-          occupationController
+                  
+                  if(accountResponse.data!.signatoryDetails!.first.occupation!.contains("OTHER (PLEASE SPECIFY)")) {
+
+                      List<String> occupationList= accountResponse.data!.signatoryDetails!.first.occupation!.split("-");
+                             occupationController.add(occupationList[0]);
+                             if(occupationList.length>1){
+                             othersOccupationController.add(occupationList[1]);
+                             }
+
+                  } else{
+                          occupationController
               .add(accountResponse.data!.signatoryDetails!.first.occupation);
+                  }    
+        
         }
+   
         if (accountResponse.data!.signatoryDetails?.first.maritalStatus !=
                 null &&
             accountResponse
@@ -2531,6 +3144,17 @@ String? countryOfResident;
                   .data!.bankWalletRequest! ==
               "Y") {
             _isBankToWalletController.add(true);
+          }
+        }
+
+           if (accountResponse
+                    .data!.icardRequest !=
+                null &&
+            accountResponse.data!.icardRequest!.isNotEmpty) {
+          if (accountResponse
+                  .data!.icardRequest! ==
+              "Y") {
+            _isCardRequestController.add(true);
           }
         }
 

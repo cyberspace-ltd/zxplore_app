@@ -60,6 +60,15 @@ class Validators {
     }
   });
 
+    final validateAccountPurpose =
+      StreamTransformer<List<String>?, List<String> >.fromHandlers(handleData: (arg, sink) {
+    if (arg != null && arg.isNotEmpty && arg.length < 1) {
+      sink.add(arg);
+    } else {
+      sink.addError('Title is required');
+    }
+  });
+
   final validateSurname =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
     Pattern pattern = r'[!$₦/@#<>?":_`~;[\]\\|=+)(*&^%0-9]';

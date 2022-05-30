@@ -39,7 +39,7 @@ android {
 
     defaultConfig {
         applicationId "com.zenith.zxplore_app"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

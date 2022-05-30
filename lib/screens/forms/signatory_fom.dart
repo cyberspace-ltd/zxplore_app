@@ -31,6 +31,8 @@ class _SignatoryStepState extends State<SignatoryStep>
   bool isLoading = false;
   late bool _isButtonDisabled;
 
+  bool? editingForm;
+
   XFile? _imageFile;
   // ignore: unused_field
   String? _retrieveDataError;
@@ -51,6 +53,8 @@ class _SignatoryStepState extends State<SignatoryStep>
         _img = imageData.buffer.asByteData();
       });
     });
+ 
+    editingForm = accountFormBloc!.getFormStatusBeforeSubmission();
   }
 
   @override
@@ -118,6 +122,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                           child: Signature(
                             color: color,
                             key: _sign,
+                          //  backgroundPainter: CustomPainter(),
                             onSign: () {
                               // final sign = _sign.currentState;
                               setState(() {
@@ -264,7 +269,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                 ),
                 onPressed: (snapshot.hasData &&
                         isLoading == false &&
-                        _isButtonDisabled == false)
+                        (_isButtonDisabled == false || (editingForm ?? false)))
                     ? submitAccount
                     : null,
                 // onPressed: _isButtonDisabled ? null : submitAccount,

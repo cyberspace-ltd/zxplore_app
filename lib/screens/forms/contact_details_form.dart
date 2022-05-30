@@ -9,7 +9,6 @@ import 'package:zxplore_app/blocs/countries_bloc.dart';
 import 'package:zxplore_app/blocs/occupations_bloc.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
-import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/data/entities/occupation_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/models/place_prediction.dart';
@@ -55,11 +54,11 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   final _genders = ['MALE', 'FEMALE'];
 
-  String ? test;
+  String? test;
 
   final _maritalStatus = ['SINGLE', 'MARRIED', 'SEPARATED', 'DIVORCED'];
 
-   List<Prediction> places = [];
+  List<Prediction> places = [];
 
   final _country = [
     "GHANA",
@@ -89,38 +88,43 @@ class _ContactDetailsState extends State<ContactDetailsStep>
   TextEditingController? _address1Controller;
   TextEditingController? _bottomSheetAddress1Controller;
 
+  TextEditingController? _nextOfKinPhoneController;
+  TextEditingController? _nextOfKinRelationshipController;
+  //    TextEditingController? _nextOfKinGenderController;
+
   TextEditingController? _address2Controller;
   TextEditingController? _cityOfResidenceController;
   late TextEditingController _occupationCategoryController;
   @override
   void initState() {
     super.initState();
-    test ="USA";
+    test = "USA";
     _countriesBloc = CountriesBloc();
     _occupationsBloc = OccupationsBloc();
     statesBloc = StatesBloc();
     statesBloc.getStates();
     _citiesBloc = CitiesBloc();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
-  
-
 
     _occupationsBloc.getOccupations();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
     _nextOfKinController = TextEditingController();
 
+    _nextOfKinPhoneController = TextEditingController();
+    _nextOfKinRelationshipController = TextEditingController();
+    //  _nextOfKinGenderController = TextEditingController();
+
     _address1Controller = TextEditingController();
     _bottomSheetAddress1Controller = TextEditingController();
-  //  _bottomSheetAddress1Controller!.addListener(placePrediction);
+    //  _bottomSheetAddress1Controller!.addListener(placePrediction);
 
     _address2Controller = TextEditingController();
     _cityOfResidenceController = TextEditingController();
     _occupationCategoryController = TextEditingController();
 
-      addressStream = accountFormBloc!.address1;
-      cityOfResidenceStream = accountFormBloc!.cityOfResidence;
-
+    addressStream = accountFormBloc!.address1;
+    cityOfResidenceStream = accountFormBloc!.cityOfResidence;
   }
 
   @override
@@ -132,6 +136,11 @@ class _ContactDetailsState extends State<ContactDetailsStep>
     _emailController!.dispose();
     _phoneController!.dispose();
     _nextOfKinController!.dispose();
+
+    _nextOfKinPhoneController!.dispose();
+    _nextOfKinRelationshipController!.dispose();
+    //    _nextOfKinGenderController!.dispose();
+
     _address1Controller!.dispose();
     _address2Controller!.dispose();
     _cityOfResidenceController!.dispose();
@@ -172,9 +181,11 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         stream: accountFormBloc!.phoneNumber,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _phoneController!.value = TextEditingValue(
-                text: snapshot.data.toString(),
-                selection: _phoneController!.selection);
+            if (_phoneController!.text != snapshot.data.toString()) {
+              _phoneController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _phoneController!.selection);
+            }
           }
           return TextField(
             controller: _phoneController,
@@ -197,9 +208,11 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         stream: accountFormBloc!.nextOfKin,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            _nextOfKinController!.value = TextEditingValue(
-                text: snapshot.data.toString(),
-                selection: _nextOfKinController!.selection);
+            if (_nextOfKinController!.text != snapshot.data.toString()) {
+              _nextOfKinController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _nextOfKinController!.selection);
+            }
           }
 
           return TextField(
@@ -211,7 +224,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
-              labelText: 'Next of Kin',
+              labelText: 'Name',
               helperText: '* Required',
               errorText: snapshot.error as String?,
             ),
@@ -219,47 +232,109 @@ class _ContactDetailsState extends State<ContactDetailsStep>
         });
   }
 
+  Widget _nextOfKinPhoneTextField() {
+    return StreamBuilder<String?>(
+        stream: accountFormBloc!.nextOfKinPhone,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (_nextOfKinPhoneController!.text != snapshot.data.toString()) {
+              _nextOfKinPhoneController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _nextOfKinPhoneController!.selection);
+            }
+          }
+          return TextField(
+            controller: _nextOfKinPhoneController,
+            textCapitalization: TextCapitalization.characters,
+            keyboardType: TextInputType.phone,
+            onChanged: accountFormBloc!.changeNextOfKinPhone,
+            maxLength: 50,
+            maxLines: null,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            decoration: InputDecoration(
+              prefixText: '+233',
+              labelText: 'Next of Kin Phone Number',
+              helperText: '* Required',
+              errorText: snapshot.error as String?,
+            ),
+          );
+        });
+  }
 
-var addressStream;
+  Widget _nextOfKinRelationShipTextField() {
+    return StreamBuilder<String?>(
+        stream: accountFormBloc!.nextOfKinRelationShip,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (_nextOfKinRelationshipController!.text !=
+                snapshot.data.toString()) {
+              _nextOfKinRelationshipController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _nextOfKinRelationshipController!.selection);
+            }
+          }
+
+          return TextField(
+            controller: _nextOfKinRelationshipController,
+            textCapitalization: TextCapitalization.characters,
+            keyboardType: TextInputType.text,
+            onChanged: accountFormBloc!.changeNextOfKinRelationShip,
+            maxLength: 50,
+            maxLines: null,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            decoration: InputDecoration(
+              labelText: 'Next of Kin - Relationship',
+              helperText: '* Required',
+              errorText: snapshot.error as String?,
+            ),
+          );
+        });
+  }
+
+  var addressStream;
   Widget _address1TextField(BuildContext buildContext) {
     return StreamBuilder<String?>(
         stream: addressStream,
-       // accountFormBloc!.address1,
+        // accountFormBloc!.address1,
         builder: (context, snapshot) {
-          
           if (snapshot.hasData) {
-     
-              if( _address1Controller!.text != snapshot.data.toString()){
-                  String value = snapshot.data.toString();
-                _address1Controller!.text = value;
-             _address1Controller!.selection = _address1Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
+            if (_address1Controller!.text != snapshot.data.toString()) {
+              String? value;
+              if (snapshot.data.toString().length < 31) {
+                value = snapshot.data.toString();
+              } else {
+                value = snapshot.data.toString().substring(0, 30);
+              }
 
-                /*
+              _address1Controller!.text = value;
+              _address1Controller!.selection = _address1Controller!.selection
+                  .copyWith(
+                      baseOffset: value.length, extentOffset: value.length);
+
+              /*
                  _address1Controller!.value = TextEditingValue(
                 text: snapshot.data.toString(),
                 selection: _address1Controller!.selection);
                 */
-              }
-           
-      
+            }
           }
-          
+
           return TextField(
             controller: _address1Controller,
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.multiline,
-           // onChanged: accountFormBloc!.changeAddress1,
-           
-           onChanged: (value){
-            accountFormBloc!.changeAddress1(value);
-          //   _address1Controller!.text = value;
-            // _address1Controller!.selection = _address1Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
-           },
-           
+            // onChanged: accountFormBloc!.changeAddress1,
+
+            onChanged: (value) {
+              accountFormBloc!.changeAddress1(value);
+              //   _address1Controller!.text = value;
+              // _address1Controller!.selection = _address1Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
+            },
+
             maxLength: 30,
             maxLines: null,
-            onTap: (){
-              if(!bottomSheetIsOpen){
+            onTap: () {
+              if (!bottomSheetIsOpen) {
                 showAddresses(buildContext);
               }
             },
@@ -273,37 +348,36 @@ var addressStream;
         });
   }
 
-int s1=0;
+  int s1 = 0;
   Widget _address2TextField() {
     return StreamBuilder<String?>(
         stream: accountFormBloc!.address2,
         builder: (context, snapshot) {
-          
           if (snapshot.hasData) {
             s1++;
-            if(s1<4){
-            _address2Controller!.value = TextEditingValue(
-                text: snapshot.data.toString(),
-                selection: _address2Controller!.selection);
-          
+            if (s1 < 4) {
+              _address2Controller!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _address2Controller!.selection);
             }
             //   String value = snapshot.data.toString();
             //  _address2Controller!.text = value;
-          //  _address2Controller!.selection = _address2Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
-         
+            //  _address2Controller!.selection = _address2Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
 
           }
-          
+
           return TextField(
             controller: _address2Controller,
             textCapitalization: TextCapitalization.characters,
             keyboardType: TextInputType.multiline,
-         //   onChanged: accountFormBloc!.changeAddress2,
-          onChanged: (value){
-            accountFormBloc!.changeAddress2(value);
-            _address2Controller!.text = value;
-             _address2Controller!.selection = _address2Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
-           },
+            //   onChanged: accountFormBloc!.changeAddress2,
+            onChanged: (value) {
+              accountFormBloc!.changeAddress2(value);
+              _address2Controller!.text = value;
+              _address2Controller!.selection = _address2Controller!.selection
+                  .copyWith(
+                      baseOffset: value.length, extentOffset: value.length);
+            },
             maxLength: 40,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
@@ -313,9 +387,6 @@ int s1=0;
           );
         });
   }
-
-
-
 
   Widget _countryOfResidenceTextField() {
     return StreamBuilder<String?>(
@@ -456,11 +527,13 @@ int s1=0;
                         errorText: itemSnapshot.error as String?),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
-                        value:   _getAccountTypeValue(itemSnapshot, listSnapshot),
+                        value: _getAccountTypeValue(itemSnapshot, listSnapshot),
                         isExpanded: true,
                         isDense: true,
                         items: listSnapshot.hasData
-                            ? listSnapshot.data!.toSet().toList()
+                            ? listSnapshot.data!
+                                .toSet()
+                                .toList()
                                 .where((x) => x.stateName!
                                     .toUpperCase()
                                     .startsWith(_selectedAccFilter))
@@ -490,18 +563,14 @@ int s1=0;
     );
   }
 
-
-List<StateEntity> getStateList(List<StateEntity> list, String googlePlace){
-StateEntity state = StateEntity(mmda: googlePlace, stateName: googlePlace);
+  List<StateEntity> getStateList(List<StateEntity> list, String googlePlace) {
+    StateEntity state = StateEntity(mmda: googlePlace, stateName: googlePlace);
     list.add(state);
-  return list;
-}
-
-
+    return list;
+  }
 
   String? _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<StateEntity>> listSnapshot) {
-     
     var data = (listSnapshot.hasData &&
             listSnapshot.data!.length > 0 &&
             listSnapshot.data!.firstWhereOrNull((x) =>
@@ -511,9 +580,8 @@ StateEntity state = StateEntity(mmda: googlePlace, stateName: googlePlace);
         ? itemSnapshot.data.toString().toUpperCase()
         : null;
 
- return data;
-
-      }
+    return data;
+  }
 
   String? _getOccupationValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<OccupationEntity>> listSnapshot) {
@@ -529,38 +597,34 @@ StateEntity state = StateEntity(mmda: googlePlace, stateName: googlePlace);
     return data;
   }
 
-var cityOfResidenceStream;
+  var cityOfResidenceStream;
 
   Widget _cityOfResidenceTextField() {
     return StreamBuilder<String?>(
       stream: cityOfResidenceStream,
       //accountFormBloc!.cityOfResidence,
       builder: (context, snapshot) {
-
         if (snapshot.hasData) {
-      
-      if(_cityOfResidenceController!.text != snapshot.data.toString()){
-                 _cityOfResidenceController!.value = TextEditingValue(
+          if (_cityOfResidenceController!.text != snapshot.data.toString()) {
+            _cityOfResidenceController!.value = TextEditingValue(
                 text: snapshot.data.toString(),
                 selection: _cityOfResidenceController!.selection);
-              }
+          }
         }
-        
+
         return TextField(
           controller: _cityOfResidenceController,
           textCapitalization: TextCapitalization.characters,
-        //  onChanged: accountFormBloc!.changeCityOfResidence,
+          //  onChanged: accountFormBloc!.changeCityOfResidence,
 
+          onChanged: (value) {
+            _cityOfResidenceController!.text = value;
+            _cityOfResidenceController!.selection = _cityOfResidenceController!
+                .selection
+                .copyWith(baseOffset: value.length, extentOffset: value.length);
 
-        onChanged: (value){
-
-           _cityOfResidenceController!.text = value;
-            _cityOfResidenceController!.selection = _cityOfResidenceController!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
-          
-         accountFormBloc!.changeCityOfResidence(value);
-          
-           },
-           
+            accountFormBloc!.changeCityOfResidence(value);
+          },
 
           keyboardType: TextInputType.text,
           maxLength: 40,
@@ -655,33 +719,85 @@ var cityOfResidenceStream;
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Widget _other_occupationField() {
+  Widget nextOfKinGenderField() {
     return StreamBuilder<String?>(
-      stream: accountFormBloc!.otherOccupation,
+      stream: accountFormBloc!.nextOfKinGender,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _othersOccupationController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _othersOccupationController.selection);
-        }
-        return TextField(
-          controller: _othersOccupationController,
-          textCapitalization: TextCapitalization.characters,
-          onChanged: accountFormBloc!.changeOtherOccupation,
-          keyboardType: TextInputType.text,
-          maxLength: 40,
-          maxLines: null,
-          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          decoration: InputDecoration(
-            labelText: 'Other Occupation',
-            helperText: '* Required',
-            errorText: snapshot.error as String?,
-          ),
+        return FormField<String>(
+          autovalidateMode: AutovalidateMode.always,
+          builder: (FormFieldState<String> state) {
+            return InputDecorator(
+              decoration: InputDecoration(
+                  labelText: 'Gender Of Next Of Kin',
+                  helperText: "* Required",
+                  errorText: snapshot.error as String?),
+              isEmpty: snapshot.data == '',
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: snapshot.data,
+                  isDense: true,
+                  onChanged: accountFormBloc!.changeNextOfKinGender,
+                  items: _genders.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+          },
         );
       },
     );
   }
+
+  // ignore: non_constant_identifier_names
+  Widget _other_occupationField() {
+    return  StreamBuilder<bool?>(
+      stream: accountFormBloc!.getChangeOtherOccupation(),
+      builder: (context, snapshot) {
+        return Visibility(
+              visible: snapshot.hasData? snapshot.data! : false,
+              child: Column(
+                children: [
+                  SizedBox(height: 20.0),
+                  StreamBuilder<String?>(
+                    stream: accountFormBloc!.otherOccupation,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (_othersOccupationController.text !=
+                            snapshot.data.toString()) {
+                          _othersOccupationController.value = TextEditingValue(
+                              text: snapshot.data.toString(),
+                              selection: _othersOccupationController.selection);
+                        }
+                      }
+                      return TextField(
+                        controller: _othersOccupationController,
+                        textCapitalization: TextCapitalization.characters,
+                        onChanged: accountFormBloc!.changeOtherOccupation,
+                        keyboardType: TextInputType.text,
+                        maxLength: 40,
+                        maxLines: null,
+                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                        decoration: InputDecoration(
+                          labelText: 'Other Occupation',
+                          helperText: '* Required',
+                          errorText: snapshot.error as String?,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            );
+      }
+    );
+     
+      }
+  
+  
 
   Widget _occupationCategoryField() {
     return StreamBuilder<String?>(
@@ -747,9 +863,16 @@ var cityOfResidenceStream;
     return StreamBuilder<List<OccupationEntity>>(
         stream: _occupationsBloc.occupations,
         builder: (context, listSnapshot) {
-          return StreamBuilder(
+          return StreamBuilder<String?>(
             stream: accountFormBloc!.occupation,
             builder: (context, itemSnapshot) {
+              if (itemSnapshot.hasData) {
+                if (itemSnapshot.data == "OTHER (PLEASE SPECIFY)") {
+                  accountFormBloc!.setChangeOtherOccupation(true);
+                }else{
+                    accountFormBloc!.setChangeOtherOccupation(false);
+                }
+              }
               return FormField<String>(
                 autovalidateMode: AutovalidateMode.always,
                 builder: (FormFieldState<String> occupations) {
@@ -897,8 +1020,8 @@ var cityOfResidenceStream;
   Widget build(BuildContext context) {
     super.build(context);
 
-   accountFormBloc!.place.listen((event) { 
-      if(event.length != 0){
+    accountFormBloc!.place.listen((event) {
+      if (event.length != 0) {
         //  showAddresses(context, event);
         setState(() {
           places = event;
@@ -922,36 +1045,52 @@ var cityOfResidenceStream;
               children: <Widget>[
                 SizedBox(height: 16.0),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: 16.0),
                     _emailTextField(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _phoneTextField(),
-                    SizedBox(height: 30.0),
-                    _nextOfKinTextField(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _address1TextField(context),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _address2TextField(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _countryOfResidenceTextField(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _buildStateOfResidence(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _mMDAFields(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _cityOfResidenceTextField(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _buildGender(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _occupationCategoryField(),
-                    SizedBox(height: 30.0),
+                    SizedBox(height: 20.0),
                     _occupationField(),
-                    Visibility(visible: others, child: SizedBox(height: 30.0)),
+                //    Visibility(visible: others, child: SizedBox(height: 20.0)),
+                     _other_occupationField(),
+                  /*
                     Visibility(
                         visible: others, child: _other_occupationField()),
-                    SizedBox(height: 30.0),
+                        */
+                    SizedBox(height: 20.0),
                     _maritalStatusField(),
+                    SizedBox(height: 15.0),
+                    Divider(),
+                    SizedBox(height: 5.0),
+                    Text("Next of Kin"),
+                    Divider(),
+                    SizedBox(height: 10.0),
+                    _nextOfKinTextField(),
+                    SizedBox(height: 20.0),
+                    _nextOfKinPhoneTextField(),
+                    SizedBox(height: 20.0),
+                    _nextOfKinRelationShipTextField(),
+                    SizedBox(height: 20.0),
+                    nextOfKinGenderField(),
+                    SizedBox(height: 15.0),
                   ],
                 ),
                 SizedBox(height: 120.0),
@@ -963,31 +1102,24 @@ var cityOfResidenceStream;
     );
   }
 
-
-showAddresses( BuildContext context){
- 
-showModalBottomSheet(
-    elevation: 0,
-      barrierColor: Colors.black.withAlpha(1),
-      isScrollControlled: true,
-  context: context,
-  builder: (context) {
-
-      return AddressFormPage(address1Controller: _address1Controller!,
-      cityOfResidenceController: _cityOfResidenceController!,
-      accountFormBloc: accountFormBloc!);
-
-});
-}
-
+  showAddresses(BuildContext context) {
+    showModalBottomSheet(
+        elevation: 0,
+        barrierColor: Colors.black.withAlpha(1),
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return AddressFormPage(
+              address1Controller: _address1Controller!,
+              cityOfResidenceController: _cityOfResidenceController!,
+              accountFormBloc: accountFormBloc!);
+        });
+  }
 
   void placePrediction() {
     String val = _bottomSheetAddress1Controller!.text;
-    if(val.isNotEmpty){
-    accountFormBloc!.getPlaces(val);
+    if (val.isNotEmpty) {
+      accountFormBloc!.getPlaces(val);
     }
-
   }
-
-
 }

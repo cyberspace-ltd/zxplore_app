@@ -20,7 +20,6 @@
         android:fullBackupContent="false"
          android:exported="true"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="flutterEmbedding"

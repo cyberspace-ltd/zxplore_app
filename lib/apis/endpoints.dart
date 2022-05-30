@@ -1,15 +1,12 @@
 class Endpoints {
   // static const String ZENITH_API_BASE_URL = "https://webservicestest.zenithbank.com:8443/ZenithAccountService/api/";
 
-  // static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
-
  static const googleKey = 'AIzaSyCUECofQTpcRO46CnOHL1q4bmKH8dvmIyA';
 
- static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/";  //Live Environment
-
+ //  static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/";  //Live Environment
+   
+  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
       
-
-
   static String getOccupationUrl() {
     return '$GATEWAY_BASE_API_URL'
         'accounts/Occupations';
@@ -98,5 +95,37 @@ class Endpoints {
   static String getPlaces(String placeName) {
     return 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input= $placeName&components=country:Gh&key=$googleKey';
   }
+
+
+   static String getEmploymentTypesUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/EmploymentTypes';
+  }
+
+     static String getMonthlyAllowanceUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/MonthlyIncomes';
+  }
+
+    static String getPurposeOfAcctUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/AccountPurposes';
+  }
+
+    static String getSourceOfFundUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/SourceOfFunds';
+  }
+
+   static String getTransactionTypeUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/TransactionTypes';
+  }
+
+   static String getNoOfTransactionUrl() {
+    return '$GATEWAY_BASE_API_URL'
+        'accounts/TransactionCounts';
+  }
+
 
 }
