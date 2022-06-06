@@ -394,8 +394,6 @@ class ZenithBankApi {
     }
   }
 
-
-
   Future<LoginResponse> attemptLogin(String username, String password) async {
     Response response;
     Dio dio = new Dio();

@@ -19,6 +19,7 @@
         android:allowBackup="false"
         android:fullBackupContent="false"
          android:exported="true"
+        android:usesCleartextTraffic="false"
         android:icon="@mipmap/ic_launcher"
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data

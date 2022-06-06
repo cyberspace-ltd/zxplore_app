@@ -47,10 +47,15 @@ android {
 
     signingConfigs {
         release {
+
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
+
+            v1SigningEnabled false
+            v2SigningEnabled true
+
         }
     }
 
@@ -60,6 +65,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             useProguard true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }

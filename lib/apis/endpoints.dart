@@ -5,7 +5,9 @@ class Endpoints {
 
  //  static const String GATEWAY_BASE_API_URL = "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/";  //Live Environment
    
-  static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
+ // static const String GATEWAY_BASE_API_URL = "http://41.138.171.45/zxploreghanaapi/api/";
+
+  static const String GATEWAY_BASE_API_URL = "https://zxplore.zenithbank.com.gh/zxploreghanaapi/api/";
       
   static String getOccupationUrl() {
     return '$GATEWAY_BASE_API_URL'
