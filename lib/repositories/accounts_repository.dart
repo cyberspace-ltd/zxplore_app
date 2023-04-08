@@ -4,10 +4,13 @@ import 'package:zxplore_app/data/entities/offline_form_entity.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/bvn_response.dart';
+import 'package:zxplore_app/models/form_model.dart';
 import 'package:zxplore_app/models/save_account_response.dart';
 import 'package:zxplore_app/models/verify_account_response.dart';
 import 'package:zxplore_app/models/verify_id_response.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
+
+import '../models/account_datum.dart';
 
 class AccountsRepository {
   ZenithBankApi _api = ZenithBankApi();
@@ -86,6 +89,7 @@ class AccountsRepository {
     }
   }
 
+/*
   Future<String> saveAccountOffline(OfflineAccountEntity offlineAccount) async {
     try {
       var updateOfflineAccount =
@@ -116,10 +120,28 @@ class AccountsRepository {
     }
   }
 
+
   Future<OfflineAccountEntity?> getOfflineAccountByRefId(
       String? referenceId) async {
     try {
       return DBProvider.db.getOfflineAccount(referenceId);
+    } catch (error) {
+      rethrow;
+    }
+  }
+  */
+
+  Future<AccountForm?> getSavedAccountFormByRefId(int referenceId) async {
+    try {
+      return DBProvider.db.getAccountFormOfflineByRef(referenceId);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<AccountDatum> insertAccountFormOffline(AccountForm account) async {
+    try {
+      return DBProvider.db.insertAccountFormOffline(account);
     } catch (error) {
       rethrow;
     }

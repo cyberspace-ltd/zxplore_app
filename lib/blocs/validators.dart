@@ -21,9 +21,6 @@ class Validators {
     }
   });
 
-
-
-
   final validateRiskRank =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
     if (arg != null && arg.length > 2) {
@@ -44,7 +41,7 @@ class Validators {
 
   final validateBvn =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.isNotEmpty ) {
+    if (arg != null && arg.isNotEmpty) {
       sink.add(arg);
     } else {
       sink.addError('A valid Ghana card mumber is required');
@@ -60,8 +57,9 @@ class Validators {
     }
   });
 
-    final validateAccountPurpose =
-      StreamTransformer<List<String>?, List<String> >.fromHandlers(handleData: (arg, sink) {
+  final validateAccountPurpose =
+      StreamTransformer<List<String>?, List<String>>.fromHandlers(
+          handleData: (arg, sink) {
     if (arg != null && arg.isNotEmpty && arg.length < 1) {
       sink.add(arg);
     } else {
@@ -218,6 +216,15 @@ class Validators {
     }
   });
 
+  final nextOfKinAddressValidate =
+      StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
+    if (arg != null && arg.length > 2) {
+      sink.add(arg);
+    } else {
+      sink.addError('Next of Kin Address is required');
+    }
+  });
+
   final validateAddress1 =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
     if (arg != null && arg.length > 2) {
@@ -308,7 +315,7 @@ class Validators {
     }
   });
 
-    final validateAdmNo =
+  final validateAdmNo =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
     if (arg != null && arg.length > 2) {
       sink.add(arg);
@@ -316,9 +323,6 @@ class Validators {
       sink.addError('Admission Number is required');
     }
   });
-
-
-  
 
   final validateIdNumber =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {

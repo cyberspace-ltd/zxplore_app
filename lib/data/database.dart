@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -6,6 +8,8 @@ import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/models/account_class_model.dart';
 import 'package:zxplore_app/models/occupation_model.dart';
 import 'package:zxplore_app/models/state_model.dart';
+import '../models/account_datum.dart';
+import '../models/form_model.dart';
 import 'entities/account_class_entity.dart';
 import 'entities/city_entity.dart';
 import 'entities/country_entity.dart';
@@ -58,12 +62,133 @@ class DBProvider {
         await db.execute(
             'CREATE TABLE $tableAccountClass ($columnAccountClassCode INTEGER PRIMARY KEY, $columnAccountClassDescription TEXT, $columnAccountClassType TEXT)');
 
+        //  await db.execute(
+        //    'CREATE TABLE $tableOfflineAccount (id INTEGER PRIMARY KEY , $columnOfflineReferenceId TEXT, accountType TEXT, accountHolderType TEXT, riskRank TEXT,accountCategory TEXT,tin TEXT, $columnOfflineTitle TEXT, surname TEXT, firstName TEXT,otherName TEXT,mothersMaidenName TEXT,dateOfBirth TEXT,stateOfOrigin TEXT, placeOfBirth TEXT, mmda TEXT, countryOfOrigin TEXT, email TEXT, phone TEXT, nextOfKin TEXT, address1 TEXT,address2 TEXT, countryOfResidence TEXT, stateOfResidence TEXT, cityOfResidence TEXT, gender TEXT,occupation TEXT,maritalStatus TEXT, idType TEXT,idIssuer TEXT, idNumber TEXT,idPlaceOfIssue TEXT, idIssueDate TEXT,idExpiryDate TEXT, isScanToPay BOOLEAN NOT NULL,isZMobile BOOLEAN NOT NULL,isZPrompt BOOLEAN NOT NULL,isStatementViaEmail BOOLEAN NOT NULL,isUSSD BOOLEAN NOT NULL,isBankToWallet BOOLEAN NOT NULL,isCardRequest BOOLEAN NOT NULL, cardType TEXT, requestingBranch TEXT, destinationBranch TEXT, preferredNameOnCard TEXT, idCard TEXT, passport TEXT,longitude TEXT,latitude TEXT,utility TEXT, signature TEXT)');
+
         await db.execute(
-            'CREATE TABLE $tableOfflineAccount (id INTEGER PRIMARY KEY , $columnOfflineReferenceId TEXT, accountType TEXT, accountHolderType TEXT, riskRank TEXT,accountCategory TEXT,tin TEXT, $columnOfflineTitle TEXT, surname TEXT, firstName TEXT,otherName TEXT,mothersMaidenName TEXT,dateOfBirth TEXT,stateOfOrigin TEXT, placeOfBirth TEXT, mmda TEXT, countryOfOrigin TEXT, email TEXT, phone TEXT, nextOfKin TEXT, address1 TEXT,address2 TEXT, countryOfResidence TEXT, stateOfResidence TEXT, cityOfResidence TEXT, gender TEXT,occupation TEXT,maritalStatus TEXT, idType TEXT,idIssuer TEXT, idNumber TEXT,idPlaceOfIssue TEXT, idIssueDate TEXT,idExpiryDate TEXT, isScanToPay BOOLEAN NOT NULL,isZMobile BOOLEAN NOT NULL,isZPrompt BOOLEAN NOT NULL,isStatementViaEmail BOOLEAN NOT NULL,isUSSD BOOLEAN NOT NULL,isBankToWallet BOOLEAN NOT NULL,isCardRequest BOOLEAN NOT NULL, cardType TEXT, requestingBranch TEXT, destinationBranch TEXT, preferredNameOnCard TEXT, idCard TEXT, passport TEXT,longitude TEXT,latitude TEXT,utility TEXT, signature TEXT)');
+            'CREATE TABLE $tableAccountFormOffline (id INTEGER PRIMARY KEY , accountType TEXT, accountNumber TEXT, accountHolderType TEXT, classCode TEXT,branchNumber TEXT,phoneNumber TEXT, rsmId TEXT, accountName TEXT, tin TEXT,registrationNumber TEXT,sex TEXT,title TEXT,dateOfBirth TEXT, dateOfIncorporation TEXT, businessNature TEXT, sector TEXT, industry TEXT, riskRank TEXT, addressLine1 TEXT, city TEXT,state TEXT, countryOfOrigin TEXT, signatoryDetails TEXT, refId TEXT, masterCardRequest TEXT,visaCardRequest TEXT,verveCardRequest TEXT, scanToPay TEXT,zMobileRequest TEXT, zPromptRequest TEXT,statementByEmailRequest TEXT, uSSDRequest TEXT,bankWalletRequest TEXT, cardRequest TEXT,cardType TEXT,requestingBranch TEXT,destinationBranch TEXT,preferredNameOnCard TEXT, latitude TEXT, longitude TEXT, monthlyIncome TEXT,employmentTypes TEXT,transactionTypes TEXT,accountPurposes TEXT, sourceOfFunds TEXT)');
+
+        await db.execute(
+            'CREATE TABLE $tableAccountsDatum (id INTEGER PRIMARY KEY , refId INTEGER, accountName TEXT, phoneNumber TEXT, status TEXT )');
       },
     );
   }
 
+  Future<AccountDatum> insertAccountDatum(
+    AccountDatum account,
+  ) async {
+    final db = await database;
+    final id = await db!.insert(
+      tableAccountsDatum,
+      account.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return account;
+  }
+
+  Future<List<AccountDatum>> getAccountDatum() async {
+    final db = await database;
+    var res = await db!.query(tableAccountsDatum);
+    List<AccountDatum> list =
+        res.isNotEmpty ? res.map((c) => AccountDatum.fromJson(c)).toList() : [];
+    return list;
+  }
+
+  Future<AccountDatum?> getAccountDatumRef(String? ref) async {
+    final db = await database;
+    List<Map> maps = await db!.query(
+      tableAccountsDatum,
+//        columns: [columnOfflineTitle, columnOfflineSurname, columnOfflineBVN],
+      where: 'refId = ?',
+      whereArgs: [ref],
+    );
+    if (maps.length > 0) {
+      return AccountDatum.fromJson(maps.first as Map<String, dynamic>);
+    }
+    return null;
+  }
+
+  Future<int> updateAccountDatum(AccountDatum account) async {
+    final db = await database;
+    var result = await db!.update(tableAccountsDatum, account.toJson(),
+        where: 'refId = ?', whereArgs: [account.refId]);
+    return result;
+  }
+
+  Future<int> deleteAccountDatum(int? id) async {
+    var db = await database;
+    return await db!.delete(
+      tableAccountsDatum,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+// ------------------------------------------------
+
+  Future<AccountDatum> insertAccountFormOffline(
+    AccountForm account,
+  ) async {
+    final db = await database;
+
+    var obj = account.toJsonModified();
+
+    final id = await db!.insert(
+      tableAccountFormOffline,
+      obj,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    AccountDatum acct = AccountDatum(
+      id: id,
+      refId: id,
+      accountName: account.accountName,
+      status: "SavedToDevice",
+      phoneNumber: account.phoneNumber,
+    );
+    final resp = insertAccountDatum(acct);
+
+    return acct;
+  }
+
+  Future<List<AccountForm>> getAccountFormOffline() async {
+    final db = await database;
+    var res = await db!.query(tableAccountFormOffline);
+    List<AccountForm> list =
+        res.isNotEmpty ? res.map((c) => AccountForm.fromJson(c)).toList() : [];
+    return list;
+  }
+
+  Future<AccountForm?> getAccountFormOfflineByRef(int ref) async {
+    final db = await database;
+    List<Map> maps = await db!.query(
+      tableAccountFormOffline,
+      where: 'id = ?',
+      whereArgs: [ref],
+    );
+    if (maps.length > 0) {
+      return AccountForm.fromJsonModified(maps.first as Map<String, dynamic>);
+    }
+    return null;
+  }
+
+  Future<int> updateAccountFormOffline(AccountForm account) async {
+    final db = await database;
+    var result = await db!.update(tableAccountFormOffline, account.toJson(),
+        where: 'phoneNumber = ?', whereArgs: [account.phoneNumber]);
+    return result;
+  }
+
+  Future<int> deleteAccountFormOffline(int? id) async {
+    var db = await database;
+    return await db!.delete(
+      tableAccountFormOffline,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+// ----------------------------------------------------------
+/*
   Future<OfflineAccountEntity> insertOfflineAccount(
     OfflineAccountEntity account,
   ) async {
@@ -114,6 +239,8 @@ class DBProvider {
       whereArgs: [id],
     );
   }
+
+*/
 
   void insertOccupations(List<OccupationMenu> occupations) async {
     final db = await database;

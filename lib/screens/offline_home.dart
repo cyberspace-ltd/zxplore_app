@@ -19,7 +19,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
   @override
   void initState() {
     _accountsBloc = AccountsBloc();
-    _accountsBloc.getOfflineAccounts();
+    // _accountsBloc.getOfflineAccounts();
     super.initState();
   }
 
@@ -65,7 +65,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
             style: TextStyle(
                 fontStyle: FontStyle.normal, color: ZxplorePrimaryColor)),
         onPressed: () {
-          _accountsBloc.getOfflineAccounts();
+          //     _accountsBloc.getOfflineAccounts();
         });
   }
 
@@ -77,8 +77,8 @@ class _OfflineHomeState extends State<OfflineHomePage> {
           child: IconButton(
               icon: const Icon(Icons.remove, color: Colors.red),
               onPressed: () {
-                _accountsBloc.deleteOfflineAccount(form.id);
-                _accountsBloc.getOfflineAccounts();
+                //     _accountsBloc.deleteOfflineAccount(form.id);
+                //   _accountsBloc.getOfflineAccounts();
 
                 setState(() {});
               }),

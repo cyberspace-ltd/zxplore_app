@@ -90,7 +90,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   TextEditingController? _nextOfKinPhoneController;
   TextEditingController? _nextOfKinRelationshipController;
-  //    TextEditingController? _nextOfKinGenderController;
+  TextEditingController? _nextOfKinAddressController;
 
   TextEditingController? _address2Controller;
   TextEditingController? _cityOfResidenceController;
@@ -113,7 +113,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
     _nextOfKinPhoneController = TextEditingController();
     _nextOfKinRelationshipController = TextEditingController();
-    //  _nextOfKinGenderController = TextEditingController();
+    _nextOfKinAddressController = TextEditingController();
 
     _address1Controller = TextEditingController();
     _bottomSheetAddress1Controller = TextEditingController();
@@ -139,7 +139,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
     _nextOfKinPhoneController!.dispose();
     _nextOfKinRelationshipController!.dispose();
-    //    _nextOfKinGenderController!.dispose();
+    _nextOfKinAddressController!.dispose();
 
     _address1Controller!.dispose();
     _address2Controller!.dispose();
@@ -254,6 +254,35 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             decoration: InputDecoration(
               prefixText: '+233',
               labelText: 'Next of Kin Phone Number',
+              helperText: '* Required',
+              errorText: snapshot.error as String?,
+            ),
+          );
+        });
+  }
+
+  Widget _nextOfKinAddressTextField() {
+    return StreamBuilder<String?>(
+        stream: accountFormBloc!.nextOfKinAddress,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (_nextOfKinAddressController!.text != snapshot.data.toString()) {
+              _nextOfKinAddressController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _nextOfKinAddressController!.selection);
+            }
+          }
+
+          return TextField(
+            controller: _nextOfKinAddressController,
+            textCapitalization: TextCapitalization.characters,
+            keyboardType: TextInputType.text,
+            onChanged: accountFormBloc!.changeNextOfKinAddress,
+            maxLength: 50,
+            maxLines: null,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            decoration: InputDecoration(
+              labelText: 'Next of Kin Address',
               helperText: '* Required',
               errorText: snapshot.error as String?,
             ),
@@ -754,50 +783,46 @@ class _ContactDetailsState extends State<ContactDetailsStep>
 
   // ignore: non_constant_identifier_names
   Widget _other_occupationField() {
-    return  StreamBuilder<bool?>(
-      stream: accountFormBloc!.getChangeOtherOccupation(),
-      builder: (context, snapshot) {
-        return Visibility(
-              visible: snapshot.hasData? snapshot.data! : false,
-              child: Column(
-                children: [
-                  SizedBox(height: 20.0),
-                  StreamBuilder<String?>(
-                    stream: accountFormBloc!.otherOccupation,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        if (_othersOccupationController.text !=
-                            snapshot.data.toString()) {
-                          _othersOccupationController.value = TextEditingValue(
-                              text: snapshot.data.toString(),
-                              selection: _othersOccupationController.selection);
-                        }
+    return StreamBuilder<bool?>(
+        stream: accountFormBloc!.getChangeOtherOccupation(),
+        builder: (context, snapshot) {
+          return Visibility(
+            visible: snapshot.hasData ? snapshot.data! : false,
+            child: Column(
+              children: [
+                SizedBox(height: 20.0),
+                StreamBuilder<String?>(
+                  stream: accountFormBloc!.otherOccupation,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (_othersOccupationController.text !=
+                          snapshot.data.toString()) {
+                        _othersOccupationController.value = TextEditingValue(
+                            text: snapshot.data.toString(),
+                            selection: _othersOccupationController.selection);
                       }
-                      return TextField(
-                        controller: _othersOccupationController,
-                        textCapitalization: TextCapitalization.characters,
-                        onChanged: accountFormBloc!.changeOtherOccupation,
-                        keyboardType: TextInputType.text,
-                        maxLength: 40,
-                        maxLines: null,
-                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        decoration: InputDecoration(
-                          labelText: 'Other Occupation',
-                          helperText: '* Required',
-                          errorText: snapshot.error as String?,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-      }
-    );
-     
-      }
-  
-  
+                    }
+                    return TextField(
+                      controller: _othersOccupationController,
+                      textCapitalization: TextCapitalization.characters,
+                      onChanged: accountFormBloc!.changeOtherOccupation,
+                      keyboardType: TextInputType.text,
+                      maxLength: 40,
+                      maxLines: null,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                      decoration: InputDecoration(
+                        labelText: 'Other Occupation',
+                        helperText: '* Required',
+                        errorText: snapshot.error as String?,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
 
   Widget _occupationCategoryField() {
     return StreamBuilder<String?>(
@@ -869,8 +894,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
               if (itemSnapshot.hasData) {
                 if (itemSnapshot.data == "OTHER (PLEASE SPECIFY)") {
                   accountFormBloc!.setChangeOtherOccupation(true);
-                }else{
-                    accountFormBloc!.setChangeOtherOccupation(false);
+                } else {
+                  accountFormBloc!.setChangeOtherOccupation(false);
                 }
               }
               return FormField<String>(
@@ -1069,9 +1094,9 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     _occupationCategoryField(),
                     SizedBox(height: 20.0),
                     _occupationField(),
-                //    Visibility(visible: others, child: SizedBox(height: 20.0)),
-                     _other_occupationField(),
-                  /*
+                    //    Visibility(visible: others, child: SizedBox(height: 20.0)),
+                    _other_occupationField(),
+                    /*
                     Visibility(
                         visible: others, child: _other_occupationField()),
                         */
@@ -1089,6 +1114,8 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                     SizedBox(height: 20.0),
                     _nextOfKinRelationShipTextField(),
                     SizedBox(height: 20.0),
+                    _nextOfKinAddressTextField(),
+                    SizedBox(height: 30.0),
                     nextOfKinGenderField(),
                     SizedBox(height: 15.0),
                   ],

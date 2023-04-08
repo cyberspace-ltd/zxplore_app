@@ -8,6 +8,8 @@ import 'package:zxplore_app/models/verify_account_response.dart';
 import 'package:zxplore_app/repositories/accounts_repository.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
+import '../models/account_datum.dart';
+
 class AccountsBloc extends BlocBase {
   final AccountsRepository _accountsRepository = AccountsRepository();
   final BehaviorSubject<AccountsResponse> _subjectAccountsResponse =
@@ -31,12 +33,23 @@ class AccountsBloc extends BlocBase {
 
       AccountsResponse response =
           await _accountsRepository.getAccountsByRsmId(rsmId);
+
+      List<AccountDatum> acctDatum = await DBProvider.db.getAccountDatum();
+      for (int i = 0; i < acctDatum.length; i++) {
+        response.data?.add(Datum(
+            refId: acctDatum[i].refId.toString(),
+            phoneNumber: acctDatum[i].phoneNumber,
+            accountName: acctDatum[i].accountName,
+            status: acctDatum[i].status));
+      }
+
       _subjectAccountsResponse.sink.add(response);
     } catch (error) {
       _subjectAccountsResponse.sink.addError('$error');
     }
   }
 
+/*
   getOfflineAccounts() async {
     List<OfflineAccountEntity> offlineAcccounts =
         await DBProvider.db.getOfflineAccounts();
@@ -46,6 +59,7 @@ class AccountsBloc extends BlocBase {
   deleteOfflineAccount(int? id) async {
     await _accountsRepository.deleteOfflineAccount(id);
   }
+  */
 
   verifyAccountByReferenceId(String? referenceId) async {
     try {

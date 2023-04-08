@@ -53,7 +53,7 @@ class _SignatoryStepState extends State<SignatoryStep>
         _img = imageData.buffer.asByteData();
       });
     });
- 
+
     editingForm = accountFormBloc!.getFormStatusBeforeSubmission();
   }
 
@@ -122,7 +122,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                           child: Signature(
                             color: color,
                             key: _sign,
-                          //  backgroundPainter: CustomPainter(),
+                            //  backgroundPainter: CustomPainter(),
                             onSign: () {
                               // final sign = _sign.currentState;
                               setState(() {
@@ -258,23 +258,27 @@ class _SignatoryStepState extends State<SignatoryStep>
               height: 60,
               width: 200,
               child: new ElevatedButton(
-                child: Text('Submit Account'),
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(
-                    Colors.white,
+                  child: Text('Submit Account'),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(
+                      Colors.white,
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Colors.red.shade900,
+                    ),
                   ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    Colors.red.shade900,
-                  ),
-                ),
-                onPressed: (snapshot.hasData &&
-                        isLoading == false &&
-                        (_isButtonDisabled == false || (editingForm ?? false)))
-                    ? submitAccount
-                    : null,
-                // onPressed: _isButtonDisabled ? null : submitAccount,
+                  onPressed: (snapshot.hasData &&
+                          isLoading == false &&
+                          (_isButtonDisabled == false ||
+                              (editingForm ?? false)))
+                      ? submitAccount
+                      : () {
+                          save(context);
+                        }
+                  //  : null,
+                  // onPressed: _isButtonDisabled ? null : submitAccount,
 //              onPressed: accountFormBloc.submit,
-              ),
+                  ),
             ),
           ),
         );
@@ -290,6 +294,7 @@ class _SignatoryStepState extends State<SignatoryStep>
     var loadingBar = FlushbarHelper.createLoading(
         message: "Attempting to submit account form....")
       ..show(context);
+
     accountFormBloc!.submit();
 
     accountFormBloc!.subjectSaveAccountResponse.listen(
@@ -311,6 +316,47 @@ class _SignatoryStepState extends State<SignatoryStep>
         _isButtonDisabled = false;
       });
     });
+  }
+
+  void save(BuildContext context) {
+    showDialogMessage(
+        context,
+        "You have not finished filling the form. Do you want to save your details to continue later",
+        '');
+  }
+
+  void saveAccount() async {
+    setState(() {
+      isLoading = true;
+      _isButtonDisabled = true;
+    });
+    var loadingBar = FlushbarHelper.createLoading(
+        message: "Attempting to save account form....")
+      ..show(context);
+
+    accountFormBloc!.saveForm();
+
+/*
+    accountFormBloc!.subjectSaveAccountResponse.listen(
+      (response) {
+        loadingBar.dismiss(context);
+        setState(() {
+          isLoading = false;
+          _isButtonDisabled = false;
+        });
+        _showSuccessDialog(
+            'The created account was sent successfully, an account number will be generated shortly.');
+      },
+    ).onError((error) {
+      loadingBar.dismiss(context);
+
+      FlushbarHelper.createError(message: error.toString())..show(context);
+      setState(() {
+        isLoading = false;
+        _isButtonDisabled = false;
+      });
+    });
+    */
   }
 
   void _showSuccessDialog(String message) {
@@ -351,6 +397,35 @@ class _SignatoryStepState extends State<SignatoryStep>
           ],
         );
       },
+    );
+  }
+
+  showDialogMessage(BuildContext context, String msg, String title) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            child: const Text('Save'),
+            onPressed: () {
+              accountFormBloc!.saveForm();
+              // Navigator.pop(context);
+              int count = 0;
+              Navigator.popUntil(context, (route) {
+                return count++ == 2;
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 

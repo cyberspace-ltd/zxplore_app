@@ -20,10 +20,13 @@ import 'account_form.dart';
 /// While it is named CategoryRoute, a more apt name would be CategoryScreen,
 /// because it is responsible for the UI at the route's destination.
 class CategoryPage extends StatefulWidget {
-  
+  String? recordSavedInDevice;
   final String? accountReferenceId;
   final bool isEditAccount;
-  const CategoryPage({this.accountReferenceId, this.isEditAccount = false});
+  CategoryPage(
+      {this.recordSavedInDevice,
+      this.accountReferenceId,
+      this.isEditAccount = false});
 
   @override
   _CategoryRouteState createState() => _CategoryRouteState();
@@ -140,7 +143,7 @@ class _CategoryRouteState extends State<CategoryPage> {
       ),
       child: _buildCategoryWidgets(MediaQuery.of(context).orientation),
     );
-    
+
     return Backdrop(
       accountFormBloc: accountFormBloc!,
       currentCategory:
@@ -152,13 +155,14 @@ class _CategoryRouteState extends State<CategoryPage> {
               accountFormBloc: accountFormBloc,
               accountReferenceId: accountReferenceId,
               isEditAccount: _isEditAccount,
-            )
+              recordSavedInDevice: widget.recordSavedInDevice)
           : AccountFormPage(
               category: _currentCategory!,
               categories: _categories,
               accountFormBloc: accountFormBloc,
               accountReferenceId: accountReferenceId,
-              isEditAccount: _isEditAccount),
+              isEditAccount: _isEditAccount,
+              recordSavedInDevice: widget.recordSavedInDevice),
       backPanel: listView,
       frontTitle: Text('Create Account'),
       backTitle: Text('Select a Category'),

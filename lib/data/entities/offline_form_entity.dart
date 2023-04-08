@@ -1,4 +1,7 @@
 final String tableOfflineAccount = 'OfflineAccount';
+final String tableAccountFormOffline = 'AccountFormOffline';
+final String tableAccountsDatum = 'AccountsResponse';
+
 final String columnOfflineId = "id";
 final String columnOfflineReferenceId = "referenceId";
 final String columnOfflineAccountType = "accountType";

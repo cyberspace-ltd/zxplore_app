@@ -274,7 +274,6 @@ class _BackdropState extends State<Backdrop>
               color: Colors.white,
             ),
             onPressed: () {
-              
               Navigator.pop(context);
             },
           ),
@@ -294,7 +293,8 @@ class _BackdropState extends State<Backdrop>
 
               loadingBar..show(context);
 
-              _accountFormBloc.saveOffline();
+              //   _accountFormBloc.saveOffline();
+              _accountFormBloc.saveForm();
 
               _accountFormBloc.subjectSaveOfflineAccountResponse
                   .listen((result) {

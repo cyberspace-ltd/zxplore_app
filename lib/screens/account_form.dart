@@ -19,18 +19,18 @@ import 'forms/upload_utility_bill.form.dart';
 
 class AccountFormPage extends StatefulWidget {
   final Category category;
-
+  String? recordSavedInDevice;
   final String? accountReferenceId;
   final AccountFormBloc? accountFormBloc;
   final bool? isEditAccount;
   final List<Category> categories;
-  const AccountFormPage({
-    required this.category,
-    required this.accountFormBloc,
-    required this.categories,
-    this.accountReferenceId,
-    this.isEditAccount = false,
-  });
+  AccountFormPage(
+      {required this.category,
+      required this.accountFormBloc,
+      required this.categories,
+      this.accountReferenceId,
+      this.isEditAccount = false,
+      this.recordSavedInDevice});
 
   @override
   _AccountFormPageState createState() => _AccountFormPageState();
@@ -70,15 +70,11 @@ class _AccountFormPageState extends State<AccountFormPage>
 
     _setDefaults();
 
-/*
-    if (_isEditAccount! && accountReferenceId != null) {
-      _getAccountDetailsFromDatabase(accountReferenceId);
+    if (accountReferenceId != null && widget.recordSavedInDevice == null) {
+      _getAccountDetailsByReferenceId(accountReferenceId);
     } else {
-      */
-      if (accountReferenceId != null) {
-        _getAccountDetailsByReferenceId(accountReferenceId);
-      }
- //   }
+      _getAccountDetailsFromDatabase(accountReferenceId);
+    }
   }
 
   void _setDefaults() {
@@ -101,8 +97,9 @@ class _AccountFormPageState extends State<AccountFormPage>
         style: TextStyle(color: Colors.red),
       ),
     );
-
-    accountFormBloc!.getOfflineAccountDetailsByRefId(referenceId);
+    if (referenceId != null) {
+      accountFormBloc!.getSavedAccountFormDetailsByRefId(referenceId);
+    }
     accountFormBloc!.subjectOfflineDetailsResponse
         .listen((message) {})
         .onError((error) {
@@ -159,7 +156,7 @@ class _AccountFormPageState extends State<AccountFormPage>
       });
     });
   }
-  
+
   @override
   void didUpdateWidget(AccountFormPage old) {
     super.didUpdateWidget(old);
@@ -179,7 +176,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    
+
     return BlocProvider<AccountFormBloc>(
       child: Form(
         key: this._formKey,
@@ -213,16 +210,14 @@ class _AccountFormPageState extends State<AccountFormPage>
                             icon: Icon(Icons.navigate_before,
                                 color: Colors.white),
                             onPressed: () {
-
                               _controller.previousPage(
                                   duration: _kDuration, curve: _kCurve);
 
-                            if(_controller.page!.toInt() != 0 ){
-                              widget.accountFormBloc!.setCurrentFormCategory(
-                                  widget.categories[
-                                      _controller.page!.toInt() - 1]);
-                            }
-
+                              if (_controller.page!.toInt() != 0) {
+                                widget.accountFormBloc!.setCurrentFormCategory(
+                                    widget.categories[
+                                        _controller.page!.toInt() - 1]);
+                              }
                             }),
                         Center(
                           child: DotsIndicator(
@@ -244,12 +239,11 @@ class _AccountFormPageState extends State<AccountFormPage>
                               _controller.nextPage(
                                   duration: _kDuration, curve: _kCurve);
 
-                            if(_controller.page!.toInt() < 8 ){
-                              widget.accountFormBloc!.setCurrentFormCategory(
-                                  widget.categories[
-                                      _controller.page!.toInt() + 1]);
-                            }
-
+                              if (_controller.page!.toInt() < 8) {
+                                widget.accountFormBloc!.setCurrentFormCategory(
+                                    widget.categories[
+                                        _controller.page!.toInt() + 1]);
+                              }
                             }),
                       ],
                     ),

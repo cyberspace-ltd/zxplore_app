@@ -65,14 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
         _fetchCountries(data);
         _fetchCardTypes(data);
 
+        //  _fetchEmploymentTypes(data);
+        //  _fetchMonthlyAllowanceUrl(data);
+        //  _fetchPurposeOfAcctUrl(data);
+        //  _fetchSourceOfFundUrl(data);
 
-      //  _fetchEmploymentTypes(data);
-      //  _fetchMonthlyAllowanceUrl(data);
-      //  _fetchPurposeOfAcctUrl(data);
-      //  _fetchSourceOfFundUrl(data);
-        
-      //   _fetchTransactionTypeUrl(data);
-     //   _fetchNoOfTransactionUrl(data);
+        //   _fetchTransactionTypeUrl(data);
+        //   _fetchNoOfTransactionUrl(data);
 
       }
     });
@@ -373,6 +372,8 @@ class _MyHomePageState extends State<MyHomePage> {
       return ZxploreCompletedGreen;
     } else if (selector == 'Saved') {
       return Colors.amber;
+    } else if (selector == 'SavedToDevice') {
+      return Colors.purpleAccent;
     } else if (selector == 'Pending') {
       return Colors.blueAccent;
     } else {
@@ -513,11 +514,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           onPressed: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      CategoryPage(accountReferenceId: form.refId, isEditAccount: form.status=="Saved")),
-            );
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => CategoryPage(
+                      accountReferenceId: form.refId,
+                      isEditAccount: (form.status == ("Saved") ||
+                          form.status == ("SavedToDevice")),
+                      recordSavedInDevice: form.status == ("SavedToDevice")
+                          ? "SavedToDevice"
+                          : null),
+                ));
           });
     }
   }
@@ -585,7 +591,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-     
+
       floatingActionButton: FloatingActionButton.extended(
         elevation: 4.0,
         backgroundColor: ZxploreRedColor,
@@ -600,7 +606,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    
+
       body: StreamBuilder<AccountsResponse>(
         stream: _accountsBloc.subjectAccountsResponse.stream,
         builder: (context, AsyncSnapshot<AccountsResponse> snapshot) {
@@ -804,7 +810,5 @@ class _MyHomePageState extends State<MyHomePage> {
     await ZenithBankApi().fetchNoOfTransactionUrl(token);
   }
 */
-  
 
-  
 }

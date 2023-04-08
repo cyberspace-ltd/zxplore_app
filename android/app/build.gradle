@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     lintOptions {
         disable 'InvalidPackage'
@@ -40,7 +40,7 @@ android {
     defaultConfig {
         applicationId "com.zenith.zxplore_app"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -64,7 +64,6 @@ android {
 
             signingConfig signingConfigs.release
             minifyEnabled true
-            useProguard true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 

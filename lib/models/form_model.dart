@@ -38,12 +38,9 @@ class AccountForm {
   String? countryOfOrigin;
   List<SignatoryDetail> signatoryDetails;
   String? refId;
-//  String alertZRequest;
   String? masterCardRequest;
   String? visaCardRequest;
   String? verveCardRequest;
-//  String tokenRequest;
-//  String ibankRequest;
   String? scanToPay;
   String? zMobileRequest;
   String? zPromptRequest;
@@ -57,66 +54,60 @@ class AccountForm {
   String? preferredNameOnCard;
   double? latitude;
   double? longitude;
-   String? monthlyIncome;
-
-
+  String? monthlyIncome;
   String? employmentTypes;
   List<TransactionTypes> transactionTypes;
   List<AccountPurposes> accountPurposes;
   List<SourceOfFundsObj> sourceOfFunds;
+  int? id;
 
-
-
-  AccountForm({
-    required this.accountType,
-    this.accountNumber,
-    required this.accountHolderType,
-    required this.classCode,
-    required this.branchNumber,
-    required this.phoneNumber,
-    required this.rsmId,
-    required this.accountName,
-    required this.tin,
-    this.registrationNumber,
-    required this.sex,
-    required this.title,
-    required this.dateOfBirth,
-    required this.dateOfIncorporation,
-    required this.businessNature,
-    required this.sector,
-    required this.industry,
-    required this.riskRank,
-    required this.addressLine1,
-    required this.city,
-    required this.state,
-    required this.countryOfOrigin,
-    required this.signatoryDetails,
-    required this.refId,
-//    @required this.alertZRequest,
-    required this.masterCardRequest,
-    required this.visaCardRequest,
-    required this.verveCardRequest,
-    required this.scanToPay,
-//    @required this.tokenRequest,
-//    @required this.ibankRequest,
-    required this.zMobileRequest,
-    required this.zPromptRequest,
-    required this.statementByEmailRequest,
-    required this.uSSDRequest,
-    required this.bankWalletRequest,
-    required this.cardRequest,
-    required this.cardType,
-    required this.requestingBranch,
-    required this.destinationBranch,
-    required this.preferredNameOnCard,
-    required this.latitude,
-    required this.longitude,
-    required this.employmentTypes,
-    required this.accountPurposes,
-    required this.sourceOfFunds,
-    required this.transactionTypes,
-    required this.monthlyIncome
-  });
+  AccountForm(
+      {required this.accountType,
+      this.accountNumber,
+      required this.accountHolderType,
+      required this.classCode,
+      required this.branchNumber,
+      required this.phoneNumber,
+      required this.rsmId,
+      required this.accountName,
+      required this.tin,
+      this.registrationNumber,
+      required this.sex,
+      required this.title,
+      required this.dateOfBirth,
+      required this.dateOfIncorporation,
+      required this.businessNature,
+      required this.sector,
+      required this.industry,
+      required this.riskRank,
+      required this.addressLine1,
+      required this.city,
+      required this.state,
+      required this.countryOfOrigin,
+      required this.signatoryDetails,
+      required this.refId,
+      required this.masterCardRequest,
+      required this.visaCardRequest,
+      required this.verveCardRequest,
+      required this.scanToPay,
+      required this.zMobileRequest,
+      required this.zPromptRequest,
+      required this.statementByEmailRequest,
+      required this.uSSDRequest,
+      required this.bankWalletRequest,
+      required this.cardRequest,
+      required this.cardType,
+      required this.requestingBranch,
+      required this.destinationBranch,
+      required this.preferredNameOnCard,
+      required this.latitude,
+      required this.longitude,
+      required this.employmentTypes,
+      required this.accountPurposes,
+      required this.sourceOfFunds,
+      required this.transactionTypes,
+      required this.monthlyIncome,
+      this.id});
 
   factory AccountForm.fromJson(Map<String, dynamic> json) => new AccountForm(
         accountType: json["AccountType"],
@@ -144,12 +135,9 @@ class AccountForm {
         signatoryDetails: new List<SignatoryDetail>.from(
             json["SignatoryDetails"].map((x) => SignatoryDetail.fromJson(x))),
         refId: json["Ref_Id"],
-//        alertZRequest: json["AlertZRequest"],
         masterCardRequest: json["MasterCardRequest"],
         visaCardRequest: json["VisaCardRequest"],
         verveCardRequest: json["VerveCardRequest"],
-//        tokenRequest: json["TokenRequest"],
-//        ibankRequest: json["IbankRequest"],
         scanToPay: json["ScanToPayRequest"],
         zMobileRequest: json["ZMobileRequest"],
         zPromptRequest: json["ZPromptRequest"],
@@ -163,18 +151,14 @@ class AccountForm {
         preferredNameOnCard: json["PreferredNameOnCard"],
         latitude: json["Latitude"].toDouble(),
         longitude: json["Longitude"].toDouble(),
-
         employmentTypes: json["EmploymentTypes"],
         monthlyIncome: json["MonthlyIncome"],
         transactionTypes: new List<TransactionTypes>.from(
             json["TransactionTypes"].map((x) => TransactionTypes.fromJson(x))),
-        
         accountPurposes: new List<AccountPurposes>.from(
             json["AccountPurposes"].map((x) => AccountPurposes.fromJson(x))),
-        
         sourceOfFunds: new List<SourceOfFundsObj>.from(
             json["SourceOfFunds"].map((x) => SourceOfFundsObj.fromJson(x))),
-
       );
 
   Map<String, dynamic> toJson() => {
@@ -205,12 +189,9 @@ class AccountForm {
         "SignatoryDetails":
             new List<dynamic>.from(signatoryDetails.map((x) => x.toJson())),
         "Ref_Id": refId,
-//        "AlertZRequest": alertZRequest,
         "MasterCardRequest": masterCardRequest,
         "VisaCardRequest": visaCardRequest,
         "VerveCardRequest": verveCardRequest,
-//        "TokenRequest": tokenRequest,
-//        "IbankRequest": ibankRequest,
         "ScanToPayRequest": scanToPay,
         "ZMobileRequest": zMobileRequest,
         "ZPromptRequest": zPromptRequest,
@@ -222,16 +203,128 @@ class AccountForm {
         "RequestingBranch": requestingBranch,
         "DestinationBranch": destinationBranch,
         "PreferredNameOnCard": preferredNameOnCard,
-           "MonthlyIncome": monthlyIncome,
-
-         "EmploymentTypes": employmentTypes,
-
-          "TransactionTypes": new List<dynamic>.from(transactionTypes.map((x) => x.toJson())),
-          "AccountPurposes": new List<dynamic>.from(accountPurposes.map((x) => x.toJson())),
-          "SourceOfFunds": new List<dynamic>.from(sourceOfFunds.map((x) => x.toJson())),
-
-
+        "MonthlyIncome": monthlyIncome,
+        "EmploymentTypes": employmentTypes,
+        "TransactionTypes":
+            new List<dynamic>.from(transactionTypes.map((x) => x.toJson())),
+        "AccountPurposes":
+            new List<dynamic>.from(accountPurposes.map((x) => x.toJson())),
+        "SourceOfFunds":
+            new List<dynamic>.from(sourceOfFunds.map((x) => x.toJson())),
       };
+
+  Map<String, dynamic> toJsonModified() => {
+        "accountType": accountType,
+        "accountNumber": accountNumber,
+        "accountHolderType": accountHolderType,
+        "classCode": classCode,
+        "branchNumber": branchNumber,
+        "phoneNumber": phoneNumber,
+        "rsmId": rsmId,
+        "accountName": accountName,
+        "tin": tin,
+        "registrationNumber": registrationNumber,
+        "sex": sex,
+        "title": title,
+        "longitude": longitude,
+        "latitude": latitude,
+        "dateOfBirth": dateOfBirth,
+        "dateOfIncorporation": dateOfIncorporation,
+        "businessNature": businessNature,
+        "sector": sector,
+        "industry": industry,
+        "riskRank": riskRank,
+        "addressLine1": addressLine1,
+        "city": city,
+        "state": state,
+        "countryOfOrigin": countryOfOrigin,
+        "signatoryDetails": jsonEncode(
+            new List<dynamic>.from(signatoryDetails.map((x) => x.toJson()))),
+        "refId": refId,
+        "masterCardRequest": masterCardRequest,
+        "visaCardRequest": visaCardRequest,
+        "verveCardRequest": verveCardRequest,
+        "scanToPay": scanToPay,
+        "zMobileRequest": zMobileRequest,
+        "zPromptRequest": zPromptRequest,
+        "statementByEmailRequest": statementByEmailRequest,
+        "uSSDRequest": uSSDRequest,
+        "bankWalletRequest": bankWalletRequest,
+        "cardRequest": cardRequest,
+        "cardType": cardType,
+        "requestingBranch": requestingBranch,
+        "destinationBranch": destinationBranch,
+        "preferredNameOnCard": preferredNameOnCard,
+        "monthlyIncome": monthlyIncome,
+        "employmentTypes": employmentTypes,
+        'id': id,
+        "transactionTypes": jsonEncode(
+            new List<dynamic>.from(transactionTypes.map((x) => x.toJson()))),
+        "accountPurposes": jsonEncode(
+            new List<dynamic>.from(accountPurposes.map((x) => x.toJson()))),
+        "sourceOfFunds": jsonEncode(
+            new List<dynamic>.from(sourceOfFunds.map((x) => x.toJson()))),
+      };
+
+  factory AccountForm.fromJsonModified(Map<String, dynamic> json) {
+    return new AccountForm(
+      accountType: json["accountType"],
+      accountNumber: json["accountNumber"],
+      accountHolderType: json["accountHolderType"],
+      classCode: json["classCode"],
+      branchNumber: json["branchNumber"],
+      phoneNumber: json["phoneNumber"],
+      rsmId: json["rsmId"],
+      accountName: json["accountName"],
+      tin: json["tin"],
+      registrationNumber: json["registrationNumber"],
+      sex: json["sex"],
+      title: json["title"],
+      id: json["id"],
+      dateOfBirth: json["dateOfBirth"],
+      dateOfIncorporation: json["dateOfIncorporation"],
+      businessNature: json["businessNature"],
+      sector: json["sector"],
+      industry: json["industry"],
+      riskRank: json["riskRank"],
+      addressLine1: json["addressLine1"],
+      city: json["city"],
+      state: json["state"],
+      countryOfOrigin: json["countryOfOrigin"],
+      signatoryDetails: new List<SignatoryDetail>.from(
+          jsonDecode(json["signatoryDetails"])
+              .map((x) => SignatoryDetail.fromJson(x))),
+      refId: json["refId"],
+      masterCardRequest: json["masterCardRequest"],
+      visaCardRequest: json["visaCardRequest"],
+      verveCardRequest: json["verveCardRequest"],
+      scanToPay: json["scanToPay"],
+      zMobileRequest: json["zMobileRequest"],
+      zPromptRequest: json["zPromptRequest"],
+      statementByEmailRequest: json["statementByEmailRequest"],
+      uSSDRequest: json["uSSDRequest"],
+      bankWalletRequest: json["bankWalletRequest"],
+      cardRequest: json["cardRequest"],
+      cardType: json["cardType"],
+      requestingBranch: json["requestingBranch"],
+      destinationBranch: json["destinationBranch"],
+      preferredNameOnCard: json["preferredNameOnCard"],
+      latitude: json["latitude"] != null ? double.parse(json["latitude"]) : 0,
+      longitude:
+          json["longitude"] != null ? double.parse(json["longitude"]) : 0,
+      employmentTypes: json["employmentTypes"],
+      monthlyIncome: json["monthlyIncome"],
+      transactionTypes: new List<TransactionTypes>.from(
+          jsonDecode(json["transactionTypes"])
+              .map((x) => TransactionTypes.fromJson(x))),
+      accountPurposes: new List<AccountPurposes>.from(
+          jsonDecode(json["accountPurposes"])
+              .map((x) => AccountPurposes.fromJson(x))),
+      sourceOfFunds: new List<SourceOfFundsObj>.from(
+          jsonDecode(json["sourceOfFunds"])
+              .map((x) => SourceOfFundsObj.fromJson(x))),
+    );
+  }
 }
 
 class SignatoryDetail {
@@ -287,7 +380,7 @@ class SignatoryDetail {
   String? nextOfKinPhone;
   String? nextOfKinRelationship;
   String? nextOfKinGender;
- // String? monthlyIncome;
+  // String? monthlyIncome;
   List<Attachment>? attachments;
   String? mmda;
   String? placeOfBirth;
@@ -349,7 +442,7 @@ class SignatoryDetail {
     this.nextOfKinPhone,
     this.nextOfKinRelationship,
     this.homeTown,
-  //  this.monthlyIncome
+    //  this.monthlyIncome
   });
 
   factory SignatoryDetail.fromJson(Map<String, dynamic> json) =>
@@ -403,16 +496,15 @@ class SignatoryDetail {
         utilityUrl: json["UtilityUrl"],
         bvn: json["Bvn"],
         maritalStatus: json["MaritalStatus"],
-
         nextOfKin: json["NextOfKin"],
-         nextOfKinRelationship: json["NextOfKinRelationship"],
-          nextOfKinPhone: json["NextOfKinPhone"],
-           nextOfKinGender: json["NextOfKinGender"],
-
-          homeTown: json["HomeTown"],
-
-        attachments:  json["Attachments"] != null? new List<Attachment>.from(
-            json["Attachments"].map((x) => Attachment.fromJson(x))) : null,
+        nextOfKinRelationship: json["NextOfKinRelationship"],
+        nextOfKinPhone: json["NextOfKinPhone"],
+        nextOfKinGender: json["NextOfKinGender"],
+        homeTown: json["HomeTown"],
+        attachments: json["Attachments"] != null
+            ? new List<Attachment>.from(
+                json["Attachments"].map((x) => Attachment.fromJson(x)))
+            : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -466,14 +558,15 @@ class SignatoryDetail {
         "Bvn": bvn,
         "MaritalStatus": maritalStatus,
         "NextOfKin": nextOfKin,
-     //    "MonthlyIncome": monthlyIncome,
-         "NextOfKinRelationship": nextOfKinRelationship,
-          "NextOfKinPhone": nextOfKinPhone,
-           "NextOfKinGender": nextOfKinGender,
-            "HomeTown" :homeTown,
+        //    "MonthlyIncome": monthlyIncome,
+        "NextOfKinRelationship": nextOfKinRelationship,
+        "NextOfKinPhone": nextOfKinPhone,
+        "NextOfKinGender": nextOfKinGender,
+        "HomeTown": homeTown,
 
-        "Attachments": attachments != null?
-            new List<dynamic>.from(attachments!.map((x) => x.toJson())) : null,
+        "Attachments": attachments != null
+            ? new List<dynamic>.from(attachments!.map((x) => x.toJson()))
+            : null,
       };
 }
 
