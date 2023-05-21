@@ -1,18 +1,17 @@
 import 'dart:convert';
 
-Occupation occupationFromJson(String str) =>
-    Occupation.fromJson(json.decode(str));
+State stateFromJson(String str) => State.fromJson(json.decode(str));
 
-String occupationToJson(Occupation data) => json.encode(data.toJson());
+String stateToJson(State data) => json.encode(data.toJson());
 
-class Occupation {
+class State {
   String? responseCode;
   String? responseMessage;
   List<String>? menu;
 
-  Occupation({this.responseCode, this.responseMessage, this.menu});
+  State({this.responseCode, this.responseMessage, this.menu});
 
-  factory Occupation.fromJson(Map<String, dynamic> json) => Occupation(
+  factory State.fromJson(Map<String, dynamic> json) => State(
         responseCode: json["ResponseCode"],
         responseMessage: json["ResponseMessage"],
         menu: List<String>.from(json["Menu"].map((x) => x)),
