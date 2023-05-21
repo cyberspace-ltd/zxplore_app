@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>You can take pictures of your documents and attach them when submitting an account.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>You choose a picture from your gallery and attach them when submitting an account.</string>
 </dict>
 </plist>
