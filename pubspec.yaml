@@ -10,6 +10,7 @@ environment:
   sdk: '>=3.0.1 <4.0.0'
 
 dependencies:
+  backdrop: ^0.9.0
   crypto: ^3.0.3
   dio: ^5.1.2
   drift: ^2.8.0
