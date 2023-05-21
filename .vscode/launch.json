@@ -5,21 +5,46 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "zxplore_app",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "zxplore_app (profile mode)",
+            "name": "zxplore_app (test env)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "debug",
+            "toolArgs": [
+                "--dart-define",
+                "ENCRYPT_KEY=CYBER400SPACE",
+                "--dart-define",
+                "INITIALISING_VECTOR_KEY=QZAzz@t@f7431c8d00b85a6d",
+                "--dart-define",
+                "BASE_URL=https://webservicestest.zenithbank.com:8443/ZenithAccountService/api"
+            ]
         },
         {
-            "name": "zxplore_app (release mode)",
+            "name": "zxplore_app (staging env)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "debug",
+            "toolArgs": [
+                "--dart-define",
+                "ENCRYPT_KEY=CYBER400SPACE",
+                "--dart-define",
+                "INITIALISING_VECTOR_KEY=QZAzz@t@f7431c8d00b85a6d",
+                "--dart-define",
+                "BASE_URL=https://41.138.171.45:8444/api"
+            ]
+        },
+        {
+            "name": "zxplore_app (prod env)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "toolArgs": [
+                "--dart-define",
+                "ENCRYPT_KEY=CYBER400SPACE",
+                "--dart-define",
+                "INITIALISING_VECTOR_KEY=QZAzz@t@f7431c8d00b85a6d",
+                "--dart-define",
+                "BASE_URL=https://zenorms.zenithbank.com:8443/api"
+            ]
         }
     ]
 }
