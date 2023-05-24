@@ -13,6 +13,7 @@ class ApiInterceptor extends Interceptor {
     options.headers['Content-Type'] = 'application/json';
 
     if (!options.path.startsWith('/Authentication')) {
+      // TODO: add token to header
       // final sp = await SharedPreferences.getInstance();
       // final json = sp.getString(SharedPrefKeys.assetMgmtUserKey);
       // if (json != null) {
