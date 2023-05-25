@@ -10,9 +10,7 @@ part of 'zenithbank_api.dart';
 
 class _ZenithBankApi implements ZenithBankApi {
   _ZenithBankApi(
-    this._dio, {
-    this.baseUrl,
-  });
+    this._dio);
 
   final Dio _dio;
 
@@ -52,7 +50,7 @@ class _ZenithBankApi implements ZenithBankApi {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<Occupation>(Options(
       method: 'GET',
@@ -75,7 +73,7 @@ class _ZenithBankApi implements ZenithBankApi {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<AccountClass>(Options(
       method: 'GET',
@@ -98,7 +96,7 @@ class _ZenithBankApi implements ZenithBankApi {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<State>(Options(
       method: 'GET',
@@ -121,7 +119,7 @@ class _ZenithBankApi implements ZenithBankApi {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<State>(Options(
       method: 'GET',
@@ -144,7 +142,7 @@ class _ZenithBankApi implements ZenithBankApi {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result =
         await _dio.fetch<Map<String, dynamic>>(_setStreamType<State>(Options(
       method: 'GET',
@@ -168,7 +166,7 @@ class _ZenithBankApi implements ZenithBankApi {
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<AccountsResponse>(Options(
       method: 'GET',
@@ -193,7 +191,7 @@ class _ZenithBankApi implements ZenithBankApi {
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<AccountDetailsResponse>(Options(
       method: 'GET',
@@ -218,7 +216,7 @@ class _ZenithBankApi implements ZenithBankApi {
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<VerifyAccountResponse>(Options(
       method: 'GET',
