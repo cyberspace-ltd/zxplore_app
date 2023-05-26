@@ -4,17 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zxplore_app/src/router/router.dart';
 
-class DashboardPage extends ConsumerStatefulWidget {
+class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key, required this.child});
   final Widget child;
-
   @override
-  ConsumerState<DashboardPage> createState() => _DashboardPageState();
-}
-
-class _DashboardPageState extends ConsumerState<DashboardPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final (index: selectedIndex, title: pageTitle) =
         _calculateSelectedIndexandTitle(context);
     return BackdropScaffold(
@@ -65,7 +59,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         ],
         onTap: (int idx) => _onItemTapped(idx, context),
       ),
-      frontLayer: widget.child,
+      frontLayer: child,
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(24),
         color: Theme.of(context).colorScheme.surface,
