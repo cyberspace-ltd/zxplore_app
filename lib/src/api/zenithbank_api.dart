@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:zxplore_app/src/api/dio/dio_factory.dart';
 import 'package:zxplore_app/src/api/models/account_class_model.dart';
 import 'package:zxplore_app/src/api/models/account_details_response.dart';
 import 'package:zxplore_app/src/api/models/accounts_response.dart';
@@ -58,3 +60,9 @@ abstract class ZenithBankApi {
     @Body() required String encodedJson,
   });
 }
+
+final apiPod = FutureProvider<ZenithBankApi>((ref) async {
+  final dio = await createDio();
+
+  return ZenithBankApi(dio);
+});

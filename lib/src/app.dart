@@ -51,7 +51,7 @@ class MyApp extends ConsumerWidget {
         // textTheme: lightTextTheme,
         brightness: Brightness.light,
         textButtonTheme: lightTextButtonTheme,
-        colorSchemeSeed: Colors.red,
+        colorSchemeSeed: Colors.redAccent.shade700,
         elevatedButtonTheme: lightElevatedButtonTheme,
         inputDecorationTheme: lightInputDecorationTheme,
         appBarTheme: lightAppBarTheme,

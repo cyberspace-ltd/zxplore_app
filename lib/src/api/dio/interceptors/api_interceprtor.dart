@@ -1,7 +1,11 @@
 // import 'dart:convert';
 
 import 'package:dio/dio.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:logging/logging.dart';
+import 'package:zxplore_app/src/utils/secure_storage.dart';
+import 'package:zxplore_app/src/utils/zxplore_crypto_helper.dart';
+
+final log = Logger('ApiInterceptor');
 
 /// Interceptor for the Zenith Bank API.
 class ApiInterceptor extends Interceptor {
@@ -12,16 +16,26 @@ class ApiInterceptor extends Interceptor {
   ) async {
     options.headers['Content-Type'] = 'application/json';
 
-    if (!options.path.startsWith('/Authentication')) {
-      // TODO: add token to header
-      // final sp = await SharedPreferences.getInstance();
-      // final json = sp.getString(SharedPrefKeys.assetMgmtUserKey);
-      // if (json != null) {
-      //   final user = AssetMgmtLocalUser.fromJson(jsonDecode(json));
-      //   final token = user.authToken;
-      //   options.headers['Authorization'] = 'Bearer $token';
-      // }
+    if (options.path.startsWith('/Security')) {
+      final data = options.data;
+      final encryptedUserName = CryptoHelper.encrypt(data["Username"]);
+      final encryptedPassword = CryptoHelper.encrypt(data["Password"]);
+
+      options.data = {
+        "Username": encryptedUserName,
+        "Password": encryptedPassword,
+      };
     }
+
+    if (!options.path.startsWith('/Security')) {
+      final token = await SecureStorage.getEmployeeToken();
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+
+    log.info(
+      'Request: ${options.method} ${options.baseUrl}${options.path} '
+      'headers: ${options.headers} data: ${options.data}',
+    );
 
     return super.onRequest(options, handler);
   }

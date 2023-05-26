@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 final lightTextButtonTheme = TextButtonThemeData(
   style: ButtonStyle(
     foregroundColor: MaterialStateProperty.all(
-      const Color(0xff70C021),
+      Colors.redAccent.shade700,
     ),
   ),
 );

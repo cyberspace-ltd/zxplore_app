@@ -6,7 +6,7 @@ import 'package:zxplore_app/src/constants/constants.dart';
 
 class CryptoHelper {
   static String _getShaHashOfKey({int length = 32}) {
-    List<int> bytes = utf8.encode(ENCRYPT_KEY);
+    List<int> bytes = utf8.encode(encryptKey);
 
     String result;
 
@@ -24,7 +24,7 @@ class CryptoHelper {
   static String encrypt(String value) {
     try {
       final key = Key.fromUtf8(_getShaHashOfKey());
-      final iv = IV.fromUtf8(INITIALISING_VECTOR_KEY);
+      final iv = IV.fromUtf8(initialisingVectorKey);
 
       final encrypter =
           Encrypter(AES(key, mode: AESMode.cbc, padding: 'PKCS7'));
@@ -39,7 +39,7 @@ class CryptoHelper {
   static String decrypt(String secret) {
     try {
       final key = Key.fromUtf8(_getShaHashOfKey());
-      final iv = IV.fromUtf8(INITIALISING_VECTOR_KEY);
+      final iv = IV.fromUtf8(initialisingVectorKey);
 
       final encrypter =
           Encrypter(AES(key, mode: AESMode.cbc, padding: 'PKCS7'));

@@ -4,12 +4,12 @@ class Assets {
   static const String createAccount = 'assets/images/create_account.png';
 }
 
-const SAVINGS_ACCOUNT = 'SAVINGS ACCOUNT';
-const CURRENT_ACCOUNT = 'CURRENT ACCOUNT';
+const savingAccount = 'SAVINGS ACCOUNT';
+const currentAccount = 'CURRENT ACCOUNT';
 
-const String ENCRYPT_KEY = "CYBER400SPACE";
+const String encryptKey = "CYBER400SPACE";
 
-const String INITIALISING_VECTOR_KEY = "f7431c8d00b85a6d";
+const String initialisingVectorKey = "f7431c8d00b85a6d";
 
-const String CERTIFICATE_SHA =
+const String certificateSHA =
     "sha256/jamhwE50GWeSiVF2Q6/uxCHVFovx8XDBKoPiKbYJp28=";
