@@ -248,8 +248,11 @@ class _SignatoryStepState extends State<SignatoryStep>
   }
 
   Widget submitButton() {
+    accountFormBloc!.setFormValidation();
+
     return StreamBuilder(
-      stream: accountFormBloc!.submitValid,
+      //   stream: accountFormBloc!.submitValid,
+      stream: accountFormBloc!.formValidation,
       builder: (context, snapshot) {
         return Padding(
           padding: const EdgeInsets.all(12.0),
@@ -268,6 +271,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                     ),
                   ),
                   onPressed: (snapshot.hasData &&
+                          snapshot.data == true &&
                           isLoading == false &&
                           (_isButtonDisabled == false ||
                               (editingForm ?? false)))

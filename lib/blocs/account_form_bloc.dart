@@ -96,6 +96,8 @@ class AccountFormBloc extends BlocBase with Validators {
 
   final _showOtherOccupationController = BehaviorSubject<bool?>();
 
+  final _validateFormController = BehaviorSubject<bool?>();
+
   // Edit form
   final _editableFormController = BehaviorSubject<bool?>();
 
@@ -538,6 +540,24 @@ class AccountFormBloc extends BlocBase with Validators {
   Stream<bool> get submitValid =>
       Rx.combineLatest2(phoneNumber, signature, (dynamic e, dynamic p) => true);
 
+/*
+  Stream<bool> submitValid() {
+    return databaseRowIDController.stream;
+  }
+  */
+
+  void setFormValidation() async {
+    bool? isFormValid = await validateForm();
+    _validateFormController.sink.add(isFormValid);
+  }
+
+  Stream<bool?> get formValidation => _validateFormController.stream;
+
+/*
+  Stream<bool?> getFormValidation() {
+    return _validateFormController.stream;
+  }
+*/
   // change data
 
   Function(String?) get changeAccountType => _accountTypeController.sink.add;
@@ -2095,6 +2115,12 @@ if (anticipatedAmountWithdraw == null) {
           .addError("Ensure you enter a valid ID card issue date");
       return;
     }
+    if (validTIN == null) {
+      _tinController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not entered Ghana card number");
+      return;
+    }
 
 //    final validIsSendEmail = _isSendEmailController.value;
 //    final validIsReceiveSms = _isReceiveSmsController.value;
@@ -2885,7 +2911,7 @@ if (anticipatedAmountWithdraw == null) {
 
       var offlineId = _idController.valueOrNull;
       if (offlineId != null) {
-        //  await _accountsRepository.deleteOfflineAccount(offlineId);
+        //   await _accountsRepository.deleteOfflineAccount(offlineId);
       }
 
       _subjectSaveAccountResponse.sink.add(response);
@@ -3000,6 +3026,624 @@ if (anticipatedAmountWithdraw == null) {
     } catch (ex) {
       print(ex);
     }
+  }
+
+  Future<bool?> validateForm() async {
+    var rowId = databaseRowIDController.valueOrNull;
+    var validRefenceId = _referenceIdController.valueOrNull;
+
+    var validAccountType = _accountTypeController.valueOrNull;
+    final validAccountHolderType =
+        _accountHolderTypeController.valueOrNull ?? 'INDIVIDUAL';
+    final validAccountRiskRank = _riskRankController.valueOrNull != null
+        ? _riskRankController.valueOrNull
+        : '';
+    String? validAccountCategory = _accountCategoryController.valueOrNull;
+
+    List<AccountClassEntity> accountClasses =
+        await DBProvider.db.getAccountClasses();
+
+    validAccountCategory = accountClasses
+        .firstWhere((x) => x.name == validAccountCategory)
+        .id
+        .toString(); //hotfix: to solve issue of account category filter from account type
+    var validTIN = _tinController.valueOrNull;
+    final validTitle = _titleController.valueOrNull;
+    final validSurname = _surnameController.valueOrNull;
+    final validFirstName = _firstNameController.valueOrNull;
+    var validOtherName = _otherNameController.valueOrNull;
+    final validMothersMaidenName = _mothersMaidenNameController.valueOrNull;
+    final validDateOfBirth = _dateOfBirthController.valueOrNull;
+//    final validStateOfOrigin = _stateOfOriginController.value;
+    final validPlaceOfBirth = _placeOfBirthController.valueOrNull;
+
+    var validMMDA = _mmdaController.valueOrNull;
+
+    final validCountryOfOrigin = _countryOfOriginController.valueOrNull == null
+        ? 'GHANA'
+        : _countryOfOriginController.valueOrNull; //workaround for bug
+
+    final countryIDIssuer = _countryOfIDCountryIssueController.valueOrNull;
+
+    var validEmail = _emailController.valueOrNull;
+
+    double validLatitude = double.parse(
+        _latitudeController.hasValue ? _latitudeController.value : "0");
+
+    double validLongitude = double.parse(
+        _longitudeController.hasValue ? _longitudeController.value : "0");
+
+    final validPhone = _phoneNumberController.valueOrNull;
+
+    final validNextOfKin = _nextOfKinController.valueOrNull;
+    final validNextOfKinPhone = _nextOfKinPhoneController.valueOrNull;
+    final validNextOfKinRelationship =
+        _nextOfKinRelationshipController.valueOrNull;
+
+    final validNextOfKinAddress = _nextOfKinAddressController.valueOrNull;
+
+    final nextOfKinGender = _nextOfKinGenderController.valueOrNull;
+
+    final monthlyIncome = _monthlyIncomeController.valueOrNull;
+    final homeTown = _homeTownController.valueOrNull;
+
+    final validAddress1 = _address1Controller.valueOrNull;
+    var validAddress2 = _address2Controller.valueOrNull;
+    final validCountryOfResidence =
+        _countryOfResidenceController.valueOrNull == null
+            ? 'GHANA'
+            : _countryOfResidenceController.valueOrNull; //workaround for bug
+
+    final validStateOfResidence = _stateOfResidenceController.valueOrNull;
+    final validCityOfResidence = _cityOfResidenceController.valueOrNull;
+    final validGender = _genderController.valueOrNull;
+    var validOccupation = occupationController.valueOrNull;
+    var validOtherOccupation = othersOccupationController.valueOrNull;
+    if (validOccupation == "OTHER (PLEASE SPECIFY)") {
+      validOccupation = validOccupation! + "-" + (validOtherOccupation ?? " ");
+    }
+    final validMaritalStatus = _maritalStatusController.valueOrNull;
+
+    var validIdType = _idTypeController.valueOrNull;
+    var validIdIssuer = _idIssuerController.valueOrNull;
+    if (validIdIssuer == "OTHERS") {
+      validIdIssuer = _idIssuerOthersController.valueOrNull;
+    }
+    var admissionNo = _admissionNoController.valueOrNull;
+
+    var validIdNumber = _idNumberController.valueOrNull;
+    var validIdPlaceOfIssue = _idPlaceOfIssueController.valueOrNull != null
+        ? _idPlaceOfIssueController.valueOrNull
+        : null;
+    var validIdIssueDate = _idIssueDateController.valueOrNull;
+    var validIdExpiryDate = _idExpiryDateController.valueOrNull;
+
+    bool idBool = idTypesWithDates.contains(validIdType);
+
+    if (idBool && (validIdIssueDate == null || validIdExpiryDate == null)) {
+      _idIssueDateController.addError("Field is required");
+      _idExpiryDateController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("Ensure you enter a valid ID card issue and expiry date");
+      return false;
+    }
+
+    if (validIdType == 'VOTER\'S ID CARD' && validIdIssueDate == null) {
+      _idIssueDateController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("Ensure you enter a valid ID card issue date");
+      return false;
+    }
+    if (validTIN == null) {
+      _tinController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not entered Ghana card number");
+      return false;
+    }
+    final validIsScanToPay = _isScanToPayController.valueOrNull;
+    final validIsZMobile = _isZMobileController.valueOrNull;
+    final validIsZPrompt = _isZPromptController.valueOrNull;
+    final validIsStatementViaEmail = _isStatementViaEmailController.valueOrNull;
+    final validUSSD = _isUssdController.valueOrNull;
+    final validBankToWallet = _isBankToWalletController.valueOrNull;
+
+    final validIsCardRequest = _isCardRequestController.valueOrNull;
+    String? validCardType = cardTypeController.valueOrNull;
+    String? validRequestingBranch = _requestingBranchController.valueOrNull;
+    String? validDestinationBranch = _destinationBranchController.valueOrNull;
+    String? validPreferredNameOnCard =
+        _preferredNameOnCardController.valueOrNull;
+
+    final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
+    final validUploadIdImage2InBase64 = _uploadIdImageController2.valueOrNull;
+
+    final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
+
+    final validUploadAdmissionLetterInBase64 =
+        uploadAdmissionLetterController.valueOrNull;
+
+    final validUploadUtilityBillInBase64 =
+        _uploadUtilityBillController.valueOrNull;
+
+    final validUploadResidentPermitInBase64 =
+        _uploadResidentPermitController.valueOrNull;
+
+    final validUploadSignatureInBase64 = _uploadSignatureController.valueOrNull;
+
+    if (validAccountType == null) {
+      _accountTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected an account type.");
+      return false;
+    }
+
+    if (monthlyIncome == null) {
+      _accountTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected an monthly income");
+      return false;
+    }
+
+    if (homeTown == null) {
+      _homeTownController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not entered home town");
+      return false;
+    }
+
+    if (validAccountCategory.isEmpty) {
+      _accountCategoryController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected an account category.");
+      return false;
+    }
+
+    if (validAccountCategory == 'ASPIRE ACCOUNT' && admissionNo == null) {
+      _admissionNoController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("enter Admission number");
+      return false;
+    }
+
+    if (validTitle == null) {
+      _titleController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid title");
+
+      return false;
+    }
+
+    if (validSurname == null) {
+      _surnameController.addError("Field is required");
+      _subjectSaveAccountResponse.addError("You have not filled in a surname");
+      return false;
+    }
+
+    final anticipatedNoDepositTran = _anticipatedNoTranController.valueOrNull;
+
+    if (anticipatedNoDepositTran == null) {
+      _anticipatedNoTranController.addError("Field is required");
+      _subjectSaveAccountResponse.addError(
+          "You have not filled in a Anticipated number of deposit transaction");
+      return false;
+    }
+    final anticipatedAmountDepositTran =
+        _anticipatedAmountController.valueOrNull;
+
+    if (anticipatedAmountDepositTran == null) {
+      _anticipatedAmountController.addError("Field is required");
+      _anticipatedAmountController.addError(
+          "You have not filled in a Anticipated amount of deposit transaction");
+      return false;
+    }
+
+    final anticipatedNoWithdraw =
+        _anticipatedWithdrawTranController.valueOrNull;
+
+    if (anticipatedNoWithdraw == null) {
+      _anticipatedWithdrawTranController.addError("Field is required");
+      _anticipatedWithdrawTranController.addError(
+          "You have not filled in a Anticipated number of withdrawal transaction");
+      return false;
+    }
+    final anticipatedAmountWithdraw =
+        _anticipatedAmountWithdrawController.valueOrNull;
+
+    if (anticipatedAmountWithdraw == null) {
+      _anticipatedAmountWithdrawController.addError("Field is required");
+      _anticipatedAmountWithdrawController.addError(
+          "You have not filled in a Anticipated amount of deposit transaction");
+      return false;
+    }
+
+    List<TransactionTypes> transactionTypesList = [];
+    TransactionTypes transactionTypes = TransactionTypes(
+      transactionType: "Deposit",
+      transactionCount: anticipatedNoDepositTran.toString(),
+      expectedAmount: anticipatedAmountDepositTran.toString(),
+    );
+    transactionTypesList.add(transactionTypes);
+    TransactionTypes withdrawalTransactionTypes = TransactionTypes(
+      transactionType: "Withdraw",
+      transactionCount: anticipatedNoWithdraw.toString(),
+      expectedAmount: anticipatedAmountWithdraw.toString(),
+    );
+
+    transactionTypesList.add(withdrawalTransactionTypes);
+
+// Account Purposes
+
+    final salaryProcessing = _salaryProcessingController.valueOrNull;
+    final bankingService = _bankingServiceController.valueOrNull;
+    final business = _businessController.valueOrNull;
+    final singleTransaction = _singleTransactionController.valueOrNull;
+    final safeKeeping = _safeKeepingController.valueOrNull;
+    final savingAndInvestment = _savingAndInvestmentController.valueOrNull;
+    final receipt = _receiptController.valueOrNull;
+    final others = _othersController.valueOrNull;
+    final othersPurpose = othersPurposeController.valueOrNull;
+
+    List<AccountPurposes> accountPurposeList = [];
+    if (salaryProcessing != null && salaryProcessing == true) {
+      accountPurposeList.add(AccountPurposes("Salary processing"));
+    }
+    if (bankingService != null && bankingService == true) {
+      accountPurposeList.add(AccountPurposes("Access to banking services"));
+    }
+    if (business != null && business == true) {
+      accountPurposeList.add(AccountPurposes("Business/Transactional"));
+    }
+    if (singleTransaction != null && singleTransaction == true) {
+      accountPurposeList
+          .add(AccountPurposes("Facilitation of a single transaction"));
+    }
+    if (safeKeeping != null && safeKeeping == true) {
+      accountPurposeList.add(AccountPurposes("Security/Safekeeping"));
+    }
+    if (savingAndInvestment != null && savingAndInvestment == true) {
+      accountPurposeList.add(AccountPurposes("Savings & Investment"));
+    }
+    if (receipt != null && receipt == true) {
+      accountPurposeList
+          .add(AccountPurposes("Receipt of inflows for Personal upkeep"));
+    }
+
+    if (others != null && others == true) {
+      accountPurposeList.add(AccountPurposes("Other"));
+    }
+
+    if (others != null && others == true) {
+      if (othersPurpose != null) {
+        accountPurposeList.add(AccountPurposes("Other-$othersPurpose"));
+      }
+    }
+
+// Source of funds
+
+    final salary = _salaryController.valueOrNull;
+    final rental = _rentalIncomeController.valueOrNull;
+    final personalS = _personalSavingController.valueOrNull;
+    final familyFriend = _familyFriendController.valueOrNull;
+    final dividends = _dividendsController.valueOrNull;
+    final commission = _commissionController.valueOrNull;
+    final businessProceed = _businessProceedController.valueOrNull;
+    final otherSource = _otherSourceController.valueOrNull;
+    final enterOther = enterOtherSourceController.valueOrNull;
+
+    final employmentType = _employmentTypeController.valueOrNull;
+
+    List<SourceOfFundsObj> sourceList = [];
+    if (salary != null && salary == true) {
+      sourceList.add(SourceOfFundsObj("Salary"));
+    }
+    if (rental != null && rental == true) {
+      sourceList.add(SourceOfFundsObj("Rental Income"));
+    }
+    if (personalS != null && personalS == true) {
+      sourceList.add(SourceOfFundsObj("Personal Savings"));
+    }
+    if (familyFriend != null && familyFriend == true) {
+      sourceList.add(SourceOfFundsObj("Family & Friends"));
+    }
+    if (dividends != null && dividends == true) {
+      sourceList.add(SourceOfFundsObj("Dividends"));
+    }
+    if (commission != null && commission == true) {
+      sourceList.add(SourceOfFundsObj("Commissions"));
+    }
+    if (businessProceed != null && businessProceed == true) {
+      sourceList.add(SourceOfFundsObj("Business Proceeds"));
+    }
+
+    if (otherSource != null && otherSource == true) {
+      sourceList.add(SourceOfFundsObj("Other"));
+    }
+
+    if (otherSource != null && otherSource == true) {
+      if (enterOther != null) {
+        sourceList.add(SourceOfFundsObj("Other-$enterOther"));
+      }
+    }
+
+    RegExp regex = new RegExp(pattern as String);
+
+    if (regex.hasMatch(validSurname)) {
+      _surnameController.addError("Enter a valid surname");
+      _subjectSaveAccountResponse
+          .addError("You have not entered a valid surname");
+      return false;
+    }
+
+    if (validFirstName == null) {
+      _firstNameController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a valid firstname");
+
+      return false;
+    }
+
+    if (regex.hasMatch(validFirstName)) {
+      _firstNameController.addError("Enter a valid first name");
+      _subjectSaveAccountResponse
+          .addError("You have not entered in a valid firstname");
+
+      return false;
+    }
+
+    if (validMothersMaidenName == null) {
+      _mothersMaidenNameController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a valid the mother\'s maiden name");
+
+      return false;
+    }
+
+    if (regex.hasMatch(validMothersMaidenName)) {
+      _mothersMaidenNameController
+          .addError("Enter a valid mother\'s maiden name");
+      _subjectSaveAccountResponse.addError(
+          "You have not entered in a valid the mother\'s maiden name");
+
+      return false;
+    }
+
+    if (validDateOfBirth == null) {
+      _dateOfBirthController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid date of birth");
+
+      return false;
+    }
+
+    if (validPlaceOfBirth == null) {
+      _placeOfBirthController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid Place of Birth");
+
+      return false;
+    }
+
+    if (validMMDA == null) {
+      _mmdaController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid MMDA");
+
+      return false;
+    }
+
+    if (validCountryOfOrigin == null) {
+      _countryOfOriginController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid country of origin");
+
+      return false;
+    }
+
+    if (countryIDIssuer == null) {
+      _countryOfIDCountryIssueController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid country of origin");
+
+      return false;
+    }
+
+    if (validPhone == null) {
+      _phoneNumberController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid phone number");
+
+      return false;
+    }
+
+    if (validNextOfKin == null) {
+      _nextOfKinController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin");
+
+      return false;
+    }
+
+    if (validNextOfKinPhone == null) {
+      _nextOfKinPhoneController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin phone number");
+
+      return false;
+    }
+
+    if (validNextOfKinRelationship == null) {
+      _nextOfKinRelationshipController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin relationship");
+
+      return false;
+    }
+
+    if (validNextOfKinAddress == null) {
+      _nextOfKinAddressController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin Address");
+
+      return false;
+    }
+
+    if (nextOfKinGender == null) {
+      _nextOfKinGenderController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled in a next of kin gender");
+
+      return false;
+    }
+
+    if (employmentType == null) {
+      _employmentTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled a employment type");
+
+      return false;
+    }
+
+    if (validAddress1 == null) {
+      _address1Controller.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled a valid main address");
+
+      return false;
+    }
+
+    if (validCountryOfResidence == null) {
+      _countryOfResidenceController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid country of residence");
+
+      return false;
+    }
+    if (validStateOfResidence == null) {
+      _stateOfResidenceController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a Region of Residence");
+      return false;
+    }
+
+    if (validCityOfResidence == null) {
+      _cityOfResidenceController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid city of residence");
+      return false;
+    }
+
+    if (validGender == null) {
+      _genderController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not chosen a valid gender");
+      return false;
+    }
+
+    if (validOccupation == null) {
+      occupationController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid occupation");
+      return false;
+    }
+
+    if (validMaritalStatus == null) {
+      _maritalStatusController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a marital status");
+
+      return false;
+    }
+    if (validIdType == null && validAccountCategory != easy_classic) {
+      _idTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid ID type");
+      return false;
+    } else if (validIdType == null && validAccountCategory == easy_classic) {
+      validIdType = "";
+      // return false;
+    }
+
+    if (validIdIssuer == null && validAccountCategory != easy_classic) {
+      _idIssuerController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not filled a valid ID Issuer");
+      return false;
+    } else if (validIdIssuer == null && validAccountCategory == easy_classic) {
+      validIdIssuer = "";
+    }
+
+    if (validIdNumber == null && validAccountCategory != easy_classic) {
+      _idNumberController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid ID number");
+
+      return false;
+    } else if (validIdNumber == null && validAccountCategory == easy_classic) {
+      validIdNumber = "";
+    }
+
+    if (validIdPlaceOfIssue == null && validAccountCategory != easy_classic) {
+    } else if (validIdPlaceOfIssue == null &&
+        validAccountCategory == easy_classic) {
+      //  validIdPlaceOfIssue = countryIDIssuer;
+    }
+
+    if (validIdIssueDate == null &&
+        (validIdType == STUDENT_ID ||
+            validIdType == OTHERS ||
+            validIdType == SSNIT_CARD)) {
+      validIdIssueDate = "";
+    } else if (validIdIssueDate != null) {
+      validIdIssueDate = validIdIssueDate;
+    } else {
+      _idIssueDateController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid issue date");
+
+      return false;
+    }
+
+    if (validIdExpiryDate == null &&
+        (validIdType == STUDENT_ID ||
+            validIdType == OTHERS ||
+            validIdType == SSNIT_CARD ||
+            validIdType == VOTERS_CARD)) {
+      validIdExpiryDate = "";
+    } else if (validIdExpiryDate != null) {
+      validIdExpiryDate = validIdExpiryDate;
+    } else {
+      _idExpiryDateController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid expiry date");
+      return false;
+    }
+
+    if (validIsCardRequest == true && validCardType == null) {
+      cardTypeController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid card type");
+      return false;
+    }
+
+    if (validIsCardRequest == true && validRequestingBranch == null) {
+      _requestingBranchController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid requesting branch");
+      return false;
+    }
+
+    if (validIsCardRequest == true && validDestinationBranch == null) {
+      _destinationBranchController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid destination branch");
+      return false;
+    }
+
+    if (validIsCardRequest == true && validPreferredNameOnCard == null) {
+      _preferredNameOnCardController.addError("Field is required");
+      _subjectSaveAccountResponse
+          .addError("You have not selected a valid preferred name on card");
+      return false;
+    }
+    return true;
   }
 
   Future<void> getCurrentLocation() async {
