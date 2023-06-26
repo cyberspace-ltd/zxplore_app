@@ -72,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
         //   _fetchTransactionTypeUrl(data);
         //   _fetchNoOfTransactionUrl(data);
-
       }
     });
 
@@ -269,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 subtitle: new Text(
-                    'This is for accounts that have been saved, but not completed.'),
+                    'This is for accounts that have been saved on the server, but not completed.'),
                 onTap: () {
 //                _controller.animateTo(0);
 //                Navigator.pop(context);
@@ -359,8 +358,36 @@ class _MyHomePageState extends State<MyHomePage> {
 //                Navigator.pop(context);
                 },
               ),
+              new ListTile(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                    color: Colors.purpleAccent,
+                    type: MaterialType.circle,
+                    child: new Container(
+                      width: 24,
+                      height: 24,
+                    ),
+                  ),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
+                  child: new Text(
+                    'Saved on device',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                subtitle: new Text(
+                    'This is for an un-completed accounts details, saved on the mobile device to be completed at a later time.'),
+                onTap: () {
+//                _controller.animateTo(0);
+//                Navigator.pop(context);
+                },
+              ),
               SizedBox(
-                height: 4.0,
+                height: 15.0,
               )
             ],
           );
@@ -810,5 +837,4 @@ class _MyHomePageState extends State<MyHomePage> {
     await ZenithBankApi().fetchNoOfTransactionUrl(token);
   }
 */
-
 }

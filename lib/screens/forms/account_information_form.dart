@@ -24,18 +24,18 @@ class _AccountInformationState extends State<AccountInformationStep>
   String? _selectedAccountType;
   String _selectedAccFilter = "";
   List<AccountClassEntity>? accountClasses;
-  
+
   String? numberOfDepoit;
   TextEditingController? _otherPurposeController;
- // String? amtOfDepoit;
+  // String? amtOfDepoit;
 
 //  String? numberOfWithdraw;
- // String? amtOfWithdraw;
+  // String? amtOfWithdraw;
 
   Preference? prefs;
 
   TextEditingController? _expectedAmountController;
-  
+
   @override
   bool get wantKeepAlive => true;
 
@@ -50,11 +50,11 @@ class _AccountInformationState extends State<AccountInformationStep>
   @override
   void initState() {
     super.initState();
-    
+
     prefs = Preference();
-   //  getDetails();
- _expectedAmountController = TextEditingController();
-  _otherPurposeController = TextEditingController();
+    //  getDetails();
+    _expectedAmountController = TextEditingController();
+    _otherPurposeController = TextEditingController();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
     _accountClassBloc = AccountClassBloc();
     _accountClassBloc.getAccountClasses();
@@ -63,7 +63,6 @@ class _AccountInformationState extends State<AccountInformationStep>
       accountClasses = data;
     });
     accountFormBloc!.getCurrentLocation();
-
   }
 
 /*
@@ -329,14 +328,14 @@ class _AccountInformationState extends State<AccountInformationStep>
                   labelText: 'Anticipated No of Transaction',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
-           //   isEmpty: snapshot.data == null,
+              //   isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data,
+                  value: snapshot.data ?? "0 - 10",
                   isDense: true,
-                  onChanged: (value){
-                    if(value != null){
-                    accountFormBloc!.setAnticipatedNoTransaction(value);
+                  onChanged: (value) {
+                    if (value != null) {
+                      accountFormBloc!.setAnticipatedNoTransaction(value);
                     }
                   },
                   items: noOfTransaction.map((String value) {
@@ -350,7 +349,6 @@ class _AccountInformationState extends State<AccountInformationStep>
             );
           },
         );
-     
       },
     );
   }
@@ -367,16 +365,16 @@ class _AccountInformationState extends State<AccountInformationStep>
                   labelText: 'Anticipated Amount',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
-            //  isEmpty: snapshot.data == null,
+              //  isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data,
+                  value: snapshot.data ?? "0 - 2000",
                   isDense: true,
-                  onChanged: (value){
-                    if(value != null){
-                    numberOfDepoit = value;
-                    accountFormBloc!.setAnticipatedAmountTransaction(value);
-                  }
+                  onChanged: (value) {
+                    if (value != null) {
+                      numberOfDepoit = value;
+                      accountFormBloc!.setAnticipatedAmountTransaction(value);
+                    }
                   },
                   items: amountOfTransaction.map((String value) {
                     return DropdownMenuItem<String>(
@@ -388,12 +386,10 @@ class _AccountInformationState extends State<AccountInformationStep>
               ),
             );
           },
-        ); 
+        );
       },
     );
   }
-
-
 
   Widget transactionCountFieldWithdraw() {
     return StreamBuilder<String?>(
@@ -407,14 +403,14 @@ class _AccountInformationState extends State<AccountInformationStep>
                   labelText: 'Anticipated No of Transaction',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
-            //  isEmpty: snapshot.data == null,
+              //  isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data,
+                  value: snapshot.data ?? "0 - 10",
                   isDense: true,
-                  onChanged: (value){
-                    if(value != null){
-                    accountFormBloc!.setAnticipatedNoWithdraw(value);
+                  onChanged: (value) {
+                    if (value != null) {
+                      accountFormBloc!.setAnticipatedNoWithdraw(value);
                     }
                   },
                   items: noOfTransaction.map((String value) {
@@ -428,7 +424,6 @@ class _AccountInformationState extends State<AccountInformationStep>
             );
           },
         );
-     
       },
     );
   }
@@ -445,16 +440,16 @@ class _AccountInformationState extends State<AccountInformationStep>
                   labelText: 'Anticipated Amount',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
-             // isEmpty: snapshot.data == null,
+              // isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data,
+                  value: snapshot.data ?? "0 - 2000",
                   isDense: true,
-                  onChanged: (value){
-                    if(value != null){
-                   // numberOfDepoit = value;
-                    accountFormBloc!.setAnticipatedAmountWithdraw(value);
-                  }
+                  onChanged: (value) {
+                    if (value != null) {
+                      // numberOfDepoit = value;
+                      accountFormBloc!.setAnticipatedAmountWithdraw(value);
+                    }
                   },
                   items: amountOfTransaction.map((String value) {
                     return DropdownMenuItem<String>(
@@ -466,62 +461,55 @@ class _AccountInformationState extends State<AccountInformationStep>
               ),
             );
           },
-        ); 
+        );
       },
     );
   }
 
-
-    Widget checkBoxWidget(String purpose) {
-      return CheckboxListTile(
+  Widget checkBoxWidget(String purpose) {
+    return CheckboxListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(purpose),
       value: true,
-      onChanged: (bool? value) {
-      
-      },
-   //   secondary: const Icon(Icons.hourglass_empty),
+      onChanged: (bool? value) {},
+      //   secondary: const Icon(Icons.hourglass_empty),
     );
-
-    }
+  }
 
   Widget _otherPurpose() {
     return StreamBuilder<bool?>(
         stream: accountFormBloc!.others,
         builder: (context, snapshot) {
-        
           return Visibility(
-            visible: snapshot.hasData? snapshot.data! : false,
-            child: StreamBuilder<String?>(
-        stream: accountFormBloc!.othersPurpose,
-        builder: (context, snapshot) {
-           if (snapshot.hasData) {
-             if(_otherPurposeController!.text != snapshot.data.toString()){
-
-          _otherPurposeController!.text = snapshot.data.toString();
-        _otherPurposeController!.selection = TextSelection.fromPosition(TextPosition(offset: _otherPurposeController!.text.length));
-        
-          }
-          }
-          return TextField(
-            controller: _otherPurposeController,
-            obscureText: false,
-            keyboardType: TextInputType.text,
-            onChanged: accountFormBloc!.changeOthersPurpose,
-            decoration: InputDecoration(
-             labelText: 'Enter purpose',
-              errorText: snapshot.error as String?,
-            ),
-          );
-        })
-
-          );
-        
+              visible: snapshot.hasData ? snapshot.data! : false,
+              child: StreamBuilder<String?>(
+                  stream: accountFormBloc!.othersPurpose,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (_otherPurposeController!.text !=
+                          snapshot.data.toString()) {
+                        _otherPurposeController!.text =
+                            snapshot.data.toString();
+                        _otherPurposeController!.selection =
+                            TextSelection.fromPosition(TextPosition(
+                                offset: _otherPurposeController!.text.length));
+                      }
+                    }
+                    return TextField(
+                      controller: _otherPurposeController,
+                      obscureText: false,
+                      keyboardType: TextInputType.text,
+                      onChanged: accountFormBloc!.changeOthersPurpose,
+                      decoration: InputDecoration(
+                        labelText: 'Enter purpose',
+                        errorText: snapshot.error as String?,
+                      ),
+                    );
+                  }));
         });
   }
 
-
-  getInfo(){}
+  getInfo() {}
 
   String? _getAccountTypeValue(AsyncSnapshot itemSnapshot,
       AsyncSnapshot<List<AccountClassEntity>> listSnapshot) {
@@ -548,7 +536,7 @@ class _AccountInformationState extends State<AccountInformationStep>
             children: <Widget>[
               SizedBox(height: 16.0),
               Column(
-                   crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 16.0),
                   accountTypeField(),
@@ -558,40 +546,32 @@ class _AccountInformationState extends State<AccountInformationStep>
                   riskRankField(),
                   SizedBox(height: 30.0),
                   _accountCategoryField(),
-               
-
                   SizedBox(height: 10.0),
-                    Divider(),
+                  Divider(),
                   SizedBox(height: 10.0),
                   purposeOfAcctWidget(),
                   _otherPurpose(),
-                    SizedBox(height: 10.0),
-                    Divider(),
+                  SizedBox(height: 10.0),
+                  Divider(),
                   SizedBox(height: 10.0),
                   Text("Deposit"),
                   SizedBox(height: 10.0),
                   Divider(),
                   SizedBox(height: 10.0),
-                  transactionCountFieldDeposit() ,
-                    SizedBox(height: 20.0),
-                  transactionAmountFieldDeposit() ,
-
+                  transactionCountFieldDeposit(),
+                  SizedBox(height: 20.0),
+                  transactionAmountFieldDeposit(),
                   SizedBox(height: 10.0),
                   Divider(),
                   SizedBox(height: 10.0),
                   Text("Withdrawal"),
-                   SizedBox(height: 10.0),
-                    Divider(),
-
                   SizedBox(height: 10.0),
-
-                  transactionCountFieldWithdraw() ,
-                    SizedBox(height: 20.0),
-                  transactionAmountFieldWithdraw() ,
-
+                  Divider(),
+                  SizedBox(height: 10.0),
+                  transactionCountFieldWithdraw(),
+                  SizedBox(height: 20.0),
+                  transactionAmountFieldWithdraw(),
                   SizedBox(height: 60.0),
-
-
                 ],
               ),
               SizedBox(height: 60.0),
@@ -602,125 +582,106 @@ class _AccountInformationState extends State<AccountInformationStep>
     );
   }
 
+  Widget purposeOfAcctWidget() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Purpose Of Account"),
+          SizedBox(
+            height: 5,
+          ),
+          Divider(),
+          SizedBox(
+            height: 5,
+          ),
+          purposeOfAccountList(),
+        ],
+      );
 
-      Widget purposeOfAcctWidget()=>Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Purpose Of Account"),
-                        SizedBox(height: 5,),
-                        Divider(),
-                         SizedBox(height: 5,),
-                        purposeOfAccountList(),
-                     ],
-                    );
-
-
-
-    Widget purposeOfAccountList()=>Column(
-      children: [
-
-        StreamBuilder<bool?>(
-          stream: accountFormBloc!.salaryProcessing,
-          builder: (context, snapshot) {
-            return CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text("Salary Processing"),
-               activeColor: Colors.red,
-              value: snapshot.hasData ? snapshot.data : false,
-              onChanged: accountFormBloc!.changeSalaryProcessing, 
-              
-              );
-          }
-        ),
-
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.bankingService,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Access to banking Services"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeBankingService );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.business,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Business/Transactional"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeBusiness );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.singleTransaction,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Facilitation of a single transaction"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeSingleTransaction );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.safeKeeping,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Security/Safekeeping"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeSafeKeeping );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.savingAndInvestment,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Savings & Investment"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeSavingAndInvestment );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.receipt,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Receipt of inflows for Personal upkeep"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeReceipt );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.others,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Other"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeOthers );
-         }
-       ),
-
-      ],
-    );
-
+  Widget purposeOfAccountList() => Column(
+        children: [
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.salaryProcessing,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text("Salary Processing"),
+                  activeColor: Colors.red,
+                  value: snapshot.hasData ? snapshot.data : false,
+                  onChanged: accountFormBloc!.changeSalaryProcessing,
+                );
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.bankingService,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Access to banking Services"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeBankingService);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.business,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Business/Transactional"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeBusiness);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.singleTransaction,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Facilitation of a single transaction"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeSingleTransaction);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.safeKeeping,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Security/Safekeeping"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeSafeKeeping);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.savingAndInvestment,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Savings & Investment"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeSavingAndInvestment);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.receipt,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Receipt of inflows for Personal upkeep"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeReceipt);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.others,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Other"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeOthers);
+              }),
+        ],
+      );
 
 /*
     Widget sourceOfAccountList()=>Column(
@@ -829,7 +790,4 @@ class _AccountInformationState extends State<AccountInformationStep>
     );
 
 */
-
 }
-
-                 

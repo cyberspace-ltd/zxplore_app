@@ -24,7 +24,6 @@ import 'package:zxplore_app/models/verify_id_response.dart';
 import 'package:zxplore_app/utils/preferences.dart';
 
 class ZenithBankApi {
-
   Future<Occupation> fetchOccupations(String? token) async {
     Response response;
     Dio dio = new Dio();
@@ -210,8 +209,7 @@ class ZenithBankApi {
     }
   }
 
-
-   Future<void> fetchEmploymentTypes(String? token) async {
+  Future<void> fetchEmploymentTypes(String? token) async {
     Response<String> response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -227,21 +225,21 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getEmploymentTypesUrl());
       if (response.data != null) {
-       var resp = jsonDecode(response.data!);
+        var resp = jsonDecode(response.data!);
         String responseCode = resp["ResponseCode"];
-        if(responseCode == "00"){
-      //  var menu = resp["Menu"] as List;
-        var prefs = Preference();
-        await prefs.load();
-        prefs.setString("EmploymentTypes", response.data!);
+        if (responseCode == "00") {
+          //  var menu = resp["Menu"] as List;
+          var prefs = Preference();
+          await prefs.load();
+          prefs.setString("EmploymentTypes", response.data!);
         }
-             }
+      }
     } on DioError catch (error) {
       throw CleanerException(_handleError(error));
     }
   }
 
-   Future<void> fetchMonthlyAllowanceUrl(String? token) async {
+  Future<void> fetchMonthlyAllowanceUrl(String? token) async {
     Response<String> response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -257,21 +255,21 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getMonthlyAllowanceUrl());
       if (response.data != null) {
-       var resp = jsonDecode(response.data!);
+        var resp = jsonDecode(response.data!);
         String responseCode = resp["ResponseCode"];
-        if(responseCode == "00"){
-      //  var menu = resp["Menu"] as List;
-        var prefs = Preference();
-        await prefs.load();
-        prefs.setString("MonthlyAllowance", response.data!);
+        if (responseCode == "00") {
+          //  var menu = resp["Menu"] as List;
+          var prefs = Preference();
+          await prefs.load();
+          prefs.setString("MonthlyAllowance", response.data!);
         }
-             }
+      }
     } on DioError catch (error) {
       throw CleanerException(_handleError(error));
     }
   }
 
-   Future<void> fetchPurposeOfAcctUrl(String? token) async {
+  Future<void> fetchPurposeOfAcctUrl(String? token) async {
     Response<String> response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -286,23 +284,22 @@ class ZenithBankApi {
         };
       };
       response = await dio.get(Endpoints.getPurposeOfAcctUrl());
-       if (response.data != null) {
-       var resp = jsonDecode(response.data!);
+      if (response.data != null) {
+        var resp = jsonDecode(response.data!);
         String responseCode = resp["ResponseCode"];
-        if(responseCode == "00"){
-      //  var menu = resp["Menu"] as List;
-        var prefs = Preference();
-        await prefs.load();
-        prefs.setString("PurposeOfAcct",response.data!);
+        if (responseCode == "00") {
+          //  var menu = resp["Menu"] as List;
+          var prefs = Preference();
+          await prefs.load();
+          prefs.setString("PurposeOfAcct", response.data!);
         }
-             }
+      }
     } on DioError catch (error) {
       throw CleanerException(_handleError(error));
     }
   }
 
-
-   Future<void> fetchSourceOfFundUrl(String? token) async {
+  Future<void> fetchSourceOfFundUrl(String? token) async {
     Response<String> response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -317,23 +314,22 @@ class ZenithBankApi {
         };
       };
       response = await dio.get(Endpoints.getSourceOfFundUrl());
-          if (response.data != null) {
-       var resp = jsonDecode(response.data!);
+      if (response.data != null) {
+        var resp = jsonDecode(response.data!);
         String responseCode = resp["ResponseCode"];
-        if(responseCode == "00"){
-       // var menu = resp["Menu"] as List;
-        var prefs = Preference();
-        await prefs.load();
-        prefs.setString("SourceOfFund", response.data!);
+        if (responseCode == "00") {
+          // var menu = resp["Menu"] as List;
+          var prefs = Preference();
+          await prefs.load();
+          prefs.setString("SourceOfFund", response.data!);
         }
-             }
+      }
     } on DioError catch (error) {
       throw CleanerException(_handleError(error));
     }
   }
 
-
-   Future<void> fetchTransactionTypeUrl(String? token) async {
+  Future<void> fetchTransactionTypeUrl(String? token) async {
     Response<String> response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -348,23 +344,22 @@ class ZenithBankApi {
         };
       };
       response = await dio.get(Endpoints.getTransactionTypeUrl());
-         if (response.data != null) {
-       var resp = jsonDecode(response.data!);
+      if (response.data != null) {
+        var resp = jsonDecode(response.data!);
         String responseCode = resp["ResponseCode"];
-        if(responseCode == "00"){
-      //  var menu = resp["Menu"] as List;
-        var prefs = Preference();
-        await prefs.load();
-        prefs.setString("TransactionType", response.data!);
+        if (responseCode == "00") {
+          //  var menu = resp["Menu"] as List;
+          var prefs = Preference();
+          await prefs.load();
+          prefs.setString("TransactionType", response.data!);
         }
-             }
+      }
     } on DioError catch (error) {
       throw CleanerException(_handleError(error));
     }
   }
 
-
-   Future<void> fetchNoOfTransactionUrl(String? token) async {
+  Future<void> fetchNoOfTransactionUrl(String? token) async {
     Response<String> response;
     Dio dio = new Dio();
     dio.options.headers = {
@@ -380,15 +375,15 @@ class ZenithBankApi {
       };
       response = await dio.get(Endpoints.getNoOfTransactionUrl());
       if (response.data != null) {
-       var resp = jsonDecode(response.data!);
+        var resp = jsonDecode(response.data!);
         String responseCode = resp["ResponseCode"];
-        if(responseCode == "00"){
-      //  var menu = resp["Menu"] as List;
-        var prefs = Preference();
-        await prefs.load();
-        prefs.setString("NoOfTransaction",response.data!);
+        if (responseCode == "00") {
+          //  var menu = resp["Menu"] as List;
+          var prefs = Preference();
+          await prefs.load();
+          prefs.setString("NoOfTransaction", response.data!);
         }
-             }
+      }
     } on DioError catch (error) {
       throw CleanerException(_handleError(error));
     }
@@ -406,7 +401,7 @@ class ZenithBankApi {
           return true;
         };
       };
-
+      String url = Endpoints.getLoginUrl();
       response = await dio.post(Endpoints.getLoginUrl(),
           data: {"UserName": username, "Password": password});
 
@@ -602,30 +597,26 @@ class ZenithBankApi {
     }
   }
 
-
-
-
-Future<List<Prediction>> fetchPlaces(String placeName) async {
-   Response response;
+  Future<List<Prediction>> fetchPlaces(String placeName) async {
+    Response response;
     List<Prediction> placePredictions = [];
     try {
-         Dio dio = new Dio();
-    response = await dio.post(Endpoints.getPlaces(placeName));
+      Dio dio = new Dio();
+      response = await dio.post(Endpoints.getPlaces(placeName));
 
-      if (response.statusCode == 200)  {
+      if (response.statusCode == 200) {
         var data = response.data;
         if (data["status"] == "OK") {
           var predictions = data["predictions"] as List;
-           placePredictions = predictions.map((e) => Prediction.fromJson(e)).toList();
+          placePredictions =
+              predictions.map((e) => Prediction.fromJson(e)).toList();
         }
-      } 
+      }
     } catch (ex) {
       print(ex.toString());
     }
-   return placePredictions;
+    return placePredictions;
   }
-
-
 
   Future<VerifyIdResponse> verifyIdentity(
       String? identityNumber, int idType, String? token) async {
@@ -703,8 +694,6 @@ Future<List<Prediction>> fetchPlaces(String placeName) async {
 
     return errorDescription;
   }
-
-
 }
 
 class CleanerException implements Exception {

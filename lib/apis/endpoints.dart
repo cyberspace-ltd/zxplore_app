@@ -1,17 +1,11 @@
 class Endpoints {
-  // static const String ZENITH_API_BASE_URL = "https://webservicestest.zenithbank.com:8443/ZenithAccountService/api/";
-
   static const googleKey = 'AIzaSyCUECofQTpcRO46CnOHL1q4bmKH8dvmIyA';
-
+// cyb env
   static const String GATEWAY_BASE_API_URL = 'http://41.138.171.45:8190/api/';
 
-  //   "http://41.138.171.45/zxploreghanaapi/api/";  // cyb env
-
-  // static const String GATEWAY_BASE_API_URL =
-  //   "https://aspd.zenithbank.com.gh/ZxploreGhanaAPI/api/"; // new test Environment
-
-  // static const String GATEWAY_BASE_API_URL =
-  //     "https://zxplore.zenithbank.com.gh/zxploreghanaapi/api/"; // New Live Environment
+  // Ghana Test Environment
+//  static const String GATEWAY_BASE_API_URL =
+//      'https://zxploretest.zenithbank.com.gh/ZxploreGhanaAPIV6/api/';
 
   static String getOccupationUrl() {
     return '$GATEWAY_BASE_API_URL'
