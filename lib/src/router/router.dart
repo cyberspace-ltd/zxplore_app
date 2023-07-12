@@ -15,57 +15,208 @@ import 'package:zxplore_app/src/router/dashboard_page.dart';
 import 'package:zxplore_app/src/router/nav_observer.dart';
 import 'package:zxplore_app/src/router/not_found_page.dart';
 
-part 'router.g.dart';
+// part 'router.g.dart';
 
-final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
-final GlobalKey<NavigatorState> shellNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
 
 final log = Logger('Router');
 
 /// gorouter provider
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    routes: $appRoutes,
+    // routes: $appRoutes,
     initialLocation: '/',
-    navigatorKey: rootNavigatorKey,
+    navigatorKey: _rootNavigatorKey,
     errorBuilder: (context, state) => NotFoundScreen(
       error: state.error!,
     ).build(context),
     // debugLogDiagnostics: kDebugMode,
     observers: <NavigatorObserver>[NavObserver()],
+    routes: <RouteBase>[
+      GoRoute(
+        // parentNavigatorKey: _rootNavigatorKey,
+        path: '/',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SignInPage();
+        },
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (
+          BuildContext context,
+          GoRouterState state,
+          StatefulNavigationShell navigationShell,
+        ) {
+          return DashboardPage(navigationShell: navigationShell);
+        },
+        branches: <StatefulShellBranch>[
+          StatefulShellBranch(
+            navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/accountInformation',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const AccountInformationPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            // navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/contactDetails',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const ContactDetailsPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            // navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/meansOfIdentification',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const MeansOfIdentificationPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            // navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/personalInformation',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const PersonalInformationPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            // navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/signatory',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const SignatoryPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            // navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/uploadId',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const UploadIdPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            // navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/uploadPassport',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const UploadPassportPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            // navigatorKey: _shellNavigatorKey,
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/uploadUtilityBill',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const UploadUtilityBillPage();
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
   );
 });
 
-@TypedGoRoute<SignInRoute>(path: '/')
-class SignInRoute extends GoRouteData {
-  const SignInRoute();
+// @TypedGoRoute<SignInRoute>(path: '/')
+// class SignInRoute extends GoRouteData {
+//   const SignInRoute();
 
-  @override
-  Widget build(BuildContext context, GoRouterState state) => const SignInPage();
-}
+//   @override
+//   Widget build(BuildContext context, GoRouterState state) => const SignInPage();
+// }
 
-@TypedShellRoute<DashboardRoute>(
-  routes: <TypedRoute<RouteData>>[
-    TypedGoRoute<AccountInformationRoute>(path: '/accountInformation'),
-    TypedGoRoute<ContactDetailsRoute>(path: '/contactDetails'),
-    TypedGoRoute<MeansOfIdentificationRoute>(path: '/meansOfIdentification'),
-    TypedGoRoute<PersonalInformationRoute>(path: '/personalInformation'),
-    TypedGoRoute<SignatoryRoute>(path: '/signatory'),
-    TypedGoRoute<UploadIdRoute>(path: '/uploadId'),
-    TypedGoRoute<UploadPassportRoute>(path: '/uploadPassport'),
-    TypedGoRoute<UploadUtilityBillRoute>(path: '/uploadUtilityBill'),
-  ],
-)
-class DashboardRoute extends ShellRouteData {
-  const DashboardRoute();
+// @TypedStatefulShellRoute<DashboardRoute>(
+//   branches: <TypedStatefulShellBranch<StatefulShellBranchData>>[
+//     TypedStatefulShellBranch<AccountInformationBranch>(
+//       routes: [
+//         TypedGoRoute<AccountInformationRoute>(path: '/accountInformation'),
+//       ],
+//     ),
+//     TypedStatefulShellBranch<ContactDetailsBranch>(
+//       routes: [
+//         TypedGoRoute<ContactDetailsRoute>(path: '/contactDetails'),
+//       ],
+//     ),
+//     TypedStatefulShellBranch<MeansOfIdentificationBranch>(
+//       routes: [
+//         TypedGoRoute<MeansOfIdentificationRoute>(
+//             path: '/meansOfIdentification'),
+//       ],
+//     ),
+//     TypedStatefulShellBranch<PersonalInformationBranch>(
+//       routes: [
+//         TypedGoRoute<PersonalInformationRoute>(path: '/personalInformation'),
+//       ],
+//     ),
+//     TypedStatefulShellBranch<SignatoryBranch>(
+//       routes: [
+//         TypedGoRoute<SignatoryRoute>(path: '/signatory'),
+//       ],
+//     ),
+//     TypedStatefulShellBranch<UploadIdBranch>(
+//       routes: [
+//         TypedGoRoute<UploadIdRoute>(path: '/uploadId'),
+//       ],
+//     ),
+//     TypedStatefulShellBranch<UploadPassportBranch>(
+//       routes: [
+//         TypedGoRoute<UploadPassportRoute>(path: '/uploadPassport'),
+//       ],
+//     ),
+//     TypedStatefulShellBranch<UploadUtilityBillBranch>(
+//       routes: [
+//         TypedGoRoute<UploadUtilityBillRoute>(path: '/uploadUtilityBill'),
+//       ],
+//     ),
+//   ],
+// )
+// class DashboardRoute extends StatefulShellRouteData {
+//   const DashboardRoute();
 
-  static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
+//   static final GlobalKey<NavigatorState> $navigatorKey = shellNavigatorKey;
 
-  @override
-  Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
-    return DashboardPage(child: navigator);
-  }
-}
+//   @override
+//   Widget builder(
+//     BuildContext context,
+//     GoRouterState state,
+//     StatefulNavigationShell navigationShell,
+//   ) {
+//     return DashboardPage(navigationShell: navigationShell);
+//   }
+// }
+
+// class AccountInformationBranch extends StatefulShellBranchData {
+//   const AccountInformationBranch();
+// }
 
 class AccountInformationRoute extends GoRouteData {
   const AccountInformationRoute();
@@ -76,6 +227,10 @@ class AccountInformationRoute extends GoRouteData {
   }
 }
 
+// class ContactDetailsBranch extends StatefulShellBranchData {
+//   const ContactDetailsBranch();
+// }
+
 class ContactDetailsRoute extends GoRouteData {
   const ContactDetailsRoute();
 
@@ -84,6 +239,10 @@ class ContactDetailsRoute extends GoRouteData {
     return const ContactDetailsPage();
   }
 }
+
+// class MeansOfIdentificationBranch extends StatefulShellBranchData {
+//   const MeansOfIdentificationBranch();
+// }
 
 class MeansOfIdentificationRoute extends GoRouteData {
   const MeansOfIdentificationRoute();
@@ -94,6 +253,10 @@ class MeansOfIdentificationRoute extends GoRouteData {
   }
 }
 
+// class PersonalInformationBranch extends StatefulShellBranchData {
+//   const PersonalInformationBranch();
+// }
+
 class PersonalInformationRoute extends GoRouteData {
   const PersonalInformationRoute();
 
@@ -102,6 +265,10 @@ class PersonalInformationRoute extends GoRouteData {
     return const PersonalInformationPage();
   }
 }
+
+// class SignatoryBranch extends StatefulShellBranchData {
+//   const SignatoryBranch();
+// }
 
 class SignatoryRoute extends GoRouteData {
   const SignatoryRoute();
@@ -112,6 +279,10 @@ class SignatoryRoute extends GoRouteData {
   }
 }
 
+// class UploadIdBranch extends StatefulShellBranchData {
+//   const UploadIdBranch();
+// }
+
 class UploadIdRoute extends GoRouteData {
   const UploadIdRoute();
 
@@ -121,6 +292,10 @@ class UploadIdRoute extends GoRouteData {
   }
 }
 
+// class UploadPassportBranch extends StatefulShellBranchData {
+//   const UploadPassportBranch();
+// }
+
 class UploadPassportRoute extends GoRouteData {
   const UploadPassportRoute();
 
@@ -129,6 +304,10 @@ class UploadPassportRoute extends GoRouteData {
     return const UploadPassportPage();
   }
 }
+
+// class UploadUtilityBillBranch extends StatefulShellBranchData {
+//   const UploadUtilityBillBranch();
+// }
 
 class UploadUtilityBillRoute extends GoRouteData {
   const UploadUtilityBillRoute();

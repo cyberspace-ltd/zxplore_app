@@ -25,7 +25,7 @@ class AssetMgmtDioFactory {
         await rootBundle.load('assets/server_certificate.crt');
     // String pem = String.fromCharCodes(pemContent.buffer.asUint8List());
     dio.httpClientAdapter = IOHttpClientAdapter(
-      onHttpClientCreate: (_) {
+      createHttpClient: () {
         SecurityContext securityContext = SecurityContext();
         securityContext.setTrustedCertificatesBytes(
             crtContent.buffer.asUint8List(),

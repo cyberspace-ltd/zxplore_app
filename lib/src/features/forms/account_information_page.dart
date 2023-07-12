@@ -10,6 +10,7 @@ class AccountInformationPage extends StatefulWidget {
 class _AccountInformationPageState extends State<AccountInformationPage> {
   final _node = FocusScopeNode();
   final _formKey = GlobalKey<FormState>();
+  String? _email;
 
   @override
   void dispose() {
@@ -25,9 +26,29 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
           padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
-            child: const Column(
+            child: Column(
               children: [
-                Text('Account Information Page'),
+                const Text('Account Information Page'),
+                const SizedBox(height: 24),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email',
+                  ),
+                  autofocus: true,
+                  focusNode: _node,
+                  onSaved: (value) {
+                    setState(() {
+                      _email = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                ),
               ],
             ),
           ),

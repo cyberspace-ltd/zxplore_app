@@ -42,7 +42,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = LoginResponse.fromJson(_result.data!);
     return value;
   }
@@ -65,7 +69,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = Occupation.fromJson(_result.data!);
     return value;
   }
@@ -88,7 +96,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = AccountClass.fromJson(_result.data!);
     return value;
   }
@@ -111,7 +123,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = State.fromJson(_result.data!);
     return value;
   }
@@ -134,7 +150,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = State.fromJson(_result.data!);
     return value;
   }
@@ -157,7 +177,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = State.fromJson(_result.data!);
     return value;
   }
@@ -181,7 +205,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = AccountsResponse.fromJson(_result.data!);
     return value;
   }
@@ -206,7 +234,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = AccountDetailsResponse.fromJson(_result.data!);
     return value;
   }
@@ -231,7 +263,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = VerifyAccountResponse.fromJson(_result.data!);
     return value;
   }
@@ -255,7 +291,11 @@ class _ZenithBankApi implements ZenithBankApi {
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = SaveAccountResponse.fromJson(_result.data!);
     return value;
   }
@@ -271,5 +311,22 @@ class _ZenithBankApi implements ZenithBankApi {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

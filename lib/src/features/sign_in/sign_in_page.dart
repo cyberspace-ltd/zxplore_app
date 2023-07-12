@@ -2,11 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zxplore_app/main.dart';
 import 'package:zxplore_app/src/api/dio_error_handler.dart';
 import 'package:zxplore_app/src/api/models/login_response.dart';
 import 'package:zxplore_app/src/api/zenithbank_api.dart';
-import 'package:zxplore_app/src/router/router.dart';
 import 'package:zxplore_app/src/shared/app_sizes.dart';
 import 'package:zxplore_app/src/shared/primary_button.dart';
 import 'package:zxplore_app/src/utils/secure_storage.dart';
@@ -49,7 +49,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       if (_formKey.currentState!.validate()) {
         // callback
         void callback() {
-          const AccountInformationRoute().push(context);
+          context.go('/accountInformation');
         }
 
         _formKey.currentState!.save();
@@ -66,7 +66,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
 
         callback();
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null &&
           error.response!.data != null &&
           error.response!.data['message'] != null) {
@@ -79,7 +79,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         var value = LoginResponse.fromJson(error.response?.data);
         throw CleanerException(value.message);
       } else {
-        throw CleanerException(handleError(error));
+        throw CleanerException(getErrorMessage(error));
       }
     }
   }
@@ -171,7 +171,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   PrimaryButton(
                     text: 'SIGN IN',
                     onPressed: () async {
-                      const AccountInformationRoute().go(context);
+                      context.go('/accountInformation');
                       // _node.unfocus();
                       // setState(() {
                       //   _submitted = true;

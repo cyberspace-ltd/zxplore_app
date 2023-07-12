@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zxplore_app/src/router/router.dart';
+import 'package:go_router/go_router.dart';
 
 /// Simple not found screen used for 404 errors (page not found on web)
 class NotFoundScreen extends StatelessWidget {
@@ -24,7 +24,7 @@ class NotFoundScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32.0),
               ElevatedButton(
-                onPressed: () => const SignInRoute().go(context),
+                onPressed: () => context.go('/'),
                 child: const Text('Go Home'),
               ),
             ],
