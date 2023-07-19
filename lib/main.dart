@@ -1,15 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zxplore_app/src/shared/providers.dart';
 
 import 'src/app.dart';
-
-final sharedPreferencesServiceProvider = Provider<SharedPreferences>((ref) {
-  throw UnimplementedError();
-});
 
 void main() async {
   final log = Logger('Main');
@@ -18,12 +17,20 @@ void main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       final sharedPreferences = await SharedPreferences.getInstance();
+      ByteData pemContent =
+          await rootBundle.load('assets/server_certificate.pem');
+      ByteData keyContent =
+          await rootBundle.load('assets/server_certificate_key.pem');
+      ByteData crtContent =
+          await rootBundle.load('assets/server_certificate.crt');
 
       runApp(
         ProviderScope(
           overrides: [
-            sharedPreferencesServiceProvider
-                .overrideWithValue(sharedPreferences),
+            sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+            keyContentProvider.overrideWithValue(keyContent),
+            pemContentProvider.overrideWithValue(pemContent),
+            crtContentProvider.overrideWithValue(crtContent),
           ],
           child: const MyApp(),
         ),
@@ -46,25 +53,3 @@ void main() async {
     (Object error, StackTrace stack) => log.severe('Oh noes!', error, stack),
   );
 }
-
-class DarkModeNotifier extends StateNotifier<bool> {
-  SharedPreferences prefs;
-
-  Future _init() async {
-    var darkMode = prefs.getBool("darkMode");
-    state = darkMode ?? false;
-  }
-
-  DarkModeNotifier(this.prefs) : super(false) {
-    _init();
-  }
-
-  void toggle() async {
-    state = !state;
-    prefs.setBool("darkMode", state);
-  }
-}
-
-final darkModeProvider = StateNotifierProvider<DarkModeNotifier, bool>(
-  (ref) => DarkModeNotifier(ref.watch(sharedPreferencesServiceProvider)),
-);

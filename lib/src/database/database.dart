@@ -43,8 +43,9 @@ class AppDatabase extends _$AppDatabase {
       select(offlineAccountEntity).get();
 
   // get single offline account
-  Future<OfflineAccount?> getOfflineAccount(int id) =>
-      (select(offlineAccountEntity)..where((tbl) => tbl.id.equals(id)))
+  Future<OfflineAccount?> getOfflineAccount(String referenceId) =>
+      (select(offlineAccountEntity)
+            ..where((tbl) => tbl.referenceId.equals(referenceId)))
           .getSingleOrNull();
 
   // update offline account

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zxplore_app/main.dart';
 import 'package:zxplore_app/src/api/dio_error_handler.dart';
 import 'package:zxplore_app/src/api/models/login_response.dart';
-import 'package:zxplore_app/src/api/zenithbank_api.dart';
+import 'package:zxplore_app/src/api/remote_api.dart';
+import 'package:zxplore_app/src/shared/app_exception.dart';
 import 'package:zxplore_app/src/shared/app_sizes.dart';
 import 'package:zxplore_app/src/shared/primary_button.dart';
+import 'package:zxplore_app/src/shared/providers.dart';
 import 'package:zxplore_app/src/utils/secure_storage.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
@@ -53,7 +54,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         }
 
         _formKey.currentState!.save();
-        final api = await ref.watch(apiPod.future);
+        final api = ref.watch(remoteApiProvider);
         final response = await api.login(
           username: username,
           password: password,
@@ -70,16 +71,16 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       if (error.response != null &&
           error.response!.data != null &&
           error.response!.data['message'] != null) {
-        throw CleanerException(error.response!.data['message']);
+        throw AppException(error.response!.data['message']);
       } else if (error.response != null &&
           error.response!.data != null &&
           error.response!.data['Message'] != null) {
-        throw CleanerException(error.response!.data['Message']);
+        throw AppException(error.response!.data['Message']);
       } else if (error.response?.statusCode == 502) {
         var value = LoginResponse.fromJson(error.response?.data);
-        throw CleanerException(value.message);
+        throw AppException(value.message);
       } else {
-        throw CleanerException(getErrorMessage(error));
+        throw AppException(getErrorMessage(error));
       }
     }
   }

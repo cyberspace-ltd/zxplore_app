@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'zenithbank_api.dart';
+part of 'remote_api.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'zenithbank_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _ZenithBankApi implements ZenithBankApi {
-  _ZenithBankApi(
+class _RemoteApi implements RemoteApi {
+  _RemoteApi(
     this._dio, {
     this.baseUrl,
   });
@@ -52,13 +52,13 @@ class _ZenithBankApi implements ZenithBankApi {
   }
 
   @override
-  Future<Occupation> fetchOccupations() async {
+  Future<OccupationModel> fetchOccupations() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<Occupation>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<OccupationModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -74,18 +74,18 @@ class _ZenithBankApi implements ZenithBankApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = Occupation.fromJson(_result.data!);
+    final value = OccupationModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<AccountClass> fetchAccountClasses() async {
+  Future<AccountClassResponse> fetchAccountClasses() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<AccountClass>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<AccountClassResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -101,18 +101,18 @@ class _ZenithBankApi implements ZenithBankApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = AccountClass.fromJson(_result.data!);
+    final value = AccountClassResponse.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<State> fetchStates() async {
+  Future<StateModel> fetchStates() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<State>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<StateModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -128,18 +128,18 @@ class _ZenithBankApi implements ZenithBankApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = State.fromJson(_result.data!);
+    final value = StateModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<State> fetchCities() async {
+  Future<StateModel> fetchCities() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<State>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<StateModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -155,18 +155,18 @@ class _ZenithBankApi implements ZenithBankApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = State.fromJson(_result.data!);
+    final value = StateModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<State> fetchCountries() async {
+  Future<StateModel> fetchCountries() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<State>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<StateModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -182,7 +182,7 @@ class _ZenithBankApi implements ZenithBankApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = State.fromJson(_result.data!);
+    final value = StateModel.fromJson(_result.data!);
     return value;
   }
 
@@ -300,6 +300,33 @@ class _ZenithBankApi implements ZenithBankApi {
     return value;
   }
 
+  @override
+  Future<BvnResponse> verifyBvn({required String encodedBvn}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {'BvnNew': encodedBvn};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<BvnResponse>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/accounts/VerifySingleBVN/',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = BvnResponse.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
@@ -330,3 +357,23 @@ class _ZenithBankApi implements ZenithBankApi {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$remoteApiHash() => r'098a082986b1d0f504da8f427bfb77bd9cc4b49d';
+
+/// See also [remoteApi].
+@ProviderFor(remoteApi)
+final remoteApiProvider = AutoDisposeProvider<RemoteApi>.internal(
+  remoteApi,
+  name: r'remoteApiProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$remoteApiHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef RemoteApiRef = AutoDisposeProviderRef<RemoteApi>;
+// ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

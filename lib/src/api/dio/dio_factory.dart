@@ -14,15 +14,19 @@ class AssetMgmtDioFactory {
   final ApiInterceptor _interceptor;
 
   /// Creates a Dio client.
-  Future<Dio> create() async {
+  Dio create({
+    required ByteData pemContent,
+    required ByteData keyContent,
+    required ByteData crtContent,
+  }) {
     final dio = Dio(_createBaseOptions())..interceptors.add(_interceptor);
 
-    ByteData pemContent =
-        await rootBundle.load('assets/server_certificate.pem');
-    ByteData keyContent =
-        await rootBundle.load('assets/server_certificate_key.pem');
-    ByteData crtContent =
-        await rootBundle.load('assets/server_certificate.crt');
+    // ByteData pemContent =
+    //     await rootBundle.load('assets/server_certificate.pem');
+    // ByteData keyContent =
+    //     await rootBundle.load('assets/server_certificate_key.pem');
+    // ByteData crtContent =
+    //     await rootBundle.load('assets/server_certificate.crt');
     // String pem = String.fromCharCodes(pemContent.buffer.asUint8List());
     dio.httpClientAdapter = IOHttpClientAdapter(
       createHttpClient: () {
@@ -56,9 +60,17 @@ class AssetMgmtDioFactory {
 /// Creates a Dio client.
 ///
 /// To used by the repositories.
-Future<Dio> createDio() async {
+Dio createDio({
+  required ByteData pemContent,
+  required ByteData keyContent,
+  required ByteData crtContent,
+}) {
   final apiInterceptor = ApiInterceptor();
   final dioFactory = AssetMgmtDioFactory(AppEnv.baseUrl, apiInterceptor);
 
-  return dioFactory.create();
+  return dioFactory.create(
+    pemContent: pemContent,
+    keyContent: keyContent,
+    crtContent: crtContent,
+  );
 }

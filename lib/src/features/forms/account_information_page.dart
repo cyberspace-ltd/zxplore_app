@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zxplore_app/src/constants/constants.dart';
 
 class AccountInformationPage extends StatefulWidget {
   const AccountInformationPage({super.key});
@@ -11,6 +12,13 @@ class _AccountInformationPageState extends State<AccountInformationPage> {
   final _node = FocusScopeNode();
   final _formKey = GlobalKey<FormState>();
   String? _email;
+
+  String? _selectedAccountType;
+  final String _selectedAccFilter = "";
+
+  final _accountHolderTypes = ['INDIVIDUAL'];
+  final _riskRanks = ['HIGH', 'LOW', 'MEDIUM'];
+  final _accountTypes = [savingAccount, currentAccount];
 
   @override
   void dispose() {

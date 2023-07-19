@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-Title titleFromJson(String str) => Title.fromJson(json.decode(str));
+TitleModel titleModelFromJson(String str) =>
+    TitleModel.fromJson(json.decode(str));
 
-String titleToJson(Title data) => json.encode(data.toJson());
+String titleModelToJson(TitleModel data) => json.encode(data.toJson());
 
-class Title {
+class TitleModel {
   String? responseCode;
   String? responseMessage;
   List<String>? menu;
 
-  Title({this.responseCode, this.responseMessage, this.menu});
+  TitleModel({this.responseCode, this.responseMessage, this.menu});
 
-  factory Title.fromJson(Map<String, dynamic> json) => Title(
+  factory TitleModel.fromJson(Map<String, dynamic> json) => TitleModel(
         responseCode: json["ResponseCode"],
         responseMessage: json["ResponseMessage"],
         menu: List<String>.from(json["Menu"].map((x) => x)),

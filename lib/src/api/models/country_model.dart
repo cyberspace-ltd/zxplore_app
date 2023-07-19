@@ -1,17 +1,18 @@
 import 'dart:convert';
 
-Country countryFromJson(String str) => Country.fromJson(json.decode(str));
+CountryModel countryModelFromJson(String str) =>
+    CountryModel.fromJson(json.decode(str));
 
-String countryToJson(Country data) => json.encode(data.toJson());
+String countryModelToJson(CountryModel data) => json.encode(data.toJson());
 
-class Country {
+class CountryModel {
   String? responseCode;
   String? responseMessage;
   List<String>? menu;
 
-  Country({this.responseCode, this.responseMessage, this.menu});
+  CountryModel({this.responseCode, this.responseMessage, this.menu});
 
-  factory Country.fromJson(Map<String, dynamic> json) => Country(
+  factory CountryModel.fromJson(Map<String, dynamic> json) => CountryModel(
         responseCode: json["ResponseCode"],
         responseMessage: json["ResponseMessage"],
         menu: List<String>.from(json["Menu"].map((x) => x)),

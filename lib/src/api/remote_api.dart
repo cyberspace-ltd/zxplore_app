@@ -1,21 +1,23 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/src/api/dio/dio_factory.dart';
-import 'package:zxplore_app/src/api/models/account_class_model.dart';
+import 'package:zxplore_app/src/api/models/account_class_response.dart';
 import 'package:zxplore_app/src/api/models/account_details_response.dart';
 import 'package:zxplore_app/src/api/models/accounts_response.dart';
+import 'package:zxplore_app/src/api/models/bvn_response.dart';
 import 'package:zxplore_app/src/api/models/login_response.dart';
 import 'package:zxplore_app/src/api/models/occupation_model.dart';
 import 'package:zxplore_app/src/api/models/save_account_response.dart';
 import 'package:zxplore_app/src/api/models/state_model.dart';
 import 'package:zxplore_app/src/api/models/verify_account_response.dart';
+import 'package:zxplore_app/src/shared/providers.dart';
 
-part 'zenithbank_api.g.dart';
+part 'remote_api.g.dart';
 
 @RestApi()
-abstract class ZenithBankApi {
-  factory ZenithBankApi(Dio dio) = _ZenithBankApi;
+abstract class RemoteApi {
+  factory RemoteApi(Dio dio) = _RemoteApi;
 
   // ----------------- Authentication Endpoints -----------------
 
@@ -26,19 +28,19 @@ abstract class ZenithBankApi {
   });
 
   @GET('/accounts/Occupations')
-  Future<Occupation> fetchOccupations();
+  Future<OccupationModel> fetchOccupations();
 
   @GET('/accounts/AccountClass')
-  Future<AccountClass> fetchAccountClasses();
+  Future<AccountClassResponse> fetchAccountClasses();
 
   @GET('/accounts/States')
-  Future<State> fetchStates();
+  Future<StateModel> fetchStates();
 
   @GET('/accounts/Cities')
-  Future<State> fetchCities();
+  Future<StateModel> fetchCities();
 
   @GET('/accounts/Countries')
-  Future<State> fetchCountries();
+  Future<StateModel> fetchCountries();
 
   @GET('/accounts/GetAccountsByRsmID/{rsmId}/All')
   Future<AccountsResponse> getAllAccountsByRsmId({
@@ -59,10 +61,18 @@ abstract class ZenithBankApi {
   Future<SaveAccountResponse> attemptSaveAccounts({
     @Body() required String encodedJson,
   });
+
+  @POST('/accounts/VerifySingleBVN/')
+  Future<BvnResponse> verifyBvn({
+    @Field("BvnNew") required String encodedBvn,
+  });
 }
 
-final apiPod = FutureProvider<ZenithBankApi>((ref) async {
-  final dio = await createDio();
-
-  return ZenithBankApi(dio);
-});
+@riverpod
+RemoteApi remoteApi(RemoteApiRef ref) => RemoteApi(
+      createDio(
+        crtContent: ref.watch(crtContentProvider),
+        keyContent: ref.watch(keyContentProvider),
+        pemContent: ref.watch(pemContentProvider),
+      ),
+    );
