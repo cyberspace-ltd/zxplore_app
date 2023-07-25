@@ -47,13 +47,13 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   TextEditingController? _otherNameController;
   TextEditingController? _mothersMaidenNameController;
   TextEditingController? _dateOfBirthController;
-    TextEditingController? _otherSourceController;
+  TextEditingController? _otherSourceController;
   TextEditingController? _placeOfBirthController;
-   TextEditingController? _homeTownController;
+  TextEditingController? _homeTownController;
   late TextEditingController _countryOfOriginController;
 
   Preference? prefs;
- // List<String>? employmentTypeList;
+  // List<String>? employmentTypeList;
   //List<String>? monthlyIncomeList;
   // List<String>? sourceOfFundList;
 
@@ -64,8 +64,8 @@ class _PersonalInformationState extends State<PersonalInformationStep>
   void initState() {
     super.initState();
 
-     prefs = Preference();
-  //   getDetails();
+    prefs = Preference();
+    //   getDetails();
 
     countriesBloc = CountriesBloc();
     statesBloc = StatesBloc();
@@ -201,18 +201,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
 
 */
 
-
   Widget _tinField() {
     return StreamBuilder<String?>(
         stream: accountFormBloc!.tin,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            
-               if(_bvnController!.text != snapshot.data.toString()){
-            _bvnController!.value = TextEditingValue(
-                text: snapshot.data.toString(),
-                selection: _bvnController!.selection);
-               }
+            if (_bvnController!.text != snapshot.data.toString()) {
+              _bvnController!.value = TextEditingValue(
+                  text: snapshot.data.toString(),
+                  selection: _bvnController!.selection);
+            }
           }
           return TextField(
             controller: _bvnController,
@@ -227,7 +225,6 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             ),
           );
         });
- 
   }
 
   Widget _surnameField() {
@@ -235,11 +232,11 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc!.surname,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-             if(_surnameController!.text != snapshot.data.toString()){
-          _surnameController!.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _surnameController!.selection);
-             }
+          if (_surnameController!.text != snapshot.data.toString()) {
+            _surnameController!.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _surnameController!.selection);
+          }
         }
         return TextField(
           controller: _surnameController,
@@ -267,11 +264,11 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc!.firstName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-             if(_firstNameController!.text != snapshot.data.toString()){
-          _firstNameController!.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _firstNameController!.selection);
-             }
+          if (_firstNameController!.text != snapshot.data.toString()) {
+            _firstNameController!.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _firstNameController!.selection);
+          }
         }
         return TextField(
           controller: _firstNameController,
@@ -297,13 +294,11 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc!.otherName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-
-             if(_otherNameController!.text != snapshot.data.toString()){
-
-          _otherNameController!.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _otherNameController!.selection);
-             }
+          if (_otherNameController!.text != snapshot.data.toString()) {
+            _otherNameController!.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _otherNameController!.selection);
+          }
         }
         return TextField(
           controller: _otherNameController,
@@ -328,13 +323,11 @@ class _PersonalInformationState extends State<PersonalInformationStep>
       stream: accountFormBloc!.mothersMaidenName,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-
-             if(_mothersMaidenNameController!.text != snapshot.data.toString()){
-
-          _mothersMaidenNameController!.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _mothersMaidenNameController!.selection);
-             }
+          if (_mothersMaidenNameController!.text != snapshot.data.toString()) {
+            _mothersMaidenNameController!.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _mothersMaidenNameController!.selection);
+          }
         }
         return TextField(
           controller: _mothersMaidenNameController,
@@ -396,9 +389,9 @@ class _PersonalInformationState extends State<PersonalInformationStep>
               FocusScope.of(context).unfocus();
               DateTime? picked = await showDatePicker(
                   context: context,
-                  initialDate: new DateTime(DateTime.now().year - 17,1,0),
+                  initialDate: new DateTime(DateTime.now().year - 17, 1, 0),
                   firstDate: new DateTime(1900),
-                  lastDate: new DateTime(DateTime.now().year - 17,1,0));
+                  lastDate: new DateTime(DateTime.now().year - 17, 1, 0));
 
               if (picked != null) {
                 var formatter = new DateFormat('dd-MMM-yy');
@@ -451,19 +444,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-
   Widget _homeTownTextField() {
     return StreamBuilder<String?>(
       stream: accountFormBloc!.homeTown,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-
-             if(_homeTownController!.text != snapshot.data.toString()){
-
-          _homeTownController!.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _homeTownController!.selection);
-             }
+          if (_homeTownController!.text != snapshot.data.toString()) {
+            _homeTownController!.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _homeTownController!.selection);
+          }
         }
         return TextField(
           controller: _homeTownController,
@@ -482,7 +472,6 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-
   Widget _countryOfOriginTextField() {
     return StreamBuilder<String?>(
       stream: accountFormBloc!.countryOfOrigin,
@@ -498,7 +487,7 @@ class _PersonalInformationState extends State<PersonalInformationStep>
               child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                 value: snapshot.data,
-                isExpanded: true,  
+                isExpanded: true,
                 isDense: true,
                 onChanged: accountFormBloc!.changeCountryOfOrigin,
                 items: COUNTRY_LIST.map((String value) {
@@ -515,7 +504,6 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-
   Widget employmentTypeTextField() {
     return StreamBuilder<String?>(
       stream: accountFormBloc!.employmentType,
@@ -528,17 +516,17 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                   labelText: 'Employment Type',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
-          //    isEmpty: snapshot.data == null,
+              //    isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value:  snapshot.data,
-                   isExpanded: true,  
+                  value: snapshot.data,
+                  isExpanded: true,
                   isDense: true,
-                  onChanged: (value){
-                    if(value !=null){
-                    accountFormBloc!.setEmploymentType(value);
-                  }
-                    },
+                  onChanged: (value) {
+                    if (value != null) {
+                      accountFormBloc!.setEmploymentType(value);
+                    }
+                  },
                   items: employmentTypeList.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -549,51 +537,46 @@ class _PersonalInformationState extends State<PersonalInformationStep>
               ),
             );
           },
-        );  
+        );
       },
     );
   }
 
   Widget monthlyIncomeTextField() {
     return StreamBuilder<String?>(
-      stream: accountFormBloc!.monthlyIncome,
-      builder: (context, snapshot) {
-        return FormField<String>(
-          autovalidateMode: AutovalidateMode.always,
-          builder: (FormFieldState<String> state) {
-            return InputDecorator(
-              decoration: InputDecoration(
-                  labelText: 'Monthly Income',
-                  helperText: "* Required",
-                  errorText: snapshot.error as String?),
-           //   isEmpty: snapshot.data == null,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: snapshot.data,
-                  isDense: true,
-                  onChanged: (value){
-                    if(value != null){
-                      accountFormBloc!.setMonthlyIncome(value);
-                    }
-                  },
-                  items: monthlyIncomeList.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+        stream: accountFormBloc!.monthlyIncome,
+        builder: (context, snapshot) {
+          return FormField<String>(
+            autovalidateMode: AutovalidateMode.always,
+            builder: (FormFieldState<String> state) {
+              return InputDecorator(
+                decoration: InputDecoration(
+                    labelText: 'Monthly Income',
+                    helperText: "* Required",
+                    errorText: snapshot.error as String?),
+                //   isEmpty: snapshot.data == null,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: snapshot.data,
+                    isDense: true,
+                    onChanged: (value) {
+                      if (value != null) {
+                        accountFormBloc!.setMonthlyIncome(value);
+                      }
+                    },
+                    items: monthlyIncomeList.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      }
-    );
+              );
+            },
+          );
+        });
   }
-
-
-
-
 
   Widget _buildDateOfBirth() {
     return StreamBuilder<bool>(
@@ -608,8 +591,6 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             return _dateOfBirthTextField();
         });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -644,25 +625,25 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             _buildDateOfBirth(),
             SizedBox(height: 30.0),
             _stateOfOriginTextField(),
-               SizedBox(height: 30.0),
+            SizedBox(height: 30.0),
             _homeTownTextField(),
             SizedBox(height: 30.0),
             _countryOfOriginTextField(),
             SizedBox(height: 30.0),
             employmentTypeTextField(),
-              SizedBox(height: 30.0),
+            SizedBox(height: 30.0),
             monthlyIncomeTextField(),
-           //    SizedBox(height: 30.0),
-           // sourceOfFundTextField(),
+            //    SizedBox(height: 30.0),
+            // sourceOfFundTextField(),
 
-                  SizedBox(height: 10.0),
-                    Divider(),
-                  SizedBox(height: 10.0),
-                  Text("Source of Funds"),
-                   SizedBox(height: 10.0),
-                  sourceOfAccountList(),
-                    SizedBox(height: 15.0),
-                  _otherSource(),
+            SizedBox(height: 10.0),
+            Divider(),
+            SizedBox(height: 10.0),
+            Text("Source of Funds"),
+            SizedBox(height: 10.0),
+            sourceOfAccountList(),
+            SizedBox(height: 15.0),
+            _otherSource(),
             SizedBox(height: 120.0),
           ],
         ),
@@ -670,151 +651,120 @@ class _PersonalInformationState extends State<PersonalInformationStep>
     );
   }
 
-
   Widget _otherSource() {
     return StreamBuilder<bool?>(
         stream: accountFormBloc!.otherSource,
         builder: (context, snapshot) {
           return Visibility(
-            visible: snapshot.hasData? snapshot.data! : false,
-            child: StreamBuilder<String?>(
-        stream: accountFormBloc!.enteredOtherSource,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-
-              if(_otherSourceController!.text != snapshot.data.toString()){
-                
-            _otherSourceController!.value = TextEditingValue(
-                text: snapshot.data.toString(),
-                selection: _otherSourceController!.selection);
-              }
-          }
-          return TextField(
-            controller: _otherSourceController,
-            obscureText: false,
-            keyboardType: TextInputType.text,
-            onChanged: accountFormBloc!.changeEnterOtherSource,
-            decoration: InputDecoration(
-             labelText: 'Enter source',
-              errorText: snapshot.error as String?,
-            ),
-          );
-        })
-
-          );
-        
+              visible: snapshot.hasData ? snapshot.data! : false,
+              child: StreamBuilder<String?>(
+                  stream: accountFormBloc!.enteredOtherSource,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (_otherSourceController!.text !=
+                          snapshot.data.toString()) {
+                        _otherSourceController!.value = TextEditingValue(
+                            text: snapshot.data.toString(),
+                            selection: _otherSourceController!.selection);
+                      }
+                    }
+                    return TextField(
+                      controller: _otherSourceController,
+                      obscureText: false,
+                      keyboardType: TextInputType.text,
+                      onChanged: accountFormBloc!.changeEnterOtherSource,
+                      decoration: InputDecoration(
+                        labelText: 'Enter source',
+                        errorText: snapshot.error as String?,
+                      ),
+                    );
+                  }));
         });
   }
 
-
-
-    Widget sourceOfAccountList()=>Column(
-      children: [
-
-        StreamBuilder<bool?>(
-          stream: accountFormBloc!.salary,
-          builder: (context, snapshot) {
-            return CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text("Salary"),
-               activeColor: Colors.red,
-              value: snapshot.hasData ? snapshot.data : false,
-              onChanged: accountFormBloc!.changeSalary, 
-              
-              );
-          }
-        ),
-
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.rentalIncome,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Rental Income"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeRentalIncome );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.personalSaving,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Personal Savings"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changePersonalSaving );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.familyFriend,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Family & Friends"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeFamilyFriend );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.dividends,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Dividends"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeDividends );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.commission,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Commissions"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeCommission );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.businessProceed,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Business Proceeds"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeBusinessProceed );
-         }
-       ),
-
-       StreamBuilder<bool?>(
-         stream: accountFormBloc!.otherSource,
-         builder: (context, snapshot) {
-           return CheckboxListTile(
-             contentPadding: EdgeInsets.zero,
-             title: Text("Other"),
-              activeColor: Colors.red,
-             value: snapshot.hasData ? snapshot.data : false,
-             onChanged: accountFormBloc!.changeOtherSource );
-         }
-       ),
-
-      ],
-    );
-
-
-
-
-
+  Widget sourceOfAccountList() => Column(
+        children: [
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.salary,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text("Salary"),
+                  activeColor: Colors.red,
+                  value: snapshot.hasData ? snapshot.data : false,
+                  onChanged: accountFormBloc!.changeSalary,
+                );
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.rentalIncome,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Rental Income"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeRentalIncome);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.personalSaving,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Personal Savings"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changePersonalSaving);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.familyFriend,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Family & Friends"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeFamilyFriend);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.dividends,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Dividends"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeDividends);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.commission,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Commissions"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeCommission);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.businessProceed,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Business Proceeds"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeBusinessProceed);
+              }),
+          StreamBuilder<bool?>(
+              stream: accountFormBloc!.otherSource,
+              builder: (context, snapshot) {
+                return CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text("Other"),
+                    activeColor: Colors.red,
+                    value: snapshot.hasData ? snapshot.data : false,
+                    onChanged: accountFormBloc!.changeOtherSource);
+              }),
+        ],
+      );
 }

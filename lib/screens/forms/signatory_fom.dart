@@ -420,7 +420,89 @@ class _SignatoryStepState extends State<SignatoryStep>
           TextButton(
             child: const Text('Save'),
             onPressed: () {
+              //    Navigator.pop(context);
+              //  showLoaderDialog(context);
+
+              goback(context);
+
               accountFormBloc!.saveForm();
+              //  Navigator.pop(context);
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  duration: const Duration(seconds: 15),
+                  content: Text(
+                      'Your record has been saved successfully, click on the refresh button in your home screen to see your saved record'),
+                ),
+              );
+
+              //  goback(context);
+
+              //  Navigator.pop(context);
+
+              /*
+              int count = 0;
+              Navigator.popUntil(context, (route) {
+                return count++ == 2;
+              });
+
+
+              showDialogMessage22(
+                  context, 'Your record has been saved', 'Successful');
+                  */
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  goback(BuildContext context) {
+    int count = 0;
+    Navigator.popUntil(context, (route) {
+      return count++ == 2;
+    });
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: const Text("Saving record...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+/*
+
+  showDialogMessage22(BuildContext context, String msg, String title) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(msg),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            child: const Text('Save'),
+            onPressed: () {
+              // accountFormBloc!.saveForm();
               // Navigator.pop(context);
               int count = 0;
               Navigator.popUntil(context, (route) {
@@ -432,6 +514,8 @@ class _SignatoryStepState extends State<SignatoryStep>
       ),
     );
   }
+
+*/
 
   Future _convertImagesToByte() async {
     List<int> imageBytes = await _imageFile!.readAsBytes();

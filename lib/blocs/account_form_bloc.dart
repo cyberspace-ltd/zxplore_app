@@ -1364,14 +1364,22 @@ if (anticipatedAmountWithdraw == null) {
     List<TransactionTypes> transactionTypesList = [];
     TransactionTypes transactionTypes = TransactionTypes(
       transactionType: "Deposit",
-      transactionCount: anticipatedNoDepositTran.toString(),
-      expectedAmount: anticipatedAmountDepositTran.toString(),
+      transactionCount: anticipatedNoDepositTran != null
+          ? anticipatedNoDepositTran.toString()
+          : "0 - 10",
+      expectedAmount: anticipatedAmountDepositTran != null
+          ? anticipatedAmountDepositTran.toString()
+          : "0 - 2000",
     );
     transactionTypesList.add(transactionTypes);
     TransactionTypes withdrawalTransactionTypes = TransactionTypes(
       transactionType: "Withdraw",
-      transactionCount: anticipatedNoWithdraw.toString(),
-      expectedAmount: anticipatedAmountWithdraw.toString(),
+      transactionCount: anticipatedNoWithdraw != null
+          ? anticipatedNoWithdraw.toString()
+          : "0 - 10",
+      expectedAmount: anticipatedAmountWithdraw != null
+          ? anticipatedAmountWithdraw.toString()
+          : "0 - 2000",
     );
 
     transactionTypesList.add(withdrawalTransactionTypes);
@@ -2221,7 +2229,8 @@ if (anticipatedAmountWithdraw == null) {
 
     final anticipatedNoDepositTran = _anticipatedNoTranController.valueOrNull;
 
-    if (anticipatedNoDepositTran == null) {
+    if (anticipatedNoDepositTran == null ||
+        anticipatedNoDepositTran == 'null') {
       _anticipatedNoTranController.addError("Field is required");
       _subjectSaveAccountResponse.addError(
           "You have not filled in a Anticipated number of deposit transaction");
@@ -2230,7 +2239,8 @@ if (anticipatedAmountWithdraw == null) {
     final anticipatedAmountDepositTran =
         _anticipatedAmountController.valueOrNull;
 
-    if (anticipatedAmountDepositTran == null) {
+    if (anticipatedAmountDepositTran == null ||
+        anticipatedAmountDepositTran == 'null') {
       _anticipatedAmountController.addError("Field is required");
       _anticipatedAmountController.addError(
           "You have not filled in a Anticipated amount of deposit transaction");
@@ -2240,7 +2250,7 @@ if (anticipatedAmountWithdraw == null) {
     final anticipatedNoWithdraw =
         _anticipatedWithdrawTranController.valueOrNull;
 
-    if (anticipatedNoWithdraw == null) {
+    if (anticipatedNoWithdraw == null || anticipatedNoWithdraw == 'null') {
       _anticipatedWithdrawTranController.addError("Field is required");
       _anticipatedWithdrawTranController.addError(
           "You have not filled in a Anticipated number of withdrawal transaction");
@@ -2249,13 +2259,15 @@ if (anticipatedAmountWithdraw == null) {
     final anticipatedAmountWithdraw =
         _anticipatedAmountWithdrawController.valueOrNull;
 
-    if (anticipatedAmountWithdraw == null) {
+    if (anticipatedAmountWithdraw == null ||
+        anticipatedAmountWithdraw == 'null') {
       _anticipatedAmountWithdrawController.addError("Field is required");
       _anticipatedAmountWithdrawController.addError(
           "You have not filled in a Anticipated amount of deposit transaction");
       return;
     }
 
+/*
     List<TransactionTypes> transactionTypesList = [];
     TransactionTypes transactionTypes = TransactionTypes(
       transactionType: "Deposit",
@@ -2267,6 +2279,31 @@ if (anticipatedAmountWithdraw == null) {
       transactionType: "Withdraw",
       transactionCount: anticipatedNoWithdraw.toString(),
       expectedAmount: anticipatedAmountWithdraw.toString(),
+    );
+
+    transactionTypesList.add(withdrawalTransactionTypes);
+
+    */
+
+    List<TransactionTypes> transactionTypesList = [];
+    TransactionTypes transactionTypes = TransactionTypes(
+      transactionType: "Deposit",
+      transactionCount: anticipatedNoDepositTran != null
+          ? anticipatedNoDepositTran.toString()
+          : "0 - 10",
+      expectedAmount: anticipatedAmountDepositTran != null
+          ? anticipatedAmountDepositTran.toString()
+          : "0 - 2000",
+    );
+    transactionTypesList.add(transactionTypes);
+    TransactionTypes withdrawalTransactionTypes = TransactionTypes(
+      transactionType: "Withdraw",
+      transactionCount: anticipatedNoWithdraw != null
+          ? anticipatedNoWithdraw.toString()
+          : "0 - 10",
+      expectedAmount: anticipatedAmountWithdraw != null
+          ? anticipatedAmountWithdraw.toString()
+          : "0 - 2000",
     );
 
     transactionTypesList.add(withdrawalTransactionTypes);
@@ -3219,7 +3256,8 @@ if (anticipatedAmountWithdraw == null) {
 
     final anticipatedNoDepositTran = _anticipatedNoTranController.valueOrNull;
 
-    if (anticipatedNoDepositTran == null) {
+    if (anticipatedNoDepositTran == null ||
+        anticipatedNoDepositTran == 'null') {
       _anticipatedNoTranController.addError("Field is required");
       _subjectSaveAccountResponse.addError(
           "You have not filled in a Anticipated number of deposit transaction");
@@ -3228,7 +3266,8 @@ if (anticipatedAmountWithdraw == null) {
     final anticipatedAmountDepositTran =
         _anticipatedAmountController.valueOrNull;
 
-    if (anticipatedAmountDepositTran == null) {
+    if (anticipatedAmountDepositTran == null ||
+        anticipatedAmountDepositTran == 'null') {
       _anticipatedAmountController.addError("Field is required");
       _anticipatedAmountController.addError(
           "You have not filled in a Anticipated amount of deposit transaction");
@@ -3238,7 +3277,7 @@ if (anticipatedAmountWithdraw == null) {
     final anticipatedNoWithdraw =
         _anticipatedWithdrawTranController.valueOrNull;
 
-    if (anticipatedNoWithdraw == null) {
+    if (anticipatedNoWithdraw == null || anticipatedNoWithdraw == 'null') {
       _anticipatedWithdrawTranController.addError("Field is required");
       _anticipatedWithdrawTranController.addError(
           "You have not filled in a Anticipated number of withdrawal transaction");
@@ -3247,13 +3286,15 @@ if (anticipatedAmountWithdraw == null) {
     final anticipatedAmountWithdraw =
         _anticipatedAmountWithdrawController.valueOrNull;
 
-    if (anticipatedAmountWithdraw == null) {
+    if (anticipatedAmountWithdraw == null ||
+        anticipatedAmountWithdraw == 'null') {
       _anticipatedAmountWithdrawController.addError("Field is required");
       _anticipatedAmountWithdrawController.addError(
           "You have not filled in a Anticipated amount of deposit transaction");
       return false;
     }
 
+/*
     List<TransactionTypes> transactionTypesList = [];
     TransactionTypes transactionTypes = TransactionTypes(
       transactionType: "Deposit",
@@ -3265,6 +3306,31 @@ if (anticipatedAmountWithdraw == null) {
       transactionType: "Withdraw",
       transactionCount: anticipatedNoWithdraw.toString(),
       expectedAmount: anticipatedAmountWithdraw.toString(),
+    );
+
+    transactionTypesList.add(withdrawalTransactionTypes);
+
+    */
+
+    List<TransactionTypes> transactionTypesList = [];
+    TransactionTypes transactionTypes = TransactionTypes(
+      transactionType: "Deposit",
+      transactionCount: anticipatedNoDepositTran != null
+          ? anticipatedNoDepositTran.toString()
+          : "0 - 10",
+      expectedAmount: anticipatedAmountDepositTran != null
+          ? anticipatedAmountDepositTran.toString()
+          : "0 - 2000",
+    );
+    transactionTypesList.add(transactionTypes);
+    TransactionTypes withdrawalTransactionTypes = TransactionTypes(
+      transactionType: "Withdraw",
+      transactionCount: anticipatedNoWithdraw != null
+          ? anticipatedNoWithdraw.toString()
+          : "0 - 10",
+      expectedAmount: anticipatedAmountWithdraw != null
+          ? anticipatedAmountWithdraw.toString()
+          : "0 - 2000",
     );
 
     transactionTypesList.add(withdrawalTransactionTypes);
@@ -4163,11 +4229,27 @@ if (anticipatedAmountWithdraw == null) {
         if (transTypes != null) {
           for (TransactionTypes trans in transTypes) {
             if (trans.transactionType!.toLowerCase() == "deposit") {
-              _anticipatedNoTranController.add(trans.transactionCount);
-              _anticipatedAmountController.add(trans.expectedAmount);
+              _anticipatedNoTranController.add(
+                  (trans.transactionCount != "null" &&
+                          trans.transactionCount != null)
+                      ? trans.transactionCount
+                      : "0 - 10");
+              _anticipatedAmountController.add(
+                  (trans.expectedAmount != "null" &&
+                          trans.expectedAmount != null)
+                      ? trans.expectedAmount
+                      : "0 - 2000");
             } else {
-              _anticipatedWithdrawTranController.add(trans.transactionCount);
-              _anticipatedAmountWithdrawController.add(trans.expectedAmount);
+              _anticipatedWithdrawTranController
+                ..add((trans.transactionCount != "null" &&
+                        trans.transactionCount != null)
+                    ? trans.transactionCount
+                    : "0 - 10");
+              _anticipatedAmountWithdrawController.add(
+                  (trans.expectedAmount != "null" &&
+                          trans.expectedAmount != null)
+                      ? trans.expectedAmount
+                      : "0 - 2000");
             }
           }
         }
@@ -5031,14 +5113,31 @@ if (anticipatedAmountWithdraw == null) {
         if (transTypes != null) {
           for (TransactionTypes trans in transTypes) {
             if (trans.transactionType!.toLowerCase() == "deposit") {
-              _anticipatedNoTranController.add(trans.transactionCount);
-              _anticipatedAmountController.add(trans.expectedAmount);
+              _anticipatedNoTranController.add(
+                  (trans.transactionCount != null ||
+                          trans.transactionCount != 'null')
+                      ? trans.transactionCount
+                      : "0 - 10");
+              _anticipatedAmountController.add((trans.expectedAmount != null ||
+                      trans.expectedAmount != 'null')
+                  ? trans.expectedAmount
+                  : "0 - 2000");
+              //   (trans.expectedAmount);
             } else {
-              _anticipatedWithdrawTranController.add(trans.transactionCount);
-              _anticipatedAmountWithdrawController.add(trans.expectedAmount);
+              _anticipatedWithdrawTranController.add(
+                  (trans.transactionCount != null ||
+                          trans.transactionCount != 'null')
+                      ? trans.transactionCount
+                      : "0 - 10");
+              _anticipatedAmountWithdrawController.add(
+                  (trans.expectedAmount != null ||
+                          trans.expectedAmount != 'null')
+                      ? trans.expectedAmount
+                      : "0 - 2000");
             }
           }
         }
+
         if (accountResponse.data!.destinationBranch != null &&
             accountResponse.data!.destinationBranch!.isNotEmpty) {
           _destinationBranchController

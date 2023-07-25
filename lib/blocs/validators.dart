@@ -5,7 +5,7 @@ import 'package:zxplore_app/category.dart';
 class Validators {
   final validateAccountType =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.length > 2) {
+    if (arg != null && arg.length > 1) {
       sink.add(arg);
     } else {
       sink.addError('Account type is required');
@@ -14,7 +14,7 @@ class Validators {
 
   final validateAccountHolderType =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.length > 2) {
+    if (arg != null && arg.length > 1) {
       sink.add(arg);
     } else {
       sink.addError('Account holder type is required');
@@ -23,7 +23,7 @@ class Validators {
 
   final validateRiskRank =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.length > 2) {
+    if (arg != null && arg.length > 1) {
       sink.add(arg);
     } else {
       sink.addError('Risk rank is required');
@@ -32,7 +32,7 @@ class Validators {
 
   final validateAccountCategory =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.isNotEmpty && arg.length > 2) {
+    if (arg != null && arg.isNotEmpty && arg.length > 1) {
       sink.add(arg);
     } else {
       sink.addError('Account Category is required');
@@ -50,7 +50,7 @@ class Validators {
 
   final validateTitle =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.isNotEmpty && arg.length > 2) {
+    if (arg != null && arg.isNotEmpty && arg.length > 1) {
       sink.add(arg);
     } else {
       sink.addError('Title is required');
@@ -137,7 +137,7 @@ class Validators {
 
   final validateStateOfOrigin =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.isNotEmpty && arg.length > 2) {
+    if (arg != null && arg.isNotEmpty && arg.length > 1) {
       sink.add(arg);
     } else {
       sink.addError('Region of Residence is required');
@@ -145,7 +145,7 @@ class Validators {
   });
   final validatePlaceOfBirth =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.isNotEmpty && arg.length > 2) {
+    if (arg != null && arg.isNotEmpty) {
       sink.add(arg);
     } else {
       sink.addError('Place of Birth is required');
@@ -154,7 +154,7 @@ class Validators {
 
   final validateCountryOfOrigin =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
-    if (arg != null && arg.isNotEmpty && arg.length > 2) {
+    if (arg != null && arg.isNotEmpty && arg.length > 1) {
       sink.add(arg);
     } else {
       sink.addError('Country of origin is required');
