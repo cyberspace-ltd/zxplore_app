@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zxplore_app/src/api/dio_error_handler.dart';
 import 'package:zxplore_app/src/api/models/login_response.dart';
 import 'package:zxplore_app/src/api/remote_api.dart';
+import 'package:zxplore_app/src/router/router.dart';
 import 'package:zxplore_app/src/shared/app_exception.dart';
 import 'package:zxplore_app/src/shared/app_sizes.dart';
 import 'package:zxplore_app/src/shared/primary_button.dart';
@@ -172,7 +173,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   PrimaryButton(
                     text: 'SIGN IN',
                     onPressed: () async {
-                      context.go('/accountInformation');
+                      const AccountInformationRouteData().go(context);
                       // _node.unfocus();
                       // setState(() {
                       //   _submitted = true;

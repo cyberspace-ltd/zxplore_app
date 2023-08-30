@@ -1,15 +1,23 @@
 import 'package:backdrop/backdrop.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class DashboardPage extends ConsumerWidget {
-  const DashboardPage({super.key, required this.navigationShell});
+  const DashboardPage({
+    required this.navigationShell,
+    required this.children,
+    Key? key,
+  }) : super(key: key ?? const ValueKey<String>('ScaffoldWithNavBar'));
+
   final StatefulNavigationShell navigationShell;
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final String pageTitle = _getPageTitle(navigationShell.currentIndex);
+
     return BackdropScaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       backLayerBackgroundColor: Theme.of(context).colorScheme.surface,
@@ -17,7 +25,9 @@ class DashboardPage extends ConsumerWidget {
         title: Text(pageTitle),
         actions: const <Widget>[
           BackdropToggleButton(
-              icon: AnimatedIcons.list_view, color: Colors.grey)
+            icon: AnimatedIcons.list_view,
+            color: Colors.grey,
+          )
         ],
       ),
       backLayer: BackdropNavigationBackLayer(
@@ -57,9 +67,12 @@ class DashboardPage extends ConsumerWidget {
             title: Text("Upload Bill"),
           ),
         ],
-        onTap: (int idx) => _onItemTapped(idx, context),
+        onTap: (int index) => _onTap(context, index),
       ),
-      frontLayer: navigationShell,
+      frontLayer: AnimatedBranchContainer(
+        currentIndex: navigationShell.currentIndex,
+        children: children,
+      ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(24),
         color: Theme.of(context).colorScheme.surface,
@@ -110,6 +123,61 @@ class DashboardPage extends ConsumerWidget {
           ],
         ),
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   showSelectedLabels: false,
+      //   showUnselectedLabels: false,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home_outlined, color: Colors.grey),
+      //       activeIcon: Icon(Icons.home_outlined, color: Colors.black),
+      //       label: 'Account Information',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.contact_page_outlined, color: Colors.grey),
+      //       activeIcon: Icon(Icons.contact_page_outlined, color: Colors.black),
+      //       label: 'Contact Details',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.account_box_rounded, color: Colors.grey),
+      //       activeIcon: Icon(Icons.account_box_rounded, color: Colors.black),
+      //       label: 'Means of Identification',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.person_pin_outlined, color: Colors.grey),
+      //       activeIcon: Icon(Icons.person_pin_outlined, color: Colors.black),
+      //       label: 'Personal Information',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.edit_document, color: Colors.grey),
+      //       activeIcon: Icon(Icons.edit_document, color: Colors.black),
+      //       label: 'Signatory',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.upload_outlined, color: Colors.grey),
+      //       activeIcon: Icon(Icons.upload_outlined, color: Colors.black),
+      //       label: 'Upload ID',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.upload_file_outlined, color: Colors.grey),
+      //       activeIcon: Icon(Icons.upload_file_outlined, color: Colors.black),
+      //       label: 'Upload Passport',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.file_upload_outlined, color: Colors.grey),
+      //       activeIcon: Icon(Icons.file_upload_outlined, color: Colors.black),
+      //       label: 'Upload Utility Bill',
+      //     ),
+      //   ],
+      //   currentIndex: navigationShell.currentIndex,
+      //   onTap: (int index) => _onTap(context, index),
+      // ),
+    );
+  }
+
+  void _onTap(BuildContext context, int index) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
     );
   }
 
@@ -140,11 +208,38 @@ class DashboardPage extends ConsumerWidget {
     }
     return 'Account Information';
   }
+}
 
-  void _onItemTapped(int index, BuildContext context) {
-    navigationShell.goBranch(
-      index,
-      initialLocation: index == navigationShell.currentIndex,
-    );
+class AnimatedBranchContainer extends StatelessWidget {
+  const AnimatedBranchContainer({
+    super.key,
+    required this.currentIndex,
+    required this.children,
+  });
+
+  final int currentIndex;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+        children: children.mapIndexed(
+      (int index, Widget navigator) {
+        return AnimatedScale(
+          scale: index == currentIndex ? 1 : 1.5,
+          duration: const Duration(milliseconds: 400),
+          child: AnimatedOpacity(
+            opacity: index == currentIndex ? 1 : 0,
+            duration: const Duration(milliseconds: 400),
+            child: _branchNavigatorWrapper(index, navigator),
+          ),
+        );
+      },
+    ).toList());
   }
+
+  Widget _branchNavigatorWrapper(int index, Widget navigator) => IgnorePointer(
+        ignoring: index != currentIndex,
+        child: TickerMode(enabled: index == currentIndex, child: navigator),
+      );
 }
