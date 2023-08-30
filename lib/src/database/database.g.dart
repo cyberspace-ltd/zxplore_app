@@ -1087,27 +1087,21 @@ class $OfflineAccountEntityTable extends OfflineAccountEntity
   static const VerificationMeta _isSendEmailMeta =
       const VerificationMeta('isSendEmail');
   @override
-  late final GeneratedColumn<bool> isSendEmail =
-      GeneratedColumn<bool>('is_send_email', aliasedName, true,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_send_email" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+  late final GeneratedColumn<bool> isSendEmail = GeneratedColumn<bool>(
+      'is_send_email', aliasedName, true,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_send_email" IN (0, 1))'));
   static const VerificationMeta _isReceiveAlertMeta =
       const VerificationMeta('isReceiveAlert');
   @override
-  late final GeneratedColumn<bool> isReceiveAlert =
-      GeneratedColumn<bool>('is_receive_alert', aliasedName, true,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_receive_alert" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+  late final GeneratedColumn<bool> isReceiveAlert = GeneratedColumn<bool>(
+      'is_receive_alert', aliasedName, true,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_receive_alert" IN (0, 1))'));
   static const VerificationMeta _isRequestHardwareTokenMeta =
       const VerificationMeta('isRequestHardwareToken');
   @override
@@ -1115,24 +1109,18 @@ class $OfflineAccountEntityTable extends OfflineAccountEntity
       GeneratedColumn<bool>('is_request_hardware_token', aliasedName, true,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_request_hardware_token" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("is_request_hardware_token" IN (0, 1))'));
   static const VerificationMeta _isRequestInternetBankingMeta =
       const VerificationMeta('isRequestInternetBanking');
   @override
   late final GeneratedColumn<bool> isRequestInternetBanking =
-      GeneratedColumn<bool>('is_request_internet_banking', aliasedName, true,
+      GeneratedColumn<bool>(
+          'is_request_internet_banking', aliasedName, true,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite:
-                'CHECK ("is_request_internet_banking" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("is_request_internet_banking" IN (0, 1))'));
   static const VerificationMeta _idCardMeta = const VerificationMeta('idCard');
   @override
   late final GeneratedColumn<String> idCard = GeneratedColumn<String>(
