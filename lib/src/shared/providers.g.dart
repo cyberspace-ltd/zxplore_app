@@ -21,6 +21,23 @@ final authRepositoryProvider = AutoDisposeProvider<AuthRepository>.internal(
 );
 
 typedef AuthRepositoryRef = AutoDisposeProviderRef<AuthRepository>;
+String _$accountsRepositoryHash() =>
+    r'8f0ed74c3ff185a1c0233eab11d7a23785839b17';
+
+/// See also [accountsRepository].
+@ProviderFor(accountsRepository)
+final accountsRepositoryProvider =
+    AutoDisposeProvider<AccountsRepository>.internal(
+  accountsRepository,
+  name: r'accountsRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$accountsRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AccountsRepositoryRef = AutoDisposeProviderRef<AccountsRepository>;
 String _$pemContentHash() => r'355c5b3eb7ce395654272066e8148a66ef3dce9d';
 
 /// See also [pemContent].

@@ -6,10 +6,13 @@ import 'package:zxplore_app/src/api/models/account_class_response.dart';
 import 'package:zxplore_app/src/api/models/account_details_response.dart';
 import 'package:zxplore_app/src/api/models/accounts_response.dart';
 import 'package:zxplore_app/src/api/models/bvn_response.dart';
+import 'package:zxplore_app/src/api/models/cities_model.dart';
+import 'package:zxplore_app/src/api/models/country_model.dart';
 import 'package:zxplore_app/src/api/models/login_response.dart';
 import 'package:zxplore_app/src/api/models/occupation_model.dart';
 import 'package:zxplore_app/src/api/models/save_account_response.dart';
 import 'package:zxplore_app/src/api/models/state_model.dart';
+import 'package:zxplore_app/src/api/models/title_model.dart';
 import 'package:zxplore_app/src/api/models/verify_account_response.dart';
 import 'package:zxplore_app/src/shared/providers.dart';
 
@@ -33,14 +36,17 @@ abstract class RemoteApi {
   @GET('/accounts/AccountClass')
   Future<AccountClassResponse> fetchAccountClasses();
 
+  @GET('/accounts/Countries')
+  Future<CountryModel> fetchCountries();
+
   @GET('/accounts/States')
   Future<StateModel> fetchStates();
 
   @GET('/accounts/Cities')
-  Future<StateModel> fetchCities();
+  Future<CitiesModel> fetchCities();
 
-  @GET('/accounts/Countries')
-  Future<StateModel> fetchCountries();
+  @GET('/accounts/Titles')
+  Future<TitleModel> fetchTitles();
 
   @GET('/accounts/GetAccountsByRsmID/{rsmId}/All')
   Future<AccountsResponse> getAllAccountsByRsmId({
@@ -62,7 +68,7 @@ abstract class RemoteApi {
     @Body() required String encodedJson,
   });
 
-  @POST('/accounts/VerifySingleBVN/')
+  @POST('/accounts/VerifySingleBVN')
   Future<BvnResponse> verifyBvn({
     @Field("BvnNew") required String encodedBvn,
   });

@@ -10,7 +10,7 @@ import 'package:zxplore_app/src/features/forms/signatory_page.dart';
 import 'package:zxplore_app/src/features/forms/upload_id_page.dart';
 import 'package:zxplore_app/src/features/forms/upload_passport_page.dart';
 import 'package:zxplore_app/src/features/forms/upload_utility_bill_page.dart';
-import 'package:zxplore_app/src/features/sign_in/sign_in_page.dart';
+import 'package:zxplore_app/src/features/sign_in/signin_page.dart';
 import 'package:zxplore_app/src/router/dashboard_page.dart';
 import 'package:zxplore_app/src/router/nav_observer.dart';
 import 'package:zxplore_app/src/router/not_found_page.dart';

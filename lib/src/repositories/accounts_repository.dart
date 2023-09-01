@@ -36,7 +36,8 @@ class AccountsRepository {
   }
 
   Future<AccountDetailsResponse> getAccountsDetailsByReference(
-      String? referenceId) async {
+    String? referenceId,
+  ) async {
     try {
       return remoteApi.getAccountsDetailsByReference(referenceId: referenceId);
     } catch (e) {
@@ -45,7 +46,8 @@ class AccountsRepository {
   }
 
   Future<VerifyAccountResponse> verifyAccountsByRefId(
-      String? referenceId) async {
+    String? referenceId,
+  ) async {
     try {
       return remoteApi.verifyAccountsByRefId(referenceId: referenceId);
     } catch (e) {
@@ -54,7 +56,8 @@ class AccountsRepository {
   }
 
   Future<SaveAccountResponse> attemptSubmitAccountToApi(
-      String jsonEncodeAccount) async {
+    String jsonEncodeAccount,
+  ) async {
     try {
       return remoteApi.attemptSaveAccounts(encodedJson: jsonEncodeAccount);
     } catch (e) {
@@ -70,6 +73,51 @@ class AccountsRepository {
     }
   }
 
+  Future<List<String>> getOccupations() async {
+    try {
+      final response = await remoteApi.fetchOccupations();
+      return response.menu ?? [];
+    } catch (e) {
+      throw AppException(getErrorMessage(e));
+    }
+  }
+
+  Future<List<String>> getCountries() async {
+    try {
+      final response = await remoteApi.fetchCountries();
+      return response.menu ?? [];
+    } catch (e) {
+      throw AppException(getErrorMessage(e));
+    }
+  }
+
+  Future<List<String>> getStates() async {
+    try {
+      final response = await remoteApi.fetchStates();
+      return response.menu ?? [];
+    } catch (e) {
+      throw AppException(getErrorMessage(e));
+    }
+  }
+
+  Future<List<String>> getCities() async {
+    try {
+      final response = await remoteApi.fetchCities();
+      return response.menu ?? [];
+    } catch (e) {
+      throw AppException(getErrorMessage(e));
+    }
+  }
+
+  Future<List<String>> getTitles() async {
+    try {
+      final response = await remoteApi.fetchTitles();
+      return response.menu ?? [];
+    } catch (e) {
+      throw AppException(getErrorMessage(e));
+    }
+  }
+
   Future<int> insertAccountOffline(OfflineAccountModel offlineAccount) =>
       db.insertOfflineAccountEntity(offlineAccount.toEntityCompanion());
 
@@ -80,7 +128,8 @@ class AccountsRepository {
       db.deleteOfflineAccountEntity(id);
 
   Future<OfflineAccountModel?> getOfflineAccountByRefId(
-      String referenceId) async {
+    String referenceId,
+  ) async {
     final account = await db.getOfflineAccount(referenceId);
     return account?.toDomainModel();
   }
@@ -97,20 +146,20 @@ class AccountsRepository {
     return db.insertOccupations(list);
   }
 
-  Future<List<String>> getOccupations() async {
+  Future<List<String>> getOccupationsFromDB() async {
     final occupations = await db.getOccupations();
     final list = occupations.map((e) => e.name).toList();
     list.removeWhere((element) => element == null);
     return list as List<String>;
   }
 
-  Future<void> insertCountries(List<String> countries) {
+  Future<void> insertCountriesFromDB(List<String> countries) {
     final list =
         countries.map((e) => CountryEntityCompanion(name: Value(e))).toList();
     return db.insertCountries(list);
   }
 
-  Future<List<String>> getCountries() async {
+  Future<List<String>> getCountriesFromDB() async {
     final countries = await db.getCountries();
     final list = countries.map((e) => e.name).toList();
     list.removeWhere((element) => element == null);
@@ -123,7 +172,7 @@ class AccountsRepository {
     return db.insertStates(list);
   }
 
-  Future<List<String>> getStates() async {
+  Future<List<String>> getStatesFromDB() async {
     final states = await db.getStates();
     final list = states.map((e) => e.name).toList();
     list.removeWhere((element) => element == null);
@@ -136,7 +185,7 @@ class AccountsRepository {
     return db.insertCities(list);
   }
 
-  Future<List<String>> getCities() async {
+  Future<List<String>> getCitiesFromDB() async {
     final cities = await db.getCities();
     final list = cities.map((e) => e.name).toList();
     list.removeWhere((element) => element == null);

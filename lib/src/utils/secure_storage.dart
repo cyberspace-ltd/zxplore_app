@@ -9,8 +9,11 @@ class SecureStorage {
 
   static const String dataInitializerKey = "DATAINITIALIZED";
 
-  static Future saveAgentInformation(
-      String token, String employeeId, String branchNumber) async {
+  static Future saveAgentInformation({
+    String? token,
+    String? employeeId,
+    String? branchNumber,
+  }) async {
     const storage = FlutterSecureStorage();
     await storage.write(key: tokenKey, value: token);
     await storage.write(key: employeeIDKey, value: employeeId);

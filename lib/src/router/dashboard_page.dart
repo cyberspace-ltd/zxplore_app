@@ -23,6 +23,10 @@ class DashboardPage extends ConsumerWidget {
       backLayerBackgroundColor: Theme.of(context).colorScheme.surface,
       appBar: BackdropAppBar(
         title: Text(pageTitle),
+        leading: const BackdropToggleButton(
+          icon: AnimatedIcons.close_menu,
+          color: Colors.grey,
+        ),
         actions: const <Widget>[
           BackdropToggleButton(
             icon: AnimatedIcons.list_view,

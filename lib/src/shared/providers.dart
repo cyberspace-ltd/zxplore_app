@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zxplore_app/src/api/remote_api.dart';
+import 'package:zxplore_app/src/database/database.dart';
+import 'package:zxplore_app/src/repositories/accounts_repository.dart';
 import 'package:zxplore_app/src/repositories/auth_repository.dart';
 
 part 'providers.g.dart';
@@ -9,6 +11,13 @@ part 'providers.g.dart';
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) =>
     AuthRepository(remoteApi: ref.watch(remoteApiProvider));
+
+@riverpod
+AccountsRepository accountsRepository(AccountsRepositoryRef ref) =>
+    AccountsRepository(
+      remoteApi: ref.watch(remoteApiProvider),
+      db: ref.watch(AppDatabase.provider),
+    );
 
 @riverpod
 ByteData pemContent(PemContentRef ref) => throw UnimplementedError();

@@ -1,17 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:zxplore_app/src/api/dio_error_handler.dart';
-import 'package:zxplore_app/src/api/models/login_response.dart';
-import 'package:zxplore_app/src/api/remote_api.dart';
+import 'package:zxplore_app/src/features/sign_in/signin_page_controller.dart';
 import 'package:zxplore_app/src/router/router.dart';
-import 'package:zxplore_app/src/shared/app_exception.dart';
 import 'package:zxplore_app/src/shared/app_sizes.dart';
+import 'package:zxplore_app/src/shared/async_value_ui.dart';
 import 'package:zxplore_app/src/shared/primary_button.dart';
 import 'package:zxplore_app/src/shared/providers.dart';
-import 'package:zxplore_app/src/utils/secure_storage.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
@@ -30,7 +25,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   String get password => _passwordController.text.trim();
 
   bool _passwordHidden = true;
-  final bool _submitted = false;
 
   void togglePasswordVisibility() {
     setState(() {
@@ -47,48 +41,26 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   }
 
   Future<void> signIn() async {
-    try {
-      if (_formKey.currentState!.validate()) {
-        // callback
-        void callback() {
-          context.go('/accountInformation');
-        }
-
-        _formKey.currentState!.save();
-        final api = ref.watch(remoteApiProvider);
-        final response = await api.login(
-          username: username,
-          password: password,
-        );
-        await SecureStorage.saveAgentInformation(
-          response.data!.user!.token!,
-          response.data!.user!.employeeId.toString(),
-          response.data!.user!.branchNumber.toString(),
-        );
-
-        callback();
-      }
-    } on DioException catch (error) {
-      if (error.response != null &&
-          error.response!.data != null &&
-          error.response!.data['message'] != null) {
-        throw AppException(error.response!.data['message']);
-      } else if (error.response != null &&
-          error.response!.data != null &&
-          error.response!.data['Message'] != null) {
-        throw AppException(error.response!.data['Message']);
-      } else if (error.response?.statusCode == 502) {
-        var value = LoginResponse.fromJson(error.response?.data);
-        throw AppException(value.message);
-      } else {
-        throw AppException(getErrorMessage(error));
-      }
-    }
+    if (!_formKey.currentState!.validate()) return;
+    final controller = ref.read(signInPageControllerProvider.notifier);
+    await controller.submit(
+      username: username,
+      password: password,
+      onSuccess: () {
+        const AccountInformationRouteData()
+            .go(rootNavigatorKey.currentContext!);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    var darkMode = ref.watch(darkModeProvider);
+    final darkMode = ref.watch(darkModeProvider);
+    ref.listen<AsyncValue>(
+      signInPageControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
+    final state = ref.watch(signInPageControllerProvider);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -131,14 +103,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       prefixIcon: Icon(Icons.account_circle_outlined),
                     ),
                     validator: (value) {
-                      if (_submitted) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
-                        }
-                        return null;
-                      } else {
-                        return null;
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
                       }
+                      return null;
                     },
                   ),
                   gapH24,
@@ -159,48 +127,17 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                       ),
                     ),
                     validator: (value) {
-                      if (_submitted) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      } else {
-                        return null;
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
                       }
+                      return null;
                     },
                   ),
                   gapH32,
                   PrimaryButton(
                     text: 'SIGN IN',
-                    onPressed: () async {
-                      const AccountInformationRouteData().go(context);
-                      // _node.unfocus();
-                      // setState(() {
-                      //   _submitted = true;
-                      // });
-                      // try {
-                      //   await signIn();
-                      // } catch (e) {
-                      //   // show an alert dialog with the error message
-                      //   showDialog(
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return AlertDialog(
-                      //         title: const Text('Error'),
-                      //         content: Text(e.toString()),
-                      //         actions: [
-                      //           TextButton(
-                      //             onPressed: () {
-                      //               Navigator.of(context).pop();
-                      //             },
-                      //             child: const Text('OK'),
-                      //           ),
-                      //         ],
-                      //       );
-                      //     },
-                      //   );
-                      // }
-                    },
+                    isLoading: state.isLoading,
+                    onPressed: signIn,
                   ),
                   gapH64,
                   ListTile(

@@ -9,10 +9,7 @@ part of 'remote_api.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
 class _RemoteApi implements RemoteApi {
-  _RemoteApi(
-    this._dio, {
-    this.baseUrl,
-  });
+  _RemoteApi(this._dio);
 
   final Dio _dio;
 
@@ -106,6 +103,33 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
+  Future<CountryModel> fetchCountries() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<CountryModel>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/accounts/Countries',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final value = CountryModel.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<StateModel> fetchStates() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -133,13 +157,13 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<StateModel> fetchCities() async {
+  Future<CitiesModel> fetchCities() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<StateModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<CitiesModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -155,25 +179,25 @@ class _RemoteApi implements RemoteApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = StateModel.fromJson(_result.data!);
+    final value = CitiesModel.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<StateModel> fetchCountries() async {
+  Future<TitleModel> fetchTitles() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<StateModel>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<TitleModel>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/accounts/Countries',
+              '/accounts/Titles',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -182,7 +206,7 @@ class _RemoteApi implements RemoteApi {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = StateModel.fromJson(_result.data!);
+    final value = TitleModel.fromJson(_result.data!);
     return value;
   }
 
