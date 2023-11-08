@@ -46,6 +46,7 @@ class AccountForm {
   String? zPromptRequest;
   String? statementByEmailRequest;
   String? uSSDRequest;
+  String? ibankRequest;
   String? bankWalletRequest;
   String? cardRequest;
   String? cardType;
@@ -107,6 +108,7 @@ class AccountForm {
       required this.sourceOfFunds,
       required this.transactionTypes,
       required this.monthlyIncome,
+      required this.ibankRequest,
       this.id});
 
   factory AccountForm.fromJson(Map<String, dynamic> json) => new AccountForm(
@@ -143,6 +145,7 @@ class AccountForm {
         zPromptRequest: json["ZPromptRequest"],
         statementByEmailRequest: json["StatementByEmailRequest"],
         uSSDRequest: json["USSDRequest"],
+        ibankRequest: json["IbankRequest"],
         bankWalletRequest: json["BankWalletRequest"],
         cardRequest: json["CardRequest"],
         cardType: json["CardType"],
@@ -197,6 +200,7 @@ class AccountForm {
         "ZPromptRequest": zPromptRequest,
         "StatementByEmailRequest": statementByEmailRequest,
         "USSDRequest": uSSDRequest,
+        "IbankRequest": ibankRequest,
         "BankWalletRequest": bankWalletRequest,
         "CardRequest": cardRequest,
         "CardType": cardType,
@@ -249,6 +253,7 @@ class AccountForm {
         "zPromptRequest": zPromptRequest,
         "statementByEmailRequest": statementByEmailRequest,
         "uSSDRequest": uSSDRequest,
+        "ibankRequest": ibankRequest,
         "bankWalletRequest": bankWalletRequest,
         "cardRequest": cardRequest,
         "cardType": cardType,
@@ -303,6 +308,7 @@ class AccountForm {
       zPromptRequest: json["zPromptRequest"],
       statementByEmailRequest: json["statementByEmailRequest"],
       uSSDRequest: json["uSSDRequest"],
+      ibankRequest: json["ibankRequest"],
       bankWalletRequest: json["bankWalletRequest"],
       cardRequest: json["cardRequest"],
       cardType: json["cardType"],

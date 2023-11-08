@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:zxplore_app/category.dart';
 
-class Validators {
+mixin Validators {
   final validateAccountType =
       StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
     if (arg != null && arg.length > 1) {
@@ -187,6 +187,16 @@ class Validators {
       sink.add(username);
     } else {
       sink.addError('Ensure your username is valid & not empty');
+    }
+  });
+
+  final validateNextOfKinPhoneNumber =
+      StreamTransformer<String?, String>.fromHandlers(handleData: (arg, sink) {
+    print(arg);
+    if (arg != null) {
+      sink.add(arg);
+    } else {
+      sink.addError('Mobile Number must be a valid phone number');
     }
   });
 

@@ -286,15 +286,35 @@ class _BackdropState extends State<Backdrop>
               color: Colors.white,
             ),
             onPressed: () {
+              /*
               var loadingBar = FlushbarHelper.createLoading(
                 message: "Saving account offline...",
                 linearProgressIndicator: null,
               );
 
               loadingBar..show(context);
+              */
+              _accountFormBloc.saveForm();
+              //  goback(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  duration: const Duration(seconds: 15),
+                  content: Text(
+                      'Your record has been saved successfully, click on the refresh button in your home screen to see your saved record'),
+                ),
+              );
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => MyHomePage()),
+              );
+              //   loadingBar.dismiss(context);
+
+/*
+              
 
               //   _accountFormBloc.saveOffline();
-              _accountFormBloc.saveForm();
+          //    _accountFormBloc.saveForm();
 
               _accountFormBloc.subjectSaveOfflineAccountResponse
                   .listen((result) {
@@ -308,7 +328,10 @@ class _BackdropState extends State<Backdrop>
                     FlushbarHelper.createError(message: error.toString());
 
                 errorSnackBar..show(context);
+                
+                
               });
+              */
             },
           ),
         ],
@@ -322,6 +345,13 @@ class _BackdropState extends State<Backdrop>
         builder: _buildStack,
       ),
     );
+  }
+
+  goback(BuildContext context) {
+    int count = 0;
+    Navigator.popUntil(context, (route) {
+      return count++ == 2;
+    });
   }
 
   void _showSuccessDialog(String message) {

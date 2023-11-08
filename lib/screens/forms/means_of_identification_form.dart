@@ -29,14 +29,9 @@ class _MeansOfIdentificationStepStepState
   final TextEditingController _idIssuerOthersController =
       TextEditingController();
 
-      final TextEditingController _admissionNoController =
-      TextEditingController();
-
-
-
+  final TextEditingController _admissionNoController = TextEditingController();
 
   final TextEditingController _idNumberController = TextEditingController();
-
 
   final _idTypes = idTypes;
 
@@ -77,24 +72,24 @@ class _MeansOfIdentificationStepStepState
 
   final _idIssuer = [
     'ELECTORAL COMMISSION',
-   //  'DVLA',
+    //  'DVLA',
     'DRIVER AND VEHICLE LICENSING AUTHORITY',
     'MINISTRY OF FOREIGN AFFAIRS',
-   // 'NIA',
-   'NATIONAL IDENTIFICATION AUTHORITY',
-   // 'SSNIT',
-   'SOCIAL SECURITY AND NATIONAL INSURANCE\nTRUST',
+    // 'NIA',
+    'NATIONAL IDENTIFICATION AUTHORITY',
+    // 'SSNIT',
+    'SOCIAL SECURITY AND NATIONAL INSURANCE\nTRUST',
     'OTHERS'
   ];
   String? selectedIdentityType;
-   String? selectedIdType;
+  String? selectedIdType;
   String? selectedIdentityIssuer;
   int _selectedIdFilter = 99;
   bool others = false;
 
   bool showAdmNo = false;
 
-  bool showIdIssuePlace =true;
+  bool showIdIssuePlace = true;
 
   AccountFormBloc? accountFormBloc;
 
@@ -103,13 +98,12 @@ class _MeansOfIdentificationStepStepState
   WidgetsBinding? buildState;
 
   // var //idTypeTextFieldStream,idIssuerTextFieldStream,
- // var  idNumberTextFieldStream;
- //,admissionNumberTextFieldStream,
- 
-var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
- 
- //otherIdIssuerTextFieldStream,admissionNumberTextFieldStream,
- 
+  // var  idNumberTextFieldStream;
+  //,admissionNumberTextFieldStream,
+
+  var otherIdIssuerTextFieldStream, admissionNumberTextFieldStream;
+
+  //otherIdIssuerTextFieldStream,admissionNumberTextFieldStream,
 
   @override
   void initState() {
@@ -117,26 +111,26 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
     statesBloc = StatesBloc();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
     buildState = WidgetsBinding.instance;
-   
+
     otherIdIssuerTextFieldStream = accountFormBloc!.idOthersIssuer;
-    admissionNumberTextFieldStream = accountFormBloc!.admissionNo; 
+    admissionNumberTextFieldStream = accountFormBloc!.admissionNo;
   }
-  
+
   String? idVal;
   Widget _idTypeTextField() {
     return StreamBuilder<String?>(
       stream: accountFormBloc!.idType,
       builder: (context, snapshot) {
         idVal = snapshot.data;
-      if(snapshot.hasData){
-
-        if(snapshot.data == STUDENT_ID){
-                             showAdmNo =true;
-                        others = true;
-                    buildState!=null? buildState!.addPostFrameCallback((_) => setState(() {})) : act();
-      }
-
-      }
+        if (snapshot.hasData) {
+          if (snapshot.data == STUDENT_ID) {
+            showAdmNo = true;
+            others = true;
+            buildState != null
+                ? buildState!.addPostFrameCallback((_) => setState(() {}))
+                : act();
+          }
+        }
         return FormField<String>(
           autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
@@ -151,33 +145,30 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
                   value: snapshot.data,
                   isDense: true,
                   onChanged: (value) {
-                  
                     setState(() {
                       selectedIdentityType = value;
                       if (value == DRIVERS_LICENSE) {
-                         showAdmNo =false;
+                        showAdmNo = false;
                         _selectedIdFilter = 0;
                       } else if (value == INT_PASSPORT) {
-                         showAdmNo =false;
+                        showAdmNo = false;
                         _selectedIdFilter = 1;
                       } else if (value == SSNIT_CARD) {
-                         showAdmNo =false;
+                        showAdmNo = false;
                         _selectedIdFilter = 2;
                       } else if (value == VOTERS_CARD) {
-                         showAdmNo =false;
+                        showAdmNo = false;
                         _selectedIdFilter = 3;
                       } else if (value == OTHERS) {
-                         showAdmNo =false;
+                        showAdmNo = false;
                         _selectedIdFilter = 4;
                       } else if (value == NATIONAL_ID) {
-                         showAdmNo =false;
+                        showAdmNo = false;
                         _selectedIdFilter = 5;
                       } else if (value == STUDENT_ID) {
-                     
                         _selectedIdFilter = 6;
                         //      showAdmNo =true;
-                      //  others = true;
-                       
+                        //  others = true;
                       } else {
                         // showAdmNo =false;
                         _selectedIdFilter = 99;
@@ -205,28 +196,23 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
       stream: accountFormBloc!.idIssuer,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          String? value;
+          if (((selectedIdType == STUDENT_ID || selectedIdType == OTHERS) &&
+              (snapshot.data == 'OTHERS'))) {
+            value = 'OTHERS';
+            others = true;
+          } else if (!_idIssuer.contains(snapshot.data)) {
+            value = 'OTHERS';
+            others = true;
+            otherIssuerDetails = snapshot.data;
 
-          String? value ;
-         if((( selectedIdType == STUDENT_ID || 
-            selectedIdType == OTHERS) && (snapshot.data == 'OTHERS'))){
-                value = 'OTHERS';
-                others = true;
-             
-          }else if(!_idIssuer.contains(snapshot.data) ){
-             value = 'OTHERS';
-                others = true;
-                otherIssuerDetails = snapshot.data;
-             
-         //     _idIssuerOthersController.text = snapshot.data ?? "";
-          }
-          else{
+            //     _idIssuerOthersController.text = snapshot.data ?? "";
+          } else {
             value = snapshot.data;
-       
           }
 
           _idIssuerController.value = TextEditingValue(
-              text: value!,
-              selection: _idIssuerController.selection);
+              text: value!, selection: _idIssuerController.selection);
         }
         return FormField<String>(
           autovalidateMode: AutovalidateMode.always,
@@ -240,13 +226,19 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data==null? null :((selectedIdType == STUDENT_ID || 
-                          selectedIdType == OTHERS) && (snapshot.data=='OTHERS'))?
-                   'OTHERS' : !_idIssuer.contains(snapshot.data) ? 'OTHERS' : snapshot.data,
+                  value: snapshot.data == null
+                      ? null
+                      : ((selectedIdType == STUDENT_ID ||
+                                  selectedIdType == OTHERS) &&
+                              (snapshot.data == 'OTHERS'))
+                          ? 'OTHERS'
+                          : !_idIssuer.contains(snapshot.data)
+                              ? 'OTHERS'
+                              : snapshot.data,
                   isDense: true,
                   isExpanded: true,
                   onChanged: (value) {
-                      accountFormBloc!.updateIDIssuerType(value);
+                    accountFormBloc!.updateIDIssuerType(value);
                     setState(() {
                       selectedIdentityIssuer = value;
                       if (value == OTHERS) {
@@ -255,8 +247,6 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
                         others = false;
                       }
                     });
-
-                  
                   },
                   items: _idIssuer.map((String value) {
                     return DropdownMenuItem<String>(
@@ -309,18 +299,15 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
 
 */
 
-  
   Widget _otherIdIssuerTextField() {
     return StreamBuilder<String?>(
       stream: otherIdIssuerTextFieldStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-
-          if(_idIssuerOthersController.text != snapshot.data.toString()){
-
-          _idIssuerOthersController.text = snapshot.data.toString();
-        _idIssuerOthersController.selection = TextSelection.fromPosition(TextPosition(offset: _idIssuerOthersController.text.length));
-
+          if (_idIssuerOthersController.text != snapshot.data.toString()) {
+            _idIssuerOthersController.text = snapshot.data.toString();
+            _idIssuerOthersController.selection = TextSelection.fromPosition(
+                TextPosition(offset: _idIssuerOthersController.text.length));
           }
           /*
           _idIssuerOthersController.value = TextEditingValue(
@@ -337,7 +324,8 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
-          labelText: idVal == STUDENT_ID ?"Name of Institution": 'ID Other Issuer',
+            labelText:
+                idVal == STUDENT_ID ? "Name of Institution" : 'ID Other Issuer',
             helperText: '* Required',
             errorText: snapshot.error as String?,
           ),
@@ -346,17 +334,15 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
     );
   }
 
-  
-  
   Widget _admissionNumberTextField() {
     return StreamBuilder<String?>(
       stream: admissionNumberTextFieldStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if(_admissionNoController.text != snapshot.data.toString()){
-          _admissionNoController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _admissionNoController.selection);
+          if (_admissionNoController.text != snapshot.data.toString()) {
+            _admissionNoController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _admissionNoController.selection);
           }
         }
         return Padding(
@@ -380,17 +366,15 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
     );
   }
 
-
-
   Widget _idNumberTextField() {
     return StreamBuilder<String?>(
       stream: accountFormBloc!.idNumber,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          if(_idNumberController.text != snapshot.data.toString()){
-          _idNumberController.value = TextEditingValue(
-              text: snapshot.data.toString(),
-              selection: _idNumberController.selection);
+          if (_idNumberController.text != snapshot.data.toString()) {
+            _idNumberController.value = TextEditingValue(
+                text: snapshot.data.toString(),
+                selection: _idNumberController.selection);
           }
         }
         return TextField(
@@ -410,7 +394,6 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
       },
     );
   }
-
 
   Widget _idPlaceOfIssue() {
     return StreamBuilder<String?>(
@@ -575,10 +558,8 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
 
   Widget _idIssueDateField() {
     return Visibility(
-      visible: 
-             _selectedIdFilter == 2 ||
-              _selectedIdFilter == 4 
-         //   ||  _selectedIdFilter == 3
+      visible: _selectedIdFilter == 2 || _selectedIdFilter == 4
+          //   ||  _selectedIdFilter == 3
           ? false
           : true,
       child: StreamBuilder<String?>(
@@ -626,9 +607,8 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
 
   Widget _idExpiryDateField() {
     return Visibility(
-      visible: 
-            _selectedIdFilter == 2 ||
-            //  _selectedIdFilter == 1 ||
+      visible: _selectedIdFilter == 2 ||
+              //  _selectedIdFilter == 1 ||
               _selectedIdFilter == 4 ||
               _selectedIdFilter == 3
           ? false
@@ -676,23 +656,20 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
     );
   }
 
-
   Widget _countryOfIssueIDTextField() {
     return StreamBuilder<String?>(
       stream: accountFormBloc!.countryIDIssuer,
       builder: (context, snapshot) {
-
-           if(snapshot.hasData){
-
-        if(snapshot.data == "GHANA"){
-                             showIdIssuePlace =true;
-                   
-      }else{
-             showIdIssuePlace =false;
-      }
-       buildState!=null? buildState!.addPostFrameCallback((_) => setState(() {})) : act();
-
-      }
+        if (snapshot.hasData) {
+          if (snapshot.data == "GHANA") {
+            showIdIssuePlace = true;
+          } else {
+            showIdIssuePlace = false;
+          }
+          buildState != null
+              ? buildState!.addPostFrameCallback((_) => setState(() {}))
+              : act();
+        }
 
         return FormField<String>(
           autovalidateMode: AutovalidateMode.always,
@@ -705,13 +682,14 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
               child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                 value: snapshot.data,
-                isExpanded: true,  
+                isExpanded: true,
                 isDense: true,
                 onChanged: accountFormBloc!.changeCountryIDIssue,
                 items: COUNTRY_LIST.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value.toUpperCase(),overflow: TextOverflow.ellipsis),
+                    child: Text(value.toUpperCase(),
+                        overflow: TextOverflow.ellipsis),
                   );
                 }).toList(),
               )),
@@ -721,8 +699,6 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
       },
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -821,7 +797,7 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
                                   } else {
                                     FlushbarHelper.createError(
                                         message:
-                                            "Identity provided provided could not be verified.")
+                                            "Identity provided could not be verified.")
                                       ..show(context);
                                   }
                                   loadingBar.dismiss();
@@ -832,20 +808,18 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
                         ],
                       ),
                     ),
-             
-                   Visibility(
-                        visible: showAdmNo
-                        , child: _admissionNumberTextField()),
-                 
+
+                    Visibility(
+                        visible: showAdmNo, child: _admissionNumberTextField()),
+
                     SizedBox(height: 30.0),
 
                     _countryOfIssueIDTextField(),
 
-                      SizedBox(height: 30.0),
+                    SizedBox(height: 30.0),
 
                     Visibility(
-                      visible: showIdIssuePlace,
-                      child: _idPlaceOfIssue()),
+                        visible: showIdIssuePlace, child: _idPlaceOfIssue()),
 
                     SizedBox(height: 30.0),
                     _idIssueDateField(),
@@ -876,9 +850,6 @@ var otherIdIssuerTextFieldStream,admissionNumberTextFieldStream;
       ),
     );
   }
-
-
-
 
   Widget getImagenBase64(String? imagen) {
     var _imageBase64 = imagen;

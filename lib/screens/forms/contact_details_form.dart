@@ -252,7 +252,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
-              prefixText: '+233',
+              prefixText: '+',
               labelText: 'Next of Kin Phone Number',
               helperText: '* Required',
               errorText: snapshot.error as String?,
@@ -369,7 +369,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             },
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
-              labelText: 'Address 1',
+              labelText: 'Address',
               helperText: '* Required',
               errorText: snapshot.error as String?,
             ),
@@ -392,7 +392,6 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             //   String value = snapshot.data.toString();
             //  _address2Controller!.text = value;
             //  _address2Controller!.selection = _address2Controller!.selection.copyWith(baseOffset: value.length, extentOffset: value.length);
-
           }
 
           return TextField(
@@ -410,7 +409,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLength: 40,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
-              labelText: 'Address 2',
+              labelText: 'GPS Address',
               errorText: snapshot.error as String?,
             ),
           );

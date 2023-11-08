@@ -199,6 +199,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final _isStatementViaEmailController = BehaviorSubject<bool?>();
 
   final _isUssdController = BehaviorSubject<bool?>();
+  final _isInternetBankingController = BehaviorSubject<bool?>();
 
   final _isBankToWalletController = BehaviorSubject<bool?>();
 
@@ -389,7 +390,7 @@ class AccountFormBloc extends BlocBase with Validators {
       _nextOfKinController.stream.transform(validateNextOfKin);
 
   Stream<String?> get nextOfKinPhone =>
-      _nextOfKinPhoneController.stream.transform(validatePhoneNumber);
+      _nextOfKinPhoneController.stream.transform(validateNextOfKinPhoneNumber);
 
   Stream<String?> get nextOfKinRelationShip =>
       _nextOfKinRelationshipController.stream.transform(validateNextOfKin);
@@ -492,6 +493,7 @@ class AccountFormBloc extends BlocBase with Validators {
       _isStatementViaEmailController.stream;
 
   Stream<bool?> get isUssd => _isUssdController.stream;
+  Stream<bool?> get isInternetBanking => _isInternetBankingController.stream;
 
   Stream<bool?> get isBankToWallet => _isBankToWalletController.stream;
 
@@ -785,6 +787,8 @@ class AccountFormBloc extends BlocBase with Validators {
       _isStatementViaEmailController.sink.add;
 
   Function(bool?) get changeIsUssd => _isUssdController.sink.add;
+  Function(bool?) get changeInternetBanking =>
+      _isInternetBankingController.sink.add;
 
   Function(bool?) get changeIsBankToWallet =>
       _isBankToWalletController.sink.add;
@@ -1251,6 +1255,8 @@ class AccountFormBloc extends BlocBase with Validators {
     final validIsZPrompt = _isZPromptController.valueOrNull;
     final validIsStatementViaEmail = _isStatementViaEmailController.valueOrNull;
     final validUSSD = _isUssdController.valueOrNull;
+    final validInternetBanking = _isInternetBankingController.valueOrNull;
+
     final validBankToWallet = _isBankToWalletController.valueOrNull;
 
     final validIsCardRequest = _isCardRequestController.valueOrNull;
@@ -1826,6 +1832,9 @@ if (anticipatedAmountWithdraw == null) {
     var isIsStatementViaEmail = validIsStatementViaEmail == true ? "Y" : "N";
     var isScanToPay = validIsScanToPay == true ? "Y" : "N";
     var isUssD = validUSSD == true ? "Y" : "N";
+
+    var isInternetBanking = validInternetBanking == true ? "Y" : "N";
+
     var isBankToWallet = validBankToWallet == true ? "Y" : "N";
     var isCardRequest = validIsCardRequest == true ? "Y" : "N";
 
@@ -1989,6 +1998,7 @@ if (anticipatedAmountWithdraw == null) {
         statementByEmailRequest: isIsStatementViaEmail,
         zMobileRequest: isZMobile,
         uSSDRequest: isUssD,
+        ibankRequest: isInternetBanking,
         bankWalletRequest: isBankToWallet,
         cardRequest: isCardRequest,
         cardType: isCardRequest == "Y" ? validCardType : null,
@@ -2140,6 +2150,8 @@ if (anticipatedAmountWithdraw == null) {
     final validIsZPrompt = _isZPromptController.valueOrNull;
     final validIsStatementViaEmail = _isStatementViaEmailController.valueOrNull;
     final validUSSD = _isUssdController.valueOrNull;
+    final validInternetBanking = _isInternetBankingController.valueOrNull;
+
     final validBankToWallet = _isBankToWalletController.valueOrNull;
 
     final validIsCardRequest = _isCardRequestController.valueOrNull;
@@ -2729,6 +2741,9 @@ if (anticipatedAmountWithdraw == null) {
     var isIsStatementViaEmail = validIsStatementViaEmail == true ? "Y" : "N";
     var isScanToPay = validIsScanToPay == true ? "Y" : "N";
     var isUssD = validUSSD == true ? "Y" : "N";
+
+    var isInternetBanking = validInternetBanking == true ? "Y" : "N";
+
     var isBankToWallet = validBankToWallet == true ? "Y" : "N";
     var isCardRequest = validIsCardRequest == true ? "Y" : "N";
 
@@ -2875,6 +2890,7 @@ if (anticipatedAmountWithdraw == null) {
         statementByEmailRequest: isIsStatementViaEmail,
         zMobileRequest: isZMobile,
         uSSDRequest: isUssD,
+        ibankRequest: isInternetBanking,
         bankWalletRequest: isBankToWallet,
         cardRequest: isCardRequest,
         cardType: isCardRequest == "Y" ? validCardType : null,
@@ -3182,6 +3198,8 @@ if (anticipatedAmountWithdraw == null) {
     final validIsZPrompt = _isZPromptController.valueOrNull;
     final validIsStatementViaEmail = _isStatementViaEmailController.valueOrNull;
     final validUSSD = _isUssdController.valueOrNull;
+    final validInternetBanking = _isInternetBankingController.valueOrNull;
+
     final validBankToWallet = _isBankToWalletController.valueOrNull;
 
     final validIsCardRequest = _isCardRequestController.valueOrNull;
@@ -3255,7 +3273,15 @@ if (anticipatedAmountWithdraw == null) {
     }
 
     final anticipatedNoDepositTran = _anticipatedNoTranController.valueOrNull;
+    final anticipatedAmountDepositTran =
+        _anticipatedAmountController.valueOrNull;
 
+    final anticipatedNoWithdraw =
+        _anticipatedWithdrawTranController.valueOrNull;
+
+    final anticipatedAmountWithdraw =
+        _anticipatedAmountWithdrawController.valueOrNull;
+/*
     if (anticipatedNoDepositTran == null ||
         anticipatedNoDepositTran == 'null') {
       _anticipatedNoTranController.addError("Field is required");
@@ -3293,25 +3319,7 @@ if (anticipatedAmountWithdraw == null) {
           "You have not filled in a Anticipated amount of deposit transaction");
       return false;
     }
-
-/*
-    List<TransactionTypes> transactionTypesList = [];
-    TransactionTypes transactionTypes = TransactionTypes(
-      transactionType: "Deposit",
-      transactionCount: anticipatedNoDepositTran.toString(),
-      expectedAmount: anticipatedAmountDepositTran.toString(),
-    );
-    transactionTypesList.add(transactionTypes);
-    TransactionTypes withdrawalTransactionTypes = TransactionTypes(
-      transactionType: "Withdraw",
-      transactionCount: anticipatedNoWithdraw.toString(),
-      expectedAmount: anticipatedAmountWithdraw.toString(),
-    );
-
-    transactionTypesList.add(withdrawalTransactionTypes);
-
-    */
-
+*/
     List<TransactionTypes> transactionTypesList = [];
     TransactionTypes transactionTypes = TransactionTypes(
       transactionType: "Deposit",
@@ -3876,6 +3884,7 @@ if (anticipatedAmountWithdraw == null) {
     _isZPromptController.close();
     _isStatementViaEmailController.close();
     _isUssdController.close();
+    _isInternetBankingController.close();
     _isBankToWalletController.close();
 
     _isCardRequestController.close();
@@ -4394,6 +4403,14 @@ if (anticipatedAmountWithdraw == null) {
             _isUssdController.add(true);
           }
         }
+
+        if (offlineAccount.ibankRequest != null &&
+            offlineAccount.ibankRequest!.isNotEmpty) {
+          if (offlineAccount.ibankRequest == "Y") {
+            _isInternetBankingController.add(true);
+          }
+        }
+
 /*
         if (offlineAccount.scanToPayRequest != null &&
             offlineAccount.scanToPayRequest!.isNotEmpty) {
@@ -5263,6 +5280,7 @@ if (anticipatedAmountWithdraw == null) {
             _isZPromptController.add(true);
           }
         }
+
         if (accountResponse.data?.ibankRequest != null &&
             accountResponse.data!.ibankRequest!.isNotEmpty) {
           if (accountResponse.data!.ibankRequest == "Y") {
@@ -5277,6 +5295,7 @@ if (anticipatedAmountWithdraw == null) {
             _isUssdController.add(true);
           }
         }
+
         if (accountResponse.data?.ibankRequest != null &&
             accountResponse.data!.ibankRequest!.isNotEmpty) {
           if (accountResponse.data!.ibankRequest == "Y") {
@@ -5290,6 +5309,13 @@ if (anticipatedAmountWithdraw == null) {
             accountResponse.data!.uSSDRequest!.isNotEmpty) {
           if (accountResponse.data!.uSSDRequest! == "Y") {
             _isUssdController.add(true);
+          }
+        }
+
+        if (accountResponse.data?.ibankRequest != null &&
+            accountResponse.data!.ibankRequest!.isNotEmpty) {
+          if (accountResponse.data!.ibankRequest == "Y") {
+            _isInternetBankingController.add(true);
           }
         }
 

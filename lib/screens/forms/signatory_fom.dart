@@ -71,7 +71,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8),
                     child: Text(
-                      'Upload your Signature by clicking either the gallery or camera icon',
+                      'Upload your Signature and phone number by clicking either the gallery or camera icon',
                       textAlign: TextAlign.center,
                     ),
                   ),

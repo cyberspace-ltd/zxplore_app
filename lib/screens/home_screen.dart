@@ -763,17 +763,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future _fetchCountries(String? token) async {
-    await DBProvider.db.getCountries().then((result) async {
-      if (result.isEmpty) {
-        await ZenithBankApi().fetchCountries(token).then((result) {
-          _countriesBloc.inAddCountries.add(result.menu);
-        }).catchError((error) {
-          throw Exception(error.toString());
-        });
-      } else {
-        return;
-      }
-    });
+    try {
+      await DBProvider.db.getCountries().then((result) async {
+        if (result.isEmpty) {
+          await ZenithBankApi().fetchCountries(token).then((result) {
+            _countriesBloc.inAddCountries.add(result.menu);
+          }).catchError((error) {
+            throw Exception(error.toString());
+          });
+        } else {
+          return;
+        }
+      });
+    } catch (e) {}
   }
 
   Future _fetchCities(String? token) async {
