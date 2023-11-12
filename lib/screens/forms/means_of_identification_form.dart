@@ -733,6 +733,8 @@ class _MeansOfIdentificationStepStepState
                       child: Column(
                         children: [
                           _idNumberTextField(),
+
+                          /*
                           Container(
                             alignment: Alignment(1.0, 0.0),
                             height: 60.0,
@@ -805,6 +807,8 @@ class _MeansOfIdentificationStepStepState
                               },
                             ),
                           ),
+
+                          */
                         ],
                       ),
                     ),

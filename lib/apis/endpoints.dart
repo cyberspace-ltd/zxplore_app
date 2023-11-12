@@ -4,8 +4,8 @@ class Endpoints {
   static const String GATEWAY_BASE_API_URL = 'http://41.138.171.45:8190/api/';
 
   // Ghana Test Environment
-//  static const String GATEWAY_BASE_API_URL =
-  //    'https://zxploretest.zenithbank.com.gh/ZxploreGhanaAPIV6/api/';
+  // static const String GATEWAY_BASE_API_URL =
+  //   'https://zxploretest.zenithbank.com.gh/ZxploreGhanaAPIV6/api/';
 
   static String getOccupationUrl() {
     return '$GATEWAY_BASE_API_URL'

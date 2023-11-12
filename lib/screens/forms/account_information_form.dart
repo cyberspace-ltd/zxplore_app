@@ -22,6 +22,12 @@ class _AccountInformationState extends State<AccountInformationStep>
   final _accountTypes = [SAVINGS_ACCOUNT, CURRENT_ACCOUNT];
 
   String? _selectedAccountType;
+  String? _anticipatedNoOfTransaction;
+  String? _anticipatedAmountOfTransaction;
+
+  String? _anticipatedWithdrawerNoTransaction;
+  String? _anticipatedWithdrawerAmountTransaction;
+
   String _selectedAccFilter = "";
   List<AccountClassEntity>? accountClasses;
 
@@ -331,11 +337,15 @@ class _AccountInformationState extends State<AccountInformationStep>
               //   isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data ?? "0 - 10",
+                  value: snapshot.data ?? _anticipatedNoOfTransaction,
                   isDense: true,
                   onChanged: (value) {
                     if (value != null) {
                       accountFormBloc!.setAnticipatedNoTransaction(value);
+
+                      setState(() {
+                        _anticipatedNoOfTransaction = value;
+                      });
                     }
                   },
                   items: noOfTransaction.map((String value) {
@@ -368,12 +378,15 @@ class _AccountInformationState extends State<AccountInformationStep>
               //  isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data ?? "0 - 2000",
+                  value: snapshot.data ?? _anticipatedAmountOfTransaction,
                   isDense: true,
                   onChanged: (value) {
                     if (value != null) {
                       numberOfDepoit = value;
                       accountFormBloc!.setAnticipatedAmountTransaction(value);
+                      setState(() {
+                        _anticipatedAmountOfTransaction = value;
+                      });
                     }
                   },
                   items: amountOfTransaction.map((String value) {
@@ -406,12 +419,15 @@ class _AccountInformationState extends State<AccountInformationStep>
               //  isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data ?? "0 - 10",
+                  value: snapshot.data ?? _anticipatedWithdrawerNoTransaction,
                   isDense: true,
                   onChanged: (value) {
                     if (value != null) {
                       accountFormBloc!.setAnticipatedNoWithdraw(value);
                     }
+                    setState(() {
+                      _anticipatedWithdrawerNoTransaction = value;
+                    });
                   },
                   items: noOfTransaction.map((String value) {
                     return DropdownMenuItem<String>(
@@ -443,12 +459,16 @@ class _AccountInformationState extends State<AccountInformationStep>
               // isEmpty: snapshot.data == null,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  value: snapshot.data ?? "0 - 2000",
+                  value:
+                      snapshot.data ?? _anticipatedWithdrawerAmountTransaction,
                   isDense: true,
                   onChanged: (value) {
                     if (value != null) {
                       // numberOfDepoit = value;
                       accountFormBloc!.setAnticipatedAmountWithdraw(value);
+                      setState(() {
+                        _anticipatedWithdrawerAmountTransaction = value;
+                      });
                     }
                   },
                   items: amountOfTransaction.map((String value) {
