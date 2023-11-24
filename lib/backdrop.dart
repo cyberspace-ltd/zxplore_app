@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
+import 'package:zxplore_app/utils/secure_storage.dart';
 
 import 'category.dart';
 import 'colors.dart';
@@ -137,10 +138,12 @@ class _BackdropState extends State<Backdrop>
   final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
   late AnimationController _controller;
   late AccountFormBloc _accountFormBloc;
+  String? username;
   @override
   void initState() {
     super.initState();
     _accountFormBloc = widget.accountFormBloc;
+    getUser();
     // This creates an [AnimationController] that can allows for animation for
     // the BackdropPanel. 0.00 means that the front panel is in "tab" (hidden)
     // mode, while 1.0 means that the front panel is open.
@@ -252,6 +255,10 @@ class _BackdropState extends State<Backdrop>
     );
   }
 
+  getUser() async {
+    username = await SecureStorage.getUsername();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -285,7 +292,7 @@ class _BackdropState extends State<Backdrop>
               Icons.save_alt,
               color: Colors.white,
             ),
-            onPressed: () {
+            onPressed: () async {
               /*
               var loadingBar = FlushbarHelper.createLoading(
                 message: "Saving account offline...",
@@ -294,7 +301,14 @@ class _BackdropState extends State<Backdrop>
 
               loadingBar..show(context);
               */
-              _accountFormBloc.saveForm();
+              /*
+              await SecureStorage.getUsername().then((value) {
+                if (value != null) {
+                  _accountFormBloc.saveForm(value);
+                }
+              });
+*/
+              _accountFormBloc.saveForm(username ?? "");
               //  goback(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

@@ -43,7 +43,7 @@ class _UploadIdStepState extends State<UploadIdStep>
         });
       }
     });
-  
+
     accountFormBloc!.uploadIdImageController2.listen((base64Signature) {
       if (_img2.lengthInBytes == 0) {
         var imageData = base64Decode(base64Signature!);
@@ -53,8 +53,6 @@ class _UploadIdStepState extends State<UploadIdStep>
         });
       }
     });
-  
-  
   }
 
   @override
@@ -65,8 +63,10 @@ class _UploadIdStepState extends State<UploadIdStep>
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-             Text("1."),
-             SizedBox(height: 10,),
+            Text("1."),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               child: Platform.isAndroid
                   ? FutureBuilder<void>(
@@ -143,13 +143,14 @@ class _UploadIdStepState extends State<UploadIdStep>
                 ),
               ],
             ),
-
-              SizedBox(height: 75,),
+            SizedBox(
+              height: 75,
+            ),
             Text("2."),
-
-             SizedBox(height: 10,),
-
-                 Container(
+            SizedBox(
+              height: 10,
+            ),
+            Container(
               child: Platform.isAndroid
                   ? FutureBuilder<void>(
                       future: retrieveLostData2(),
@@ -165,7 +166,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                           case ConnectionState.done:
                             return (_img2.buffer.lengthInBytes == 0
                                 ? const Text(
-                                   'Click either the gallery or camera icon below to add the other side of your ID card',
+                                    'Click either the gallery or camera icon below to add the other side of your ID card',
                                     textAlign: TextAlign.center,
                                   )
                                 : LimitedBox(
@@ -201,9 +202,7 @@ class _UploadIdStepState extends State<UploadIdStep>
                           maxHeight: 600.0,
                           child: Image.memory(_img2.buffer.asUint8List()))),
             ),
-         
             SizedBox(height: 30.0),
-         
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -227,42 +226,71 @@ class _UploadIdStepState extends State<UploadIdStep>
                 ),
               ],
             ),
-         
-         SizedBox(height: 80,),
-         
+            SizedBox(
+              height: 80,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Future _convertImagesToByte() async {
+  Future _convertImagesToByte(String? msg) async {
     List<int> imageBytes = await _imageFile!.readAsBytes();
+    var maxFileSizeInBytes = 2 * 1048576;
+    var fileSize = imageBytes.length; // Get the file size in bytes
 
-    var imgBytes = new Uint8List.fromList(imageBytes);
+    if (fileSize < maxFileSizeInBytes) {
+      var imgBytes = new Uint8List.fromList(imageBytes);
 
-    String base64Image = base64Encode(imageBytes);
+      String base64Image = base64Encode(imageBytes);
 
-    _img = imgBytes.buffer.asByteData();
+      _img = imgBytes.buffer.asByteData();
 
-    accountFormBloc!.setUploadIdForm(base64Image);
-//     print(base64Image);
+      accountFormBloc!.setUploadIdForm(base64Image);
+      if (msg != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Size of Image is too large. Image size must be less than 2MB')),
+      );
+    }
   }
 
-
-  Future _convertImagesToByte2() async {
+  Future _convertImagesToByte2(String? msg) async {
     List<int> imageBytes = await _imageFile2!.readAsBytes();
+    var maxFileSizeInBytes = 2 * 1048576; // 2 MB
+    var fileSize = imageBytes.length; // Get the file size in bytes
+    if (fileSize <= maxFileSizeInBytes) {
+      // File is the right size, upload/use it
+      var imgBytes = new Uint8List.fromList(imageBytes);
 
-    var imgBytes = new Uint8List.fromList(imageBytes);
+      String base64Image = base64Encode(imageBytes);
 
-    String base64Image = base64Encode(imageBytes);
+      _img2 = imgBytes.buffer.asByteData();
 
-    _img2 = imgBytes.buffer.asByteData();
+      accountFormBloc!.setUploadIdForm2(base64Image);
+      if (msg != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      }
+    } else {
+      // File is too large, ask user to upload a smaller file, or compress the file/image
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Size of Image is too large. Image size must be less than 2MB')),
+      );
+    }
 
-    accountFormBloc!.setUploadIdForm2(base64Image);
 //     print(base64Image);
   }
-
 
   Future<void> retrieveLostData() async {
     final LostDataResponse response = await _picker.retrieveLostData();
@@ -272,15 +300,14 @@ class _UploadIdStepState extends State<UploadIdStep>
     if (response.file != null) {
       setState(() {
         _imageFile = response.file;
-        _convertImagesToByte();
+        _convertImagesToByte(null);
       });
     } else {
       retrieveDataError = response.exception!.code;
     }
   }
 
-
-    Future<void> retrieveLostData2() async {
+  Future<void> retrieveLostData2() async {
     final LostDataResponse response = await _picker.retrieveLostData();
     if (response.isEmpty) {
       return;
@@ -288,23 +315,23 @@ class _UploadIdStepState extends State<UploadIdStep>
     if (response.file != null) {
       setState(() {
         _imageFile2 = response.file;
-        _convertImagesToByte2();
+        _convertImagesToByte2(null);
       });
     } else {
       retrieveDataError2 = response.exception!.code;
     }
   }
 
-
-
   void _onImageButtonPressed(ImageSource source) async {
     try {
       _imageFile = await _picker.pickImage(source: source, maxHeight: 350);
       if (_imageFile != null) {
-        _convertImagesToByte();
+        _convertImagesToByte('Identification Uploaded');
+        /*
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Identification Uploaded')),
         );
+        */
       }
     } catch (e) {
       pickImageError = e;
@@ -313,14 +340,16 @@ class _UploadIdStepState extends State<UploadIdStep>
     setState(() {});
   }
 
-void _onImageButtonPressed2(ImageSource source) async {
+  void _onImageButtonPressed2(ImageSource source) async {
     try {
       _imageFile2 = await _picker.pickImage(source: source, maxHeight: 350);
       if (_imageFile2 != null) {
-        _convertImagesToByte2();
+        _convertImagesToByte2('Identification Uploaded');
+        /*
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Identification Uploaded')),
         );
+        */
       }
     } catch (e) {
       pickImageError2 = e;
@@ -328,7 +357,6 @@ void _onImageButtonPressed2(ImageSource source) async {
 
     setState(() {});
   }
-
 
   @override
   bool get wantKeepAlive => true;

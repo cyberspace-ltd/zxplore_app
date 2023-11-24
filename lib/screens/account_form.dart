@@ -244,6 +244,10 @@ class _AccountFormPageState extends State<AccountFormPage>
                                     widget.categories[
                                         _controller.page!.toInt() + 1]);
                               }
+                              int ss = _controller.page!.toInt();
+                              if (_controller.page!.toInt() == 7) {
+                                accountFormBloc!.setFormValidation();
+                              }
                             }),
                       ],
                     ),

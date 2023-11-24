@@ -3,26 +3,28 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class SecureStorage {
   static const String TOKEN_KEY = "TOKEN";
 
+  static const String USERNAME = "USERNAME";
+
   static const String EMPLOYEE_ID_KEY = "EMPLOYEEID";
 
   static const String BRANCH_NUMBER_KEY = "BRANCHNUMBER";
 
   static const String DATA_INITIALIZER_KEY = "DATAINITIALIZED";
 
-  static Future saveAgentInformation(
-      String? token, String? employeeId, String branchNumber) async {
+  static Future saveAgentInformation(String? token, String? employeeId,
+      String branchNumber, String username) async {
     final storage = new FlutterSecureStorage();
     await storage.write(key: TOKEN_KEY, value: token);
     await storage.write(key: EMPLOYEE_ID_KEY, value: employeeId);
     await storage.write(key: BRANCH_NUMBER_KEY, value: branchNumber);
+    await storage.write(key: USERNAME, value: username);
   }
 
- static Future setInitialDataLoaded() async {
+  static Future setInitialDataLoaded() async {
     final storage = new FlutterSecureStorage();
 
     await storage.write(key: DATA_INITIALIZER_KEY, value: 'Y');
   }
-
 
   static Future<String?> getInitialDataLoaded() async {
     final storage = new FlutterSecureStorage();
@@ -37,6 +39,12 @@ class SecureStorage {
   static Future<String?> getEmployeeId() async {
     final storage = new FlutterSecureStorage();
     return await storage.read(key: EMPLOYEE_ID_KEY);
+  }
+
+  static Future<String?> getUsername() async {
+    final storage = new FlutterSecureStorage();
+    String? usern = await storage.read(key: USERNAME);
+    return usern;
   }
 
   static Future<String?> getBranchNumber() async {

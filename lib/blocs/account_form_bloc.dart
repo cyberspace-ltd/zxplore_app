@@ -1135,7 +1135,7 @@ class AccountFormBloc extends BlocBase with Validators {
   }
   */
 
-  saveForm() async {
+  saveForm(String userName) async {
     var rowId = databaseRowIDController.valueOrNull;
     var validRefenceId = _referenceIdController.valueOrNull;
 
@@ -2012,7 +2012,8 @@ if (anticipatedAmountWithdraw == null) {
         monthlyIncome: monthlyIncome,
         accountPurposes: accountPurposeList,
         sourceOfFunds: sourceList,
-        transactionTypes: transactionTypesList);
+        transactionTypes: transactionTypesList,
+        staffUsername: userName);
 
     AccountDatum acct =
         await DBProvider.db.insertAccountFormOffline(_accountForm);
@@ -2027,7 +2028,7 @@ if (anticipatedAmountWithdraw == null) {
         'valid Risk rank $validAccountRiskRank, valid category  = $validAccountCategory, upload id (base 64) - $validUploadIdImageInBase64');
   }
 
-  submit() async {
+  submit(String userNameVal) async {
     var rowId = databaseRowIDController.valueOrNull;
     var validRefenceId = _referenceIdController.valueOrNull;
 
@@ -2904,7 +2905,8 @@ if (anticipatedAmountWithdraw == null) {
         monthlyIncome: monthlyIncome,
         accountPurposes: accountPurposeList,
         sourceOfFunds: sourceList,
-        transactionTypes: transactionTypesList);
+        transactionTypes: transactionTypesList,
+        staffUsername: userNameVal);
     // String bdh= _accountForm.toJson().toString();
     String json = jsonEncode(_accountForm);
 
@@ -3095,11 +3097,13 @@ if (anticipatedAmountWithdraw == null) {
 
     List<AccountClassEntity> accountClasses =
         await DBProvider.db.getAccountClasses();
+    if (validAccountCategory != null) {
+      validAccountCategory = accountClasses
+          .firstWhere((x) => x.name == validAccountCategory)
+          .id
+          .toString(); //hotfix: to solve issue of account category filter from account type
+    }
 
-    validAccountCategory = accountClasses
-        .firstWhere((x) => x.name == validAccountCategory)
-        .id
-        .toString(); //hotfix: to solve issue of account category filter from account type
     var validTIN = _tinController.valueOrNull;
     final validTitle = _titleController.valueOrNull;
     final validSurname = _surnameController.valueOrNull;
@@ -3245,7 +3249,7 @@ if (anticipatedAmountWithdraw == null) {
       return false;
     }
 
-    if (validAccountCategory.isEmpty) {
+    if (validAccountCategory == null) {
       _accountCategoryController.addError("Field is required");
       _subjectSaveAccountResponse
           .addError("You have not selected an account category.");

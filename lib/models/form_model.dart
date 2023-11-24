@@ -21,6 +21,7 @@ class AccountForm {
   String? branchNumber;
   String? phoneNumber;
   String? rsmId;
+  String? staffUsername;
   String? accountName;
   String? tin;
   String? registrationNumber;
@@ -109,6 +110,7 @@ class AccountForm {
       required this.transactionTypes,
       required this.monthlyIncome,
       required this.ibankRequest,
+      required this.staffUsername,
       this.id});
 
   factory AccountForm.fromJson(Map<String, dynamic> json) => new AccountForm(
@@ -132,6 +134,7 @@ class AccountForm {
         riskRank: json["RiskRank"],
         addressLine1: json["AddressLine1"],
         city: json["City"],
+        staffUsername: json["StaffUsername"],
         state: json["State"],
         countryOfOrigin: json["CountryOfOrigin"],
         signatoryDetails: new List<SignatoryDetail>.from(
@@ -176,6 +179,7 @@ class AccountForm {
         "TIN": tin,
         "RegistrationNumber": registrationNumber,
         "Sex": sex,
+        "StaffUsername": staffUsername,
         "Title": title,
         "Longitude": longitude,
         "Latitude": latitude,
@@ -227,6 +231,7 @@ class AccountForm {
         "rsmId": rsmId,
         "accountName": accountName,
         "tin": tin,
+        "StaffUsername": staffUsername,
         "registrationNumber": registrationNumber,
         "sex": sex,
         "title": title,
@@ -282,6 +287,7 @@ class AccountForm {
       rsmId: json["rsmId"],
       accountName: json["accountName"],
       tin: json["tin"],
+      staffUsername: json["StaffUsername"],
       registrationNumber: json["registrationNumber"],
       sex: json["sex"],
       title: json["title"],

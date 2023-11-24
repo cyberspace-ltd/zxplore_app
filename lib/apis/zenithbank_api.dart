@@ -459,6 +459,30 @@ class ZenithBankApi {
     }
   }
 
+  Future<AccountsResponse> getAllAccountsByUsername(
+      String? usern, String? token) async {
+    Response response;
+    Dio dio = new Dio();
+    dio.options.headers = {
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+          (client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          return true;
+        };
+      };
+      response =
+          await dio.get("${Endpoints.getAccountsByUsernameUrl()}$usern/All");
+      return AccountsResponse.fromJson(response.data);
+    } on DioError catch (error) {
+//      print("Exception occured: $error stackTrace: $stacktrace");
+      throw CleanerException(_handleError(error));
+    }
+  }
+
   Future<AccountDetailsResponse> getAccountsDetailsByReference(
       String? referenceId, String? token) async {
     Response response;

@@ -29,10 +29,16 @@ class AccountsBloc extends BlocBase {
 
   getAccounts() async {
     try {
-      String? rsmId = await SecureStorage.getEmployeeId();
+      //  String? rsmId = await SecureStorage.getEmployeeId();
+      String? username = await SecureStorage.getUsername();
 
+/*
       AccountsResponse response =
           await _accountsRepository.getAccountsByRsmId(rsmId);
+*/
+
+      AccountsResponse response =
+          await _accountsRepository.getAccountsByUsernameRepo(username);
 
       List<AccountDatum> acctDatum = await DBProvider.db.getAccountDatum();
       for (int i = 0; i < acctDatum.length; i++) {

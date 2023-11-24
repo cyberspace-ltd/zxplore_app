@@ -25,6 +25,16 @@ class AccountsRepository {
     }
   }
 
+  getAccountsByUsernameRepo(String? usern) async {
+    try {
+      var token = await SecureStorage.getEmployeeToken();
+
+      return _api.getAllAccountsByUsername(usern, token);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<AccountClass> getAccountClasses() async {
     try {
       var token = await SecureStorage.getEmployeeToken();

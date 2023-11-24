@@ -38,10 +38,10 @@ class LoginBloc extends Object with Validators {
     final encryptedUserName = CryptoHelper.encrypt(validUserName!);
     final encryptedPassword = CryptoHelper.encrypt(validPassword!);
 
-    attemptLogin(encryptedUserName, encryptedPassword);
+    attemptLogin(encryptedUserName, encryptedPassword, validUserName);
   }
 
-  attemptLogin(String userName, String password) async {
+  attemptLogin(String userName, String password, String plainUserName) async {
     await _loginRepository
         .attemptLogin(userName, password)
         .then((response) async {
@@ -49,7 +49,8 @@ class LoginBloc extends Object with Validators {
         await SecureStorage.saveAgentInformation(
             response.data!.user!.token!,
             response.data!.user!.employeeId.toString(),
-            response.data!.user!.branchNumber.toString());
+            response.data!.user!.branchNumber.toString(),
+            plainUserName);
 
         _subjectLoginResponse.sink.add(response);
       } else {

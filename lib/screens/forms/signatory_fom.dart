@@ -12,6 +12,7 @@ import 'package:zxplore_app/libs/Signature.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
+import 'package:zxplore_app/utils/secure_storage.dart';
 
 class SignatoryStep extends StatefulWidget {
   @override
@@ -31,6 +32,8 @@ class _SignatoryStepState extends State<SignatoryStep>
   bool isLoading = false;
   late bool _isButtonDisabled;
 
+  String? username;
+
   bool? editingForm;
 
   XFile? _imageFile;
@@ -45,6 +48,7 @@ class _SignatoryStepState extends State<SignatoryStep>
     super.initState();
     _isButtonDisabled = true;
 
+    getUser();
     accountFormBloc = BlocProvider.of<AccountFormBloc>(context);
 
     accountFormBloc!.uploadSignatureController.listen((base64Signature) {
@@ -55,6 +59,11 @@ class _SignatoryStepState extends State<SignatoryStep>
     });
 
     editingForm = accountFormBloc!.getFormStatusBeforeSubmission();
+    accountFormBloc!.setFormValidation();
+  }
+
+  getUser() async {
+    username = await SecureStorage.getUsername();
   }
 
   @override
@@ -299,7 +308,13 @@ class _SignatoryStepState extends State<SignatoryStep>
         message: "Attempting to submit account form....")
       ..show(context);
 
-    accountFormBloc!.submit();
+    SecureStorage.getUsername().then((value) {
+      if (value != null) {
+        accountFormBloc!.submit(value);
+      }
+    });
+
+    //  accountFormBloc!.submit(username ?? "");
 
     accountFormBloc!.subjectSaveAccountResponse.listen(
       (response) {
@@ -337,30 +352,19 @@ class _SignatoryStepState extends State<SignatoryStep>
     var loadingBar = FlushbarHelper.createLoading(
         message: "Attempting to save account form....")
       ..show(context);
-
-    accountFormBloc!.saveForm();
-
 /*
-    accountFormBloc!.subjectSaveAccountResponse.listen(
-      (response) {
-        loadingBar.dismiss(context);
-        setState(() {
-          isLoading = false;
-          _isButtonDisabled = false;
-        });
-        _showSuccessDialog(
-            'The created account was sent successfully, an account number will be generated shortly.');
-      },
-    ).onError((error) {
-      loadingBar.dismiss(context);
-
-      FlushbarHelper.createError(message: error.toString())..show(context);
-      setState(() {
-        isLoading = false;
-        _isButtonDisabled = false;
-      });
+    await SecureStorage.getUsername().then((value) {
+      if (value != null) {
+        accountFormBloc!.saveForm(value);
+      }
     });
-    */
+*/
+    accountFormBloc!.saveForm(username ?? '');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _showSuccessDialog(String message) {
@@ -419,14 +423,19 @@ class _SignatoryStepState extends State<SignatoryStep>
           ),
           TextButton(
             child: const Text('Save'),
-            onPressed: () {
+            onPressed: () async {
               //    Navigator.pop(context);
               //  showLoaderDialog(context);
 
               goback(context);
-
-              accountFormBloc!.saveForm();
-              //  Navigator.pop(context);
+/*
+              await SecureStorage.getUsername().then((value) {
+                if (value != null) {
+                  accountFormBloc!.saveForm(value);
+                }
+              });
+              */
+              accountFormBloc!.saveForm(username ?? '');
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
