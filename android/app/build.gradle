@@ -33,9 +33,6 @@ if (keystorePropertiesFile.exists()) {
 android {
     compileSdkVersion 33
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
 
     defaultConfig {
         applicationId "com.zenith.zxplore_app"
@@ -69,6 +66,10 @@ android {
 
         }
     }
+    lint {
+        disable 'InvalidPackage'
+    }
+    namespace 'com.zenith.zxplore_app'
 }
 
 flutter {

@@ -6,8 +6,8 @@ import 'package:zxplore_app/utils/flushbar_helper.dart';
 import '../blocs/login_bloc.dart';
 import '../colors.dart';
 import 'home_screen.dart';
-import 'package:package_info/package_info.dart';
-
+// import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
