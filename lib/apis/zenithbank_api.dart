@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart' as cup;
 import 'package:flutter/services.dart';
 
 import 'package:zxplore_app/apis/endpoints.dart';
@@ -392,7 +393,7 @@ class ZenithBankApi {
   Future<LoginResponse> attemptLogin(String username, String password) async {
     Response response;
     Dio dio = new Dio();
-    print("herer");
+
     try {
       (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (client) {
@@ -406,18 +407,26 @@ class ZenithBankApi {
           data: {"UserName": username, "Password": password});
 
       if (response.statusCode == 200) {
+        cup. debugPrint("Login Response::${response}");
+
         return LoginResponse.fromJson(response.data);
       }
       if (response.statusCode == 400) {
         var value = LoginResponse.fromJson(response.data);
+        cup.debugPrint("Login Response::${response}");
         throw CleanerException(value.data!.responseMessage);
       } else {
+        cup. debugPrint("Login Response::${response}");
+
         throw CleanerException('login failed.');
       }
     } on DioError catch (error) {
+
       if (error.response != null &&
           error.response!.data != null &&
           error.response!.data['message'] != null) {
+        // cup. debugPrint("Login Response_ex::${error.response!.data['message']}");
+
         throw CleanerException(error.response!.data['message']);
       } else if (error.response != null &&
           error.response!.data != null &&
