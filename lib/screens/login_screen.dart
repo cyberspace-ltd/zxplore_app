@@ -8,6 +8,7 @@ import '../colors.dart';
 import 'home_screen.dart';
 // import 'package:package_info/package_info.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       loadingBar.dismiss();
                       FlushbarHelper.createError(
-                              message: "${error.toString()}.")
+                              message: "${responseMessage(error)}.")
                           .show(context);
                       loadingBar.dismiss();
                     });
@@ -131,6 +132,14 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
     );
+  }
+
+  String responseMessage(dynamic errorResponse) {
+    if (errorResponse.runtimeType == String) {
+      return errorResponse;
+    } else {
+      return 'Loging Failed.';
+    }
   }
 
   @override
@@ -166,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(16.0),
               child: Center(
                 child: Text(
-                  'Enter your Zenith bank active directory credentials below. This helps identify the employee that wants to access the application.',
+                  'Enter your Zenith bank active directory credential(s) below. This helps identify the employee that wants to access the application.',
                   style: Theme.of(context).textTheme.caption,
                   textAlign: TextAlign.center,
                 ),
