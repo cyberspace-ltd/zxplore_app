@@ -15,6 +15,9 @@ class AppEnv {
   /// base url
   static const String baseUrl = String.fromEnvironment(
     'BASE_URL',
+    // defaultValue: 'http://41.203.113.10:8443/api',
+    // defaultValue: 'https://41.203.113.10:8443/api',
+    // defaultValue: 'http://41.138.171.45:8443/api',
     defaultValue: 'https://zenorms.zenithbank.com:8443/api',
   );
 }

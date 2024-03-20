@@ -9,6 +9,7 @@ import 'package:zxplore_app/src/shared/app_exception.dart';
 import 'package:zxplore_app/src/shared/app_sizes.dart';
 import 'package:zxplore_app/src/shared/providers.dart';
 import 'package:zxplore_app/src/shared/secondary_button.dart';
+import 'package:zxplore_app/src/utils/zxplore_crypto_helper.dart';
 
 final personalInfoFormKey = GlobalKey<FormState>(debugLabel: 'personalInfo');
 
@@ -52,7 +53,7 @@ class _PersonalInformationPageState
   late final TextEditingController _bvnController;
   late final TextEditingController _firstNameController;
   late final TextEditingController _surnameController;
-  late final TextEditingController _otherNameController;
+  late final TextEditingController _middleNameController;
   late final TextEditingController _mothersMaidenNameController;
 
   final initialDate = DateTime.now().subtract(const Duration(days: 365 * 14));
@@ -69,18 +70,26 @@ class _PersonalInformationPageState
       if (response.bvn == null) {
         throw AppException('BVN not found');
       } else {
-        _firstNameController.text = response.firstName ?? '';
-        _surnameController.text = response.lastName ?? '';
-        _otherNameController.text = response.middleName ?? '';
-        if (response.dateOfBirth != null) {
-          _dateOfBirth = DateTime.tryParse(response.dateOfBirth!);
-        }
+        _firstNameController.text = response.firstName != null
+            ? CryptoHelper.decrypt(response.firstName!)
+            : '';
+        _middleNameController.text = response.middleName != null
+            ? CryptoHelper.decrypt(response.middleName!)
+            : '';
+        _surnameController.text = response.lastName != null
+            ? CryptoHelper.decrypt(response.lastName!)
+            : '';
+        _dateOfBirth = response.dateOfBirth != null
+            ? DateTime.tryParse(CryptoHelper.decrypt(response.dateOfBirth!))
+            : null;
         _selectedCountry = response.nationality;
         _selectedState = response.stateOfOrigin;
       }
-      setState(() {
-        bvnVerified = true;
-      });
+      if (mounted) {
+        setState(() {
+          bvnVerified = true;
+        });
+      }
     } catch (e) {
       if (mounted) {
         showExceptionAlertDialog(
@@ -125,7 +134,7 @@ class _PersonalInformationPageState
       });
     _firstNameController = TextEditingController();
     _surnameController = TextEditingController();
-    _otherNameController = TextEditingController();
+    _middleNameController = TextEditingController();
     _mothersMaidenNameController = TextEditingController();
   }
 
@@ -134,7 +143,7 @@ class _PersonalInformationPageState
     _bvnController.dispose();
     _firstNameController.dispose();
     _surnameController.dispose();
-    _otherNameController.dispose();
+    _middleNameController.dispose();
     _mothersMaidenNameController.dispose();
     super.dispose();
   }
@@ -190,7 +199,7 @@ class _PersonalInformationPageState
                   gapH16,
                   DropdownButtonFormField<String>(
                     decoration: const InputDecoration(
-                      labelText: 'Select Gender',
+                      labelText: 'Select Title',
                       helperText: "* Required",
                     ),
                     value: _selectedTitle,
@@ -256,7 +265,7 @@ class _PersonalInformationPageState
                   ),
                   gapH16,
                   TextFormField(
-                    controller: _otherNameController,
+                    controller: _middleNameController,
                     decoration: const InputDecoration(
                       labelText: 'Enter Middle Name',
                       isDense: true,

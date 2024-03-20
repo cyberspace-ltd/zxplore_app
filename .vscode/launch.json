@@ -15,7 +15,7 @@
                 "--dart-define",
                 "INITIALISING_VECTOR_KEY=QZAzz@t@f7431c8d00b85a6d",
                 "--dart-define",
-                "BASE_URL=https://webservicestest.zenithbank.com:8443/ZenithAccountService/api"
+                "BASE_URL=http://41.138.171.45:8443/api"
             ]
         },
         {
