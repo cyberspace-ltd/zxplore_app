@@ -34,7 +34,7 @@ class _SignatoryStepState extends State<SignatoryStep>
 
   String? username;
 
-  bool? editingForm;
+  bool editingForm = false;
 
   XFile? _imageFile;
   // ignore: unused_field
@@ -58,7 +58,7 @@ class _SignatoryStepState extends State<SignatoryStep>
       });
     });
 
-    editingForm = accountFormBloc!.getFormStatusBeforeSubmission();
+    editingForm = accountFormBloc!.getFormStatusBeforeSubmission() ?? false;
     accountFormBloc!.setFormValidation();
   }
 
@@ -91,8 +91,8 @@ class _SignatoryStepState extends State<SignatoryStep>
                       FloatingActionButton(
                         onPressed: () {
                           _onImageButtonPressed(ImageSource.gallery);
-                          _isButtonDisabled = false;
-                          setState(() {
+                            _isButtonDisabled = false;
+                                                        setState(() {
                             isSignatureAcceptButtonVisible = false;
                           });
                         },
@@ -183,8 +183,7 @@ class _SignatoryStepState extends State<SignatoryStep>
                                 setState(() {
                                   _img = data;
                                   _isButtonDisabled = false;
-                                });
-//                        debugPrint("onPressed " + encoded);
+                                                                  }); 
                               },
                             ),
                             TextButton(
@@ -223,13 +222,13 @@ class _SignatoryStepState extends State<SignatoryStep>
         text: TextSpan(
           text:
               "By clicking the 'Submit Account' button, you accept that you have read the ",
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
           children: [
             TextSpan(
                 text: "Terms & Conditions",
                 style: Theme.of(context)
                     .textTheme
-                    .caption!
+                    .bodySmall!
                     .apply(color: Colors.pink, fontWeightDelta: 1),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
@@ -240,7 +239,7 @@ class _SignatoryStepState extends State<SignatoryStep>
             TextSpan(
               text:
                   " and that you understand them and that you (the RM) agree to be bound by them.",
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),
@@ -260,7 +259,6 @@ class _SignatoryStepState extends State<SignatoryStep>
     accountFormBloc!.setFormValidation();
 
     return StreamBuilder(
-      //   stream: accountFormBloc!.submitValid,
       stream: accountFormBloc!.formValidation,
       builder: (context, snapshot) {
         return Padding(
@@ -279,19 +277,20 @@ class _SignatoryStepState extends State<SignatoryStep>
                       Colors.red.shade900,
                     ),
                   ),
-                  onPressed: (snapshot.hasData &&
-                          snapshot.data == true &&
-                          isLoading == false &&
-                          (_isButtonDisabled == false ||
-                              (editingForm ?? false)))
-                      ? submitAccount
-                      : () {
-                          save(context);
-                        }
-                  //  : null,
-                  // onPressed: _isButtonDisabled ? null : submitAccount,
-//              onPressed: accountFormBloc.submit,
-                  ),
+                  onPressed: () {
+                    if (_isButtonDisabled != false || editingForm != false) {
+                      showSimpleAlert(
+                          context, 'Error', 'System busy, check if  you have accepted signature/uploaded one.');
+                    } else if (snapshot.hasData == false ||
+                        snapshot.data == false) {
+                      // shoWSaveDialog(context,customMessage: snapshot.stackTrace.toString());
+                    } else if (snapshot.hasError) {
+                      showSimpleAlert(
+                          context, 'Error', snapshot.error.toString());
+                    } else {
+                      submitAccount(context);
+                    }
+                  }),
             ),
           ),
         );
@@ -299,7 +298,7 @@ class _SignatoryStepState extends State<SignatoryStep>
     );
   }
 
-  void submitAccount() async {
+  void submitAccount(BuildContext context) async {
     setState(() {
       isLoading = true;
       _isButtonDisabled = true;
@@ -313,8 +312,7 @@ class _SignatoryStepState extends State<SignatoryStep>
         accountFormBloc!.submit(value);
       }
     });
-
-    //  accountFormBloc!.submit(username ?? "");
+ 
 
     accountFormBloc!.subjectSaveAccountResponse.listen(
       (response) {
@@ -327,21 +325,50 @@ class _SignatoryStepState extends State<SignatoryStep>
             'The created account was sent successfully, an account number will be generated shortly.');
       },
     ).onError((error) {
-      loadingBar.dismiss(context);
+      try {
+        loadingBar.dismiss(context);
 
-      FlushbarHelper.createError(message: error.toString())..show(context);
-      setState(() {
-        isLoading = false;
-        _isButtonDisabled = false;
-      });
+        var errorSnackBar =
+            FlushbarHelper.createError(message: error.toString());
+        errorSnackBar.show(context);
+        setState(() {
+          isLoading = false;
+          _isButtonDisabled = false;
+        });
+      } catch (error, stackTrace) {
+        debugPrintStack(label: 'Error @ subjectSaveAccountResponse  onError Signatory form ', stackTrace: stackTrace);
+      }
     });
   }
 
-  void save(BuildContext context) {
+  void shoWSaveDialog(BuildContext context, {String? customMessage}) {
     showDialogMessage(
         context,
-        "You have not finished filling the form. Do you want to save your details to continue later",
+        customMessage ??
+            "You have not finished filling the form. Do you want to save your details to continue later",
         '');
+  }
+
+  void showSimpleAlert(BuildContext context, String title, String content) {
+    // Function to show the alert dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // Build the alert dialog
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void saveAccount() async {
@@ -424,19 +451,8 @@ class _SignatoryStepState extends State<SignatoryStep>
           TextButton(
             child: const Text('Save'),
             onPressed: () async {
-              //    Navigator.pop(context);
-              //  showLoaderDialog(context);
-
               goback(context);
-/*
-              await SecureStorage.getUsername().then((value) {
-                if (value != null) {
-                  accountFormBloc!.saveForm(value);
-                }
-              });
-              */
               accountFormBloc!.saveForm(username ?? '');
-
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   duration: const Duration(seconds: 15),
@@ -444,21 +460,6 @@ class _SignatoryStepState extends State<SignatoryStep>
                       'Your record has been saved successfully, click on the refresh button in your home screen to see your saved record'),
                 ),
               );
-
-              //  goback(context);
-
-              //  Navigator.pop(context);
-
-              /*
-              int count = 0;
-              Navigator.popUntil(context, (route) {
-                return count++ == 2;
-              });
-
-
-              showDialogMessage22(
-                  context, 'Your record has been saved', 'Successful');
-                  */
             },
           ),
         ],
@@ -534,8 +535,7 @@ class _SignatoryStepState extends State<SignatoryStep>
     _img = imgBytes.buffer.asByteData();
 
     accountFormBloc!.setSignature(base64Image);
-
-//    print(base64Image);
+  
   }
 
   Future<void> retrieveLostData() async {

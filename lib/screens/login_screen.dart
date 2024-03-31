@@ -35,6 +35,14 @@ class _LoginPageState extends State<LoginPage> {
             onChanged: _loginBloc!.changeUserName,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
+                     enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
               labelText: 'Username',
               errorText: snapshot.error as String?,
             ),
@@ -60,6 +68,14 @@ class _LoginPageState extends State<LoginPage> {
             child: TextField(
               onChanged: _loginBloc!.changePassword,
               decoration: InputDecoration(
+                       enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
                 labelText: 'Password',
                 errorText: snapshot.error as String?,
                 suffixIcon: IconButton(
@@ -167,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Text(
                   'Enter your Zenith bank active directory credentials below. This helps identify the employee that wants to access the application.',
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -192,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Text(
                   'Zxplore GH Version $appVersion',
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:zxplore_app/blocs/validators.dart';
 import 'package:zxplore_app/models/login_response.dart';
@@ -37,7 +38,7 @@ class LoginBloc extends Object with Validators {
 
     final encryptedUserName = CryptoHelper.encrypt(validUserName!);
     final encryptedPassword = CryptoHelper.encrypt(validPassword!);
-
+    
     attemptLogin(encryptedUserName, encryptedPassword, validUserName);
   }
 

@@ -27,7 +27,7 @@ class _UploadIdStepState extends State<UploadIdStep>
   String? retrieveDataError2;
   dynamic pickImageError2;
   ByteData _img2 = ByteData(0);
-  ImagePicker _picker2 = ImagePicker();
+  // ImagePicker _picker2 = ImagePicker();
 
   @override
   void initState() {

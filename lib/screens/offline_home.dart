@@ -88,7 +88,7 @@ class _OfflineHomeState extends State<OfflineHomePage> {
           child: new Text.rich(
             TextSpan(
               text:
-                  '${form.firstName != null ? form.firstName : ""} ${form.surname != null ? form.surname : ""}',
+                  '${form.firstName??"" } ${form.surname ??""}',
               // default text style
               style: TextStyle(
                 color: Colors.black,

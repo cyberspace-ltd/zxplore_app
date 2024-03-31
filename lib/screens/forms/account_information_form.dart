@@ -104,6 +104,16 @@ class _AccountInformationState extends State<AccountInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Account Type',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -129,7 +139,6 @@ class _AccountInformationState extends State<AccountInformationStep>
                         _selectedAccFilter = "";
                       }
                     });
-//                    accountFormBloc.changeAccountType;
                     accountFormBloc!.updateAccountType(value);
                     accountFormBloc!.updateAccountCategoryType(null);
                   },
@@ -150,7 +159,18 @@ class _AccountInformationState extends State<AccountInformationStep>
           autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
+
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Account Holder Type',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -159,7 +179,7 @@ class _AccountInformationState extends State<AccountInformationStep>
                 child: DropdownButton<String>(
                   value: snapshot.data ?? _accountHolderTypes[0],
                   isDense: true,
-                  onChanged: accountFormBloc!.changeHolderType,
+                  onChanged:accountFormBloc!.changeHolderType,
                   items: _accountHolderTypes.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -184,6 +204,16 @@ class _AccountInformationState extends State<AccountInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Risk Rank', errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
               child: DropdownButtonHideUnderline(
@@ -218,6 +248,16 @@ class _AccountInformationState extends State<AccountInformationStep>
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
                     decoration: InputDecoration(
+                         enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                         labelText: 'Account Category',
                         helperText: "* Required",
                         errorText: itemSnapshot.error as String?),
@@ -331,6 +371,16 @@ class _AccountInformationState extends State<AccountInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Anticipated No of Transaction',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -372,6 +422,16 @@ class _AccountInformationState extends State<AccountInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Anticipated Amount',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -413,6 +473,17 @@ class _AccountInformationState extends State<AccountInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Anticipated No of Transaction',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -453,6 +524,16 @@ class _AccountInformationState extends State<AccountInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Anticipated Amount',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),

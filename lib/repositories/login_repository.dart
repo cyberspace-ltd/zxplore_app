@@ -28,10 +28,7 @@ class LoginRepository{
       // });
 
      return _api.attemptLogin(username, password);
-
-
-
-    } catch (error) {
+ } catch (error) {
       rethrow;
     }
   }

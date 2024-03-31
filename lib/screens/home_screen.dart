@@ -7,7 +7,7 @@ import 'package:zxplore_app/blocs/countries_bloc.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/screens/category_screen.dart';
-import 'package:zxplore_app/screens/offline_home.dart';
+// import 'package:zxplore_app/screens/offline_home.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    super.initState();
     _occupationsBloc = OccupationsBloc();
     _countriesBloc = CountriesBloc();
     statesBloc = StatesBloc();
@@ -74,10 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
         //   _fetchNoOfTransactionUrl(data);
       }
     });
+    refreshAccounts();
+  }
 
+  Future<void> refreshAccounts() async {
     _accountsBloc = AccountsBloc();
-    _accountsBloc.getAccounts();
-    super.initState();
+
+    await _accountsBloc.getAccounts();
   }
 
   Widget _buildLoadingWidget() {
@@ -152,33 +156,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-//   Widget _buildDummyWidget() {
-//     return Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Icon(
-//               Icons.info_outline,
-//               color: Colors.black54,
-//               size: 60,
-//             ),
-//             SizedBox(height: 20),
-//             Text(
-//                 "Click the Create Account button below to begin the instant account creation process",
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(fontStyle: FontStyle.normal, fontSize: 14.0)),
-//             SizedBox(height: 20),
-//             Transform.scale(
-//               scale: 1.2,
-// //              child: _actionChipError(error),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
 
   Widget _buildErrorWidget(String error) {
     return Padding(
@@ -408,104 +385,109 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  ListTile makeListTile(Datum form, BuildContext _context) => ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
-        leading: Container(
-          padding: EdgeInsets.only(left: 16.0),
-          child: new Material(
-            color: getColor(form.status),
-            type: MaterialType.circle,
-            child: new Container(
-              width: 24,
-              height: 24,
-            ),
+  ListTile makeListTile(Datum form, BuildContext _context) {
+    // debugPrint("DATA::${form.accountNumber}");
+    // String? accName  = CryptoHelper.decrypt(form.accountName!);
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 2.0, vertical: 10.0),
+      leading: Container(
+        padding: EdgeInsets.only(left: 16.0),
+        child: new Material(
+          color: getColor(form.status),
+          type: MaterialType.circle,
+          child: new Container(
+            width: 24,
+            height: 24,
           ),
         ),
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new Text.rich(
-            TextSpan(
-              text: CryptoHelper.decrypt(form.accountName!),
-              // default text style
-              style: TextStyle(
-                color: Colors.black,
-                background: Paint()
-                  ..color = Colors.transparent
-                  ..strokeWidth = 16.5
-                  ..style = PaintingStyle.stroke,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                    text: '\n\n',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(
-                    text: ' +233${CryptoHelper.decrypt(form.phoneNumber!)} ',
-                    style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        color: Colors.black54,
-                        fontSize: 14.0)),
-              ],
+      ),
+      title: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: new Text.rich(
+          TextSpan(
+            text: saferDetail(form.accountName),
+            // (form.accountName != null)
+            //     ? "Name: ${CryptoHelper.decrypt(form.accountName ?? '')}"
+            //     : 'Name: N/A',
+            style: TextStyle(
+              color: Colors.black,
+              background: Paint()
+                ..color = Colors.transparent
+                ..strokeWidth = 16.5
+                ..style = PaintingStyle.stroke,
             ),
+            children: <TextSpan>[
+              TextSpan(
+                  text: '\n\n', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: form.phoneNumber != null
+                      ? "Phone:+233${CryptoHelper.decrypt(form.phoneNumber!)}"
+                      : "Phone: N/A",
+                  style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      color: Colors.black54,
+                      fontSize: 14.0)),
+            ],
           ),
         ),
-        subtitle: Row(
-          children: <Widget>[
-            ActionChip(
-                backgroundColor: ZxploreGrey,
-                padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
-                avatar: CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: const Icon(
-                    Icons.refresh,
-                    color: Colors.black,
-                  ),
+      ),
+      subtitle: Row(
+        children: <Widget>[
+          ActionChip(
+              backgroundColor: ZxploreGrey,
+              padding: EdgeInsets.fromLTRB(0, 0, 4, 0),
+              avatar: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: const Icon(
+                  Icons.refresh,
+                  color: Colors.black,
                 ),
-                label: Text('Verify Account'),
-                onPressed: () {
-                  var loadingBar = FlushbarHelper.createLoading(
-                      message:
-                          "'Verifying account status for ${CryptoHelper.decrypt(form.accountName!)}....",
-                      linearProgressIndicator: null);
-                  loadingBar..show(context);
-                  _accountsBloc.verifyAccountByReferenceId(form.refId);
-                  _accountsBloc.subjectVerifyAccountsResponse
-                      .listen((response) {
-                    loadingBar.dismiss();
+              ),
+              label: Text('Verify Account'),
+              onPressed: () {
+                var loadingBar = FlushbarHelper.createLoading(
+                    message:
+                        "'Verifying account status for ${CryptoHelper.decrypt(form.accountName!)}....",
+                    linearProgressIndicator: null);
+                loadingBar..show(context);
+                _accountsBloc.verifyAccountByReferenceId(form.refId);
+                _accountsBloc.subjectVerifyAccountsResponse.listen((response) {
+                  loadingBar.dismiss();
 
-                    if (response.status!) {
-                      if (response.data!.accountNumber != null) {
-                        FlushbarHelper.createSuccess(
-                            message:
-                                '${response.message} . Account number is: ${response.data!.accountNumber}')
-                          ..show(context);
-                      } else {
-                        FlushbarHelper.createInformation(
-                                message: '${response.message}')
-                            .show(context);
-                        loadingBar.dismiss();
-                      }
+                  if (response.status!) {
+                    if (response.data!.accountNumber != null) {
+                      FlushbarHelper.createSuccess(
+                          message:
+                              '${response.message} . Account number is: ${response.data!.accountNumber}')
+                        ..show(context);
                     } else {
                       FlushbarHelper.createInformation(
                               message: '${response.message}')
                           .show(context);
                       loadingBar.dismiss();
                     }
-                  }).onError((error) {
-                    loadingBar.dismiss();
-                    FlushbarHelper.createError(
-                            message: "'${error.toString()}'.")
+                  } else {
+                    FlushbarHelper.createInformation(
+                            message: '${response.message}')
                         .show(context);
                     loadingBar.dismiss();
-                  });
-                }),
-            Expanded(
-                flex: 1,
-                child: Container(
-                  child: _statusWidget(form),
-                )),
-          ],
-        ),
-      );
+                  }
+                }).onError((error) {
+                  loadingBar.dismiss();
+                  FlushbarHelper.createError(message: "'${error.toString()}'.")
+                      .show(context);
+                  loadingBar.dismiss();
+                });
+              }),
+          Expanded(
+              flex: 1,
+              child: Container(
+                child: _statusWidget(form),
+              )),
+        ],
+      ),
+    );
+  }
 
   Widget _statusWidget(Datum form) {
     if (form.status?.toLowerCase() == 'completed') {
@@ -521,7 +503,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           label: Text(
-            '${CryptoHelper.decrypt(form.accountNumber!)}',
+            'Acc: ${form.accountNumber == null ? CryptoHelper.decrypt(form.accountNumber!) : 'N/A'}',
           ));
 //          onPressed: () {});
     } else {
@@ -572,7 +554,11 @@ class _MyHomePageState extends State<MyHomePage> {
           shrinkWrap: true,
           itemCount: accountsResponse.data!.length,
           itemBuilder: (BuildContext context, int index) {
-            return makeCard(accountsResponse.data![index], _context);
+            //  debugPrint("DT:${CryptoHelper.decrypt(accountsResponse.data![1].accountName!)}");
+            return
+                //
+
+                makeCard(accountsResponse.data![index], _context);
           },
         ),
       );
@@ -581,6 +567,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
+        backgroundColor: ZxplorePrimaryColor,
         automaticallyImplyLeading: false,
         // Don't show the leading button
         centerTitle: true,
@@ -604,21 +591,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 setState(() {});
               }),
-          IconButton(
-              icon: Icon(Icons.cloud_off, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => OfflineHomePage()),
-                );
-              }),
+          // IconButton(
+          //     icon: Icon(Icons.cloud_off, color: Colors.white),
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (BuildContext context) => OfflineHomePage()),
+          //       );
+          //     }),
           SizedBox(
             width: 16,
           )
         ],
       ),
-
       floatingActionButton: FloatingActionButton.extended(
         elevation: 4.0,
         backgroundColor: ZxploreRedColor,
@@ -633,25 +619,20 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
       body: StreamBuilder<AccountsResponse>(
         stream: _accountsBloc.subjectAccountsResponse.stream,
         builder: (context, AsyncSnapshot<AccountsResponse> snapshot) {
-          if (snapshot.hasData) {
-            if (!snapshot.data!.status!) {
-              //todo: make use of error.
-              return _buildErrorWidget(snapshot.data!.message!);
-            }
-            return makeBody(snapshot.data!, context);
-          } else if (snapshot.hasError) {
-            return _buildErrorWidget(snapshot.error as String);
-          } else {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return _buildLoadingWidget();
+          } else if (snapshot.hasError) {
+            return _buildErrorWidget(snapshot.data!.message!);
+          } else if (snapshot.hasData) {
+            return makeBody(snapshot.data!, context);
+          } else {
+            return Center(child: Text('No data available'));
           }
         },
       ),
-//    body:
-//    _buildDummyWidget(),
       bottomNavigationBar: BottomAppBar(
         color: ZxplorePrimaryColor,
         child: new Row(
@@ -839,4 +820,21 @@ class _MyHomePageState extends State<MyHomePage> {
     await ZenithBankApi().fetchNoOfTransactionUrl(token);
   }
 */
+}
+
+String saferDetail(String? value) {
+  if (value != null) {
+    String? saferString = CryptoHelper.decrypt(value);
+   
+    // ignore: unnecessary_null_comparison
+    if (saferString==null){
+      return 'N/A';
+    } else {
+      if (saferString.toString().replaceAll(RegExp(r'\s+'), '') == 'nullnull') {
+        return 'N/A';
+      }
+      return saferString;
+    }
+  }
+  return 'N/A';
 }

@@ -64,12 +64,12 @@ ThemeData _buildZxploreTheme() {
 TextTheme _buildZxploreTextTheme(TextTheme base) {
   return base
       .copyWith(
-        headline5: base.headline6!
+        headlineSmall: base.headlineSmall!
             .copyWith(fontWeight: FontWeight.w500, color: ZxplorePrimaryColor),
-        headline6: base.headline6!.copyWith(fontSize: 18.0),
-        caption:
-            base.caption!.copyWith(fontSize: 11.0, color: ZxplorePrimaryColor),
-        bodyText2: base.bodyText2!.copyWith(
+        titleLarge: base.titleLarge!.copyWith(fontSize: 18.0),
+        bodySmall:
+            base.bodySmall!.copyWith(fontSize: 11.0, color: ZxplorePrimaryColor),
+        bodyMedium: base.bodyMedium!.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 16.0,
         ),
