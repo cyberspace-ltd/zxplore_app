@@ -1,10 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
+// import 'dart:convert';
+// import 'dart:developer';
 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:zxplore_app/models/card_type_model.dart';
+// import 'package:zxplore_app/models/card_type_model.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
@@ -137,6 +137,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Title',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -215,13 +225,21 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           return TextField(
             controller: _bvnController,
             obscureText: false,
+            // maxLength: 12,
             keyboardType: TextInputType.text,
             onChanged: accountFormBloc!.changeTin,
             decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
               labelText: 'Ghana Card Number',
-              // helperText:
-              //     'Click the verify TIN button to populate account form.',
               errorText: snapshot.error as String?,
+              helperText: '* Required',
             ),
           );
         });
@@ -248,6 +266,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
             labelText: 'Surname',
             helperText: '* Required',
             errorText: snapshot.error as String?,
@@ -280,6 +306,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
             labelText: 'First Name',
             helperText: '* Required',
             errorText: snapshot.error as String?,
@@ -310,6 +344,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
             labelText: 'Other Name',
             errorText: snapshot.error as String?,
           ),
@@ -338,6 +380,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
             labelText: 'Mother\'s Maiden Name',
             helperText: '* Required',
             errorText: snapshot.error as String?,
@@ -366,8 +416,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1),
+              borderRadius: BorderRadius.circular(8),
+            ),
             labelText: 'Date of Birth',
-            helperText: '* Required',
+            helperText: '*Required',
             errorText: snapshot.error as String?,
           ),
         );
@@ -407,6 +465,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                 onChanged: accountFormBloc!.changeDateOfBirth,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   labelText: 'Date of Birth',
                   helperText: "* Required",
                   suffixIcon: Icon(Icons.date_range),
@@ -436,6 +502,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
               labelText: 'Place of Birth',
               helperText: "* Required",
               errorText: snapshot.error as String?),
@@ -464,6 +538,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
               labelText: 'Hometown',
               helperText: "* Required",
               errorText: snapshot.error as String?),
@@ -481,6 +563,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Country of Origin',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -513,6 +605,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'Employment Type',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -551,6 +653,16 @@ class _PersonalInformationState extends State<PersonalInformationStep>
             builder: (FormFieldState<String> state) {
               return InputDecorator(
                 decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(width: 1),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                          color: Theme.of(context).primaryColor,
+                          width: 8), // Highlight on focus
+                    ),
                     labelText: 'Monthly Income',
                     helperText: "* Required",
                     errorText: snapshot.error as String?),
@@ -674,6 +786,14 @@ class _PersonalInformationState extends State<PersonalInformationStep>
                       keyboardType: TextInputType.text,
                       onChanged: accountFormBloc!.changeEnterOtherSource,
                       decoration: InputDecoration(
+                               enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                         labelText: 'Enter source',
                         errorText: snapshot.error as String?,
                       ),

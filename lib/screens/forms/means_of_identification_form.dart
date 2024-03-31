@@ -7,9 +7,8 @@ import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/blocs/states_bloc.dart';
 import 'package:zxplore_app/utils/const.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
-import 'package:zxplore_app/utils/zxplore_crypto_helper.dart';
-import 'package:zxplore_app/utils/flushbar_helper.dart';
-
+// import 'package:zxplore_app/utils/zxplore_crypto_helper.dart';
+// import 'package:zxplore_app/utils/flushbar_helper.dart';
 class MeansOfIdentificationStep extends StatefulWidget {
   @override
   _MeansOfIdentificationStepStepState createState() =>
@@ -136,6 +135,16 @@ class _MeansOfIdentificationStepStepState
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'ID Type',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -219,6 +228,17 @@ class _MeansOfIdentificationStepStepState
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
+
                 labelText: 'ID Issuer',
                 helperText: '* Required',
                 errorText: snapshot.error as String?,
@@ -324,6 +344,14 @@ class _MeansOfIdentificationStepStepState
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+                 enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
             labelText:
                 idVal == STUDENT_ID ? "Name of Institution" : 'ID Other Issuer',
             helperText: '* Required',
@@ -356,6 +384,14 @@ class _MeansOfIdentificationStepStepState
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
               labelText: 'Admission Number',
               helperText: '* Required',
               errorText: snapshot.error as String?,
@@ -386,6 +422,14 @@ class _MeansOfIdentificationStepStepState
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+                 enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
             labelText: 'ID Number',
             helperText: '* Required',
             errorText: snapshot.error as String?,
@@ -404,6 +448,16 @@ class _MeansOfIdentificationStepStepState
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                   labelText: 'ID Place of Issue',
                   errorText: snapshot.error as String?),
               isEmpty: snapshot.data == '',
@@ -593,6 +647,14 @@ class _MeansOfIdentificationStepStepState
                   onChanged: accountFormBloc!.changeIssueDate,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
+                           enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ), 
                     labelText: 'ID Issue Date',
                     helperText: "* Required",
                     suffixIcon: Icon(Icons.date_range),
@@ -644,6 +706,14 @@ class _MeansOfIdentificationStepStepState
                   onChanged: accountFormBloc!.changeExpiryDate,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
                     labelText: 'ID Expiry Date',
                     helperText: "* Required",
                     suffixIcon: Icon(Icons.date_range),
@@ -676,6 +746,17 @@ class _MeansOfIdentificationStepStepState
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
+
                   labelText: 'ID Country of Issue',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -901,7 +982,7 @@ class _MeansOfIdentificationStepStepState
                       'The ID number provided is valid',
                       style: Theme.of(context)
                           .textTheme
-                          .caption!
+                          .bodySmall!
                           .apply(color: Colors.green, fontWeightDelta: 2),
                     ),
                   ),
@@ -922,7 +1003,7 @@ class _MeansOfIdentificationStepStepState
                 Center(
                   child: Text(
                     "$name",
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
                 SizedBox(

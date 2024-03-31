@@ -1,14 +1,16 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
+import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:zxplore_app/apis/zenithbank_api.dart';
 import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/category.dart';
 import 'package:zxplore_app/data/database.dart';
 import 'package:zxplore_app/data/entities/account_class_entity.dart';
-import 'package:zxplore_app/data/entities/offline_form_entity.dart';
+// import 'package:zxplore_app/data/entities/offline_form_entity.dart';
 import 'package:zxplore_app/data/entities/state_entity.dart';
 import 'package:zxplore_app/models/account_details_response.dart';
 import 'package:zxplore_app/models/account_purposes.dart';
@@ -51,6 +53,7 @@ class AccountFormBloc extends BlocBase with Validators {
   final databaseRowIDController = BehaviorSubject<int?>();
 
   final _accountTypeController = BehaviorSubject<String?>();
+ 
 
   final _accountHolderTypeController = BehaviorSubject<String?>();
 
@@ -189,7 +192,7 @@ class AccountFormBloc extends BlocBase with Validators {
 //  final _isRequestInternetBankingController = BehaviorSubject<bool>();
 
 // E-PRODUCT LIST
-  //TODO: GHANA SPECIFIC SERVICES STREAM
+//TODO: GHANA SPECIFIC SERVICES STREAM
   final _isScanToPayController = BehaviorSubject<bool?>();
 
   final _isZMobileController = BehaviorSubject<bool?>();
@@ -1099,6 +1102,7 @@ class AccountFormBloc extends BlocBase with Validators {
   updateAccountType(String? value) {
     _accountTypeController.sink.add(value);
   }
+  
 
   updateIdentityType(String? value) {
     _idTypeController.sink.add(value);
@@ -1134,6 +1138,243 @@ class AccountFormBloc extends BlocBase with Validators {
     }
   }
   */
+  ////---------------- VALIDATING REQUIRED FIELDS--------------///
+  //1
+  String? validAccountType  (){
+     var validAccountType = _accountTypeController.valueOrNull;
+    return validAccountType;
+  }
+    String? validAccountCategory  (){
+     var validAccountCat = _accountCategoryController.valueOrNull;
+    return validAccountCat;
+  }
+      String? validAccountHolderType  (){
+     var validValue = _accountHolderTypeController.valueOrNull;
+    return validValue;
+  }
+      String? validAccountAntTrxn (){
+     var validValue = _anticipatedNoTranController.valueOrNull;
+    return validValue;
+  }
+
+   String? validAccountAntAmt (){
+     var validValue = _anticipatedAmountController.valueOrNull;
+    return validValue;
+  }
+   String? validAccountAntWTrxn (){
+     var validValue = _anticipatedWithdrawTranController.valueOrNull;
+    return validValue;
+  }
+    String? validAccountAntWAmt (){
+     var validValue = _anticipatedAmountWithdrawController.valueOrNull;
+    return validValue;
+  }//!1
+  //2
+      String? validTin (){
+        //Ghana card number
+     var validValue = _tinController.valueOrNull;
+    return validValue;
+  }
+        String? validTitle (){
+      
+     var validValue = _titleController.valueOrNull;
+    return validValue;
+  }
+          String? validSurN (){
+      
+     var validValue = _surnameController.valueOrNull ;
+    return validValue;
+  }
+            String? validFirstN (){
+      
+     var validValue = _firstNameController.valueOrNull;
+    return validValue;
+  }
+           String? validOtherN (){
+      
+     var validValue = _otherNameController.valueOrNull;
+    return validValue;
+  }
+           String? validMothersMN (){
+      
+     var validValue = _otherNameController.valueOrNull;
+    return validValue;
+  }
+
+   String? validDob (){
+      
+     var validValue = _dateOfBirthController.valueOrNull;
+    return validValue;
+  }
+    String? validPlaceOfBirth (){
+      
+     var validValue = _placeOfBirthController.valueOrNull;
+    return validValue;
+  }
+
+     String? validHomeTown (){
+      
+     var validValue = _homeTownController.valueOrNull;
+    return validValue;
+  }
+    String? validEmploymentType (){
+      
+     var validValue = _employmentTypeController.valueOrNull;
+    return validValue;
+  }//!2
+  //3
+     String? validEmail (){
+      
+     var validValue = _emailController.valueOrNull;
+    return validValue;
+  }
+  
+   String? validPhone (){
+     var validValue = _phoneNumberController.valueOrNull;
+    return validValue;
+  }
+  String? validAddress (){
+     var validValue = _address1Controller.valueOrNull;
+    return validValue;
+  }
+   String? validGPSAddress (){
+     var validValue = _address2Controller.valueOrNull;
+    return validValue;
+  }
+  String? validCountryOfRes (){
+     var validValue = _countryOfResidenceController.valueOrNull;
+    return validValue;
+  }
+
+   String? validStateOfRes (){
+     var validValue = _stateOfResidenceController.valueOrNull;
+    return validValue;
+  }
+     String? validCityOfRes (){
+     var validValue = _cityOfResidenceController.valueOrNull;
+    return validValue;
+  }
+    String? validRegion (){
+     var validValue = _stateOfResidenceController.valueOrNull;
+    return validValue;
+  }
+     String? validMmda (){
+     var validValue = _mmdaController.valueOrNull;
+    return validValue;
+  }
+     String? validGender (){
+     var validValue = _genderController.valueOrNull;
+    return validValue;
+  }
+    String? validMaritalStat (){
+     var validValue = _maritalStatusController.valueOrNull;
+    return validValue;
+  } 
+   String? validOccGrp (){
+     var validValue = occupationCategoryController.valueOrNull;
+    return validValue;
+  }
+   String? validOccupation (){
+     var validValue = occupationController.valueOrNull;
+    return validValue;
+  }
+
+    String? validNok(){
+    var validValue = _nextOfKinController.valueOrNull;
+  return validValue;
+}
+  String? validNokRelationship(){
+    var validValue = _nextOfKinRelationshipController.valueOrNull;
+  return validValue;
+}
+  String? validNokAddress(){
+    var validValue = _nextOfKinAddressController.valueOrNull;
+  return validValue;
+}
+
+ String? validNokPhone(){
+    var validValue = _nextOfKinPhoneController.valueOrNull;
+  return validValue;
+}
+ String? validNokGender(){
+    var validValue = _nextOfKinGenderController.valueOrNull;
+  return validValue;
+}
+//!3
+//4
+ String? validIdType(){
+    var validValue = _idTypeController.valueOrNull;
+  return validValue;
+}
+String? validIdIssueer(){
+    var validValue = _idIssuerController.valueOrNull;
+  return validValue;
+}
+String? validIdNumber(){
+    var validValue = _idNumberController.valueOrNull;
+  return validValue;
+}
+String? validIdPlaceOfIssue(){
+    var validValue = _idPlaceOfIssueController.valueOrNull;
+  return validValue;
+}
+String? validIdDateOfIssue(){
+    var validValue = _idIssueDateController.valueOrNull;
+  return validValue;
+}
+String? validIdExp(){
+    var validValue = _idExpiryDateController.valueOrNull;
+  return validValue;
+}
+
+String? validIdCiuntryOfIssue(){
+    var validValue = _countryOfIDCountryIssueController.valueOrNull;
+  return validValue;
+} //!4
+//5
+bool validEProduct(){
+  final listOfAllEProductsValues=<bool?>[
+  _isScanToPayController.valueOrNull,
+  _isZPromptController.valueOrNull,
+  _isZMobileController.valueOrNull,
+  _isUssdController.valueOrNull,
+   _isInternetBankingController.valueOrNull,
+  _isBankToWalletController.valueOrNull,
+  _isCardRequestController.valueOrNull,
+  ];
+  // check if any Value is true
+  final atLeastOneIsTrue = listOfAllEProductsValues.any((element) => element == true);
+  if(atLeastOneIsTrue){
+    return true;
+  }
+  return false;
+}
+
+//6
+bool validIdUploads(){
+   var validValue1 = _uploadIdImageController.valueOrNull;
+   var validValue2 = _uploadIdImageController2.valueOrNull;
+   if((validValue1!=null && _uploadIdImageController.valueOrNull!.length!=0) && (validValue2!=null&& _uploadIdImageController2.valueOrNull!.length!=0)){
+    return true;
+   }
+   return false;
+}
+//7
+String? validIdPassport(){
+    var validValue = _uploadPassportController.valueOrNull;
+  return validValue;
+} 
+String? validUtilityBill(){
+    var validValue = _uploadUtilityBillController.valueOrNull;
+  return validValue;
+} 
+ 
+String? validIdSignature(){
+    var validValue = _uploadSignatureController.valueOrNull;
+  return validValue;
+}
+
+   ////--!--------------  End  Validation  ----------------////
 
   saveForm(String userName) async {
     var rowId = databaseRowIDController.valueOrNull;
@@ -1196,10 +1437,10 @@ class AccountFormBloc extends BlocBase with Validators {
 
     final validAddress1 = _address1Controller.valueOrNull;
     var validAddress2 = _address2Controller.valueOrNull;
-    final validCountryOfResidence =
-        _countryOfResidenceController.valueOrNull == null
-            ? 'GHANA'
-            : _countryOfResidenceController.valueOrNull; //workaround for bug
+    // final validCountryOfResidence =
+    //     _countryOfResidenceController.valueOrNull == null
+    //         ? 'GHANA'
+    //         : _countryOfResidenceController.valueOrNull; //workaround for bug
 
     final validStateOfResidence = _stateOfResidenceController.valueOrNull;
     final validCityOfResidence = _cityOfResidenceController.valueOrNull;
@@ -1225,7 +1466,7 @@ class AccountFormBloc extends BlocBase with Validators {
     var validIdIssueDate = _idIssueDateController.valueOrNull;
     var validIdExpiryDate = _idExpiryDateController.valueOrNull;
 
-    bool idBool = idTypesWithDates.contains(validIdType);
+    // bool idBool = idTypesWithDates.contains(validIdType);
 
 /*
     if(idBool && (validIdIssueDate == null
@@ -1484,7 +1725,7 @@ if (anticipatedAmountWithdraw == null) {
       }
     }
 
-    RegExp regex = new RegExp(pattern as String);
+    // RegExp regex = new RegExp(pattern as String);
 
 /*
     if (regex.hasMatch(validSurname)) {
@@ -3084,15 +3325,15 @@ if (anticipatedAmountWithdraw == null) {
   }
 
   Future<bool?> validateForm() async {
-    var rowId = databaseRowIDController.valueOrNull;
-    var validRefenceId = _referenceIdController.valueOrNull;
+    // var rowId = databaseRowIDController.valueOrNull;
+    // var validRefenceId = _referenceIdController.valueOrNull;
 
     var validAccountType = _accountTypeController.valueOrNull;
-    final validAccountHolderType =
-        _accountHolderTypeController.valueOrNull ?? 'INDIVIDUAL';
-    final validAccountRiskRank = _riskRankController.valueOrNull != null
-        ? _riskRankController.valueOrNull
-        : '';
+    // final validAccountHolderType =
+    //     _accountHolderTypeController.valueOrNull ?? 'INDIVIDUAL';
+    // final validAccountRiskRank = _riskRankController.valueOrNull != null
+    // //     ? _riskRankController.valueOrNull
+    //     : '';
     String? validAccountCategory = _accountCategoryController.valueOrNull;
 
     List<AccountClassEntity> accountClasses =
@@ -3122,13 +3363,13 @@ if (anticipatedAmountWithdraw == null) {
 
     final countryIDIssuer = _countryOfIDCountryIssueController.valueOrNull;
 
-    var validEmail = _emailController.valueOrNull;
+    // var validEmail = _emailController.valueOrNull;
 
-    double validLatitude = double.parse(
-        _latitudeController.hasValue ? _latitudeController.value : "0");
+    // double validLatitude = double.parse(
+    //     _latitudeController.hasValue ? _latitudeController.value : "0");
 
-    double validLongitude = double.parse(
-        _longitudeController.hasValue ? _longitudeController.value : "0");
+    // double validLongitude = double.parse(
+    //     _longitudeController.hasValue ? _longitudeController.value : "0");
 
     final validPhone = _phoneNumberController.valueOrNull;
 
@@ -3197,14 +3438,14 @@ if (anticipatedAmountWithdraw == null) {
           .addError("You have not entered Ghana card number");
       return false;
     }
-    final validIsScanToPay = _isScanToPayController.valueOrNull;
-    final validIsZMobile = _isZMobileController.valueOrNull;
-    final validIsZPrompt = _isZPromptController.valueOrNull;
-    final validIsStatementViaEmail = _isStatementViaEmailController.valueOrNull;
-    final validUSSD = _isUssdController.valueOrNull;
-    final validInternetBanking = _isInternetBankingController.valueOrNull;
+    // final validIsScanToPay = _isScanToPayController.valueOrNull;
+    // final validIsZMobile = _isZMobileController.valueOrNull;
+    // final validIsZPrompt = _isZPromptController.valueOrNull;
+    // final validIsStatementViaEmail = _isStatementViaEmailController.valueOrNull;
+    // final validUSSD = _isUssdController.valueOrNull;
+    // final validInternetBanking = _isInternetBankingController.valueOrNull;
 
-    final validBankToWallet = _isBankToWalletController.valueOrNull;
+    // final validBankToWallet = _isBankToWalletController.valueOrNull;
 
     final validIsCardRequest = _isCardRequestController.valueOrNull;
     String? validCardType = cardTypeController.valueOrNull;
@@ -3213,21 +3454,21 @@ if (anticipatedAmountWithdraw == null) {
     String? validPreferredNameOnCard =
         _preferredNameOnCardController.valueOrNull;
 
-    final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
-    final validUploadIdImage2InBase64 = _uploadIdImageController2.valueOrNull;
+    // final validUploadIdImageInBase64 = _uploadIdImageController.valueOrNull;
+    // final validUploadIdImage2InBase64 = _uploadIdImageController2.valueOrNull;
 
-    final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
+    // final validUploadPassportInBase64 = _uploadPassportController.valueOrNull;
 
-    final validUploadAdmissionLetterInBase64 =
-        uploadAdmissionLetterController.valueOrNull;
+    // final validUploadAdmissionLetterInBase64 =
+    //     uploadAdmissionLetterController.valueOrNull;
 
-    final validUploadUtilityBillInBase64 =
-        _uploadUtilityBillController.valueOrNull;
+    // final validUploadUtilityBillInBase64 =
+    //     _uploadUtilityBillController.valueOrNull;
 
-    final validUploadResidentPermitInBase64 =
-        _uploadResidentPermitController.valueOrNull;
+    // final validUploadResidentPermitInBase64 =
+    //     _uploadResidentPermitController.valueOrNull;
 
-    final validUploadSignatureInBase64 = _uploadSignatureController.valueOrNull;
+    // final validUploadSignatureInBase64 = _uploadSignatureController.valueOrNull;
 
     if (validAccountType == null) {
       _accountTypeController.addError("Field is required");
@@ -3330,6 +3571,7 @@ if (anticipatedAmountWithdraw == null) {
     transactionTypesList.add(transactionTypes);
     TransactionTypes withdrawalTransactionTypes = TransactionTypes(
       transactionType: "Withdraw",
+   
       transactionCount: anticipatedNoWithdraw != null
           ? anticipatedNoWithdraw.toString()
           : "0 - 10",
@@ -3770,16 +4012,10 @@ if (anticipatedAmountWithdraw == null) {
       driverLicenseVerificationResponse.add(identityResponse);
 
       if (identityResponse.responseCode == '200') {
-        // print(CryptoHelper.decrypt("bNxR3JQR9SQLUZZydVzQuw=="));
-        // print(CryptoHelper.decrypt("rOSmtmXdFkOWi1rRBsQ/aA=="));
-        // print(CryptoHelper.decrypt("VW+vu5PSeRRqxIHk6Gkj5w=="));
-        // print(CryptoHelper.decrypt("mowRSoiP3yiJ7vxaoRqUfQ=="));
-        // print(CryptoHelper.decrypt("cAjVqZrxDJO01zjVe4SV6Q=="));
-        // print(CryptoHelper.decrypt(
-        //     "m/p8hrMIVm76MoR7fpGSfqqKGnt2e7zOUt5EFdEJfoQ="));
-        print(CryptoHelper.decrypt(identityResponse.fullName!));
+       
+        debugPrint(CryptoHelper.decrypt(identityResponse.fullName!));
 
-        print(identityResponse.photo);
+        debugPrint(identityResponse.photo);
       } else {
         driverLicenseVerificationResponse
             .addError('Could not verify the Driver License provided. ');

@@ -38,6 +38,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get("${Endpoints.getOccupationUrl()}");
       print(response);
@@ -61,6 +62,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getAccountClassesUrl());
       return AccountClass.fromJson(response.data);
@@ -83,6 +85,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getTitlesUrl());
       return Title.fromJson(response.data);
@@ -105,6 +108,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getStatesUrl());
       return State.fromJson(response.data);
@@ -127,6 +131,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getCitiesUrl());
       return Cities.fromJson(response.data);
@@ -161,6 +166,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getCountriesUrl());
       return Country.fromJson(response.data);
@@ -180,6 +186,7 @@ class ZenithBankApi {
 //    } else {
 //      throw CleanerException('Failed to load countries');
 //    }
+
   }
 
   Future<void> fetchCardTypes(String? token) async {
@@ -195,6 +202,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getCardTypesUrl());
       inspect(response);
@@ -223,6 +231,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getEmploymentTypesUrl());
       if (response.data != null) {
@@ -253,6 +262,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getMonthlyAllowanceUrl());
       if (response.data != null) {
@@ -283,6 +293,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getPurposeOfAcctUrl());
       if (response.data != null) {
@@ -313,6 +324,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getSourceOfFundUrl());
       if (response.data != null) {
@@ -343,6 +355,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getTransactionTypeUrl());
       if (response.data != null) {
@@ -373,6 +386,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response = await dio.get(Endpoints.getNoOfTransactionUrl());
       if (response.data != null) {
@@ -393,7 +407,7 @@ class ZenithBankApi {
   Future<LoginResponse> attemptLogin(String username, String password) async {
     Response response;
     Dio dio = new Dio();
-
+     
     try {
       (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (client) {
@@ -401,8 +415,9 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
-      String url = Endpoints.getLoginUrl();
+      // String url = Endpoints.getLoginUrl();
       response = await dio.post(Endpoints.getLoginUrl(),
           data: {"UserName": username, "Password": password});
 
@@ -458,6 +473,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response =
           await dio.get("${Endpoints.getAccountsByRsmIdUrl()}$rsmId/All");
@@ -482,6 +498,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response =
           await dio.get("${Endpoints.getAccountsByUsernameUrl()}$usern/All");
@@ -507,6 +524,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
       response =
           await dio.get("${Endpoints.getAccountDetailsUrl()}$referenceId");
@@ -554,6 +572,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
 
       response = await dio.post("${Endpoints.getSaveAccountsUrl()}",
@@ -599,6 +618,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
 
       response =
@@ -665,6 +685,7 @@ class ZenithBankApi {
             (X509Certificate cert, String host, int port) {
           return true;
         };
+        return null;
       };
 
       response = await dio.post(Endpoints.getVerifyIdUrl(),

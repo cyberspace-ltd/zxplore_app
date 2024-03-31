@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
-import 'package:zxplore_app/blocs/provider.dart';
 import 'package:zxplore_app/models/place_prediction.dart';
 
 import '../../colors.dart';
@@ -90,6 +89,15 @@ class _AddressFormPageState extends State<AddressFormPage> {
               maxLines: null,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
               decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
                 labelText: 'Enter Address',
               ),
             ),

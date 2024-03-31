@@ -169,6 +169,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
               labelText: 'Email',
               errorText: snapshot.error as String?,
             ),
@@ -191,9 +200,20 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             controller: _phoneController,
             keyboardType: TextInputType.phone,
             onChanged: accountFormBloc!.changePhone,
-            maxLength: 11,
+            maxLength: 10,
 //            enabled: accountFormBloc.bvnPhone,
             decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        hintText: '90000000 111',
+        hintStyle: TextStyle(color: Colors.grey[400]),
+
               labelText: 'Phone',
               prefixText: '+233',
               helperText: "* Required",
@@ -224,6 +244,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
               labelText: 'Name',
               helperText: '* Required',
               errorText: snapshot.error as String?,
@@ -252,6 +281,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+         hintText: '90000000 111',
+        hintStyle: TextStyle(color: Colors.grey[400]),
+
               prefixText: '+',
               labelText: 'Next of Kin Phone Number',
               helperText: '* Required',
@@ -282,6 +322,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
               labelText: 'Next of Kin Address',
               helperText: '* Required',
               errorText: snapshot.error as String?,
@@ -312,6 +361,14 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLines: null,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
               labelText: 'Next of Kin - Relationship',
               helperText: '* Required',
               errorText: snapshot.error as String?,
@@ -369,6 +426,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             },
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
               labelText: 'Address',
               helperText: '* Required',
               errorText: snapshot.error as String?,
@@ -409,6 +475,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
             maxLength: 40,
             maxLengthEnforcement: MaxLengthEnforcement.enforced,
             decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
               labelText: 'GPS Address',
               errorText: snapshot.error as String?,
             ),
@@ -425,6 +500,18 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
+
+
                   labelText: 'Country Of Residence',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -481,6 +568,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
             labelText: 'Region of Residence',
             helperText: '* Required',
             errorText: snapshot.error as String?,
@@ -499,6 +595,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
                   labelText: 'Region of Residence',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -516,7 +621,7 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                         _selectedAccFilter = "";
                       } else
                         _selectedAccFilter = value.toUpperCase();
-                      print(_selectedAccFilter);
+                      debugPrint(_selectedAccFilter);
                     });
                     accountFormBloc!.updateStateRegion(value);
                     accountFormBloc!.updateMMDA(null);
@@ -550,6 +655,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
                     decoration: InputDecoration(
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
                         labelText: 'MMDA',
                         helperText: "* Required",
                         errorText: itemSnapshot.error as String?),
@@ -659,6 +773,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
             labelText: 'CITY/TOWN OF RESIDENCE',
             helperText: '* Required',
             errorText: snapshot.error as String?,
@@ -702,6 +825,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           maxLines: null,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
           decoration: InputDecoration(
+            
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
             labelText: 'Gender',
             helperText: '* Required',
             errorText: snapshot.error as String?,
@@ -720,6 +852,15 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
                   labelText: 'Gender',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -755,7 +896,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           autovalidateMode: AutovalidateMode.always,
           builder: (FormFieldState<String> state) {
             return InputDecorator(
+
               decoration: InputDecoration(
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
                   labelText: 'Gender Of Next Of Kin',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -810,6 +961,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                       maxLines: null,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       decoration: InputDecoration(
+                        
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
                         labelText: 'Other Occupation',
                         helperText: '* Required',
                         errorText: snapshot.error as String?,
@@ -832,6 +994,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+                
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
                   labelText: 'Occupation Group',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),
@@ -902,6 +1075,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
                 builder: (FormFieldState<String> occupations) {
                   return InputDecorator(
                     decoration: InputDecoration(
+
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
                         labelText: 'Occupation',
                         helperText: "* Required",
                         errorText: itemSnapshot.error as String?),
@@ -1013,6 +1197,17 @@ class _ContactDetailsState extends State<ContactDetailsStep>
           builder: (FormFieldState<String> state) {
             return InputDecorator(
               decoration: InputDecoration(
+
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+                 borderSide: BorderSide(width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+
                   labelText: 'Marital Status',
                   helperText: "* Required",
                   errorText: snapshot.error as String?),

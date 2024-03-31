@@ -124,8 +124,8 @@ class _EProductsStepState extends State<EProductsStep>
       stream: accountFormBloc!.isStatementViaEmail,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          int g = 10;
-          int sum = g + 20;
+          // int g = 10;
+          // int sum = g + 20;
         }
         return CheckboxListTile(
           onChanged: accountFormBloc!.changeIsStatementViaEmail,
@@ -220,6 +220,16 @@ class _EProductsStepState extends State<EProductsStep>
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: InputDecorator(
                       decoration: InputDecoration(
+                           enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 8), // Highlight on focus
+                  ),
                         labelText: 'Card Type',
                         helperText: "* Required",
                         errorText: snapshot.error as String?,
@@ -279,6 +289,14 @@ class _EProductsStepState extends State<EProductsStep>
                   maxLines: null,
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
                   decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     labelText: 'Requesting Branch',
                     helperText: '* Required',
                     errorText: snapshot.error as String?,
@@ -322,6 +340,14 @@ class _EProductsStepState extends State<EProductsStep>
                   maxLines: null,
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
                   decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     labelText: 'Destination Branch',
                     helperText: '* Required',
                     errorText: snapshot.error as String?,
@@ -365,6 +391,14 @@ class _EProductsStepState extends State<EProductsStep>
                   maxLines: null,
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
                   decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     labelText: 'Preferred Name On Card',
                     helperText: '* Required',
                     errorText: snapshot.error as String?,

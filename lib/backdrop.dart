@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:zxplore_app/blocs/account_form_bloc.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
-import 'package:zxplore_app/utils/flushbar_helper.dart';
+// import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
 import 'category.dart';
@@ -48,7 +48,7 @@ class _BackdropPanel extends StatelessWidget {
               padding: EdgeInsetsDirectional.only(start: 16.0),
               alignment: AlignmentDirectional.centerStart,
               child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.subtitle1!,
+                style: Theme.of(context).textTheme.titleMedium!,
                 child: title!,
               ),
             ),
@@ -368,44 +368,47 @@ class _BackdropState extends State<Backdrop>
     });
   }
 
-  void _showSuccessDialog(String message) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Offline Account"),
-          content: new Text(message),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            OutlinedButton(
-              child: Text('Done'),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(
-                  Colors.red.shade900,
-                ),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.white,
-                ),
-                side: MaterialStateProperty.all<BorderSide>(
-                  BorderSide(color: Colors.red.shade900),
-                ),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  EdgeInsets.all(16),
-                ),
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => MyHomePage()),
-                );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showSuccessDialog(String message) {
+  //   // flutter defined function
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       // return object of type Dialog
+  //       return AlertDialog(
+  //         title: new Text("Offline Account"),
+  //         content: new Text(message),
+  //         actions: <Widget>[
+  //           // usually buttons at the bottom of the dialog
+  //           OutlinedButton(
+  //             child: Text('Done'),
+  //             style: ButtonStyle(
+  //               foregroundColor: MaterialStateProperty.all<Color>(
+  //                 Colors.red.shade900,
+  //               ),
+  //               backgroundColor: MaterialStateProperty.all<Color>(
+  //                 Colors.white,
+  //               ),
+  //               side: MaterialStateProperty.all<BorderSide>(
+  //                 BorderSide(color: Colors.red.shade900),
+  //               ),
+  //               padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+  //                 EdgeInsets.all(16),
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.pushReplacement(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                     builder: (BuildContext context) => MyHomePage()),
+  //               );
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
+
+
 }

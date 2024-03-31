@@ -27,7 +27,7 @@ class AccountsBloc extends BlocBase {
   StreamSink<List<OfflineAccountEntity>> get _offlineAccounts =>
       _offlineAccountsController.sink;
 
-  getAccounts() async {
+  Future<void> getAccounts() async {
     try {
       //  String? rsmId = await SecureStorage.getEmployeeId();
       String? username = await SecureStorage.getUsername();

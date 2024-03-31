@@ -236,18 +236,20 @@ class _AccountFormPageState extends State<AccountFormPage>
                             icon:
                                 Icon(Icons.navigate_next, color: Colors.white),
                             onPressed: () {
-                              _controller.nextPage(
-                                  duration: _kDuration, curve: _kCurve);
+                              print("Prev_Index::${_controller.page!.toInt()}");
+                               performEachFormValidaation(pageNumer: _controller.page!.toInt());
 
-                              if (_controller.page!.toInt() < 8) {
-                                widget.accountFormBloc!.setCurrentFormCategory(
-                                    widget.categories[
-                                        _controller.page!.toInt() + 1]);
-                              }
-                              int ss = _controller.page!.toInt();
-                              if (_controller.page!.toInt() == 7) {
-                                accountFormBloc!.setFormValidation();
-                              }
+                              // _controller.nextPage(
+                              //     duration: _kDuration, curve: _kCurve);
+
+                              // if (_controller.page!.toInt() < 8) {
+                              //   widget.accountFormBloc!.setCurrentFormCategory(
+                              //       widget.categories[
+                              //           _controller.page!.toInt() + 1]);
+                              // }
+                              // if (_controller.page!.toInt() == 7) {
+                              //   accountFormBloc!.setFormValidation();
+                              // }
                             }),
                       ],
                     ),
@@ -262,6 +264,200 @@ class _AccountFormPageState extends State<AccountFormPage>
     );
   }
 
+  void performEachFormValidaation({required int pageNumer}) {
+    switch (pageNumer) {
+      //*validaate required fields on first form
+      case 0:
+        if (validateFirstForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+      case 1:
+        if (validateSecondForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+      case 2:
+        if (validateThirdForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+      case 3:
+        if (validateFourthForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+      case 4:
+        if (validateFiftForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+      case 5:
+        if (validateSixthForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+      case 6:
+        if (validateSeventhForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+
+      case 7:
+        if (validateEigthForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+          //*Validate all forms
+          accountFormBloc!.setFormValidation();
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+
+      case 8:
+        if (validateninthForm()) {
+          _controller.nextPage(duration: _kDuration, curve: _kCurve);
+          widget.accountFormBloc!.setCurrentFormCategory(
+              widget.categories[_controller.page!.toInt() + 1]);
+        } else {
+          showErroPrompt(context);
+        }
+        break;
+    }
+  }
+
+  bool validateFirstForm() {
+    if (
+      (accountFormBloc?.validAccountType() != null && accountFormBloc?.validAccountType()!.length != 0) &&
+        (accountFormBloc?.validAccountCategory() != null&& accountFormBloc?.validAccountCategory()!.length != 0) &&
+       (accountFormBloc?.validAccountHolderType() != null&& accountFormBloc?.validAccountHolderType()!.length != 0) &&
+        (accountFormBloc?.validAccountAntAmt() != null&& accountFormBloc?.validAccountAntAmt()!.length != 0) &&
+        (accountFormBloc?.validAccountAntTrxn() != null&& accountFormBloc?.validAccountAntTrxn()!.length != 0) &&
+        (accountFormBloc?.validAccountAntWTrxn() != null&& accountFormBloc?.validAccountAntWTrxn()!.length != 0) &&
+        (accountFormBloc?.validAccountAntWAmt() != null&& accountFormBloc?.validAccountAntWAmt()!.length != 0)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateSecondForm() {
+    if ((accountFormBloc?.validTin() != null && accountFormBloc?.validTin()!.length != 0) &&
+        (accountFormBloc?.validTitle() != null && accountFormBloc?.validTitle()!.length != 0) &&
+        (accountFormBloc?.validSurN() != null && accountFormBloc?.validSurN()!.length != 0) &&
+        (accountFormBloc?.validFirstN() != null && accountFormBloc?.validFirstN()!.length != 0) &&
+        (accountFormBloc?.validOtherN() != null && accountFormBloc?.validOtherN()!.length != 0)&&
+        (accountFormBloc?.validDob() != null && accountFormBloc?.validDob()!.length != 0)&&
+        (accountFormBloc?.validPlaceOfBirth() != null && accountFormBloc?.validPlaceOfBirth()!.length != 0)&&
+        (accountFormBloc?.validHomeTown() != null && accountFormBloc?.validHomeTown()!.length != 0)&&
+        (accountFormBloc?.validEmploymentType() != null && accountFormBloc?.validEmploymentType()!.length != 0)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateThirdForm() {
+    if ((accountFormBloc?.validEmail() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validPhone() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validAddress() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validGPSAddress() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validCityOfRes() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validRegion() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validCityOfRes() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validGender() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validOccGrp() != null)&& accountFormBloc?.validEmploymentType()!.length != 0 &&
+        (accountFormBloc?.validOccupation() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validMaritalStat() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validNok() != null && accountFormBloc?.validEmploymentType()!.length != 0)&&
+       ( accountFormBloc?.validGender() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validOccGrp() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validNokAddress() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validNokGender() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+       ( accountFormBloc?.validNokPhone() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
+        (accountFormBloc?.validNokRelationship() != null&& accountFormBloc?.validEmploymentType()!.length != 0)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateFourthForm() {
+    if (
+      (accountFormBloc?.validIdType() != null && accountFormBloc?.validIdType()!.length != 0) &&
+        (accountFormBloc?.validIdIssueer() != null&& accountFormBloc?.validIdIssueer()!.length != 0) &&
+        (accountFormBloc?.validIdNumber() != null&& accountFormBloc?.validIdNumber()!.length != 0) &&
+        (accountFormBloc?.validIdCiuntryOfIssue() != null&& accountFormBloc?.validIdCiuntryOfIssue()!.length != 0) &&
+        // (accountFormBloc?.validIdDateOfIssue() != null&& accountFormBloc?.validIdDateOfIssue()!.length != 0) &&
+        (accountFormBloc?.validIdPlaceOfIssue() != null&& accountFormBloc?.validIdPlaceOfIssue()!.length != 0)
+        // (accountFormBloc?.validIdExp() != null&& accountFormBloc?.validIdExp()!.length != 0)
+        ) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateFiftForm() {
+    if (accountFormBloc?.validEProduct() == true) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateSixthForm() {
+    if (accountFormBloc?.validIdUploads() == true) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateSeventhForm() {
+    if (accountFormBloc?.validIdPassport() != null && accountFormBloc?.validIdPassport()!.length != 0) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateEigthForm() {
+    if (accountFormBloc?.validUtilityBill() != null&& accountFormBloc?.validUtilityBill()!.length != 0) {
+      return true;
+    }
+    return false;
+  }
+
+  bool validateninthForm() {
+    if (accountFormBloc?.validIdSignature() != null) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   void dispose() {
     accountFormBloc?.dispose();
@@ -270,6 +466,14 @@ class _AccountFormPageState extends State<AccountFormPage>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+void showErroPrompt(BuildContext context) {
+  var errorSnackBar = FlushbarHelper.createErrorAction(
+      message: 'Some required fields are missing',duration: Duration(seconds: 2),
+      button: TextButton(onPressed: () {}, child: Text(' ')));
+
+  errorSnackBar..show(context);
 }
 
 /// An indicator showing the currently selected page of a PageController
