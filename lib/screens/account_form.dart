@@ -359,7 +359,7 @@ class _AccountFormPageState extends State<AccountFormPage>
     if (
       (accountFormBloc?.validAccountType() != null && accountFormBloc?.validAccountType()!.length != 0) &&
         (accountFormBloc?.validAccountCategory() != null&& accountFormBloc?.validAccountCategory()!.length != 0) &&
-       (accountFormBloc?.validAccountHolderType() != null&& accountFormBloc?.validAccountHolderType()!.length != 0) &&
+      //  (accountFormBloc?.validAccountHolderType() != null&& accountFormBloc?.validAccountHolderType()!.length != 0) && //loaded bby default
         (accountFormBloc?.validAccountAntAmt() != null&& accountFormBloc?.validAccountAntAmt()!.length != 0) &&
         (accountFormBloc?.validAccountAntTrxn() != null&& accountFormBloc?.validAccountAntTrxn()!.length != 0) &&
         (accountFormBloc?.validAccountAntWTrxn() != null&& accountFormBloc?.validAccountAntWTrxn()!.length != 0) &&
@@ -370,11 +370,12 @@ class _AccountFormPageState extends State<AccountFormPage>
   }
 
   bool validateSecondForm() {
+
     if ((accountFormBloc?.validTin() != null && accountFormBloc?.validTin()!.length != 0) &&
         (accountFormBloc?.validTitle() != null && accountFormBloc?.validTitle()!.length != 0) &&
         (accountFormBloc?.validSurN() != null && accountFormBloc?.validSurN()!.length != 0) &&
         (accountFormBloc?.validFirstN() != null && accountFormBloc?.validFirstN()!.length != 0) &&
-        (accountFormBloc?.validOtherN() != null && accountFormBloc?.validOtherN()!.length != 0)&&
+        // (accountFormBloc?.validOtherN() != null && accountFormBloc?.validOtherN()!.length != 0)&&
         (accountFormBloc?.validDob() != null && accountFormBloc?.validDob()!.length != 0)&&
         (accountFormBloc?.validPlaceOfBirth() != null && accountFormBloc?.validPlaceOfBirth()!.length != 0)&&
         (accountFormBloc?.validHomeTown() != null && accountFormBloc?.validHomeTown()!.length != 0)&&
@@ -385,6 +386,7 @@ class _AccountFormPageState extends State<AccountFormPage>
   }
 
   bool validateThirdForm() {
+    debugPrint("1:${(        (accountFormBloc?.validHomeTown() != null&& accountFormBloc?.validHomeTown()!.length != 0))}");
     if ((accountFormBloc?.validEmail() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
         (accountFormBloc?.validPhone() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
         (accountFormBloc?.validAddress() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
