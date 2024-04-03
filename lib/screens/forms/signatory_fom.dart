@@ -59,6 +59,7 @@ class _SignatoryStepState extends State<SignatoryStep>
     });
 
     editingForm = accountFormBloc!.getFormStatusBeforeSubmission() ?? false;
+    // debugPrint("Inistate_editingForm::$editingForm");
     accountFormBloc!.setFormValidation();
   }
 
@@ -278,7 +279,9 @@ class _SignatoryStepState extends State<SignatoryStep>
                     ),
                   ),
                   onPressed: () {
-                    if (_isButtonDisabled != false || editingForm != false) {
+                    
+                    if (_isButtonDisabled == true ) {
+                      // editingForm == true
                       showSimpleAlert(
                           context, 'Error', 'System busy, check if  you have accepted signature/uploaded one.');
                     } else if (snapshot.hasData == false ||

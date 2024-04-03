@@ -522,13 +522,12 @@ class _MyHomePageState extends State<MyHomePage> {
             'Edit Account',
           ),
           onPressed: () {
-            Navigator.push(
+                        Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => CategoryPage(
                       accountReferenceId: form.refId,
-                      isEditAccount: (form.status == ("Saved") ||
-                          form.status == ("SavedToDevice")),
+                      isEditAccount: (form.status == ("Saved") ||form.status == ("SavedToDevice")),
                       recordSavedInDevice: form.status == ("SavedToDevice")
                           ? "SavedToDevice"
                           : null),
