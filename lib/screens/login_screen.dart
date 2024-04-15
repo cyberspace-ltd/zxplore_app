@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(16.0),
               child: Center(
                 child: Text(
-                  'Enter your Zenith bank active directory credentials below. This helps identify the employee that wants to access the application.',
+                  'Enter your Zenith bank active directory credential(s) below. This helps identify the employee that wants to access the application.',
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),

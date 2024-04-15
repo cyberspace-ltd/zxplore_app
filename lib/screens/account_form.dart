@@ -378,6 +378,7 @@ class _AccountFormPageState extends State<AccountFormPage>
         // (accountFormBloc?.validOtherN() != null && accountFormBloc?.validOtherN()!.length != 0)&&
         (accountFormBloc?.validDob() != null && accountFormBloc?.validDob()!.length != 0)&&
         (accountFormBloc?.validPlaceOfBirth() != null && accountFormBloc?.validPlaceOfBirth()!.length != 0)&&
+         (accountFormBloc?.validCountryOfOrigin() != null && accountFormBloc?.validCountryOfOrigin()!.length != 0)&&
         (accountFormBloc?.validHomeTown() != null && accountFormBloc?.validHomeTown()!.length != 0)&&
         (accountFormBloc?.validEmploymentType() != null && accountFormBloc?.validEmploymentType()!.length != 0)) {
       return true;
@@ -386,7 +387,6 @@ class _AccountFormPageState extends State<AccountFormPage>
   }
 
   bool validateThirdForm() {
-    debugPrint("1:${(        (accountFormBloc?.validHomeTown() != null&& accountFormBloc?.validHomeTown()!.length != 0))}");
     if ((accountFormBloc?.validEmail() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
         (accountFormBloc?.validPhone() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
         (accountFormBloc?.validAddress() != null&& accountFormBloc?.validEmploymentType()!.length != 0) &&
@@ -472,7 +472,7 @@ class _AccountFormPageState extends State<AccountFormPage>
 
 void showErroPrompt(BuildContext context) {
   var errorSnackBar = FlushbarHelper.createErrorAction(
-      message: 'Some required fields are missing',duration: Duration(seconds: 2),
+      message: 'Some required field(s) are missing',duration: Duration(seconds: 2),
       button: TextButton(onPressed: () {}, child: Text(' ')));
 
   errorSnackBar..show(context);

@@ -1211,6 +1211,12 @@ class AccountFormBloc extends BlocBase with Validators {
      var validValue = _placeOfBirthController.valueOrNull;
     return validValue;
   }
+     String? validCountryOfOrigin (){
+      
+     var validValue = _countryOfOriginController.valueOrNull;
+    return validValue;
+  }
+  
 
      String? validHomeTown (){
       
