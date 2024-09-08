@@ -48,7 +48,17 @@ ThemeData _buildZxploreTheme() {
     primaryColor: ZxplorePrimaryColor,
     scaffoldBackgroundColor: kShrineBackgroundWhite,
     cardColor: kShrineBackgroundWhite,
-    errorColor: kShrineErrorRed,
+    colorScheme: ColorScheme(
+      onPrimary: ZxplorePrimaryColor,
+      primary: kShrineBackgroundWhite,
+      onError: kShrineErrorRed,
+      error: kShrineErrorRed,
+      brightness: Brightness.light,
+      secondary: Colors.red,
+      surface: kShrineBackgroundWhite,
+      onSurface: kShrineBackgroundWhite,
+      onSecondary: kShrineBackgroundWhite,
+    ),
     buttonTheme: base.buttonTheme.copyWith(
       buttonColor: ZxplorePrimaryColor,
       textTheme: ButtonTextTheme.normal,
@@ -57,7 +67,6 @@ ThemeData _buildZxploreTheme() {
     inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),
     textTheme: _buildZxploreTextTheme(base.textTheme),
     primaryTextTheme: _buildZxploreTextTheme(base.primaryTextTheme),
-    colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.red),
   );
 }
 
@@ -67,8 +76,8 @@ TextTheme _buildZxploreTextTheme(TextTheme base) {
         headlineSmall: base.headlineSmall!
             .copyWith(fontWeight: FontWeight.w500, color: ZxplorePrimaryColor),
         titleLarge: base.titleLarge!.copyWith(fontSize: 18.0),
-        bodySmall:
-            base.bodySmall!.copyWith(fontSize: 11.0, color: ZxplorePrimaryColor),
+        bodySmall: base.bodySmall!
+            .copyWith(fontSize: 11.0, color: ZxplorePrimaryColor),
         bodyMedium: base.bodyMedium!.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 16.0,

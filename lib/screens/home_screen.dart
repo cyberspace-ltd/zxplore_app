@@ -210,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.fromLTRB(0, 4.0, 0, 4.0),
                   child: new Text(
                     'COLOR KEY',
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
                 onTap: () {

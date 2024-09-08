@@ -438,7 +438,7 @@ class _EProductsStepState extends State<EProductsStep>
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Select the E-products available to this account.',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                       textAlign: TextAlign.start,
                     ),
                   ),
