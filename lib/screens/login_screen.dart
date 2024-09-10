@@ -1,56 +1,43 @@
-import 'dart:io';
-
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:zxplore_app/utils/flushbar_helper.dart';
-
-import '../blocs/login_bloc.dart';
-import '../colors.dart';
-import 'home_screen.dart';
-// import 'package:package_info/package_info.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/colors.dart';
+import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
+import 'package:zxplore_app/screens/controllers/login/get_login_modes.dart';
+import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
+import 'package:zxplore_app/screens/home_screen.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
+import 'package:zxplore_app/widgets/custom_text_field.dart';
+import 'package:zxplore_app/widgets/submit_button.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  LoginBloc? _loginBloc;
-  bool _passwordVisible = false;
+class _LoginPageState extends ConsumerState<LoginPage> {
+  final loginFrmKey = GlobalKey<FormState>();
+  final loginPasswordController = TextEditingController();
+  final loginUserNameController = TextEditingController();
+  LoginModesData? selectedValue;
+
+  bool _passwordHidden = false;
   String appVersion = '';
+  String? loginModeValue = '';
+  String? loginModeName = '';
   @override
   void initState() {
-    _loginBloc = LoginBloc();
-    _passwordVisible = false;
-    getPackageInfo();
     super.initState();
+    getPackageInfo();
   }
 
-  Widget userNameField() {
-    return StreamBuilder(
-      stream: _loginBloc!.username,
-      builder: (context, snapshot) {
-        return AccentColorOverride(
-          color: ZxplorePrimaryColor,
-          child: TextField(
-            onChanged: _loginBloc!.changeUserName,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-                     enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        focusedBorder: OutlineInputBorder(
-                 borderSide: BorderSide(width: 1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-              labelText: 'Username',
-              errorText: snapshot.error as String?,
-            ),
-          ),
-        );
-      },
-    );
+  void _togglePasswordVisibility() {
+    setState(() {
+      _passwordHidden = !_passwordHidden;
+    });
   }
 
   getPackageInfo() async {
@@ -60,217 +47,263 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  Widget passwordField() {
-    return StreamBuilder(
-        stream: _loginBloc!.password,
-        builder: (context, snapshot) {
-          return AccentColorOverride(
-            color: ZxplorePrimaryColor,
-            child: TextField(
-              onChanged: _loginBloc!.changePassword,
-              decoration: InputDecoration(
-                       enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        focusedBorder: OutlineInputBorder(
-                 borderSide: BorderSide(width: 1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-                labelText: 'Password',
-                errorText: snapshot.error as String?,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    // Based on passwordVisible state choose the icon
-                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: ZxplorePrimaryColor,
-                  ),
-                  onPressed: () {
-                    // Update the state i.e. toogle the state of passwordVisible variable
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                ),
-              ),
-              obscureText: !_passwordVisible,
-            ),
+  Future<void> loginUser() async {
+    ref.read(loginControllerProvider.notifier).loginUser(
+        onSuccess: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
           );
-        });
-  }
-
-  Widget submitButton() {
-    return StreamBuilder(
-      stream: _loginBloc!.submitValid,
-      builder: (context, snapshot) {
-        return ButtonTheme(
-          height: 60.0,
-          child: ElevatedButton(
-            child: Text('Login'),
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(
-                Colors.white,
-              ),
-              backgroundColor: MaterialStateProperty.all<Color>(
-                Colors.red.shade900,
-              ),
-            ),
-            onPressed: snapshot.hasData
-                ? () async {
-                    var loadingBar = FlushbarHelper.createLoading(
-                        message: "Attempting to login....",
-                        linearProgressIndicator: null);
-                    loadingBar..show(context);
-
-                    _loginBloc!.submit();
-
-                    _loginBloc!.subjectLoginResponse
-                        .listen((loginResponse) async {
-                      loadingBar.dismiss();
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MyHomePage()),
-                      );
-                    }).onError((error) {
-                      loadingBar.dismiss();
-
-                      loadingBar.dismiss();
-                      FlushbarHelper.createError(
-                              message: "${responseMessage(error)}.")
-                          .show(context);
-                      loadingBar.dismiss();
-                    });
-                  }
-                : null,
-          ),
-        );
-      },
-    );
-  }
-
-  String responseMessage(dynamic errorResponse) {
-    if (errorResponse.runtimeType == String) {
-      return errorResponse;
-    } else {
-      return 'Loging Failed.';
-    }
+        },
+        loginMode: loginModeName,
+        username: loginUserNameController.text.toString(),
+        password: loginPasswordController.text.toString());
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => _exitApp(context),
+    ref.listen<AsyncValue>(
+      loginControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
+    return ZxploreProgress(
+      inAsyncCall: ref.watch(getLoginModesProvider).isLoading,
       child: Scaffold(
         body: SafeArea(
-          child: ListView(children: <Widget>[
-            Container(
-              color: ZxplorePrimaryColor,
-              height: 0.5 * MediaQuery.of(context).size.height,
-              child: Center(
-                child: Container(
-                  height: 120,
-                  width: 120,
-                  color: Colors.white,
-                  child: Center(
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        fit: BoxFit.fitWidth,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Form(
+              key: loginFrmKey,
+              child: ListView(
+                children: [
+                  Container(
+                    color: ZxplorePrimaryColor,
+                    height: 0.5 * MediaQuery.of(context).size.height,
+                    child: Center(
+                      child: Container(
+                        height: 120,
+                        width: 120,
+                        color: Colors.white,
+                        child: Center(
+                          child: Container(
+                            width: 60,
+                            height: 60,
+                            child: Image.asset(
+                              'assets/images/logo.png',
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  SizedBox(height: 16.0),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Center(
+                      child: Text(
+                        'Enter your Zenith bank active directory credential(s) below. This helps identify the employee that wants to access the application.',
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                    Padding(
+                                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                          children: [
+                            Text(
+                              'Preferred Login',
+                              overflow: TextOverflow.fade,
+                              maxLines: 1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
+                          ],
+                        ),
+                    ),
+                  SizedBox(height: 16.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getLoginModesProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<LoginModesData>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select preferred Login',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        items: data
+                                            .map<
+                                                    DropdownMenuItem<
+                                                        LoginModesData>>(
+                                                (LoginModesData item) =>
+                                                    DropdownMenuItem<
+                                                        LoginModesData>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.loginModeName ??
+                                                            '',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        value: selectedValue,
+                                        onChanged: (LoginModesData? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            selectedValue = newValue;
+                                            loginModeValue =
+                                                newValue?.loginModeValue;
+                                            loginModeName =
+                                                newValue?.loginModeName;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 14, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
+                                        ),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
+                              error: (e, s) => const SizedBox.shrink(),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: CustomTextFormField(
+                      title: 'Username',
+                      fillColor: Colors.transparent,
+                      controller: loginPasswordController,
+                      hint: 'Enter username',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Username is  required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 12.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: CustomTextFormField(
+                      title: 'Password',
+                      fillColor: Colors.transparent,
+                      controller: loginPasswordController,
+                      hint: 'Enter Password',
+                      inputType: TextInputType.visiblePassword,
+                      isPassword: _passwordHidden,
+                      togglePasswordVisibility: _togglePasswordVisibility,
+                      showPasswordSuffixIcon: true,
+                      isEyeIconHidden: _passwordHidden,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Password is  required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 12.0),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                    child: PrimaryButton(
+                      onPressed: () {
+                        if (!loginFrmKey.currentState!.validate()) {
+                          return;
+                        }
+                        loginUser();
+                      },
+                      title: 'Login',
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Center(
+                          child: Text(
+                        'Zxplore GH Version $appVersion',
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                      ))),
+                ],
               ),
             ),
-            SizedBox(height: 16.0),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: Text(
-                  'Enter your Zenith bank active directory credential(s) below. This helps identify the employee that wants to access the application.',
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: userNameField(),
-            ),
-            SizedBox(height: 12.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: passwordField(),
-            ),
-            SizedBox(height: 12.0),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-              child: submitButton(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: Text(
-                  'Zxplore GH Version $appVersion',
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-//          Expanded(child: WavyFooter())
-          ]),
+          ),
         ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _loginBloc?.dispose();
-    super.dispose();
-  }
-}
-
-Future<bool> _exitApp(BuildContext context) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: new Text('Do you want to exit this application?'),
-        content: new Text('We hate to see you leave...'),
-        actions: <Widget>[
-          new TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
-          ),
-          new TextButton(
-            onPressed: () => exit(0),
-            child: new Text('Yes'),
-          ),
-        ],
-      );
-    },
-  ).then((value) => value as bool);
-}
-
-class AccentColorOverride extends StatelessWidget {
-  const AccentColorOverride({Key? key, this.color, this.child})
-      : super(key: key);
-
-  final Color? color;
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      child: child!,
-      data: Theme.of(context).copyWith(
-        brightness: Brightness.dark,
       ),
     );
   }
