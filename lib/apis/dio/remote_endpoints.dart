@@ -2,6 +2,9 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
+import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
+import 'package:zxplore_app/models/epma_models/rennew_token_response.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
 
@@ -25,11 +28,11 @@ abstract class RemoteApi {
   // ----------------- Authentication Endpoints -----------------
 
   @GET('Account/loginModes')
-  Future<dynamic> getLoginModes({
+  Future<LoginModesResponse> getLoginModes({
     @CancelRequest() CancelToken? cancelToken,
   });
   @POST('Account/login')
-  Future<dynamic> login({
+  Future<EpmaLoginResponse> login({
     @Field('loginMode') required String loginMode,
     @Field('username') required String username,
     @Field('password') required String password,
@@ -37,7 +40,7 @@ abstract class RemoteApi {
   });
 
   @POST('Account/renewToken')
-  Future<dynamic> renewToken({
+  Future<RenewTokenResponse> renewToken({
     @Field('token') required String oldToken,
   });
   // ----------------- IN APP -----------------

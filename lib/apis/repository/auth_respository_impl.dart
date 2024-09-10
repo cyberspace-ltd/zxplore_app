@@ -1,7 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
 import 'package:zxplore_app/apis/repository/auth_repository.dart';
+import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
+import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
+import 'package:zxplore_app/models/epma_models/rennew_token_response.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
     /// AuthRespositoryImpl
 class AuthRespositoryImpl extends AuthRepository {
@@ -11,7 +16,7 @@ class AuthRespositoryImpl extends AuthRepository {
 
   final RemoteApi api;
   @override
-  Future getLoginModesRepo() async{
+  Future<LoginModesResponse> getLoginModesRepo() async{
   try {
       final response = await api.getLoginModes();
 
@@ -32,7 +37,7 @@ class AuthRespositoryImpl extends AuthRepository {
   }
 
   @override
-  Future loginRepo({required String loginMode, required String username, required String password}) async{
+  Future<EpmaLoginResponse> loginRepo({required String loginMode, required String username, required String password}) async{
   try {
       final response = await api.login(loginMode: loginMode,password: password,username: username);
 
@@ -53,7 +58,7 @@ class AuthRespositoryImpl extends AuthRepository {
   }
   
   @override
-  Future reneToken({required String oldToken}) async {
+  Future<RenewTokenResponse> renewToken({required String oldToken}) async {
 try {
       final response = await api.renewToken(oldToken: oldToken);
 
@@ -73,3 +78,5 @@ try {
     }
   }
 }
+
+ 

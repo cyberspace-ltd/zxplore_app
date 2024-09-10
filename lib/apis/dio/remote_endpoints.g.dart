@@ -22,13 +22,13 @@ class _RemoteApi implements RemoteApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<dynamic> getLoginModes({CancelToken? cancelToken}) async {
+  Future<LoginModesResponse> getLoginModes({CancelToken? cancelToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<dynamic>(Options(
+    final _options = _setStreamType<LoginModesResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -45,13 +45,19 @@ class _RemoteApi implements RemoteApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late LoginModesResponse _value;
+    try {
+      _value = LoginModesResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
   @override
-  Future<dynamic> login({
+  Future<EpmaLoginResponse> login({
     required String loginMode,
     required String username,
     required String password,
@@ -66,7 +72,7 @@ class _RemoteApi implements RemoteApi {
       'username': username,
       'password': password,
     };
-    final _options = _setStreamType<dynamic>(Options(
+    final _options = _setStreamType<EpmaLoginResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -83,18 +89,24 @@ class _RemoteApi implements RemoteApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late EpmaLoginResponse _value;
+    try {
+      _value = EpmaLoginResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
   @override
-  Future<dynamic> renewToken({required String oldToken}) async {
+  Future<RenewTokenResponse> renewToken({required String oldToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {'token': oldToken};
-    final _options = _setStreamType<dynamic>(Options(
+    final _options = _setStreamType<RenewTokenResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -110,8 +122,14 @@ class _RemoteApi implements RemoteApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late RenewTokenResponse _value;
+    try {
+      _value = RenewTokenResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 

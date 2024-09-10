@@ -1,9 +1,12 @@
+import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
+import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
+
 abstract class AuthRepository {
 
-     Future <dynamic> loginRepo({required String loginMode, 
+     Future <EpmaLoginResponse> loginRepo({required String loginMode, 
      required String username,
      required String password,});
-     Future <dynamic> getLoginModesRepo();
-     Future <dynamic> reneToken({required String oldToken});
+     Future <LoginModesResponse> getLoginModesRepo();
+     Future <dynamic> renewToken({required String oldToken});
 
 }
