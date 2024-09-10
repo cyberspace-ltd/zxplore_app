@@ -30,7 +30,7 @@ class DioFactory {
 
 Dio createDio() {
  
-  const apiInterceptor = ApiInterceptor('');
+  const apiInterceptor = ApiInterceptor('Zxplore@APIKey2007ZW0RD\$2024Xyz&&60@AEJ\$');
   final dioFactory = DioFactory(
    Endpoints.EPMA_MIDDLEWARE_BASE_URL,
     apiInterceptor,

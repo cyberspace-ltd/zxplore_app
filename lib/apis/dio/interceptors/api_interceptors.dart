@@ -21,16 +21,9 @@ class ApiInterceptor extends Interceptor {
   ) async {
     options.headers['ApiKey'] = apiKey;
 
-    if (!options.path.startsWith('auth/verifyAccount') ||
-        !options.path.startsWith('auth/resendOtp') ||
-        !options.path.startsWith('auth/verifyOtp') ||
-        !options.path.startsWith('auth/login') ||
-        !options.path.startsWith('auth/forgotPassword') ||
-        !options.path.startsWith('auth/forgotPin') ||
-        !options.path.startsWith('auth/changePassword') ||
-        !options.path.startsWith('auth/PaymentMethodsResponse') ||
-        !options.path.startsWith('auth/google/callback') ||
-        !options.path.startsWith('payment-methods')) {
+    if (!options.path.startsWith('Account/login') ||
+        !options.path.startsWith('Account/loginModes') ||
+        !options.path.startsWith('Account/renewToken')) {
       final sp = await SharedPreferences.getInstance();
       final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
       if (token != null) {

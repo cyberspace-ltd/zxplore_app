@@ -24,10 +24,40 @@ abstract class RemoteApi {
 
   // ----------------- Authentication Endpoints -----------------
 
-  @POST('auth/get-token')
-  Future<dynamic> generateToken({
-    @Field('login') required String phoneOrEmail,
+  @GET('Account/loginModes')
+  Future<dynamic> getLoginModes({
     @CancelRequest() CancelToken? cancelToken,
   });
-   
+  @POST('Account/login')
+  Future<dynamic> login({
+    @Field('loginMode') required String loginMode,
+    @Field('username') required String username,
+    @Field('password') required String password,
+    @CancelRequest() CancelToken? cancelToken,
+  });
+
+  @POST('Account/renewToken')
+  Future<dynamic> renewToken({
+    @Field('token') required String oldToken,
+  });
+  // ----------------- IN APP -----------------
+  @GET('Operation/userPendingStatistics')
+  Future<dynamic> getUserPendingStatistics({
+    @CancelRequest() CancelToken? cancelToken,
+  });
+
+  @GET('Operation/pendingRequestsDraft')
+  Future<dynamic> getUserPendingDraft({
+    @CancelRequest() CancelToken? cancelToken,
+  });
+
+  @GET('Operation/pendingRequestsAll')
+  Future<dynamic> getUserPendingAll({
+    @CancelRequest() CancelToken? cancelToken,
+  });
+
+  @GET('Operation/viewAccountRequest')
+  Future<dynamic> viewAccountRequest({
+    @Query('RequestId') required String? typeValue,
+  });
 }
