@@ -14,13 +14,14 @@ description: A Cross Platform Mobile app for Account Creation By Zenith Staff
 version: 1.1.8+11
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.3.1 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   dio: ^5.7.0
   intl: ^0.19.0
+  win32: ^5.5.4
   http: ^1.2.0
   retrofit: ^4.0.3
   retry: ^3.1.2
