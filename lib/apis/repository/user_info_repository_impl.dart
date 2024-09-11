@@ -1,17 +1,18 @@
 import 'package:zxplore_app/apis/repository/user_info_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
-import 'package:zxplore_app/apis/repository/auth_repository.dart';
+import 'package:zxplore_app/models/epma_models/user_pending_statistics_ressponse.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
-      /// UserInfoRepositoryImpl
+
+/// UserInfoRepositoryImpl
 class UserInfoRepositoryImpl extends UserInfoRepository {
   final RemoteApi api;
 
-      /// UserInfoRepositoryImpl
+  /// UserInfoRepositoryImpl
   UserInfoRepositoryImpl({required this.api});
   @override
-  Future<dynamic> getUserPendingAllRepo()async {
-  try {
+  Future<dynamic> getUserPendingAllRepo() async {
+    try {
       final response = await api.getUserPendingAll();
       return response;
     } on FormatException catch (_) {
@@ -28,11 +29,10 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
           err.response?.data['message'] ?? 'Request process failed');
     }
   }
-  
 
   @override
-  Future getUserPendingDraftRepo()async {
-   try {
+  Future getUserPendingDraftRepo() async {
+    try {
       final response = await api.getUserPendingDraft();
       return response;
     } on FormatException catch (_) {
@@ -51,8 +51,8 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   }
 
   @override
-  Future getUserPendingStatisticsRepo() async {
- try {
+  Future<UserPendingStatisticsResponse> getUserPendingStatisticsRepo() async {
+    try {
       final response = await api.getUserPendingStatistics();
       return response;
     } on FormatException catch (_) {
@@ -69,5 +69,4 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
           err.response?.data['message'] ?? 'Request process failed');
     }
   }
-
 }

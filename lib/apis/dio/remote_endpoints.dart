@@ -1,10 +1,10 @@
-// ignore_for_file: public_member_api_docs
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
 import 'package:zxplore_app/models/epma_models/rennew_token_response.dart';
+import 'package:zxplore_app/models/epma_models/user_pending_statistics_ressponse.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
 
@@ -45,7 +45,7 @@ abstract class RemoteApi {
   });
   // ----------------- IN APP -----------------
   @GET('Operation/userPendingStatistics')
-  Future<dynamic> getUserPendingStatistics({
+  Future<UserPendingStatisticsResponse> getUserPendingStatistics({
     @CancelRequest() CancelToken? cancelToken,
   });
 
