@@ -67,240 +67,237 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       (_, state) => state.showAlertDialogOnError(context),
     );
     return ZxploreProgress(
-      inAsyncCall: ref.watch(getLoginModesProvider).isLoading,
+      inAsyncCall: ref.watch(getLoginModesProvider).isLoading  || ref.watch(loginControllerProvider).isLoading,
       child: Scaffold(
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Form(
-              key: loginFrmKey,
-              child: ListView(
-                children: [
-                  Container(
-                    color: ZxplorePrimaryColor,
-                    height: 0.5 * MediaQuery.of(context).size.height,
-                    child: Center(
-                      child: Container(
-                        height: 120,
-                        width: 120,
-                        color: Colors.white,
-                        child: Center(
-                          child: Container(
-                            width: 60,
-                            height: 60,
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              fit: BoxFit.fitWidth,
-                            ),
+          child: Form(
+            key: loginFrmKey,
+            child: ListView(
+              children: [
+                Container(
+                  color: ZxplorePrimaryColor,
+                  height: 0.5 * MediaQuery.of(context).size.height,
+                  child: Center(
+                    child: Container(
+                      height: 120,
+                      width: 120,
+                      color: Colors.white,
+                      child: Center(
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 16.0),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Center(
-                      child: Text(
-                        'Enter your Zenith bank active directory credential(s) below. This helps identify the employee that wants to access the application.',
-                        style: Theme.of(context).textTheme.bodySmall,
-                        textAlign: TextAlign.center,
-                      ),
+                ),
+                SizedBox(height: 16.0),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Text(
+                      'Enter your Zenith bank active directory credential(s) below. This helps identify the employee that wants to access the application.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  SizedBox(height: 16.0),
-                    Padding(
-                                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                          children: [
-                            Text(
-                              'Preferred Login',
-                              overflow: TextOverflow.fade,
-                              maxLines: 1,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                          ],
-                        ),
-                    ),
-                  SizedBox(height: 16.0),
+                ),
+                SizedBox(height: 16.0),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        return ref.watch(getLoginModesProvider).when(
-                              data: (data) => (data != null &&
-                                      data.isNotEmpty == true)
-                                  ? DropdownButtonHideUnderline(
-                                      child: DropdownButton2<LoginModesData>(
-                                        isExpanded: true,
-                                        hint: Text(
-                                          'Select preferred Login',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.normal,
+                                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                        children: [
+                          Text(
+                            'Preferred Login',
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                          ),
+                        ],
+                      ),
+                  ),
+                SizedBox(height: 16.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getLoginModesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<LoginModesData>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select preferred Login',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      LoginModesData>>(
+                                              (LoginModesData item) =>
+                                                  DropdownMenuItem<
+                                                      LoginModesData>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.loginModeName ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: selectedValue,
+                                      onChanged: (LoginModesData? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          selectedValue = newValue;
+                                          loginModeValue =
+                                              newValue?.loginModeValue;
+                                          loginModeName =
+                                              newValue?.loginModeName;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 14, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
-                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        items: data
-                                            .map<
-                                                    DropdownMenuItem<
-                                                        LoginModesData>>(
-                                                (LoginModesData item) =>
-                                                    DropdownMenuItem<
-                                                        LoginModesData>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item.loginModeName ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          color:
-                                                              ZxplorePrimaryColor,
-                                                        ),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ))
-                                            .toList(),
-                                        value: selectedValue,
-                                        onChanged: (LoginModesData? newValue) {
-                                          setState(() {
-                                            /// Set selected item params
-                                            selectedValue = newValue;
-                                            loginModeValue =
-                                                newValue?.loginModeValue;
-                                            loginModeName =
-                                                newValue?.loginModeName;
-                                          });
-                                        },
-                                        buttonStyleData: ButtonStyleData(
-                                          height: 60,
-                                          // width: 160,
-                                          padding: const EdgeInsets.only(
-                                              left: 14, right: 14),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                            border: Border.all(
-                                              color: ZxplorePrimaryColor,
-                                            ),
-                                          ),
-                                          elevation: 0,
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
                                         ),
-                                        iconStyleData: const IconStyleData(
-                                          icon: Icon(
-                                            CupertinoIcons.chevron_down,
-                                          ),
-                                          iconSize: 14,
-                                          iconEnabledColor: ZxplorePrimaryColor,
-                                          iconDisabledColor: Colors.grey,
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
-                                        dropdownStyleData: DropdownStyleData(
-                                          maxHeight: 200,
-                                          // width: 200,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                          // offset: const Offset(0, 0),
-                                          scrollbarTheme:
-                                              const ScrollbarThemeData(
-                                            radius: Radius.circular(40),
-                                            thickness:
-                                                WidgetStatePropertyAll<double>(
-                                                    6),
-                                            thumbVisibility:
-                                                WidgetStatePropertyAll<bool>(
-                                                    true),
-                                          ),
-                                        ),
-                                        menuItemStyleData:
-                                            const MenuItemStyleData(
-                                          height: 40,
-                                          padding: EdgeInsets.only(
-                                              left: 14, right: 14),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(
+                                                  6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                    )
-                                  : const SizedBox.shrink(),
-                              error: (e, s) => const SizedBox.shrink(),
-                              loading: () => SizedBox(height: 16.0),
-                            );
-                      },
-                    ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            error: (e, s) => const SizedBox.shrink(),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
                   ),
-                  SizedBox(height: 16.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: CustomTextFormField(
-                      title: 'Username',
-                      fillColor: Colors.transparent,
-                      controller: loginPasswordController,
-                      hint: 'Enter username',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return 'Username is  required';
-                        }
-                        return null;
-                      },
-                    ),
+                ),
+                SizedBox(height: 16.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: CustomTextFormField(
+                    title: 'Username',
+                    fillColor: Colors.transparent,
+                    controller: loginUserNameController,
+                    hint: 'Enter username',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Username is  required';
+                      }
+                      return null;
+                    },
                   ),
-                  SizedBox(height: 12.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: CustomTextFormField(
-                      title: 'Password',
-                      fillColor: Colors.transparent,
-                      controller: loginPasswordController,
-                      hint: 'Enter Password',
-                      inputType: TextInputType.visiblePassword,
-                      isPassword: _passwordHidden,
-                      togglePasswordVisibility: _togglePasswordVisibility,
-                      showPasswordSuffixIcon: true,
-                      isEyeIconHidden: _passwordHidden,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return 'Password is  required';
-                        }
-                        return null;
-                      },
-                    ),
+                ),
+                SizedBox(height: 12.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: CustomTextFormField(
+                    title: 'Password',
+                    fillColor: Colors.transparent,
+                    controller: loginPasswordController,
+                    hint: 'Enter Password',
+                    inputType: TextInputType.visiblePassword,
+                    isPassword: _passwordHidden,
+                    togglePasswordVisibility: _togglePasswordVisibility,
+                    showPasswordSuffixIcon: true,
+                    isEyeIconHidden: _passwordHidden,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Password is  required';
+                      }
+                      return null;
+                    },
                   ),
-                  SizedBox(height: 12.0),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-                    child: PrimaryButton(
-                      onPressed: () {
-                        if (!loginFrmKey.currentState!.validate()) {
-                          return;
-                        }
-                        loginUser();
-                      },
-                      title: 'Login',
-                    ),
+                ),
+                SizedBox(height: 12.0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                  child: PrimaryButton(
+                    onPressed: () {
+                      if (!loginFrmKey.currentState!.validate()) {
+                        return;
+                      }
+                      loginUser();
+                    },
+                    title: 'Login',
                   ),
-                  Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Center(
-                          child: Text(
-                        'Zxplore GH Version $appVersion',
-                        style: Theme.of(context).textTheme.bodySmall,
-                        textAlign: TextAlign.center,
-                      ))),
-                ],
-              ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Center(
+                        child: Text(
+                      'Zxplore GH Version $appVersion',
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.center,
+                    ))),
+              ],
             ),
           ),
         ),
