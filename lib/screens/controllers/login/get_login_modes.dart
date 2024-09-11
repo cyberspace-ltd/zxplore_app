@@ -6,7 +6,7 @@ part 'get_login_modes.g.dart';
 
 @riverpod
 
-/// Get kyc document type
+/// Get getLoginModes
 Future<List<LoginModesData>?> getLoginModes(
   GetLoginModesRef ref,
 ) async {
@@ -35,9 +35,6 @@ Future<List<LoginModesData>?> getLoginModes(
   } catch (e, stackTrace) {
     final ex =
         Exception('Failed to Docs Categories: ${stackTrace.toString()} ');
-    print("RES::${e}");
-    print("RES::${ex}");
-
     AsyncError(ex, stackTrace);
     return null;
   }

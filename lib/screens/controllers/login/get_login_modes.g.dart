@@ -6,9 +6,9 @@ part of 'get_login_modes.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getLoginModesHash() => r'8b2408e40685f78ce13a26417e295ff0e4071a27';
+String _$getLoginModesHash() => r'769e2e7d247ecbc464be61651c792a4d34482be6';
 
-/// Get kyc document type
+/// Get getLoginModes
 ///
 /// Copied from [getLoginModes].
 @ProviderFor(getLoginModes)
