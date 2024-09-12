@@ -1,5 +1,6 @@
  
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:zxplore_app/colors.dart'; 
 import 'package:zxplore_app/widgets/blur_modal_progress.dart';
 
 /// Custom Adapative circular progress indicator
@@ -19,7 +20,7 @@ class ZxploreProgress extends StatelessWidget {
       blurEffectIntensity: 7,
       color: Colors.white,
       inAsyncCall: inAsyncCall,
-      progressIndicator: CircularProgressIndicator(),
+      progressIndicator: CircularProgressIndicator(color: ZxplorePrimaryColor,),
     child: child,
     );
   }
