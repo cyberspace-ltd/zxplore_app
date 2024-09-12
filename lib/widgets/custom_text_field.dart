@@ -225,7 +225,7 @@ class CustomTextFormField extends StatelessWidget {
             readOnly: readOnly,
             inputFormatters: inputFormatters,
             maxLength: maxLenght,
-            cursorColor: cursorColor,
+            cursorColor: cursorColor??ZxplorePrimaryColor,
             validator: validator,
             obscureText: isPassword,
             showCursor: showCursor,
@@ -259,7 +259,7 @@ class CustomTextFormField extends StatelessWidget {
               /// Eye icon
               suffixIcon: showPasswordSuffixIcon
                   ? IconButton(
-                      color: ZxploreGrey,
+                      color: ZxplorePrimaryColor,
                       icon: Icon(isEyeIconHidden
                           ? Icons.visibility_outlined
                           : Icons.visibility_off_outlined),
