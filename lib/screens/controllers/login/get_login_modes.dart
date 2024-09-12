@@ -15,8 +15,7 @@ Future<List<LoginModesData>?> getLoginModes(
 
   try {
     const AsyncLoading();
-    final loginModesResponse =
-        await repo.getLoginModesRepo();
+    final loginModesResponse =    await repo.getLoginModesRepo();
 
     if (loginModesResponse.status==true) {
       if (loginModesResponse.data!.isNotEmpty == true) {

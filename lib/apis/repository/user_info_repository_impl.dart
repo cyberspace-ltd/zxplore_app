@@ -1,6 +1,8 @@
 import 'package:zxplore_app/apis/repository/user_info_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
+import 'package:zxplore_app/models/epma_models/pending_requests_all_response.dart';
+import 'package:zxplore_app/models/epma_models/pending_requests_drafts.dart';
 import 'package:zxplore_app/models/epma_models/user_pending_statistics_ressponse.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 
@@ -14,7 +16,9 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   Future<dynamic> getUserPendingAllRepo() async {
     try {
       final response = await api.getUserPendingAll();
-      return response;
+
+      return  response;
+
     } on FormatException catch (_) {
       throw AppException(
           'The response from the server was not in the correct format');
@@ -31,7 +35,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   }
 
   @override
-  Future getUserPendingDraftRepo() async {
+  Future<dynamic> getUserPendingDraftRepo() async {
     try {
       final response = await api.getUserPendingDraft();
       return response;

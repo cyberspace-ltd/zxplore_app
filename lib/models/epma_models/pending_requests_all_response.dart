@@ -1,18 +1,18 @@
 // To parse this JSON data, do
 //
-//     final pendingRequestAllResponse = pendingRequestAllResponseFromJson(jsonString);
+//     final pendingRequestAllResponse = pendingRequestAllResponseFromJson(jsonString?);
 
 import 'dart:convert';
 
 PendingRequestAllResponse pendingRequestAllResponseFromJson(String str) => PendingRequestAllResponse.fromJson(json.decode(str));
 
-String pendingRequestAllResponseToJson(PendingRequestAllResponse data) => json.encode(data.toJson());
+String? pendingRequestAllResponseToJson(PendingRequestAllResponse data) => json.encode(data.toJson());
 
 class PendingRequestAllResponse {
     int code;
     bool status;
-    String message;
-    List<Datum> data;
+    String? message;
+    List<PendingRequestsDatum>? data;
 
     PendingRequestAllResponse({
         required this.code,
@@ -25,26 +25,26 @@ class PendingRequestAllResponse {
         code: json["code"],
         status: json["status"],
         message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<PendingRequestsDatum>.from(json["data"].map((x) => PendingRequestsDatum.fromJson(x))),
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String?, dynamic> toJson() => {
         "code": code,
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
     };
 }
 
-class Datum {
-    String reqId;
-    String formType;
-    String fullName;
-    String stage;
-    String branch;
+class PendingRequestsDatum {
+    String? reqId;
+    String? formType;
+    String? fullName;
+    String? stage;
+    String? branch;
     DateTime createDate;
 
-    Datum({
+    PendingRequestsDatum({
         required this.reqId,
         required this.formType,
         required this.fullName,
@@ -53,7 +53,7 @@ class Datum {
         required this.createDate,
     });
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory PendingRequestsDatum.fromJson(Map<String?, dynamic> json) => PendingRequestsDatum(
         reqId: json["reqId"],
         formType: json["formType"],
         fullName: json["fullName"],
@@ -62,7 +62,7 @@ class Datum {
         createDate: DateTime.parse(json["createDate"]),
     );
 
-    Map<String, dynamic> toJson() => {
+    Map<String?, dynamic> toJson() => {
         "reqId": reqId,
         "formType": formType,
         "fullName": fullName,

@@ -101,12 +101,12 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<RenewTokenResponse> renewToken({required String oldToken}) async {
+  Future<dynamic> renewToken({required String oldToken}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = {'token': oldToken};
-    final _options = _setStreamType<RenewTokenResponse>(Options(
+    final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -122,14 +122,8 @@ class _RemoteApi implements RemoteApi {
           _dio.options.baseUrl,
           baseUrl,
         )));
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late RenewTokenResponse _value;
-    try {
-      _value = RenewTokenResponse.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
-      rethrow;
-    }
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
     return _value;
   }
 

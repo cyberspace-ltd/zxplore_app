@@ -67,7 +67,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       (_, state) => state.showAlertDialogOnError(context),
     );
     return ZxploreProgress(
-      inAsyncCall: ref.watch(getLoginModesProvider).isLoading  || ref.watch(loginControllerProvider).isLoading,
+      inAsyncCall: ref.watch(getLoginModesProvider).isLoading ||
+          ref.watch(loginControllerProvider).isLoading,
       child: Scaffold(
         body: SafeArea(
           child: Form(
@@ -107,26 +108,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ),
                 SizedBox(height: 16.0),
-                  Padding(
-                                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                        children: [
-                          Text(
-                            'Preferred Login',
-                            overflow: TextOverflow.fade,
-                            maxLines: 1,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
-                        ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Preferred Login',
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 16),
                       ),
+                    ],
                   ),
-                SizedBox(height: 16.0),
+                ),
+                SizedBox(height: 3.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Consumer(
@@ -155,8 +151,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                                       LoginModesData>(
                                                     value: item,
                                                     child: Text(
-                                                      item.loginModeName ??
-                                                          '',
+                                                      item.loginModeName ?? '',
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -164,8 +159,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                                         color:
                                                             ZxplorePrimaryColor,
                                                       ),
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ))
                                           .toList(),
@@ -184,7 +179,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         height: 60,
                                         // width: 160,
                                         padding: const EdgeInsets.only(
-                                            left: 14, right: 14),
+                                            left: 0, right: 14),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(14),
@@ -214,8 +209,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                             const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
-                                              WidgetStatePropertyAll<double>(
-                                                  6),
+                                              WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
                                               WidgetStatePropertyAll<bool>(
                                                   true),
@@ -259,6 +253,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: CustomTextFormField(
                     title: 'Password',
+                    isEyeIconHidden:false,
                     fillColor: Colors.transparent,
                     controller: loginPasswordController,
                     hint: 'Enter Password',
@@ -266,14 +261,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     isPassword: _passwordHidden,
                     togglePasswordVisibility: _togglePasswordVisibility,
                     showPasswordSuffixIcon: true,
-                    isEyeIconHidden: _passwordHidden,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
                         return 'Password is  required';
                       }
                       return null;
-                    },
+                  },
                   ),
                 ),
                 SizedBox(height: 12.0),

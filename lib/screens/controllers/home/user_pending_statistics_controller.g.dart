@@ -9,9 +9,7 @@ part of 'user_pending_statistics_controller.dart';
 String _$getUserStatisticsDataHash() =>
     r'740da84e48d953b3c2f0b9140a667823616728d3';
 
-/// Get UserStatisticsData
-///
-/// Copied from [getUserStatisticsData].
+/// See also [getUserStatisticsData].
 @ProviderFor(getUserStatisticsData)
 final getUserStatisticsDataProvider =
     AutoDisposeFutureProvider<StatisticsData?>.internal(

@@ -87,4 +87,31 @@ class LoginController extends _$LoginController {
       // return null;
     }
   }
+
+  Future<dynamic> extRenewToken() async {
+    // final sharedPreferences = ref.read(sharedPreferencesProvider).requireValue;
+    try {
+      state = const AsyncValue.loading();
+        await prefs.load();
+      final oldToken=  prefs.getString(SharedPreferencesKeys.accessTokenKey);
+
+      final repo = ref.read(authRespositoryImplProvider);
+
+      final renewTokenRes = await repo.renewToken(oldToken:oldToken);
+
+      if (renewTokenRes.data['status']) {
+        state = AsyncValue.data(renewTokenRes.data['data']);
+        prefs.setString(SharedPreferencesKeys.accessTokenKey, renewTokenRes.data['data']);
+   
+        return renewTokenRes;
+      } else {
+        throw AppException('${renewTokenRes.message}');
+      }
+    } catch (e, s) {
+      // state = AsyncError(e, s);
+      throw AppException('${s.toString()}');
+
+      // return null;
+    }
+  }
 }

@@ -58,7 +58,7 @@ class AuthRespositoryImpl extends AuthRepository {
   }
   
   @override
-  Future<RenewTokenResponse> renewToken({required String oldToken}) async {
+  Future<dynamic> renewToken({required String oldToken}) async {
 try {
       final response = await api.renewToken(oldToken: oldToken);
 

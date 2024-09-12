@@ -40,7 +40,7 @@ abstract class RemoteApi {
   });
 
   @POST('Account/renewToken')
-  Future<RenewTokenResponse> renewToken({
+  Future<dynamic> renewToken({
     @Field('token') required String oldToken,
   });
   // ----------------- IN APP -----------------
