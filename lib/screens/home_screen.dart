@@ -66,7 +66,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           body: ListView(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 40),
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
                 child: Row(
                   children: [
                     Text(

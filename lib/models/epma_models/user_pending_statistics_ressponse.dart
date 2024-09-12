@@ -37,7 +37,7 @@ class UserPendingStatisticsResponse {
 }
 
 class StatisticsData {
-      static const List<String> keys = ['Draft', 'Other Stages', 'Pending Postingsr'];
+      static const List<String> keys = ['Draft', 'All/Other Stages', 'Pending Postings'];
 
 
     int draft;
