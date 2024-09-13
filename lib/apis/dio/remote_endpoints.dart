@@ -43,7 +43,7 @@ abstract class RemoteApi {
   Future<dynamic> renewToken({
     @Field('token') required String oldToken,
   });
-  // ----------------- IN APP -----------------
+  // -----------------OPERATIONS IN APP -----------------
   @GET('Operation/userPendingStatistics')
   Future<UserPendingStatisticsResponse> getUserPendingStatistics({
     @CancelRequest() CancelToken? cancelToken,
@@ -63,4 +63,30 @@ abstract class RemoteApi {
   Future<dynamic> viewAccountRequest({
     @Query('RequestId') required String? typeValue,
   });
+  
+  @POST('Operation/createNewRequest')
+  Future<dynamic> createAccount({
+    @Field('surname') required String? surname,
+    @Field('firstName') required String? firstName,
+    @Field('otherNames')   String? otherNames,
+    @Field('genderCode') required String? genderCode,
+    @Field('birthDate') required String? birthDate,
+    @Field('citizenshipCode') required String? citizenshipCode,
+    @Field('identificationTypeId') required int? identificationTypeId,
+    @Field('identificationNo') required String? identificationNo,
+    @Field('idCountryCode') required String? idCountryCode,
+    @Field('idIssueAuthority') required String? idIssueAuthority,
+    @Field('idExpiryDate') required String? idExpiryDate,
+    @Field('idIssueDate') required String? idIssueDate,
+    @Field('niaVerificationNo') required String? niaVerificationNo,
+    @Field('iddCode') required String? iddCode,
+    @Field('telNo') required String? telNo,
+    @Field('mobileNo') required String? mobileNo,
+    @Field('residentialAddress') required String? residentialAddress,
+    @Field('residentialAddress') required String? city,
+    @Field('residentialAddress2')   String? residentialAddress2,
+    @CancelRequest() CancelToken? cancelToken,
+  });
+
+
 }

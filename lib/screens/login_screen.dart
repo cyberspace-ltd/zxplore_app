@@ -224,7 +224,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     ),
                                   )
                                 : const SizedBox.shrink(),
-                            error: (e, s) => const SizedBox.shrink(),
+                            error: (e, s) => GestureDetector(
+                              onTap: ()=>ref.invalidate(getLoginModesProvider),
+                              child: const Text('An error occured fetch login modes.Tap to refresh',maxLines: 3,overflow: TextOverflow.ellipsis,)),
                             loading: () => SizedBox(height: 16.0),
                           );
                     },

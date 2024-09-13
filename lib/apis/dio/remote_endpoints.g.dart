@@ -249,6 +249,77 @@ class _RemoteApi implements RemoteApi {
     return _value;
   }
 
+  @override
+  Future<dynamic> createAccount({
+    String? surname,
+    String? firstName,
+    String? otherNames,
+    String? genderCode,
+    String? birthDate,
+    String? citizenshipCode,
+    int? identificationTypeId,
+    String? identificationNo,
+    String? idCountryCode,
+    String? idIssueAuthority,
+    String? idExpiryDate,
+    String? idIssueDate,
+    String? niaVerificationNo,
+    String? iddCode,
+    String? telNo,
+    String? mobileNo,
+    String? residentialAddress,
+    String? city,
+    String? residentialAddress2,
+    CancelToken? cancelToken,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'surname': surname,
+      'firstName': firstName,
+      'otherNames': otherNames,
+      'genderCode': genderCode,
+      'birthDate': birthDate,
+      'citizenshipCode': citizenshipCode,
+      'identificationTypeId': identificationTypeId,
+      'identificationNo': identificationNo,
+      'idCountryCode': idCountryCode,
+      'idIssueAuthority': idIssueAuthority,
+      'idExpiryDate': idExpiryDate,
+      'idIssueDate': idIssueDate,
+      'niaVerificationNo': niaVerificationNo,
+      'iddCode': iddCode,
+      'telNo': telNo,
+      'mobileNo': mobileNo,
+      'residentialAddress': residentialAddress,
+      'residentialAddress': city,
+      'residentialAddress2': residentialAddress2,
+    };
+    _data.removeWhere((k, v) => v == null);
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'Operation/createNewRequest',
+          queryParameters: queryParameters,
+          data: _data,
+          cancelToken: cancelToken,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
