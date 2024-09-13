@@ -5,6 +5,7 @@ import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/category_screen.dart';
 import 'package:zxplore_app/screens/controllers/home/user_pending_statistics_controller.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticiapted_amount.dart';
+import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/pending_drafts_requests_screen.dart';
 import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
@@ -60,7 +61,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => CategoryPage()),
+                    builder: (BuildContext context) => CreateNewAccountScreen()),
               );
             },
           ),
