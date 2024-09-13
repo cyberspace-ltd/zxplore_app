@@ -7,6 +7,8 @@ import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
 import 'package:zxplore_app/screens/controllers/login/get_login_modes.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
+import 'package:zxplore_app/screens/controllers/meta/anticiapted_amount.dart';
+import 'package:zxplore_app/screens/controllers/meta/anticipated_transactions.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
@@ -50,6 +52,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> loginUser() async {
     ref.read(loginControllerProvider.notifier).loginUser(
         onSuccess: () {
+          /// call the required Meta
+
+          ref.read(getAnticipatedAmountProvider);
+          ref.read(getAnticipatedTransactionProvider);
+          ///! End 
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
@@ -255,7 +262,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: CustomTextFormField(
                     title: 'Password',
-                    isEyeIconHidden:false,
+                    isEyeIconHidden: false,
                     fillColor: Colors.transparent,
                     controller: loginPasswordController,
                     hint: 'Enter Password',
@@ -269,7 +276,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         return 'Password is  required';
                       }
                       return null;
-                  },
+                    },
                   ),
                 ),
                 SizedBox(height: 12.0),
