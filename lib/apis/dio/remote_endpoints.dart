@@ -88,8 +88,7 @@ abstract class RemoteApi {
   });
 
   // ----------------- META Endpoints -----------------
-
-  @GET('Metadata/accountClass')
+@GET('Metadata/accountClass')
   Future<dynamic> getAccountClass(
     {
      @Query('RequestId') required String? requestId,
