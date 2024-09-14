@@ -6,7 +6,7 @@ part of 'employment_types.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getEmploymentTypeHash() => r'6594f26f7b97263c64994ad4548b8dfffd49fae7';
+String _$getEmploymentTypeHash() => r'cca6b0e284964db331136c62f9988e41bd304427';
 
 /// Get getCustomerClassification
 ///

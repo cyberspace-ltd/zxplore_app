@@ -7,7 +7,7 @@ part of 'business_natures.dart';
 // **************************************************************************
 
 String _$getBusinessNaturesHash() =>
-    r'4680637107bb5116414f0c7a573906807462f379';
+    r'c9560b517e86c4ed139b2ccdce05a52412c45a55';
 
 /// Get getAnticipatedAmount
 ///

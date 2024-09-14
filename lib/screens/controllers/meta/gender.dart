@@ -1,7 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/meta_data_provider.dart';
-import 'package:zxplore_app/models/epma_models/meta/business_natures.dart';
-import 'package:zxplore_app/models/epma_models/meta/fatca_status_response.dart';
 import 'package:zxplore_app/models/epma_models/meta/gender_response.dart';
 
 part 'gender.g.dart';
@@ -18,13 +16,16 @@ Future<List<GendersDatum>?> getGender(
   try {
     const AsyncLoading();
     final response =    await repo.getGenders();
-
     if (response['status']==true) {
+
       final result = GendersResponse.fromJson(response);
+    
+
       if (result.data.isNotEmpty == true) {
-        for (final element in response.data!) {
+        for (final element in result.data) {
           responseList.add(element);
         }
+          // print("G3:::${result.data}");
         AsyncData(responseList);
         return responseList;
       } else {

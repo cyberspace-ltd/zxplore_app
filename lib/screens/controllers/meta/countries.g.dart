@@ -6,7 +6,7 @@ part of 'countries.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getCountriesHash() => r'acfe032a5663a22e3160f6c02d977bea801dcf1f';
+String _$getCountriesHash() => r'4ffee073da3a741afb678e60d399114bc36ae7f6';
 
 /// Get getAnticipatedAmount
 ///

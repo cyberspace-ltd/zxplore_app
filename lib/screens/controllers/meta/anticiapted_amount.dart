@@ -20,7 +20,7 @@ Future<List<AnticipatedAmountsDatum>?> getAnticipatedAmount(
     if (amountsResponse['status']==true) {
       final result = AnticipatedAmountsResponse.fromJson(amountsResponse);
       if (result.data.isNotEmpty == true) {
-        for (final element in amountsResponse.data!) {
+        for (final element in result.data) {
           amountsList.add(element);
         }
         AsyncData(amountsList);

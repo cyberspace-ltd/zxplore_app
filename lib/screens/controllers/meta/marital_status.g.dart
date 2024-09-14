@@ -6,7 +6,7 @@ part of 'marital_status.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getMaritalStatusHash() => r'e46df4e6c0a8f163587434f5eeabf5574249a3c4';
+String _$getMaritalStatusHash() => r'd393747a4c84c8d2daa9085a7c5bc50da7288bf9';
 
 /// Get getMaritalStatus
 ///

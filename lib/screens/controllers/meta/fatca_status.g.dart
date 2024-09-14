@@ -6,7 +6,7 @@ part of 'fatca_status.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getFatcaStatusHash() => r'0625f3f25cf4a13e3f0d6abca593e54a2d670758';
+String _$getFatcaStatusHash() => r'789b2ea5684cf94c2d7b00f454e01fd23906f47f';
 
 /// Get FatcaStatusDatum
 ///

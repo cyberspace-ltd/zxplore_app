@@ -6,7 +6,7 @@ part of 'recon_status.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getReconStatusHash() => r'67113f8ef60291c65ba2126ca26fb312f77f580d';
+String _$getReconStatusHash() => r'b64fd773067bab276808350248eed9891d3f305b';
 
 /// Get getReconStatus
 ///

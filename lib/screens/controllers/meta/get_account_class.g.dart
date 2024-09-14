@@ -6,7 +6,7 @@ part of 'get_account_class.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getAccountClassHash() => r'a0259cff9ee9fe9399d9a7cf606c5e9dd3f2044c';
+String _$getAccountClassHash() => r'504b0a8a6ef94855ed77c358dd40a12fef20fe02';
 
 /// Copied from Dart SDK
 class _SystemHash {

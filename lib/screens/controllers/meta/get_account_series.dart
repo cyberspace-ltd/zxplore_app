@@ -20,7 +20,7 @@ Future<List<AccountSeriesDatum>?> getAccountSeries(
     if (response['status']==true) {
       final result = AccountSeriesResponse.fromJson(response);
       if (result.data.isNotEmpty == true) {
-        for (final element in response.data!) {
+        for (final element in result.data) {
           responseList.add(element);
         }
         AsyncData(responseList);

@@ -20,7 +20,7 @@ Future<List<CustomerClassificationDatum>?> getCustomerClassification(
     if (response['status']==true) {
       final result = CustomerClassificationResponse.fromJson(response);
       if (result.data.isNotEmpty == true) {
-        for (final element in response.data!) {
+        for (final element in result.data) {
           responseList.add(element);
         }
         AsyncData(responseList);

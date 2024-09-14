@@ -7,7 +7,7 @@ part of 'anticipated_transactions.dart';
 // **************************************************************************
 
 String _$getAnticipatedTransactionHash() =>
-    r'0fa40d86568baa08e7f3e35395c4e17d92423a56';
+    r'0df7397e5acb38a0dd2455205c9d59f7de5526ae';
 
 /// Get getAnticipatedAmount
 ///

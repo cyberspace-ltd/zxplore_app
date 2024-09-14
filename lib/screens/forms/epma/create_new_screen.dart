@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/colors.dart';
+import 'package:zxplore_app/models/epma_models/meta/gender_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/create_account_controller.dart';
+import 'package:zxplore_app/screens/controllers/meta/gender.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
+
 
 ///CreateNewAccountScreen new account request primarily usinngthe EPMA service
 class CreateNewAccountScreen extends ConsumerStatefulWidget {
   const CreateNewAccountScreen({super.key});
 
   @override
-  ConsumerState<CreateNewAccountScreen> createState() => _CreateNewAccountScreenState();
+  ConsumerState<CreateNewAccountScreen> createState() =>
+      _CreateNewAccountScreenState();
 }
 
-class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen> {
+class _CreateNewAccountScreenState
+    extends ConsumerState<CreateNewAccountScreen> {
   final creatFrmKey = GlobalKey<FormState>();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
@@ -28,11 +36,14 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
   final residentialAddressController = TextEditingController();
   final residentialAddressController2 = TextEditingController();
   final cityController = TextEditingController();
-    // String?  selectedGenderCode;
-  String?  selectedGenderCode;
-  String?  selectedIdentificationTypeId;
-  String?  selectedCountryCode;
-  String?  selectedCitizenshipCode;
+  // String?  selectedGenderCode;
+  String? selectedGenderCode;
+  String? selectedGenderName;
+  String? selectedIdentificationTypeId;
+  String? selectedCountryCode;
+  String? selectedCitizenshipCode;
+
+  GendersDatum? selectedGenderItem;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +58,11 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
             'Create account',
             style: TextStyle(color: Colors.white),
           ),
+          actions: [
+            IconButton(onPressed: (){
+              ref.invalidate(getGenderProvider);
+            }, icon: Icon(Icons.refresh))
+          ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -106,12 +122,132 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
                       return null;
                     },
                   ),
-                        const SizedBox(height: 8),
-                     const Divider(
-                                height: 16,
-                                color:Color.fromARGB(255, 169, 189, 201),
-                                thickness: 0.5,
-                              ),
+                  const SizedBox(height: 16),
+                     Text(
+                        'Gender',
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 16),
+                      ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getGenderProvider).when(
+                            data: (data) =>
+                                (data != null && data.isNotEmpty == true)
+                                    ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<GendersDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select preferred Login',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      GendersDatum>>(
+                                              ( item) =>
+                                                  DropdownMenuItem<
+                                                      GendersDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.genderName ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: selectedGenderItem,
+                                      onChanged: (GendersDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          selectedGenderItem = newValue;
+                                          selectedGenderCode =
+                                              newValue?.genderCode;
+                                          selectedGenderName =
+                                              newValue?.genderName;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
+                                        ),
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                               
+                                    : Text('empty gender'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref.invalidate(getGenderProvider),
+                                child: const Text(
+                                  'An error occured fetch login modes.Tap to refresh',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  const Divider(
+                    height: 16,
+                    color: Color.fromARGB(255, 169, 189, 201),
+                    thickness: 0.5,
+                  ),
                   const SizedBox(height: 8),
                   CustomTextFormField(
                     title: 'Telephone Number',
@@ -188,11 +324,11 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
                     },
                   ),
                   const SizedBox(height: 8),
-                     const Divider(
-                                height: 16,
-                                color:Color.fromARGB(255, 169, 189, 201),
-                                thickness: 0.5,
-                              ),
+                  const Divider(
+                    height: 16,
+                    color: Color.fromARGB(255, 169, 189, 201),
+                    thickness: 0.5,
+                  ),
                   const SizedBox(height: 8),
                   CustomTextFormField(
                     title: 'ID Issuer',
@@ -253,7 +389,6 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
                       return null;
                     },
                   ),
-                
                   const SizedBox(height: 24),
                   PrimaryButton(
                       onPressed: () {

@@ -6,7 +6,7 @@ part of 'regions.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getRegionsHash() => r'38bf68f5d53493224c3dd7a4d11ab0551770fb94';
+String _$getRegionsHash() => r'e6e87279c4ec9c43112e81ea76791481b2f99c15';
 
 /// Get getRegions
 ///

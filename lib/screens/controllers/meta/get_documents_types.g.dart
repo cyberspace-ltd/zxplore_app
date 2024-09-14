@@ -6,7 +6,7 @@ part of 'get_documents_types.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getDocumentTypesHash() => r'ccb50b4922a00c397d7dd9d8c6d5db8399aab343';
+String _$getDocumentTypesHash() => r'1476b6579d2816855deb382ee2667075d7c67b88';
 
 /// Get getDocumentTypes
 ///

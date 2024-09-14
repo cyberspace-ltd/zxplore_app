@@ -15,15 +15,12 @@ import 'package:zxplore_app/screens/controllers/meta/customer_classification.dar
 import 'package:zxplore_app/screens/controllers/meta/employment_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/fatca_status.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
-import 'package:zxplore_app/screens/controllers/meta/get_account_class.dart';
-import 'package:zxplore_app/screens/controllers/meta/get_account_series.dart';
 import 'package:zxplore_app/screens/controllers/meta/get_documents_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/marital_status.dart';
 import 'package:zxplore_app/screens/controllers/meta/recon_status.dart';
 import 'package:zxplore_app/screens/controllers/meta/regions.dart';
 import 'package:zxplore_app/screens/controllers/meta/search_options.dart';
-import 'package:zxplore_app/screens/controllers/meta/sub_business_natures.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
@@ -82,12 +79,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ref.read(getReconStatusProvider);
           ref.read(getRegionsProvider);
           ref.read(getSearchOptionsProvider);
+
           /// Todo add recent params when i item has been selected
           ///  set this items only when there is a recently viewed or editable request
           // ref.read(getAccountSeriesProvider('',''));
           // ref.read(getAccountClassProvider('','',''));
           // ref.read(getSubBusinessNaturesProvider(0));
-          ///! End 
+          ///! End
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (BuildContext context) => MyHomePage()),
@@ -163,7 +161,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 SizedBox(height: 3.0),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Consumer(
+                  child: 
+                  Consumer(
                     builder: (context, ref, child) {
                       return ref.watch(getLoginModesProvider).when(
                             data: (data) => (data != null &&
@@ -184,7 +183,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                           .map<
                                                   DropdownMenuItem<
                                                       LoginModesData>>(
-                                              (LoginModesData item) =>
+                                              ( item) =>
                                                   DropdownMenuItem<
                                                       LoginModesData>(
                                                     value: item,
@@ -263,8 +262,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   )
                                 : const SizedBox.shrink(),
                             error: (e, s) => GestureDetector(
-                              onTap: ()=>ref.invalidate(getLoginModesProvider),
-                              child: const Text('An error occured fetch login modes.Tap to refresh',maxLines: 3,overflow: TextOverflow.ellipsis,)),
+                                onTap: () =>
+                                    ref.invalidate(getLoginModesProvider),
+                                child: const Text(
+                                  'An error occured fetch login modes.Tap to refresh',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
                             loading: () => SizedBox(height: 16.0),
                           );
                     },

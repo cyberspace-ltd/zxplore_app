@@ -7,7 +7,7 @@ part of 'identification_types.dart';
 // **************************************************************************
 
 String _$getIdentificationTypesHash() =>
-    r'bc7a1486598dfcb704d8c199bb020750f9e21439';
+    r'8a460bb29d07c825f345ae401e3d9791a3fb3f31';
 
 /// Get getDocumentTypes
 ///

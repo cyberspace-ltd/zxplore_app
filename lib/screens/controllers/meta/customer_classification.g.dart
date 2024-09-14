@@ -7,7 +7,7 @@ part of 'customer_classification.dart';
 // **************************************************************************
 
 String _$getCustomerClassificationHash() =>
-    r'0d4777d1db570f959f18ef02c84653140c42c93d';
+    r'b4062f3b3cbceecab56d5e43e1852e81469f3c5f';
 
 /// Get getCustomerClassification
 ///

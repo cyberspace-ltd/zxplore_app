@@ -6,7 +6,7 @@ part of 'search_options.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getSearchOptionsHash() => r'fcdc9a07648afa5b0d25303d8f0e02d3d00a4ba0';
+String _$getSearchOptionsHash() => r'e826bfd65b69eb1a3f6427c1641536b5a5a232d1';
 
 /// Get getSearchOptions
 ///

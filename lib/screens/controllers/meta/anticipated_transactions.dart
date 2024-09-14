@@ -20,7 +20,7 @@ Future<List<AnticipatedTransactionsDatum>?> getAnticipatedTransaction(
     if (trxnResponse['status']==true) {
       final result = AnticipatedTransactionsResponse.fromJson(trxnResponse);
       if (result.data.isNotEmpty == true) {
-        for (final element in trxnResponse.data!) {
+        for (final element in result.data) {
           trxnList.add(element);
         }
         AsyncData(trxnList);
