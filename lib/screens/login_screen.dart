@@ -9,6 +9,21 @@ import 'package:zxplore_app/screens/controllers/login/get_login_modes.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticiapted_amount.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticipated_transactions.dart';
+import 'package:zxplore_app/screens/controllers/meta/business_natures.dart';
+import 'package:zxplore_app/screens/controllers/meta/countries.dart';
+import 'package:zxplore_app/screens/controllers/meta/customer_classification.dart';
+import 'package:zxplore_app/screens/controllers/meta/employment_types.dart';
+import 'package:zxplore_app/screens/controllers/meta/fatca_status.dart';
+import 'package:zxplore_app/screens/controllers/meta/gender.dart';
+import 'package:zxplore_app/screens/controllers/meta/get_account_class.dart';
+import 'package:zxplore_app/screens/controllers/meta/get_account_series.dart';
+import 'package:zxplore_app/screens/controllers/meta/get_documents_types.dart';
+import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
+import 'package:zxplore_app/screens/controllers/meta/marital_status.dart';
+import 'package:zxplore_app/screens/controllers/meta/recon_status.dart';
+import 'package:zxplore_app/screens/controllers/meta/regions.dart';
+import 'package:zxplore_app/screens/controllers/meta/search_options.dart';
+import 'package:zxplore_app/screens/controllers/meta/sub_business_natures.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
@@ -53,9 +68,25 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.read(loginControllerProvider.notifier).loginUser(
         onSuccess: () {
           /// call the required Meta
-
           ref.read(getAnticipatedAmountProvider);
           ref.read(getAnticipatedTransactionProvider);
+          ref.read(getBusinessNaturesProvider);
+          ref.read(getCountriesProvider);
+          ref.read(getCustomerClassificationProvider);
+          ref.read(getEmploymentTypeProvider);
+          ref.read(getFatcaStatusProvider);
+          ref.read(getGenderProvider);
+          ref.read(getDocumentTypesProvider);
+          ref.read(getIdentificationTypesProvider);
+          ref.read(getMaritalStatusProvider);
+          ref.read(getReconStatusProvider);
+          ref.read(getRegionsProvider);
+          ref.read(getSearchOptionsProvider);
+          /// Todo add recent params when i item has been selected
+          ///  set this items only when there is a recently viewed or editable request
+          // ref.read(getAccountSeriesProvider('',''));
+          // ref.read(getAccountClassProvider('','',''));
+          // ref.read(getSubBusinessNaturesProvider(0));
           ///! End 
           Navigator.pushReplacement(
             context,

@@ -118,9 +118,9 @@ class MetaRepositoryImpl extends MetaRepository {
   }
 
   @override
-  Future<dynamic> getBusinessNatures({required int? businessNatureId}) async {
+  Future<dynamic> getBusinessNatures() async {
     try {
-      final response = await api.getBusinessNatures(businessNatureId: businessNatureId);
+      final response = await api.getBusinessNatures();
 
       return response;
     } on FormatException catch (_) {
@@ -370,9 +370,9 @@ class MetaRepositoryImpl extends MetaRepository {
   }
 
   @override
-  Future<dynamic> getSubBusinessNatures() async {
+  Future<dynamic> getSubBusinessNatures({required int? businessNatureId}) async {
     try {
-      final response = await api.getSubBusinessNatures();
+      final response = await api.getSubBusinessNatures(businessNatureId:businessNatureId );
 
       return response;
     } on FormatException catch (_) {

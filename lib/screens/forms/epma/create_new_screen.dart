@@ -81,7 +81,7 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
                     title: 'Last name',
                     fillColor: Colors.transparent,
                     controller: lastNameController,
-                    hint: 'Enter first name',
+                    hint: 'Enter last name',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -106,82 +106,13 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'Other name',
-                    fillColor: Colors.transparent,
-                    controller: otherNameController,
-                    hint: 'Enter other name',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'other name is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'ID Issuer',
-                    fillColor: Colors.transparent,
-                    controller: idIssueAuthorityController,
-                    hint: 'Enter ID Issuer',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'ID Issuer is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'ID Number',
-                    fillColor: Colors.transparent,
-                    controller: identificationNoController,
-                    hint: 'Enter ID Number',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'ID Number is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'NIA Number',
-                    fillColor: Colors.transparent,
-                    controller: niaVerificationNoController,
-                    hint: 'Enter NIA number',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'other name is  required';
-                      // }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'IDD Code',
-                    fillColor: Colors.transparent,
-                    controller: iddCodeController,
-                    hint: 'Enter IDD code',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'IDD Code is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
+                        const SizedBox(height: 8),
+                     const Divider(
+                                height: 16,
+                                color:Color.fromARGB(255, 169, 189, 201),
+                                thickness: 0.5,
+                              ),
+                  const SizedBox(height: 8),
                   CustomTextFormField(
                     title: 'Telephone Number',
                     fillColor: Colors.transparent,
@@ -256,6 +187,73 @@ class _CreateNewAccountScreenState extends ConsumerState<CreateNewAccountScreen>
                       return null;
                     },
                   ),
+                  const SizedBox(height: 8),
+                     const Divider(
+                                height: 16,
+                                color:Color.fromARGB(255, 169, 189, 201),
+                                thickness: 0.5,
+                              ),
+                  const SizedBox(height: 8),
+                  CustomTextFormField(
+                    title: 'ID Issuer',
+                    fillColor: Colors.transparent,
+                    controller: idIssueAuthorityController,
+                    hint: 'Enter ID Issuer',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'ID Issuer is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'ID Number',
+                    fillColor: Colors.transparent,
+                    controller: identificationNoController,
+                    hint: 'Enter ID Number',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'ID Number is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'NIA Number',
+                    fillColor: Colors.transparent,
+                    controller: niaVerificationNoController,
+                    hint: 'Enter NIA number',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'IDD Code',
+                    fillColor: Colors.transparent,
+                    controller: iddCodeController,
+                    hint: 'Enter IDD code',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'IDD Code is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                
                   const SizedBox(height: 24),
                   PrimaryButton(
                       onPressed: () {

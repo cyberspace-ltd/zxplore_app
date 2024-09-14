@@ -472,12 +472,9 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<dynamic> getBusinessNatures({int? businessNatureId}) async {
+  Future<dynamic> getBusinessNatures() async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'BusinessNatureId': businessNatureId
-    };
-    queryParameters.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<dynamic>(Options(
@@ -799,9 +796,12 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<dynamic> getSubBusinessNatures() async {
+  Future<dynamic> getSubBusinessNatures({int? businessNatureId}) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'BusinessNatureId': businessNatureId
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<dynamic>(Options(

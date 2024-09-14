@@ -12,7 +12,7 @@ class DocumentTypesResponse {
     int code;
     bool status;
     String message;
-    List<DocumentTypessDatum> data;
+    List<DocumentTypesDatum> data;
 
     DocumentTypesResponse({
         required this.code,
@@ -25,7 +25,7 @@ class DocumentTypesResponse {
         code: json["code"],
         status: json["status"],
         message: json["message"],
-        data: List<DocumentTypessDatum>.from(json["data"].map((x) => DocumentTypessDatum.fromJson(x))),
+        data: List<DocumentTypesDatum>.from(json["data"].map((x) => DocumentTypesDatum.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -36,16 +36,16 @@ class DocumentTypesResponse {
     };
 }
 
-class DocumentTypessDatum {
+class DocumentTypesDatum {
     String documentTypeCode;
     String documentTypeName;
 
-    DocumentTypessDatum({
+    DocumentTypesDatum({
         required this.documentTypeCode,
         required this.documentTypeName,
     });
 
-    factory DocumentTypessDatum.fromJson(Map<String, dynamic> json) => DocumentTypessDatum(
+    factory DocumentTypesDatum.fromJson(Map<String, dynamic> json) => DocumentTypesDatum(
         documentTypeCode: json["documentTypeCode"],
         documentTypeName: json["documentTypeName"],
     );

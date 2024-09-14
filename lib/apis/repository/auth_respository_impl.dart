@@ -4,10 +4,7 @@ import 'package:zxplore_app/apis/repository/auth_repository.dart';
 import 'package:zxplore_app/models/epma_models/create_account.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
-import 'package:zxplore_app/models/epma_models/rennew_token_response.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
     /// AuthRespositoryImpl
 class AuthRespositoryImpl extends AuthRepository {

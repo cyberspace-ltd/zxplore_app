@@ -1,24 +1,24 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/meta_data_provider.dart';
-import 'package:zxplore_app/models/epma_models/meta/search_options_response.dart'; 
+import 'package:zxplore_app/models/epma_models/meta/document_types.dart'; 
 
-part 'search_options.g.dart';
+part 'get_documents_types.g.dart';
 
 @Riverpod(keepAlive: true)
 
-/// Get getSearchOptions
-Future<List<SearchOptionDatum>?> getSearchOptions(
- GetSearchOptionsRef ref,
+/// Get getDocumentTypes
+Future<List< DocumentTypesDatum>?> getDocumentTypes(
+ GetDocumentTypesRef ref,
 ) async {
   final repo = ref.read(metaRepositoryImplProvider);
-  final responseList = <SearchOptionDatum>[];
+  final responseList = <DocumentTypesDatum>[];
 
   try {
     const AsyncLoading();
-    final response =    await repo.getSearchOptions();
+    final response =    await repo.getDocumentTypes();
 
     if (response['status']==true) {
-      final result = SearchOptionResponse.fromJson(response);
+      final result = DocumentTypesResponse.fromJson(response);
       if (result.data.isNotEmpty == true) {
         for (final element in response.data!) {
           responseList.add(element);

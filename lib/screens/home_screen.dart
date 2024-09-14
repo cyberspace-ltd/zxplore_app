@@ -81,78 +81,85 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                   ],
                 ),
               ),
-              Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-                  child: Consumer(builder: (ct, ref, ch) {
-                    return ref.watch(getUserStatisticsDataProvider).when(
-                        data: (data) {
-                          return data != null
-                              ? Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.5,
-                                  padding: EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Color(0xfff0eeee),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          offset: const Offset(0, 4),
-                                          color: Colors.grey.withOpacity(0.25),
-                                          blurRadius: 4,
-                                        ),
-                                      ]),
-                                  child: Column(
-                                    children: [
-                                      StatisItem(
-                                        title: '${keys[0]}',
-                                        value: data.draft,
+              Consumer(builder: (ct, ref, ch) {
+                return ref.watch(getUserStatisticsDataProvider).when(
+                    data: (data) {
+                      return data != null
+                          ? Padding(
+                           padding:    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
+                            child: Container(
+                              
+                                height:
+                                    MediaQuery.of(context).size.height * 0.5,
+                                padding: EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Color(0xfff0eeee),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        offset: const Offset(0, 4),
+                                        color: Colors.grey.withOpacity(0.25),
+                                        blurRadius: 4,
+                                      ),
+                                    ]),
+                                child: Column(
+                                  children: [
+                                    StatisItem(
+                                      title: '${keys[0]}',
+                                      value: data.draft,
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  PendingDraftsRequestsScreen()),
+                                        );
+                                      },
+                                    ),
+                                    StatisItem(
+                                        title: '${keys[1]}',
+                                        value: data.otherStages,
                                         onPressed: () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (BuildContext context) =>
-                                                    PendingDraftsRequestsScreen()),
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    AllPendingRequestsScreen()),
                                           );
-                                        },
-                                      ),
-                                      StatisItem(
-                                          title: '${keys[1]}',
-                                          value: data.otherStages,
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      AllPendingRequestsScreen()),
-                                            );
-                                          }),
-                                      StatisItem(
-                                          title: '${keys[2]}',
-                                          value: data.pendingPostingInstant,
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      AllPendingRequestsScreen()),
-                                            );
-                                          }),
-                                    ],
-                                  ),
-                                )
-                              : Text(AppStrings.errorInProccessing);
-                        },
-                        error: (error, stk) => Center(
-                              child: GestureDetector(
-                                  onTap: () => ref
-                                      .invalidate(getUserStatisticsDataProvider),
-                                  child: Text(AppStrings.errorInProccessing)),
-                            ),
-                        loading: () => const SizedBox.shrink());
-                  }))
+                                        }),
+                                    StatisItem(
+                                        title: '${keys[2]}',
+                                        value: data.pendingPostingInstant,
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    AllPendingRequestsScreen()),
+                                          );
+                                        }),
+                                  ],
+                                ),
+                              ),
+                          )
+                          : Padding(
+                    padding:   EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(AppStrings.errorInProccessing),
+                          );
+                    },
+                    error: (error, stk) => Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: GestureDetector(
+                                onTap: () => ref
+                                    .invalidate(getUserStatisticsDataProvider),
+                                child: Text(AppStrings.errorInProccessing)),
+                          ),
+                        ),
+                    loading: () => const SizedBox.shrink());
+              })
             ],
           ),
           bottomNavigationBar: BottomAppBar(

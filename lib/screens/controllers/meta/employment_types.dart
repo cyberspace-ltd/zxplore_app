@@ -1,24 +1,24 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/meta_data_provider.dart';
-import 'package:zxplore_app/models/epma_models/meta/search_options_response.dart'; 
+import 'package:zxplore_app/models/epma_models/meta/employment_type_response.dart';
 
-part 'search_options.g.dart';
+part 'employment_types.g.dart';
 
 @Riverpod(keepAlive: true)
 
-/// Get getSearchOptions
-Future<List<SearchOptionDatum>?> getSearchOptions(
- GetSearchOptionsRef ref,
+/// Get getCustomerClassification
+Future<List<EmploymentTypeDatum>?> getEmploymentType(
+ GetEmploymentTypeRef ref,
 ) async {
   final repo = ref.read(metaRepositoryImplProvider);
-  final responseList = <SearchOptionDatum>[];
+  final responseList = <EmploymentTypeDatum>[];
 
   try {
     const AsyncLoading();
-    final response =    await repo.getSearchOptions();
+    final response =    await repo.getEmployTypes();
 
     if (response['status']==true) {
-      final result = SearchOptionResponse.fromJson(response);
+      final result = EmploymentTypeResponse.fromJson(response);
       if (result.data.isNotEmpty == true) {
         for (final element in response.data!) {
           responseList.add(element);

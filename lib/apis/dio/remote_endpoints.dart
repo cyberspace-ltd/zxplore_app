@@ -106,8 +106,7 @@ abstract class RemoteApi {
   @GET('Metadata/anticipatedTransactions')
   Future<dynamic> getAnticipatedTransactions();
   @GET('Metadata/businessNatures')
-  Future<dynamic> getBusinessNatures({
-     @Query('BusinessNatureId') required int? businessNatureId});
+  Future<dynamic> getBusinessNatures();
   @GET('Metadata/Countries')
   Future<dynamic> getCountries();
   @GET('Metadata/customerClassification')
@@ -131,5 +130,7 @@ abstract class RemoteApi {
   @GET('Metadata/viewAccountRequest')
   Future<dynamic> getReconStatus();
   @GET('Metadata/subBusinessNatures')
-  Future<dynamic> getSubBusinessNatures();
+  Future<dynamic> getSubBusinessNatures({
+    @Query('BusinessNatureId') required int? businessNatureId}
+  );
 }
