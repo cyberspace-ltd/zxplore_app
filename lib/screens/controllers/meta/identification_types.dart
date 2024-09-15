@@ -15,7 +15,7 @@ Future<List< IdentificationTypesDatum>?> getIdentificationTypes(
 
   try {
     const AsyncLoading();
-    final response =    await repo.getDocumentTypes();
+    final response =    await repo.getIdentificationTypes();
 
     if (response['status']==true) {
       final result = IdentificationTypesResponse.fromJson(response);

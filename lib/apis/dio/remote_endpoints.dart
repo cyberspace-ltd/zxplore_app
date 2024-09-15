@@ -82,7 +82,7 @@ abstract class RemoteApi {
     @Field('telNo') required String? telNo,
     @Field('mobileNo') required String? mobileNo,
     @Field('residentialAddress') required String? residentialAddress,
-    @Field('residentialAddress') required String? city,
+    @Field('city') required String? city,
     @Field('residentialAddress2')   String? residentialAddress2,
     @CancelRequest() CancelToken? cancelToken,
   });

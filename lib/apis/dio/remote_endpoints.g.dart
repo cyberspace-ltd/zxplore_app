@@ -294,7 +294,7 @@ class _RemoteApi implements RemoteApi {
       'telNo': telNo,
       'mobileNo': mobileNo,
       'residentialAddress': residentialAddress,
-      'residentialAddress': city,
+      'city': city,
       'residentialAddress2': residentialAddress2,
     };
     _data.removeWhere((k, v) => v == null);

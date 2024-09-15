@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/auth_repo_provider.dart';
 import 'package:zxplore_app/models/epma_models/create_account.dart';
@@ -12,28 +13,31 @@ class CreateAccountController extends _$CreateAccountController {
     return null;
   }
 
-  Future<void> createNnewAAccount({required CreateAccountData accountData,      dynamic afterFetched,}) async {
-
+  Future<void> createNnewAAccount(
+      {required CreateAccountData accountData,
+      dynamic afterFetched,
+      VoidCallback? onFailure}) async {
     try {
-        state = const AsyncValue.loading();
+      state = const AsyncValue.loading();
       final authRepository = ref.read(authRespositoryImplProvider);
 
+      final registerResponse =
+          await authRepository.createAccount(accountData: accountData);
 
-        final registerResponse = await authRepository.createAccount(accountData: accountData);
-             
-        if (registerResponse['status'] == true) {
-          final result = CreateAccountResponse.fromMap(registerResponse);
-          state = AsyncValue.data(result);
-       
-          afterFetched();
-        } else {
-           throw AppException('${registerResponse['message']}');
-        }
-     
-    } catch (e,s) {
-         state = AsyncError(e, s);  
-        return null;
+      if (registerResponse['status'] == true) {
+        final result = CreateAccountResponse.fromMap(registerResponse);
+        state = AsyncValue.data(result);
+
+        afterFetched();
+      } else {
+        onFailure!.call();
+
+        throw AppException('${registerResponse['message']}');
+      }
+    } catch (e, s) {
+      state = AsyncError(e, s);
+      onFailure!.call();
+      return null;
     }
-
   }
 }

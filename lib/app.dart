@@ -47,7 +47,9 @@ ThemeData _buildZxploreTheme() {
   return base.copyWith(
     primaryColor: ZxplorePrimaryColor,
     scaffoldBackgroundColor: kShrineBackgroundWhite,
+    dialogBackgroundColor: Colors.red[100],
     cardColor: kShrineBackgroundWhite,
+    
     colorScheme: ColorScheme(
       onPrimary: ZxplorePrimaryColor,
       primary: kShrineBackgroundWhite,
@@ -56,12 +58,17 @@ ThemeData _buildZxploreTheme() {
       brightness: Brightness.light,
       secondary: Colors.red,
       surface: kShrineBackgroundWhite,
-      onSurface: kShrineBackgroundWhite,
-      onSecondary: kShrineBackgroundWhite,
+      onSurface: ZxplorePrimaryColor,
+      onSecondary: ZxplorePrimaryColor,
     ),
     buttonTheme: base.buttonTheme.copyWith(
       buttonColor: ZxplorePrimaryColor,
       textTheme: ButtonTextTheme.normal,
+    ),
+       textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: ZxplorePrimaryColor, // Change this to the color you want
+      ),
     ),
     primaryIconTheme: base.iconTheme.copyWith(color: ZxplorePrimaryColor),
     inputDecorationTheme: InputDecorationTheme(border: OutlineInputBorder()),

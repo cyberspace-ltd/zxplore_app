@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:zxplore_app/colors.dart';
+import 'package:zxplore_app/models/epma_models/create_account.dart';
+import 'package:zxplore_app/models/epma_models/meta/country_response.dart';
 import 'package:zxplore_app/models/epma_models/meta/gender_response.dart';
+import 'package:zxplore_app/models/epma_models/meta/identification_types.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/create_account_controller.dart';
+import 'package:zxplore_app/screens/controllers/meta/countries.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
+import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
+import 'package:zxplore_app/screens/home_screen.dart';
+import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
-
 
 ///CreateNewAccountScreen new account request primarily usinngthe EPMA service
 class CreateNewAccountScreen extends ConsumerStatefulWidget {
@@ -36,14 +43,29 @@ class _CreateNewAccountScreenState
   final residentialAddressController = TextEditingController();
   final residentialAddressController2 = TextEditingController();
   final cityController = TextEditingController();
-  // String?  selectedGenderCode;
+  final dateExpireController = TextEditingController();
+  final dobController = TextEditingController();
+  final datedIssuedController = TextEditingController();
+  GendersDatum? selectedGenderItem;
   String? selectedGenderCode;
   String? selectedGenderName;
-  String? selectedIdentificationTypeId;
-  String? selectedCountryCode;
-  String? selectedCitizenshipCode;
 
-  GendersDatum? selectedGenderItem;
+  IdentificationTypesDatum? selectedIdType;
+  int? selectedIdentificationTypeCode;
+  String? selectedIdentificationTypeName;
+
+  CountryDatum? selectedCountry;
+  String? selectedCountryCode;
+  String? selectedCountryName;
+  String? selectedCitizenshipCode;
+  String? dob;
+  String? datedIssued;
+  String? dateExpire;
+  DateTime? dobInit = DateTime.now();
+  final DateFormat dateFormatter = DateFormat('dd/MM/yyyy');
+  final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
+  String dobFormattedDate = 'dd/mm/yyy';
+  String sDobFormattedDate = 'yyyy/mm/dd';
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +80,11 @@ class _CreateNewAccountScreenState
             'Create account',
             style: TextStyle(color: Colors.white),
           ),
-          actions: [
-            IconButton(onPressed: (){
-              ref.invalidate(getGenderProvider);
-            }, icon: Icon(Icons.refresh))
-          ],
+          // actions: [
+          //   IconButton(onPressed: (){
+          //     ref.invalidate(getGenderProvider);
+          //   }, icon: Icon(Icons.refresh))
+          // ],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -78,6 +100,12 @@ class _CreateNewAccountScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Text(
+                    _selectedDate == null
+                        ? 'No date selected!'
+                        : 'Selected Date: ${_selectedDate!.toLocal()}'
+                            .split(' ')[0],
+                  ),
                   CustomTextFormField(
                     title: 'First name',
                     fillColor: Colors.transparent,
@@ -123,24 +151,54 @@ class _CreateNewAccountScreenState
                     },
                   ),
                   const SizedBox(height: 16),
-                     Text(
-                        'Gender',
-                        overflow: TextOverflow.fade,
-                        maxLines: 1,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700, fontSize: 16),
-                      ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    onTap: () {
+                      _showDatePicker(context, dateCategory: 'DOB');
+                    },
+                    title: 'Date Of Birth',
+                    readOnly: true,
+                    showCursor: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    showDropDownSuffixIcon: true,
+                    fillColor: Colors.transparent,
+                    controller: dobController,
+                    hint: 'Date Of Birth ',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Date Of Birth is required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Gender',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
                   const SizedBox(height: 6),
                   Consumer(
                     builder: (context, ref, child) {
                       return ref.watch(getGenderProvider).when(
-                            data: (data) =>
-                                (data != null && data.isNotEmpty == true)
-                                    ? DropdownButtonHideUnderline(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
                                     child: DropdownButton2<GendersDatum>(
                                       isExpanded: true,
                                       hint: Text(
-                                        'Select preferred Login',
+                                        'Select gender',
                                         style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.normal,
@@ -149,11 +207,8 @@ class _CreateNewAccountScreenState
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      GendersDatum>>(
-                                              ( item) =>
-                                                  DropdownMenuItem<
+                                          .map<DropdownMenuItem<GendersDatum>>(
+                                              (item) => DropdownMenuItem<
                                                       GendersDatum>(
                                                     value: item,
                                                     child: Text(
@@ -229,10 +284,135 @@ class _CreateNewAccountScreenState
                                       ),
                                     ),
                                   )
-                               
-                                    : Text('empty gender'),
+                                : Text('empty gender'),
                             error: (e, s) => GestureDetector(
                                 onTap: () => ref.invalidate(getGenderProvider),
+                                child: const Text(
+                                  'An error occured fetch login modes.Tap to refresh',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Country',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getCountriesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<CountryDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select country',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<DropdownMenuItem<CountryDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      CountryDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.countryName ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: selectedCountry,
+                                      onChanged: (CountryDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          selectedCountry = newValue;
+                                          selectedCountryCode =
+                                              newValue?.countryCode;
+                                          selectedCountryName =
+                                              newValue?.countryName;
+                                          selectedCitizenshipCode =
+                                              newValue?.countryCode;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
+                                        ),
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    child: Text(
+                                        'No? countries?, Tap to refresh, '),
+                                    onTap: () =>
+                                        ref.invalidate(getCountriesProvider),
+                                  ),
+                            error: (e, s) => GestureDetector(
+                                onTap: () =>
+                                    ref.invalidate(getCountriesProvider),
                                 child: const Text(
                                   'An error occured fetch login modes.Tap to refresh',
                                   maxLines: 3,
@@ -310,7 +490,7 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'City  ',
+                    title: 'City',
                     fillColor: Colors.transparent,
                     controller: residentialAddressController2,
                     hint: 'Enter city',
@@ -330,6 +510,135 @@ class _CreateNewAccountScreenState
                     thickness: 0.5,
                   ),
                   const SizedBox(height: 8),
+                  const SizedBox(height: 16),
+                  Text(
+                    'ID Type',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getIdentificationTypesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<
+                                        IdentificationTypesDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select ID type',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      IdentificationTypesDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      IdentificationTypesDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.identificationTypeName ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: selectedIdType,
+                                      onChanged:
+                                          (IdentificationTypesDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          selectedIdType = newValue;
+                                          selectedIdentificationTypeCode =
+                                              newValue?.identificationTypeId;
+                                          selectedCountryName =
+                                              newValue?.identificationTypeName;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
+                                        ),
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    child: Text('No? types?, Tap to refresh, '),
+                                    onTap: () => ref.invalidate(
+                                        getIdentificationTypesProvider),
+                                  ),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref
+                                    .invalidate(getIdentificationTypesProvider),
+                                child: const Text(
+                                  'An error occured fetch login modes.Tap to refresh',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   CustomTextFormField(
                     title: 'ID Issuer',
                     fillColor: Colors.transparent,
@@ -355,6 +664,61 @@ class _CreateNewAccountScreenState
                     validator: (value) {
                       if (value.toString().isEmpty) {
                         return 'ID Number is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    onTap: () {
+                      _selectDate(context);
+                      // _showDatePicker(context, dateCategory: 'ISSUE');
+                    },
+                    title: 'Issue Date',
+                    showCursor: false,
+                    readOnly: true,
+                    fillColor: Colors.transparent,
+                    controller: datedIssuedController,
+                    showDropDownSuffixIcon: true,
+                    hint: 'ID Issue Date',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'ID Issue is required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    onTap: () {
+                      _showDatePicker(context, dateCategory: 'EXPIRY');
+                    },
+                    title: 'Expiry Date',
+                    readOnly: true,
+                    showDropDownSuffixIcon: true,
+                    showCursor: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    fillColor: Colors.transparent,
+                    controller: dateExpireController,
+                    hint: 'ID Expiry Date',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'ID Expiry is required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
                       }
                       return null;
                     },
@@ -395,6 +759,33 @@ class _CreateNewAccountScreenState
                         if (!creatFrmKey.currentState!.validate()) {
                           return;
                         }
+                        if (selectedCountry == null) {
+                          zXFlushBar(context, "Country is required");
+                          return;
+                        }
+                        if (selectedGenderItem == null) {
+                          zXFlushBar(context, "Gender is required");
+                          return;
+                        }
+
+                        if (selectedIdType == null) {
+                          zXFlushBar(context, "ID type is required");
+                          return;
+                        }
+                        if (dob == null) {
+                          zXFlushBar(context, "Date of birth is required");
+                          return;
+                        }
+                        if (dateExpire == null) {
+                          zXFlushBar(context, "ID expiry date id required");
+                          return;
+                        }
+
+                        if (datedIssued == null) {
+                          zXFlushBar(context, "ID issued date id required");
+                          return;
+                        }
+                        createAccountRequest();
                       },
                       title: 'Create Account')
                 ],
@@ -405,4 +796,111 @@ class _CreateNewAccountScreenState
       ),
     );
   }
+
+  Future<void> createAccountRequest() async {
+    ref.read(createAccountControllerProvider.notifier).createNnewAAccount(
+        accountData: CreateAccountData(
+            surname: lastNameController.text.toString(),
+            firstName: firstNameController.text.toString(),
+            otherNames: lastNameController.text.toString(),
+            identificationNo: identificationNoController.text.toString(),
+            niaVerificationNo: niaVerificationNoController.text.toString(),
+            iddCode: iddCodeController.text.toString(),
+            city: cityController.text.toString(),
+            mobileNo: mobileNoController.text.toString(),
+            telNo: telNoController.text.toString(),
+            residentialAddress: residentialAddressController.text.toString(),
+            residentialAddress2: residentialAddressController2.text.toString(),
+            citizenshipCode: selectedCitizenshipCode ?? '',
+            idCountryCode: selectedCountryCode ?? '',
+            genderCode: selectedGenderCode,
+            identificationTypeId: selectedIdentificationTypeCode,
+            idIssueAuthority: idIssueAuthorityController.text.toString(),
+            birthDate: dob ?? '',
+            idExpiryDate: dateExpire ?? '',
+            idIssueDate: datedIssued ?? ''),
+        onFailure: () {},
+        afterFetched: () {
+          if (mounted) {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (builder) {
+                  return AlertDialog.adaptive(
+                    content: Column(
+                      children: [
+                        Text('Account created successfully'),
+                        gapH20,
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        MyHomePage()),
+                              );
+                            },
+                            child: Text('Done'))
+                      ],
+                    ),
+                  );
+                });
+          }
+        });
+  }
+
+  DateTime? _selectedDate;
+
+  // Function to show the DatePicker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate)
+      setState(() {
+        _selectedDate = picked;
+      });
+  }
+
+  /// Date Picker
+  Future<void> _showDatePicker(BuildContext dateContext,
+      {required String dateCategory}) async {
+    if (mounted) {
+      final DateTime? fPickedDate = await showDatePicker(
+        context: context,
+        initialDate: dobInit!,
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+      );
+      if (fPickedDate != null) {
+        if (dateCategory == 'DOB') {
+          setState(() {
+            dobInit = fPickedDate;
+            dobFormattedDate = dateFormatter.format(dobInit!);
+            sDobFormattedDate = sdateFormatter.format(dobInit!);
+            dobController.text = dobFormattedDate;
+          });
+        } else if (dateCategory == 'ISSUE') {
+          dobInit = fPickedDate;
+          dobFormattedDate = dateFormatter.format(dobInit!);
+          sDobFormattedDate = sdateFormatter.format(dobInit!);
+          datedIssuedController.text = dobFormattedDate;
+        } else {
+          dobInit = fPickedDate;
+          dobFormattedDate = dateFormatter.format(dobInit!);
+          sDobFormattedDate = sdateFormatter.format(dobInit!);
+          dateExpireController.text = dobFormattedDate;
+        }
+      }
+    }
+  }
+}
+
+Widget zXFlushBar(BuildContext context, String? message) {
+  return FlushbarHelper.createError(
+      message: message ?? "Required field(s) missing")
+    ..show(context);
 }

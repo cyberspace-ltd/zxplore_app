@@ -22,7 +22,9 @@ class ApiInterceptor extends Interceptor {
     options.headers['ApiKey'] = apiKey;
     if (options.path !='Account/login' &&
        options.path !='Account/loginModes' &&
-        options.path !='Account/renewToken') {
+        options.path !='Account/renewToken' &&
+        options.path !='Metadata/'
+        ) {
       final sp = await SharedPreferences.getInstance();
       final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
       if (token != null) {
