@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/models/epma_models/pending_requests_all_response.dart';
+import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 
 
 enum RequestState {
@@ -76,5 +78,5 @@ final combinedFormStateProvider = StateNotifierProvider<CombinedFormStateNotifie
  
 
 
-final latestSelectAccountRequestProvider = StateProvider<dynamic>((ref)=>null);
+final latestSelectAccountRequestProvider = StateProvider<PendingRequestsDatum?>((ref)=>null);
 // final RequestStateProvider = StateProvider<RequestState>((ref)=>RequestState.DEFAULT);

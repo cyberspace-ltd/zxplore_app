@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/pending_requests_all_response.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/selected_request_provider.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/pending_requests_all_controller.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
@@ -150,8 +151,17 @@ class _AllPendingRequestsScreenState
             
                             return AccountRequestItem(
                               onPressed: () {},
-                              onTapEdit: (){},
-                              onTapView: (){},
+                                   onTapEdit: (){
+                                ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.EDITING, SelectedFormSection.initial);
+                                ref.read(latestSelectAccountRequestProvider.notifier).update((val)=>item);
+                                /// navigate to the edit initial data page
+                              },
+                              onTapView: (){
+                                /// navigate to the view initial data page
+                                /// set state to viewing
+                                ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.VIEWING, SelectedFormSection.initial);
+                                ref.read(latestSelectAccountRequestProvider.notifier).update((val)=>item);
+                              },
                               request: item,
                             );
                           },

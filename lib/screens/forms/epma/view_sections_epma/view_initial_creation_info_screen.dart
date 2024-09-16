@@ -1,27 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/selected_request_provider.dart';
 
-enum SelectedFormSection {
-  initial,
-  fundingSources,
-  accountPurposes,
-  productsServices,
-  formIndividual,
-  otherInformations,
-  otherAccounts,
-  foreignAccounts,
-  dueDiligences,
-  documentsObtainedIndividuals,
-  acctReqWkfHistory,
-  accountType,
-  nextOfKin,
-  referees,
-  assignedAccts,
-  children,
-  stakeHolders,
-  relatedBusiness,
-  taxJurisdiction,
-  documentsAttached
+ class ViewInitialCreationInfoScreen extends ConsumerStatefulWidget {
+  const ViewInitialCreationInfoScreen({super.key});
+
+  @override
+  ConsumerState<ViewInitialCreationInfoScreen> createState() => _ViewInitialCreationInfoScreenState();
+}
+
+class _ViewInitialCreationInfoScreenState extends ConsumerState<ViewInitialCreationInfoScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
+  }
 }
 
 class FormSectionScreen extends ConsumerWidget {
