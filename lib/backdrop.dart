@@ -119,14 +119,14 @@ class Backdrop extends StatefulWidget {
   final Widget backPanel;
   final Widget frontTitle;
   final Widget backTitle;
-  final AccountFormBloc accountFormBloc;
+  // final AccountFormBloc accountFormBloc;
   const Backdrop({
     required this.currentCategory,
     required this.frontPanel,
     required this.backPanel,
     required this.frontTitle,
     required this.backTitle,
-    required this.accountFormBloc,
+    // required this.accountFormBloc,
   });
 
   @override
@@ -137,13 +137,13 @@ class _BackdropState extends State<Backdrop>
     with SingleTickerProviderStateMixin {
   final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
   late AnimationController _controller;
-  late AccountFormBloc _accountFormBloc;
+  // late AccountFormBloc _accountFormBloc;
   String? username;
   @override
   void initState() {
     super.initState();
-    _accountFormBloc = widget.accountFormBloc;
-    getUser();
+    // _accountFormBloc = widget.accountFormBloc;
+    // getUser();
     // This creates an [AnimationController] that can allows for animation for
     // the BackdropPanel. 0.00 means that the front panel is in "tab" (hidden)
     // mode, while 1.0 means that the front panel is open.
@@ -237,19 +237,7 @@ class _BackdropState extends State<Backdrop>
       child: Stack(
         children: <Widget>[
           widget.backPanel,
-          PositionedTransition(
-            rect: panelAnimation,
-            child: _BackdropPanel(
-              onTap: _toggleBackdropPanelVisibility,
-              onVerticalDragUpdate: _handleDragUpdate,
-              onVerticalDragEnd: _handleDragEnd,
-              title: StreamBuilder(
-                stream: widget.accountFormBloc.currentFormCategory,
-                builder: (context, snapshot) => Text('${snapshot.data}'),
-              ),
-              child: widget.frontPanel,
-            ),
-          ),
+ 
         ],
       ),
     );
@@ -265,15 +253,8 @@ class _BackdropState extends State<Backdrop>
       appBar: AppBar(
         backgroundColor: ZxplorePrimaryColor,
         elevation: 0.0,
-        leading: IconButton(
-          onPressed: _toggleBackdropPanelVisibility,
-//          onPressed: (){},
-          icon: AnimatedIcon(
-            icon: AnimatedIcons.close_menu,
-            color: Colors.white,
-            progress: _controller.view,
-          ),
-        ),
+        leading: SizedBox.shrink(),
+ 
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
@@ -284,70 +265,6 @@ class _BackdropState extends State<Backdrop>
               Navigator.pop(context);
             },
           ),
-//          new IconButton(icon: new Icon(Icons.clear_all, color: Colors.white,),
-//            onPressed: (){},
-//          ),
-          new IconButton(
-            icon: new Icon(
-              Icons.save_alt,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              /*
-              var loadingBar = FlushbarHelper.createLoading(
-                message: "Saving account offline...",
-                linearProgressIndicator: null,
-              );
-
-              loadingBar..show(context);
-              */
-              /*
-              await SecureStorage.getUsername().then((value) {
-                if (value != null) {
-                  _accountFormBloc.saveForm(value);
-                }
-              });
-*/
-              _accountFormBloc.saveForm(username ?? "");
-              //  goback(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  duration: const Duration(seconds: 15),
-                  content: Text(
-                      'Your record has been saved successfully, click on the refresh button in your home screen to see your saved record'),
-                ),
-              );
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => MyHomePage()),
-              );
-              //   loadingBar.dismiss(context);
-
-/*
-              
-
-              //   _accountFormBloc.saveOffline();
-          //    _accountFormBloc.saveForm();
-
-              _accountFormBloc.subjectSaveOfflineAccountResponse
-                  .listen((result) {
-                loadingBar.dismiss(context);
-
-                _showSuccessDialog('$result');
-              }).onError((error) {
-                loadingBar.dismiss(context);
-
-                var errorSnackBar =
-                    FlushbarHelper.createError(message: error.toString());
-
-                errorSnackBar..show(context);
-                
-                
-              });
-              */
-            },
-          ),
         ],
         title: _BackdropTitle(
           listenable: _controller.view,
@@ -355,6 +272,7 @@ class _BackdropState extends State<Backdrop>
           backTitle: widget.backTitle,
         ),
       ),
+      
       body: LayoutBuilder(
         builder: _buildStack,
       ),
@@ -367,48 +285,4 @@ class _BackdropState extends State<Backdrop>
       return count++ == 2;
     });
   }
-
-  // void _showSuccessDialog(String message) {
-  //   // flutter defined function
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       // return object of type Dialog
-  //       return AlertDialog(
-  //         title: new Text("Offline Account"),
-  //         content: new Text(message),
-  //         actions: <Widget>[
-  //           // usually buttons at the bottom of the dialog
-  //           OutlinedButton(
-  //             child: Text('Done'),
-  //             style: ButtonStyle(
-  //               foregroundColor: MaterialStateProperty.all<Color>(
-  //                 Colors.red.shade900,
-  //               ),
-  //               backgroundColor: MaterialStateProperty.all<Color>(
-  //                 Colors.white,
-  //               ),
-  //               side: MaterialStateProperty.all<BorderSide>(
-  //                 BorderSide(color: Colors.red.shade900),
-  //               ),
-  //               padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-  //                 EdgeInsets.all(16),
-  //               ),
-  //             ),
-  //             onPressed: () {
-  //               Navigator.pushReplacement(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                     builder: (BuildContext context) => MyHomePage()),
-  //               );
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
-
-
-}
+    }
