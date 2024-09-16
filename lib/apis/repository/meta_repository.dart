@@ -20,4 +20,7 @@ abstract class MetaRepository {
   Future<dynamic> getFatcaStatus();
   Future<dynamic> getDocumentTypes();
   Future<dynamic> getSearchOptions();
+
+
+
 }

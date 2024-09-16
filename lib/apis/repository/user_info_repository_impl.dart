@@ -73,4 +73,26 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
           err.response?.data['message'] ?? 'Request process failed');
     }
   }
+
+    
+  @override
+  Future viewAccountRequest({required String? requestId}) async{
+      try {
+      final response = await api.viewAccountRequest(requestId:requestId );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
 }

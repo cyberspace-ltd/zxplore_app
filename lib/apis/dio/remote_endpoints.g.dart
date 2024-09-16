@@ -222,9 +222,9 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<dynamic> viewAccountRequest({String? typeValue}) async {
+  Future<dynamic> viewAccountRequest({String? requestId}) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'RequestId': typeValue};
+    final queryParameters = <String, dynamic>{r'RequestId': requestId};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;

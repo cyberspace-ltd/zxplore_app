@@ -5,6 +5,7 @@ import 'package:zxplore_app/models/epma_models/pending_requests_all_response.dar
 import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/selected_request_provider.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/pending_requests_draft_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
@@ -153,5 +154,19 @@ class _PendingDraftsRequestsScreenState
         ),
       ),
     );
+  }
+
+  Future<void> getSelectedRequestDetails(String requestId)async{
+
+    final requestResponse =  await ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(requestId);
+
+    if(requestResponse !=null){
+     Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Container()),
+              );
+    }
+ 
   }
 }

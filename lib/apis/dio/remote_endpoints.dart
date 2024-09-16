@@ -60,7 +60,7 @@ abstract class RemoteApi {
 
   @GET('Operation/viewAccountRequest')
   Future<dynamic> viewAccountRequest({
-    @Query('RequestId') required String? typeValue,
+    @Query('RequestId') required String? requestId,
   });
   
   @POST('Operation/createNewRequest')

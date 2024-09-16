@@ -6,5 +6,7 @@ abstract class  UserInfoRepository {
      Future <dynamic> getUserPendingStatisticsRepo();
    Future <dynamic> getUserPendingDraftRepo();
    Future <dynamic> getUserPendingAllRepo();
+   Future<dynamic> viewAccountRequest({required String? requestId});
+
   
 }
