@@ -71,12 +71,16 @@ class CombinedFormStateNotifier extends StateNotifier<CombinedFormState> {
     state = state.copyWith(selectedSection: selectedSection);
   }
 }
-
+///[combinedFormStateProvider] this holds the stat and form section which the user is either [VIEWING] OR[EDITING]
+/// and the section as shown in the enum [SelectedFormSection]
 final combinedFormStateProvider = StateNotifierProvider<CombinedFormStateNotifier, CombinedFormState>((ref) {
   return CombinedFormStateNotifier();
 });
  
 
+///[latestSelectRequestProvider] this holds the last selected request Draft/Pending post
+/// this provides the request id for calling the view request
+final latestSelectRequestProvider = StateProvider<PendingRequestsDatum?>((ref)=>null);
 
-final latestSelectAccountRequestProvider = StateProvider<PendingRequestsDatum?>((ref)=>null);
-// final RequestStateProvider = StateProvider<RequestState>((ref)=>RequestState.DEFAULT);
+///[latestViewAccountRequestProvider] this holds the last acquired request a user choses to [VIEW]
+final latestViewAccountRequestProvider = StateProvider<ViewAccountRequestResponse?>((ref)=>null);

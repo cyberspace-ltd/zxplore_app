@@ -127,14 +127,14 @@ class _PendingDraftsRequestsScreenState
                               },
                               onTapEdit: (){
                                 ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.EDITING, SelectedFormSection.initial);
-                                ref.read(latestSelectAccountRequestProvider.notifier).update((val)=>item);
+                                ref.read(latestSelectRequestProvider.notifier).update((val)=>item);
                                 /// navigate to the edit initial data page
                               },
                               onTapView: (){
                                 /// navigate to the view initial data page
                                 /// set state to viewing
                                 ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.VIEWING, SelectedFormSection.initial);
-                                ref.read(latestSelectAccountRequestProvider.notifier).update((val)=>item);
+                                ref.read(latestSelectRequestProvider.notifier).update((val)=>item);
                               },
                               request: item,
                             );
