@@ -4,6 +4,8 @@ import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/pending_requests_all_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/selected_request_provider.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/pending_requests_all_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
@@ -48,7 +50,21 @@ class _AllPendingRequestsScreenState
   }
 
  
+  Future<void> getSelectedRequestDetails(String? requestId) async {
+    final requestResponse = await ref
+        .read(viewRequestControllerProvider.notifier)
+        .getRequestDetailAsync(requestId!);
 
+    if (requestResponse != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => ViewInitialCreationInfoScreen(
+                  formIndividualData: requestResponse.toMap(),
+                )),
+      );
+    } else {}
+  }
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
@@ -57,25 +73,33 @@ class _AllPendingRequestsScreenState
 
       }),
     );
-    ref.listen<AsyncValue>(
-      getPendingRequestsAllDatumProvider,
-      (_, state) {
-        if (state.value == AsyncLoading) {
-          // showMaterialModalBottomSheet(
-          //   context: context,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(30),
-          //   ),
-          //   backgroundColor: AppColors.white,
-          //   builder: (context) {
-          //     return const Center(
-          //       child: CustomProgressIndicator(),
-          //     );
-          //   },
-          // );
-        }
-      },
-    );
+        ref.listen<AsyncValue>(
+      viewRequestControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, errorMsg:  state.error,okAction: (){
+                                getSelectedRequestDetails( ref
+                                    .read(latestSelectRequestProvider)?.reqId!);
+
+      },cancelAction: ()=>Navigator.pop(context),
+    ));
+    // ref.listen<AsyncValue>(
+    //   getPendingRequestsAllDatumProvider,
+    //   (_, state) {
+    //     if (state.value == AsyncLoading) {
+    //       // showMaterialModalBottomSheet(
+    //       //   context: context,
+    //       //   shape: RoundedRectangleBorder(
+    //       //     borderRadius: BorderRadius.circular(30),
+    //       //   ),
+    //       //   backgroundColor: AppColors.white,
+    //       //   builder: (context) {
+    //       //     return const Center(
+    //       //       child: CustomProgressIndicator(),
+    //       //     );
+    //       //   },
+    //       // );
+    //     }
+    //   },
+    // );
 
     return RefreshIndicator(
       onRefresh: () async => ref.invalidate(getPendingRequestsAllDatumProvider),
@@ -151,16 +175,28 @@ class _AllPendingRequestsScreenState
             
                             return AccountRequestItem(
                               onPressed: () {},
-                                   onTapEdit: (){
-                                ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.EDITING, SelectedFormSection.initial);
-                                ref.read(latestSelectRequestProvider.notifier).update((val)=>item);
+                            onTapEdit: () {
+                                ref
+                                    .read(combinedFormStateProvider.notifier)
+                                    .updateState(RequestState.EDITING,
+                                        SelectedFormSection.initial);
+                                ref
+                                    .read(latestSelectRequestProvider.notifier)
+                                    .update((val) => item);
+
                                 /// navigate to the edit initial data page
                               },
-                              onTapView: (){
+                              onTapView: () {
                                 /// navigate to the view initial data page
                                 /// set state to viewing
-                                ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.VIEWING, SelectedFormSection.initial);
-                                ref.read(latestSelectRequestProvider.notifier).update((val)=>item);
+                                ref
+                                    .read(combinedFormStateProvider.notifier)
+                                    .updateState(RequestState.VIEWING,
+                                        SelectedFormSection.initial);
+                                ref
+                                    .read(latestSelectRequestProvider.notifier)
+                                    .update((val) => item);
+                                getSelectedRequestDetails(item.reqId);
                               },
                               request: item,
                             );

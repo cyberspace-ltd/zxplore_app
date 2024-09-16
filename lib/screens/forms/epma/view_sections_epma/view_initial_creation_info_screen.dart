@@ -30,8 +30,8 @@ class _ViewInitialCreationInfoScreenState
         onTapEdit: () {
           // to navigate to edit this section
         },
-        child: SizedBox(
-          height: screenSize(context).height,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: ListView.builder(
               shrinkWrap: true,
               itemCount: sectionData.length,
@@ -64,7 +64,6 @@ class FormIndividualItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-       ViewItem(title: 'Full name',value: data?.fullName??'',),
        ViewItem(title: 'Full name',value: data?.fullName??'',),
        ViewItem(title: 'Email',value: data?.emailAddress??'',),
        ViewItem(title: 'Mobile',value: data?.mobileNo??'',),
@@ -105,7 +104,7 @@ class FormIndividualItem extends StatelessWidget {
        ViewItem(title: 'Statement to Email',value: data?.setupStatementViaEmail??false,),
        ViewItem(title: 'Customer on ZPrompt',value: data?.setupZPrompt??false,),
        ViewItem(title: 'Customer on IBank',value: data?.setupIbank??false,),
-       ViewItem(title: 'Account Ownershipk',value: data?.setupIbank??false,),
+       ViewItem(title: 'Account Ownership',value: data?.setupIbank??false,),
        ViewItem(title: 'Monthly Icom',value: data?.monthlyIncome??0.0,),
       ],
     );

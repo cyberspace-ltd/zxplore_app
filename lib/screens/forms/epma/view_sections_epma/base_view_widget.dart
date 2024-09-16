@@ -30,11 +30,7 @@ class BaseFormScreen extends StatelessWidget {
           // ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child:
-          child
+      body:  child
           
           //  Column(
           //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,10 +52,7 @@ class BaseFormScreen extends StatelessWidget {
           //     );
           //   }).toList(),
           // ),
-      
-      
-        ),
-      ),
+       ,
       floatingActionButton: FloatingActionButton(
         onPressed: onTapEdit,
         child: const Icon(Icons.edit),

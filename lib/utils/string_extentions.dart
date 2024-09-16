@@ -31,3 +31,12 @@ Color stageColor(String? stage)
 
   }
 }
+
+// Function to format date
+String formatDate(String? dateString) {
+  if (dateString == null || dateString.isEmpty) {
+    return '';
+  }
+  DateTime date = DateTime.parse(dateString);
+  return DateFormat('dd MMM yyyy, hh:mm a').format(date);
+}
