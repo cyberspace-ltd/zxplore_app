@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_section_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 
 class ViewInitialCreationInfoScreen extends ConsumerStatefulWidget {
@@ -27,6 +28,14 @@ class _ViewInitialCreationInfoScreenState
     return BaseFormScreen(
         title: 'Form Individual',
         data: _flattenData(widget.formIndividualData),
+        onTapSectionMenu: (){
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>SectionScreen()
+                    ),
+          );
+        },
         onTapEdit: () {
           // to navigate to edit this section
         },
