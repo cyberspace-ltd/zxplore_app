@@ -150,6 +150,8 @@ class _AllPendingRequestsScreenState
             
                             return AccountRequestItem(
                               onPressed: () {},
+                              onTapEdit: (){},
+                              onTapView: (){},
                               request: item,
                             );
                           },
@@ -171,9 +173,11 @@ class _AllPendingRequestsScreenState
 }
 
 class AccountRequestItem extends StatelessWidget {
-  const AccountRequestItem({super.key, this.request, this.onPressed});
+  const AccountRequestItem({super.key, this.request,  this.onPressed,required this.onTapEdit,required this.onTapView});
   final PendingRequestsDatum? request;
   final Function()? onPressed;
+  final Function()? onTapEdit;
+  final Function()? onTapView;
 
   @override
   Widget build(BuildContext context) {
@@ -205,9 +209,31 @@ class AccountRequestItem extends StatelessWidget {
                       .bodyMedium
                       ?.copyWith(fontWeight: FontWeight.w500),
                 ),
-                CircleAvatar(
-                  radius: 10,
-                  backgroundColor: request?.stage?.toLowerCase()=='draft'?Colors.purpleAccent:request?.stage?.toLowerCase()=='pending posting'?Colors.yellow:Colors.green
+                SizedBox(
+                  width: 100,
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 10,
+                        backgroundColor: request?.stage?.toLowerCase()=='draft'?Colors.purpleAccent:request?.stage?.toLowerCase()=='pending posting'?Colors.yellow:Colors.green
+                      ),
+                      PopupMenuButton<int>(itemBuilder: (BuildContext context){
+                        return <PopupMenuEntry<int>>[
+                          PopupMenuItem<int>(
+                            value: 0,
+                            child: GestureDetector(
+                              onTap: onTapView,
+                              child: Text('View'))),
+                              PopupMenuItem<int>(
+                            value: 1,
+                            child: GestureDetector(
+                              onTap: onTapEdit,
+                              child: Text('Edit')))
+
+                        ];
+                      })
+                    ],
+                  ),
                 )
               ],
             ),
