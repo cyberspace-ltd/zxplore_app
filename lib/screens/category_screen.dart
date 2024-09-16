@@ -145,7 +145,7 @@ class _CategoryRouteState extends State<CategoryPage> {
     );
 
     return Backdrop(
-      accountFormBloc: accountFormBloc!,
+      // accountFormBloc: accountFormBloc!,
       currentCategory:
           _currentCategory == null ? _defaultCategory! : _currentCategory!,
       frontPanel: _currentCategory == null
