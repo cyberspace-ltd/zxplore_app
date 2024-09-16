@@ -1,12 +1,13 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 part 'view_request_controller.g.dart';
 
 @riverpod
 class ViewRequestController extends _$ViewRequestController {
   @override
-  FutureOr<ViewAccountRequestResponse?>  build() {
+  FutureOr<ViewAccountRequestResponse?> build() {
     return null;
   }
 
@@ -15,22 +16,29 @@ class ViewRequestController extends _$ViewRequestController {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
-      const AsyncLoading();
+      state = const AsyncLoading();
       final requestResponse =
           await repo.viewAccountRequest(requestId: requestId);
 
       if (requestResponse['status'] == true) {
         final result = ViewAccountRequestResponse.fromMap(requestResponse);
-        AsyncValue.data(result);
+        state = AsyncValue.data(result);
         return result;
       } else {
-        AsyncValue.data(null);
+        if (requestResponse['message'] == 'token expired/invalid') {
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        }
+        state = AsyncValue.data(null);
         return null;
       }
     } catch (e, stackTrace) {
       final ex =
-          Exception('Failed to Docs Categories: ${stackTrace.toString()} ');
-      AsyncError(ex, stackTrace);
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
       return null;
     }
   }

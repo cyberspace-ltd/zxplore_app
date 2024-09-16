@@ -7,12 +7,12 @@ import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 
 extension AsyncValueUI on AsyncValue {
-  void showAlertDialogOnError(BuildContext context,{dynamic okAction,dynamic cancelAction}) {
+  void showAlertDialogOnError(BuildContext context,{dynamic okAction,dynamic cancelAction,dynamic errorMsg}) {
     if (!isLoading && hasError) {
       showExceptionAlertDialog(
         context: context,
         title: 'Error',
-        exception: checkMessageIsString(error),
+        exception: checkMessageIsString(errorMsg??error),
         okAction: okAction??(){},cancelAction: cancelAction??(){}
       
         

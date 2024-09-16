@@ -21,7 +21,6 @@ class LoginController extends _$LoginController {
     required String? username,
     required String? password,
   }) async {
-    // final sharedPreferences = ref.read(sharedPreferencesProvider).requireValue;
     try {
       state = const AsyncValue.loading();
       final repo = ref.read(authRespositoryImplProvider);
@@ -89,29 +88,20 @@ class LoginController extends _$LoginController {
   }
 
   Future<dynamic> extRenewToken() async {
-    // final sharedPreferences = ref.read(sharedPreferencesProvider).requireValue;
     try {
       state = const AsyncValue.loading();
         await prefs.load();
       final oldToken=  prefs.getString(SharedPreferencesKeys.accessTokenKey);
-
       final repo = ref.read(authRespositoryImplProvider);
-
       final renewTokenRes = await repo.renewToken(oldToken:oldToken);
-
-      if (renewTokenRes.data['status']) {
-        state = AsyncValue.data(renewTokenRes.data['data']);
-        prefs.setString(SharedPreferencesKeys.accessTokenKey, renewTokenRes.data['data']);
-   
-        return renewTokenRes;
+      if (renewTokenRes['status']) {
+        prefs.setString(SharedPreferencesKeys.accessTokenKey, renewTokenRes['data']);
+        return renewTokenRes['data'];
       } else {
-        throw AppException('${renewTokenRes.message}');
+        throw AppException('${renewTokenRes['message']}');
       }
     } catch (e, s) {
-      // state = AsyncError(e, s);
       throw AppException('${s.toString()}');
-
-      // return null;
     }
   }
 }

@@ -1,256 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:zxplore_app/screens/controllers/epma_controllers/selected_request_provider.dart';
+import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/utils/app_sizes.dart';
 
- class ViewInitialCreationInfoScreen extends ConsumerStatefulWidget {
+class ViewInitialCreationInfoScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> formIndividualData;
 
-  const ViewInitialCreationInfoScreen({Key? key, required this.formIndividualData}) : super(key: key);
+  const ViewInitialCreationInfoScreen(
+      {Key? key, required this.formIndividualData})
+      : super(key: key);
 
   @override
-  ConsumerState<ViewInitialCreationInfoScreen> createState() => _ViewInitialCreationInfoScreenState();
+  ConsumerState<ViewInitialCreationInfoScreen> createState() =>
+      _ViewInitialCreationInfoScreenState();
 }
 
-class _ViewInitialCreationInfoScreenState extends ConsumerState<ViewInitialCreationInfoScreen> {
+class _ViewInitialCreationInfoScreenState
+    extends ConsumerState<ViewInitialCreationInfoScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
+    final ViewAccountRequestResponse? requestData =
+        ViewAccountRequestResponse.fromMap(widget.formIndividualData);
+    final sectionData = requestData?.data?.formIndividual ?? [];
 
-// class FormSectionScreen extends ConsumerWidget {
-//   final SelectedFormSection section;
-
-//   const FormSectionScreen({Key? key, required this.section}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     // In a real app, you would fetch this data from your state management solution
-//     final Map<String, dynamic> sectionData = _getSectionData(ref, section);
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(_getSectionTitle(section)),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               // Implement edit functionality
-//               print('Edit button pressed for ${_getSectionTitle(section)}');
-//             },
-//             child: const Text('Edit', style: TextStyle(color: Colors.white)),
-//           ),
-//         ],
-//       ),
-//       body: SingleChildScrollView(
-//         child: Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: _buildSectionContent(sectionData),
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           // Implement edit functionality
-//           print('FAB pressed for ${_getSectionTitle(section)}');
-//         },
-//         child: const Icon(Icons.edit),
-//       ),
-//     );
-//   }
-
-//   Widget _buildSectionContent(Map<String, dynamic> sectionData) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: sectionData.entries.map((entry) {
-//         if (entry.value is Map<String, dynamic>) {
-//           return _buildNestedSection(entry.key, entry.value);
-//         } else if (entry.value is List) {
-//           return _buildListSection(entry.key, entry.value);
-//         } else {
-//           return _buildSimpleField(entry.key, entry.value);
-//         }
-//       }).toList(),
-//     );
-//   }
-
-//   Widget _buildNestedSection(String title, Map<String, dynamic> data) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//         const SizedBox(height: 8),
-//         Padding(
-//           padding: const EdgeInsets.only(left: 16.0),
-//           child: _buildSectionContent(data),
-//         ),
-//         const SizedBox(height: 16),
-//       ],
-//     );
-//   }
-
-//   Widget _buildListSection(String title, List data) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//         const SizedBox(height: 8),
-//         ...data.map((item) {
-//           if (item is Map<String, dynamic>) {
-//             return Padding(
-//               padding: const EdgeInsets.only(left: 16.0),
-//               child: _buildSectionContent(item),
-//             );
-//           } else {
-//             return Text(item.toString(), style: const TextStyle(fontSize: 16));
-//           }
-//         }),
-//         const SizedBox(height: 16),
-//       ],
-//     );
-//   }
-
-//   Widget _buildSimpleField(String key, dynamic value) {
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Text(key, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-//         Text(value.toString(), style: const TextStyle(fontSize: 16)),
-//         const SizedBox(height: 16),
-//       ],
-//     );
-//   }
-
-//   String _getSectionTitle(SelectedFormSection section) {
-//     return section.toString().split('.').last;
-//   }
-
-//   Map<String, dynamic> _getSectionData(WidgetRef ref, SelectedFormSection section) {
-//     // In a real app, you would fetch this data from your state management solution
-//     // For this example, we're using dummy data based on the JSON structure
-//     final Map<String, dynamic> fullData = {
-//       "formIndividual": [
-//         {
-//           "formId": 0,
-//           "reqId": "string",
-//           "stageId": 0,
-//           "rowVersion": 0,
-//           "itemStage": "string",
-//           "surname": "string",
-//           "firstName": "string",
-//           "otherNames": "string",
-//           // ... other fields ...
-//         }
-//       ],
-//       "productsServices": [
-//         {
-//           "productsServicesId": 0,
-//           "reqId": "string",
-//           "itemStage": "string",
-//           "rowVersion": 0,
-//           "adps": true,
-//           "easyPay": true,
-//           // ... other fields ...
-//         }
-//       ],
-//       "accountPurposes": [
-//         {
-//           "accountPurposesId": 0,
-//           "reqId": "string",
-//           "rowVersion": 0,
-//           "itemStage": "string",
-//           "salaryProcessing": true,
-//           "toOtainLoan": true,
-//           // ... other fields ...
-//         }
-//       ],
-//       "fundingSources": [
-//         {
-//           "fundingSourcesId": 0,
-//           "reqId": "string",
-//           "rowVersion": 0,
-//           "itemStage": "string",
-//           "commissions": true,
-//           "dividends": true,
-//           // ... other fields ...
-//         }
-//       ],
-//       // ... other sections ...
-//     };
-
-//     return fullData[section.toString().split('.').last] ?? {};
-//   }
-// }
-
- 
-// Base screen template
-class BaseFormScreen extends StatelessWidget {
-  final String title;
-  final Map<String, dynamic> data;
-
-  const BaseFormScreen({Key? key, required this.title, required this.data}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Implement edit functionality
-              print('Edit button pressed for $title');
-            },
-            child: const Text('Edit', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: data.entries.map((entry) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    entry.key,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    entry.value.toString(),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement edit functionality
-          print('FAB pressed for $title');
-        },
-        child: const Icon(Icons.edit),
-      ),
-    );
-  }
-}
-
-// Example of a specific screen: FormIndividualScreen
-class FormIndividualScreen extends StatelessWidget {
-  final Map<String, dynamic> formIndividualData;
-
-  const FormIndividualScreen({Key? key, required this.formIndividualData}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
     return BaseFormScreen(
-      title: 'Form Individual',
-      data: _flattenData(formIndividualData),
-    );
+        title: 'Form Individual',
+        data: _flattenData(widget.formIndividualData),
+        onTapEdit: () {
+          // to navigate to edit this section
+        },
+        child: SizedBox(
+          height: screenSize(context).height,
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: sectionData.length,
+              itemBuilder: (BuildContext context, index) {
+                return FormIndividualItem(data:sectionData[index] ,);
+              }),
+        ));
   }
 
   Map<String, String> _flattenData(Map<String, dynamic> data) {
@@ -268,52 +56,107 @@ class FormIndividualScreen extends StatelessWidget {
   }
 }
 
-// Example of another specific screen: FundingSourcesScreen
-class FundingSourcesScreen extends StatelessWidget {
-  final List<Map<String, dynamic>> fundingSourcesData;
-
-  const FundingSourcesScreen({Key? key, required this.fundingSourcesData}) : super(key: key);
+class FormIndividualItem extends StatelessWidget {
+  const FormIndividualItem({super.key, this.data});
+  final FormIndividual? data;
 
   @override
   Widget build(BuildContext context) {
-    return BaseFormScreen(
-      title: 'Funding Sources',
-      data: _processData(fundingSourcesData),
+    return Column(
+      children: [
+       ViewItem(title: 'Full name',value: data?.fullName??'',),
+       ViewItem(title: 'Full name',value: data?.fullName??'',),
+       ViewItem(title: 'Email',value: data?.emailAddress??'',),
+       ViewItem(title: 'Mobile',value: data?.mobileNo??'',),
+       ViewItem(title: 'Telephone',value: data?.telNo??'',),
+       ViewItem(title: 'Marital Satus',value: data?.maritalStatus??'',),
+       ViewItem(title: 'Spouse',value: data?.spouseName??'',),
+       ViewItem(title: 'Spouse occupation',value: data?.spouseOccupation??'',),
+       ViewItem(title: 'Business',value: data?.businessNature?.businessNatureName??'',),
+       ViewItem(title: 'Sub-Business Category',value: data?.subBusinessNature?.subBusinessNatureName??'',),
+       ViewItem(title: 'Eployer Name',value: data?.employerName??'',),
+       ViewItem(title: 'Eployer Email',value: data?.employerEmail??'',),
+       ViewItem(title: 'Eployer Tel.',value: data?.employerTel??'',),
+       ViewItem(title: 'Eployer Type',value: data?.employmentType?.employmentTypeName??'',),
+       ViewItem(title: 'Account Creation Stage',value: data?.itemStage??'',),
+       ViewItem(title: 'DOB',value: data?.birthDate??'',),
+       ViewItem(title: 'Gender',value: data?.gender?.genderName??'',),
+       ViewItem(title: 'Birth place',value: data?.birthPlace??'',),
+       ViewItem(title: 'ID Number',value: data?.identificationNo??'',),
+       ViewItem(title: 'Country',value: data?.country?.countryName??'',),
+       ViewItem(title: 'Citizenship',value: data?.country?.countryName??'',),
+       ViewItem(title: 'Country',value: data?.country?.countryName??'',),
+       ViewItem(title: 'ID Type',value: data?.identificationType?.identificationTypeName??'',),
+       ViewItem(title: 'ID Issuer',value: data?.idIssueAuthority??'',),
+       ViewItem(title: 'ID Issue Date',value: data?.idIssueDate??'',),
+       ViewItem(title: 'ID Expiry Date',value: data?.idExpiryDate??'',),
+       ViewItem(title: 'IDD Code',value: data?.iddCode??'',),
+       ViewItem(title: 'NIA',value: data?.niaVerificationNo??'',),
+       ViewItem(title: 'Home Town',value: data?.homeTown??'',),
+       ViewItem(title: 'Permanent Address',value: data?.hasPermanentResidence??'',),
+       ViewItem(title: 'Residential Address 1',value: data?.residentialAddress??'',),
+       ViewItem(title: 'Residential Address 2',value: data?.residentialAddress2??'',),
+       ViewItem(title: 'City',value: data?.country?.countryName??'',),
+       ViewItem(title: 'Customer Classification',value: data?.customerClassification?.customerClassificationId??'',),
+       ViewItem(title: 'Resides in GH',value: data?.customerResidentInGhana??false,),
+       ViewItem(title: 'Physically Challenged',value: data?.isPhysicallyChallanged??false,),
+       ViewItem(title: 'Customer is PEP',value: data?.customerIsPep??false,),
+       ViewItem(title: 'Email Indemnity',value: data?.setupEmailIndemnity??false,),
+       ViewItem(title: 'Statement to Email',value: data?.setupStatementViaEmail??false,),
+       ViewItem(title: 'Customer on ZPrompt',value: data?.setupZPrompt??false,),
+       ViewItem(title: 'Customer on IBank',value: data?.setupIbank??false,),
+       ViewItem(title: 'Account Ownershipk',value: data?.setupIbank??false,),
+       ViewItem(title: 'Monthly Icom',value: data?.monthlyIncome??0.0,),
+      ],
     );
-  }
-
-  Map<String, String> _processData(List<Map<String, dynamic>> data) {
-    Map<String, String> processed = {};
-    if (data.isNotEmpty) {
-      data[0].forEach((key, value) {
-        if (key != 'fundingSourcesId' && key != 'reqId' && key != 'rowVersion' && key != 'itemStage' && key != 'actionFlag') {
-          processed[key] = value.toString();
-        }
-      });
-    }
-    return processed;
   }
 }
 
-// More screens would be implemented similarly...
+class ViewItem extends StatelessWidget {
+  const ViewItem({super.key,required this.title, this.value});
+  final String title;
+  final dynamic value;
 
-// Usage example
-// class MyApp extends StatelessWidget {
-//   final Map<String, dynamic> jsonData;
-
-//   const MyApp({Key? key, required this.jsonData}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Navigator(
-//         pages: [
-//           MaterialPage(child: FormIndividualScreen(formIndividualData: jsonData['data']['formIndividual'][0])),
-//           MaterialPage(child: FundingSourcesScreen(fundingSourcesData: jsonData['data']['fundingSources'])),
-//           // Add more pages for other sections...
-//         ],
-//         onPopPage: (route, result) => route.didPop(result),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  title,
+                  
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                ),
+              ],
+            ),
+            Wrap(
+              children: [
+                Text(
+                  '$value',
+                  maxLines: 5,
+                  textAlign: TextAlign.left,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.normal, fontSize: 16),
+                ),
+              ],
+            ),
+            gapH12
+          ],
+        ),
+      ),
+    );
+  }
+}
+ 

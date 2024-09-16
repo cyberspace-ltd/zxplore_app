@@ -6,7 +6,9 @@ import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/selected_request_provider.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/pending_requests_draft_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
@@ -47,13 +49,23 @@ class _PendingDraftsRequestsScreenState
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+
+       ref.listen<AsyncValue>(
+      viewRequestControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, errorMsg:  state.error,okAction: (){
+                                getSelectedRequestDetails( ref
+                                    .read(latestSelectRequestProvider)?.reqId!);
+
+      },cancelAction: ()=>Navigator.pop(context),
+    ));
     return RefreshIndicator(
-      onRefresh: () async => ref.invalidate(getPendingRequestsDraftDatumProvider),
+      onRefresh: () async =>
+          ref.invalidate(getPendingRequestsDraftDatumProvider),
       child: ZxploreProgress(
-        inAsyncCall: ref.watch(getPendingRequestsDraftDatumProvider).isLoading,
+        inAsyncCall: ref.watch(getPendingRequestsDraftDatumProvider).isLoading || ref
+        .watch(viewRequestControllerProvider).isLoading,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: ZxplorePrimaryColor,
@@ -66,8 +78,8 @@ class _PendingDraftsRequestsScreenState
               style: TextStyle(color: Colors.white),
             ),
           ),
-          body:   Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
+          body: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
             child: ListView(
               children: [
                 Text(
@@ -109,7 +121,8 @@ class _PendingDraftsRequestsScreenState
                     return requestItemsAsyncValue.when(
                       data: (requestItems) {
                         if (requestItems == null || requestItems.isEmpty) {
-                          return const Center(child: Text('No items available.'));
+                          return const Center(
+                              child: Text('No items available.'));
                         }
                         final requestsToShow = _filteredItems ?? requestItems;
                         return ListView.separated(
@@ -120,22 +133,31 @@ class _PendingDraftsRequestsScreenState
                           itemCount: requestsToShow.length,
                           itemBuilder: (context, index) {
                             final item = requestsToShow[index];
-            
-                            return AccountRequestItem(
-                              onPressed: () {
-                      
 
-                              },
-                              onTapEdit: (){
-                                ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.EDITING, SelectedFormSection.initial);
-                                ref.read(latestSelectRequestProvider.notifier).update((val)=>item);
+                            return AccountRequestItem(
+                              onPressed: () {},
+                              onTapEdit: () {
+                                ref
+                                    .read(combinedFormStateProvider.notifier)
+                                    .updateState(RequestState.EDITING,
+                                        SelectedFormSection.initial);
+                                ref
+                                    .read(latestSelectRequestProvider.notifier)
+                                    .update((val) => item);
+
                                 /// navigate to the edit initial data page
                               },
-                              onTapView: (){
+                              onTapView: () {
                                 /// navigate to the view initial data page
                                 /// set state to viewing
-                                ref.read(combinedFormStateProvider.notifier ).updateState(RequestState.VIEWING, SelectedFormSection.initial);
-                                ref.read(latestSelectRequestProvider.notifier).update((val)=>item);
+                                ref
+                                    .read(combinedFormStateProvider.notifier)
+                                    .updateState(RequestState.VIEWING,
+                                        SelectedFormSection.initial);
+                                ref
+                                    .read(latestSelectRequestProvider.notifier)
+                                    .update((val) => item);
+                                getSelectedRequestDetails(item.reqId);
                               },
                               request: item,
                             );
@@ -156,17 +178,19 @@ class _PendingDraftsRequestsScreenState
     );
   }
 
-  Future<void> getSelectedRequestDetails(String requestId)async{
+  Future<void> getSelectedRequestDetails(String? requestId) async {
+    final requestResponse = await ref
+        .read(viewRequestControllerProvider.notifier)
+        .getRequestDetailAsync(requestId!);
 
-    final requestResponse =  await ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(requestId);
-
-    if(requestResponse !=null){
-     Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => Container()),
-              );
-    }
- 
+    if (requestResponse != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => ViewInitialCreationInfoScreen(
+                  formIndividualData: requestResponse.toMap(),
+                )),
+      );
+    } else {}
   }
 }

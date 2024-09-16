@@ -194,7 +194,7 @@ class AccountRequestItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.12,
+        height: MediaQuery.of(context).size.height * 0.18,
         padding: EdgeInsets.all(16.0),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
@@ -220,15 +220,26 @@ class AccountRequestItem extends StatelessWidget {
                       ?.copyWith(fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
-                  width: 100,
-                  child: Row(
+                  // width: 70,
+                  child: Row(mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
                         radius: 10,
                         backgroundColor: request?.stage?.toLowerCase()=='draft'?Colors.purpleAccent:request?.stage?.toLowerCase()=='pending posting'?Colors.yellow:Colors.green
                       ),
-                      PopupMenuButton<int>(itemBuilder: (BuildContext context){
+                      PopupMenuButton<int>(
+                        onSelected: (value){
+                          if(value==0){
+                            onTapView!();
+
+                          }else{
+                            onTapEdit!();
+
+                          }
+                        },
+                        itemBuilder: (BuildContext context){
                         return <PopupMenuEntry<int>>[
+                        
                           PopupMenuItem<int>(
                             value: 0,
                             child: GestureDetector(
