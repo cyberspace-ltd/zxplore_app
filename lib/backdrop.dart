@@ -176,7 +176,7 @@ class _BackdropState extends State<Backdrop>
         status == AnimationStatus.forward;
   }
 
-  void _toggleBackdropPanelVisibility() {
+  void toggleBackdropPanelVisibility() {
     FocusScope.of(context).requestFocus(FocusNode());
     _controller.fling(
         velocity: _backdropPanelVisible ? -_kFlingVelocity : _kFlingVelocity);
@@ -190,7 +190,6 @@ class _BackdropState extends State<Backdrop>
 
   // By design: the panel can only be opened with a swipe. To close the panel
   // the user must either tap its heading or the backdrop's menu icon.
-
   void _handleDragUpdate(DragUpdateDetails details) {
     if (_controller.isAnimating ||
         _controller.status == AnimationStatus.completed) return;

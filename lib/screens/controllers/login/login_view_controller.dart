@@ -30,9 +30,6 @@ class LoginController extends _$LoginController {
 
       if (loginRes.status) {
         state = AsyncValue.data(loginRes);
-        //  perssist the token here
-        await prefs.load();
-        prefs.setString(SharedPreferencesKeys.accessTokenKey, loginRes.data);
         onSuccess!.call();
         return loginRes;
       } else {

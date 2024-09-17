@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
+import 'package:zxplore_app/widgets/empty_view.dart';
 // import 'package:zxplore_app/utils/app_sizes.dart';
 // import 'package:zxplore_app/utils/string_extentions.dart';
 
@@ -29,17 +30,21 @@ class _AccountTypeScreenState
     return BaseFormScreen(
         title: 'Account Type',
         data: _flattenData(widget.formIndividualData),
+        showEdit: sectionData.isNotEmpty,
         onTapEdit: () {
           // to navigate to edit this section
         },
+        onTapAdd: (){
+          // rroute to add new item page 
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: ListView.builder(
+          child:sectionData.isNotEmpty? ListView.builder(
               shrinkWrap: true,
               itemCount: sectionData.length,
               itemBuilder: (BuildContext context, index) {
                 return Item(data:sectionData[index] ,);
-              }),
+              }):EmptyViewWidget(),
         ));
   }
   Map<String, String> _flattenData(Map<String, dynamic> data) {

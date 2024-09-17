@@ -51,7 +51,15 @@ class ApiInterceptor extends Interceptor {
       'headers: ${response.headers} data: ${response.data}',
     );
 
-   
+    if(response.requestOptions.path =='Account/login'){
+      if(response.data['status']==true){
+        final pref= await SharedPreferences.getInstance();
+       final tk= response.data['data'];
+       if(tk!=null){
+        await pref.setString(SharedPreferencesKeys.accessTokenKey, tk);
+       }
+      }
+    }
     return super.onResponse(response, handler);
   }
 

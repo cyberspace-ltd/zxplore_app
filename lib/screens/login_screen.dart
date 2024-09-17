@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
+import 'package:zxplore_app/screens/controllers/home/user_pending_statistics_controller.dart';
 import 'package:zxplore_app/screens/controllers/login/get_login_modes.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticiapted_amount.dart';
@@ -65,20 +66,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.read(loginControllerProvider.notifier).loginUser(
         onSuccess: () {
           /// call the required Meta
-          // ref.read(getAnticipatedAmountProvider);
-          // ref.read(getAnticipatedTransactionProvider);
-          // ref.read(getBusinessNaturesProvider);
-          // ref.read(getCountriesProvider);
-          // ref.read(getCustomerClassificationProvider);
-          // ref.read(getEmploymentTypeProvider);
-          // ref.read(getFatcaStatusProvider);
-          // ref.read(getGenderProvider);
-          // ref.read(getDocumentTypesProvider);
-          // ref.read(getIdentificationTypesProvider);
-          // ref.read(getMaritalStatusProvider);
-          // ref.read(getReconStatusProvider);
-          // ref.read(getRegionsProvider);
-          // ref.read(getSearchOptionsProvider);
+          ref.read(getAnticipatedAmountProvider);
+          ref.read(getAnticipatedTransactionProvider);
+          ref.read(getBusinessNaturesProvider);
+          ref.read(getCountriesProvider);
+          ref.read(getCustomerClassificationProvider);
+          ref.read(getEmploymentTypeProvider);
+          ref.read(getFatcaStatusProvider);
+          ref.read(getGenderProvider);
+          ref.read(getDocumentTypesProvider);
+          ref.read(getIdentificationTypesProvider);
+          ref.read(getMaritalStatusProvider);
+          ref.read(getReconStatusProvider);
+          ref.read(getRegionsProvider);
+          ref.read(getSearchOptionsProvider);
 
           /// Todo add recent params when i item has been selected
           ///  set this items only when there is a recently viewed or editable request
