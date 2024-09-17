@@ -51,65 +51,14 @@ class ApiInterceptor extends Interceptor {
       'headers: ${response.headers} data: ${response.data}',
     );
 
-    if (response.requestOptions.path.startsWith('/auth/login')) {
-      final loginResponse = {'a': 'b'}
-          as Response; // LoginResponseWrapper.fromJson(response.data);
-      if (loginResponse.statusCode == 200) {
-        if (loginResponse.data.responseCode == 0) {
-          final sp = await SharedPreferences.getInstance();
-          final token = loginResponse.data.data?.token;
-          if (token != null) {
-            await sp.setString('accessTokenKey', token);
-            _log.info('Access token saved to shared preferences');
-          }
-        }
-      }
-    }
-
-    if (response.requestOptions.path.startsWith('/getteasy/personalDetails')) {
-      final personalDetailsresponse = {'a': 'b'} as Response;
-      // PersonalDetailsResponseWrapper.fromJson(response.data);
-      if (personalDetailsresponse.statusCode == 200) {
-        if (personalDetailsresponse.data.responseCode == 0) {
-          final sp = await SharedPreferences.getInstance();
-          final firstName = personalDetailsresponse.data.data.details.firstName;
-          final surname = personalDetailsresponse.data.data.details.surname;
-          final email = personalDetailsresponse.data.data.details.email;
-          final phoneNumber =
-              personalDetailsresponse.data.data.details.phoneNumber;
-          final title = personalDetailsresponse.data.data.details.title;
-          if (firstName != null) {
-            // await sp.setString(SharedPreferencesKeys.firstNameKey, firstName);
-            _log.info('First name saved to shared preferences');
-          }
-          if (surname != null) {
-            // await sp.setString(SharedPreferencesKeys.surnameKey, surname);
-            _log.info('Surname saved to shared preferences');
-          }
-          if (email != null) {
-            await sp.setString(SharedPreferencesKeys.emailKey, email);
-            _log.info('Email saved to shared preferences');
-          }
-          if (phoneNumber != null) {
-            await sp.setString(
-                SharedPreferencesKeys.phoneNumberKey, phoneNumber);
-            _log.info('Phone number saved to shared preferences');
-          }
-          if (title != null) {
-            await sp.setString(SharedPreferencesKeys.titleKey, title);
-            _log.info('Title saved to shared preferences');
-          }
-        }
-      }
-    }
-
+   
     return super.onResponse(response, handler);
   }
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    debugPrint('❌❌❌ Error  Response TypeA:${err.response}');
-    debugPrint('❌❌❌ Error  Response Msg:${err.response?.data['message']}');
+    // debugPrint('❌❌❌ Error  Response TypeA:${err.response}');
+    // debugPrint('❌❌❌ Error  Response Msg:${err.response?.data['message']}');
     // debugPrint('❌❌❌ Error    Msg:${err.message}');
     // log('❌❌❌ Error  Response code:${err.response?.statusCode}');
 
