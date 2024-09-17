@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zxplore_app/apis/dio/network_exceptions.dart';
@@ -27,7 +28,8 @@ class ApiInterceptor extends Interceptor {
         ) {
       final sp = await SharedPreferences.getInstance();
       final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
-      if (token != null) {
+
+    if (token != null) {
         options.headers['Authorization'] = 'Bearer $token';
         _log.info('Access token added to request headers');
       }
@@ -54,14 +56,33 @@ class ApiInterceptor extends Interceptor {
     if(response.requestOptions.path =='Account/login'){
       if(response.data['status']==true){
         final pref= await SharedPreferences.getInstance();
+       final  secStorage= FlutterSecureStorage();
+      
        final tk= response.data['data'];
        if(tk!=null){
         await pref.setString(SharedPreferencesKeys.accessTokenKey, tk);
+      await secStorage.write(key: SharedPreferencesKeys.secAccessTokenKey, value: response.data['data']);
        }
       }
+      
     }
     return super.onResponse(response, handler);
   }
+  //   Future<void> _refreshToken() async {
+  //      final  secStorage= FlutterSecureStorage();
+
+  //   final oldToken = await secStorage.read(key: SharedPreferencesKeys.secAccessTokenKey);
+  //   final response = await Dio().post(
+  //     'Account/renewToken',
+  //     data: {'refresh_token': oldToken},
+  //   );
+  //   if (response.statusCode == 200) {
+  //     await secStorage.write(key: SharedPreferencesKeys.secAccessTokenKey, value: response.data['data']);
+ 
+  //   } else {
+  //     throw Exception('Failed to refresh token');
+  //   }
+  // }
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -128,3 +149,6 @@ class ApiInterceptor extends Interceptor {
     }
   }
 }
+
+
+ 
