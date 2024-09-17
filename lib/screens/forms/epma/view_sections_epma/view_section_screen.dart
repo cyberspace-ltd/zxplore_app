@@ -22,10 +22,6 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
   String? accountReferenceId;
   AccountFormBloc? accountFormBloc;
   bool? _isEditAccount;
-  // Widgets are supposed to be deeply immutable objects. We can update and edit
-  // _categories as we build our app, and when we pass it into a widget's
-  // `children` property, we call .toList() on it.
-  // For more details, see https://github.com/dart-lang/sdk/issues/27755
   final _categories = <Category>[];
 
   @override
@@ -36,27 +32,37 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
     // _setDefaults();
   }
 
-  // void _setDefaults() {
-  //   setState(() {
-  //     accountReferenceId = widget.accountReferenceId;
-  //     _isEditAccount = widget.isEditAccount;
-  //     accountFormBloc!.setFormStatus(_isEditAccount);
-  //   });
-  // }
+
 
   _getCategories() {
     var categoryIndex = 0;
 
     setState(() {
-      _categories.add(Category(id: 0, name: 'Account Information'));
-      _categories.add(Category(id: 1, name: 'Personal Information'));
-      _categories.add(Category(id: 2, name: 'Contact Details'));
-      _categories.add(Category(id: 3, name: 'Means of Identification'));
-      _categories.add(Category(id: 4, name: 'E-Product List'));
-      _categories.add(Category(id: 5, name: 'ID Card Upload'));
-      _categories.add(Category(id: 6, name: 'Passport Picture Upload'));
-      _categories.add(Category(id: 7, name: 'Utility Bill Upload'));
-      _categories.add(Category(id: 8, name: 'Signatory'));
+      // _categories.add(Category(id: 0, name: 'Account Information'));
+      // _categories.add(Category(id: 1, name: 'Personal Information'));
+      // _categories.add(Category(id: 2, name: 'Contact Details'));
+      // _categories.add(Category(id: 3, name: 'Means of Identification'));
+      // _categories.add(Category(id: 4, name: 'E-Product List'));
+      // _categories.add(Category(id: 5, name: 'ID Card Upload'));
+      // _categories.add(Category(id: 6, name: 'Passport Picture Upload'));
+      // _categories.add(Category(id: 7, name: 'Utility Bill Upload'));
+      _categories.add(Category(id: 0, name: 'Personal Information'));//Initial
+      _categories.add(Category(id: 1, name: 'Funding Sources'));
+      _categories.add(Category(id: 2, name: 'Account Purposes'));
+      _categories.add(Category(id: 3, name: 'Products Services'));
+      _categories.add(Category(id: 4, name: 'Other Informations'));
+      _categories.add(Category(id: 5, name: 'Other Accounts'));
+      _categories.add(Category(id: 6, name: 'Foreign Accounts'));
+      _categories.add(Category(id: 7, name: 'Documents Obtained Individuals'));
+      _categories.add(Category(id: 8, name: 'Account Type'));
+      _categories.add(Category(id: 9, name: 'Next Of Kin'));
+      _categories.add(Category(id: 10, name: 'Referees'));
+      _categories.add(Category(id: 0, name: 'Assigned Accts'));
+      _categories.add(Category(id: 11, name: 'Children'));
+      _categories.add(Category(id: 12, name: 'Stake Holders'));
+      _categories.add(Category(id: 13, name: 'Related Business'));
+      _categories.add(Category(id: 14, name: 'Tax Jurisdiction'));
+      _categories.add(Category(id: 15, name: 'Documents Upload'));
 
       if (categoryIndex == 0) {
         _defaultCategory = _categories[0];
@@ -75,10 +81,10 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
 
   /// Function to call when a [Category] is tapped.
   void _onCategoryTap(Category category) {
-    accountFormBloc!.setCurrentFormCategory(category);
-    setState(() {
-      _currentCategory = category;
-    });
+    // accountFormBloc!.setCurrentFormCategory(category);
+    // setState(() {
+    //   _currentCategory = category;
+    // });
   }
 
   /// Makes the correct number of rows for the list view, based on whether the

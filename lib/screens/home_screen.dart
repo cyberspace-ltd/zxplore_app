@@ -9,6 +9,7 @@ import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/pending_drafts_requests_screen.dart';
 import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/utils/helper_functions.dart';
+import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 import '../colors.dart';
 import 'login_screen.dart';
@@ -275,9 +276,10 @@ class StatisItem extends StatelessWidget {
             Text(title ?? ''),
             Chip(
               label: Text(
-                '${value ?? 0}',
+                formatNumberInKs(value),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
               ),
               backgroundColor: ZxploreRedColor,
+              side: BorderSide(color: Colors.red)
             )
           ],
         ),

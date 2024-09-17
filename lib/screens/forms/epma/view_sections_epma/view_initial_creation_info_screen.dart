@@ -4,6 +4,7 @@ import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_section_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/utils/string_extentions.dart';
 
 class ViewInitialCreationInfoScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> formIndividualData;
@@ -87,7 +88,7 @@ class FormIndividualItem extends StatelessWidget {
        ViewItem(title: 'Eployer Tel.',value: data?.employerTel??'',),
        ViewItem(title: 'Eployer Type',value: data?.employmentType?.employmentTypeName??'',),
        ViewItem(title: 'Account Creation Stage',value: data?.itemStage??'',),
-       ViewItem(title: 'DOB',value: data?.birthDate??'',),
+       ViewItem(title: 'DOB',value: formatDate(data?.birthDate??''),),
        ViewItem(title: 'Gender',value: data?.gender?.genderName??'',),
        ViewItem(title: 'Birth place',value: data?.birthPlace??'',),
        ViewItem(title: 'ID Number',value: data?.identificationNo??'',),
@@ -114,7 +115,7 @@ class FormIndividualItem extends StatelessWidget {
        ViewItem(title: 'Customer on ZPrompt',value: data?.setupZPrompt??false,),
        ViewItem(title: 'Customer on IBank',value: data?.setupIbank??false,),
        ViewItem(title: 'Account Ownership',value: data?.setupIbank??false,),
-       ViewItem(title: 'Monthly Icom',value: data?.monthlyIncome??0.0,),
+       ViewItem(title: 'Monthly Income',value: data?.monthlyIncome??0.0,),
       ],
     );
   }

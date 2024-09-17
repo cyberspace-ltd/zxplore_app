@@ -65,20 +65,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.read(loginControllerProvider.notifier).loginUser(
         onSuccess: () {
           /// call the required Meta
-          ref.read(getAnticipatedAmountProvider);
-          ref.read(getAnticipatedTransactionProvider);
-          ref.read(getBusinessNaturesProvider);
-          ref.read(getCountriesProvider);
-          ref.read(getCustomerClassificationProvider);
-          ref.read(getEmploymentTypeProvider);
-          ref.read(getFatcaStatusProvider);
-          ref.read(getGenderProvider);
-          ref.read(getDocumentTypesProvider);
-          ref.read(getIdentificationTypesProvider);
-          ref.read(getMaritalStatusProvider);
-          ref.read(getReconStatusProvider);
-          ref.read(getRegionsProvider);
-          ref.read(getSearchOptionsProvider);
+          // ref.read(getAnticipatedAmountProvider);
+          // ref.read(getAnticipatedTransactionProvider);
+          // ref.read(getBusinessNaturesProvider);
+          // ref.read(getCountriesProvider);
+          // ref.read(getCustomerClassificationProvider);
+          // ref.read(getEmploymentTypeProvider);
+          // ref.read(getFatcaStatusProvider);
+          // ref.read(getGenderProvider);
+          // ref.read(getDocumentTypesProvider);
+          // ref.read(getIdentificationTypesProvider);
+          // ref.read(getMaritalStatusProvider);
+          // ref.read(getReconStatusProvider);
+          // ref.read(getRegionsProvider);
+          // ref.read(getSearchOptionsProvider);
 
           /// Todo add recent params when i item has been selected
           ///  set this items only when there is a recently viewed or editable request

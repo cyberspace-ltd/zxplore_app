@@ -26,7 +26,6 @@ enum SelectedFormSection {
   stakeHolders,
   relatedBusiness,
   taxJurisdiction,
-  documentsAttached
 }
 
 class CombinedFormState {

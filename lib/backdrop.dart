@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:zxplore_app/blocs/account_form_bloc.dart';
-import 'package:zxplore_app/screens/home_screen.dart';
+// import 'package:zxplore_app/blocs/account_form_bloc.dart';
+// import 'package:zxplore_app/screens/home_screen.dart';
 // import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/utils/secure_storage.dart';
 
@@ -137,16 +137,10 @@ class _BackdropState extends State<Backdrop>
     with SingleTickerProviderStateMixin {
   final GlobalKey _backdropKey = GlobalKey(debugLabel: 'Backdrop');
   late AnimationController _controller;
-  // late AccountFormBloc _accountFormBloc;
   String? username;
   @override
   void initState() {
     super.initState();
-    // _accountFormBloc = widget.accountFormBloc;
-    // getUser();
-    // This creates an [AnimationController] that can allows for animation for
-    // the BackdropPanel. 0.00 means that the front panel is in "tab" (hidden)
-    // mode, while 1.0 means that the front panel is open.
     _controller = AnimationController(
       duration: Duration(milliseconds: 300),
       value: 1.0,
@@ -237,7 +231,6 @@ class _BackdropState extends State<Backdrop>
       child: Stack(
         children: <Widget>[
           widget.backPanel,
- 
         ],
       ),
     );
@@ -254,7 +247,6 @@ class _BackdropState extends State<Backdrop>
         backgroundColor: ZxplorePrimaryColor,
         elevation: 0.0,
         leading: SizedBox.shrink(),
- 
         actions: <Widget>[
           new IconButton(
             icon: new Icon(
@@ -272,7 +264,6 @@ class _BackdropState extends State<Backdrop>
           backTitle: widget.backTitle,
         ),
       ),
-      
       body: LayoutBuilder(
         builder: _buildStack,
       ),
@@ -285,4 +276,4 @@ class _BackdropState extends State<Backdrop>
       return count++ == 2;
     });
   }
-    }
+}

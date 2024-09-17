@@ -14,9 +14,10 @@ Future<StatisticsData?> getUserStatisticsData(
     const AsyncLoading();
     final statsResponse = await repo.getUserPendingStatisticsRepo();
 
-    if (statsResponse.status == true) {
-      AsyncValue.data(statsResponse.data);
-      return statsResponse.data;
+    if (statsResponse['status'] == true) {
+      final result  = UserPendingStatisticsResponse.fromJson(statsResponse);
+      AsyncValue.data(result.data);
+      return result.data;
     } else {
       AsyncValue.data(null);
       return null;

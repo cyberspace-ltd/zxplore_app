@@ -55,7 +55,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   }
 
   @override
-  Future<UserPendingStatisticsResponse> getUserPendingStatisticsRepo() async {
+  Future<dynamic> getUserPendingStatisticsRepo() async {
     try {
       final response = await api.getUserPendingStatistics();
       return response;

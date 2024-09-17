@@ -40,3 +40,33 @@ String formatDate(String? dateString) {
   DateTime date = DateTime.parse(dateString);
   return DateFormat('dd MMM yyyy, hh:mm a').format(date);
 }
+
+String formatNumberInKs(int? number) {
+  if(number==null) return '0';
+  if (number < 1000) {
+    return number.toString();  // Show numbers less than 1000 as they are
+  } else if (number >= 1000 && number < 1000000) {
+    int thousands = number ~/ 1000;  // Get the number of thousands
+    if (number % 1000 == 0) {
+      return '${thousands}k';  // Exact thousands, e.g. 1k, 2k
+    } else {
+      return '${thousands}k+';  // Thousands with extra digits, e.g. 1k+, 2k+
+    }
+  } else if (number >= 1000000) {
+    int millions = number ~/ 1000000;  // Get the number of millions
+    if (number % 1000000 == 0) {
+      return '${millions}m';  // Exact millions, e.g. 1m, 2m
+    } else {
+      return '${millions}m+';  // Millions with extra digits, e.g. 1m+, 2m+
+    }
+  }
+  else if (number >= 1000000000) {
+    int billions = number ~/ 1000000000;  // Get the number of millions
+    if (number % 1000000000 == 0) {
+      return '${billions}m';  // Exact millions, e.g. 1b, 2b
+    } else {
+      return '${billions}m+';  // Millions with extra digits, e.g. 1b+, 2b+
+    }
+  }
+  return number.toString();  // Fallback, should never hit this line
+}

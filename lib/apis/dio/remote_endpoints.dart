@@ -44,7 +44,7 @@ abstract class RemoteApi {
   });
   // -----------------OPERATIONS IN APP -----------------
   @GET('Operation/userPendingStatistics')
-  Future<UserPendingStatisticsResponse> getUserPendingStatistics({
+  Future<dynamic> getUserPendingStatistics({
     @CancelRequest() CancelToken? cancelToken,
   });
 
