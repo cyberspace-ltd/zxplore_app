@@ -32,6 +32,7 @@ dependencies:
   location: ^5.0.3
   equatable: ^2.0.5
   freezed: ^2.5.2
+  google_fonts: ^6.2.1
   dropdown_button2: ^2.3.9
   package_info_plus: ^5.0.1
   path_provider: ^2.1.2

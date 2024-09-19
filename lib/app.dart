@@ -4,6 +4,9 @@ import 'colors.dart';
 import 'screens/home_screen.dart';
 import 'screens/splash_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:zxplore_app/utils/util.dart';
+import 'package:zxplore_app/utils/theme.dart';
 
 class ZxploreApp extends StatefulWidget {
   @override
@@ -13,17 +16,23 @@ class ZxploreApp extends StatefulWidget {
 class _ZxploreAppState extends State<ZxploreApp> {
   @override
   Widget build(BuildContext context) {
+    final brightness = View.of(context).platformDispatcher.platformBrightness;
+    TextTheme textTheme = createTextTheme(context, "Lato", "Lato");
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    MaterialTheme theme = MaterialTheme(textTheme);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: brightness == Brightness.light ? theme.light() : theme.dark(),
       title: 'Z-XPLORE GH',
       home: MyHomePage(title: 'Z-XPLORE Home Page'),
       initialRoute: '/splash',
       onGenerateRoute: _getRoute,
-      theme: _zXploreTheme,
+      // theme: _zXploreTheme,
     );
   }
 }
