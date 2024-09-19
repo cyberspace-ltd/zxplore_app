@@ -17,7 +17,6 @@ enum SelectedFormSection {
   foreignAccounts,
   dueDiligences,
   documentsObtainedIndividuals,
-  acctReqWkfHistory,
   accountType,
   nextOfKin,
   referees,

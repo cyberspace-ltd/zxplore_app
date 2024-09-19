@@ -152,7 +152,7 @@ class _AllPendingRequestsScreenState
                     });
                   },
                 ),
-                gapH16,
+                gapH24,
                 Consumer(
                   builder: (context, watch, child) {
                     final requestItemsAsyncValue = ref.watch(
@@ -219,10 +219,11 @@ class _AllPendingRequestsScreenState
 }
 
 class AccountRequestItem extends StatelessWidget {
-  const AccountRequestItem({super.key, this.request,  this.onPressed,required this.onTapEdit,required this.onTapView});
+  const AccountRequestItem({super.key, this.request,this.onTapDelete,  this.onPressed,required this.onTapEdit,required this.onTapView});
   final PendingRequestsDatum? request;
   final Function()? onPressed;
   final Function()? onTapEdit;
+  final Function()? onTapDelete;
   final Function()? onTapView;
 
   @override
@@ -231,10 +232,10 @@ class AccountRequestItem extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.18,
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(24.0),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(24),
             color: Colors.white,
             boxShadow: [
               BoxShadow(
@@ -269,10 +270,10 @@ class AccountRequestItem extends StatelessWidget {
                             onTapView!();
 
                           }
-                          // else{
-                          //   onTapEdit!();
+                          else{
+                            onTapEdit!();
 
-                          // }
+                          }
                         },
                         itemBuilder: (BuildContext context){
                         return <PopupMenuEntry<int>>[
@@ -287,6 +288,11 @@ class AccountRequestItem extends StatelessWidget {
                             // child: GestureDetector(
                             //   onTap: onTapEdit,
                             //   child: Text('Edit')))
+                                 PopupMenuItem<int>(
+                            value: 1,
+                            child: GestureDetector(
+                              onTap: onTapDelete,
+                              child: Text('Delete'))),
 
                         ];
                       })
@@ -318,6 +324,117 @@ class AccountRequestItem extends StatelessWidget {
                 ),
               ],
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class FoldableItem extends StatelessWidget {
+  const FoldableItem({super.key, this.request,this.onTapDelete,
+    this.onPressed,required this.onTapEdit,required this.onTapView, required this.name,required this.number,required this.requestId, required this.subRequestId});
+  final dynamic request;
+  final String? name;
+  final String? requestId;
+  final int? subRequestId;
+  final String? number;
+  final Function()? onPressed;
+  final Function()? onTapEdit;
+  final Function()? onTapDelete;
+  final Function()? onTapView;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.12,
+        padding: EdgeInsets.all(16.0),
+        margin: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 4),
+                color: Colors.grey.withOpacity(0.25),
+                blurRadius: 4,
+              ),
+            ]),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  name ?? '',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.normal),
+                ),
+                SizedBox(
+                  // width: 70,
+                  child: Row(mainAxisSize: MainAxisSize.min,
+                    children: [
+                      PopupMenuButton<int>(
+                        onSelected: (value){
+                          if(value==0){
+                            onTapView!();
+
+                          }else if(value==1){
+                            onTapEdit!();
+
+                          }
+                          else{
+                            onTapDelete!();
+
+                          }
+                        },
+                        itemBuilder: (BuildContext context){
+                        return <PopupMenuEntry<int>>[
+                        
+                          PopupMenuItem<int>(
+                                  height: 24,
+
+                            value: 0,
+                            child: GestureDetector(
+                              onTap: onTapView,
+                              child: Text('View'))),
+                              PopupMenuItem<int>(
+                                  height: 24,
+
+                            value: 1,
+                            child: GestureDetector(
+                              onTap: onTapEdit,
+                              child: Text('Edit'))),
+                                 PopupMenuItem<int>(
+                                  height: 24,
+                            value: 2,
+                            child: GestureDetector(
+                              onTap: onTapDelete,
+                              child: Text('Delete'))),
+
+                        ];
+                      })
+                    ],
+                  ),
+                )
+              ],
+            ),
+            gapH4,
+            Row(
+              children: [
+                Text(
+                  number?? '',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.normal),
+                ),
+              ],
+            ),
+           
           ],
         ),
       ),

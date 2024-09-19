@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
 // import 'package:zxplore_app/models/epma_models/user_pending_statistics_ressponse.dart';
@@ -62,12 +63,12 @@ abstract class RemoteApi {
   Future<dynamic> viewAccountRequest({
     @Query('RequestId') required String? requestId,
   });
-  
+
   @POST('Operation/createNewRequest')
   Future<dynamic> createAccount({
     @Field('surname') required String? surname,
     @Field('firstName') required String? firstName,
-    @Field('otherNames')   String? otherNames,
+    @Field('otherNames') String? otherNames,
     @Field('genderCode') required String? genderCode,
     @Field('birthDate') required String? birthDate,
     @Field('citizenshipCode') required String? citizenshipCode,
@@ -83,22 +84,20 @@ abstract class RemoteApi {
     @Field('mobileNo') required String? mobileNo,
     @Field('residentialAddress') required String? residentialAddress,
     @Field('city') required String? city,
-    @Field('residentialAddress2')   String? residentialAddress2,
+    @Field('residentialAddress2') String? residentialAddress2,
     @CancelRequest() CancelToken? cancelToken,
   });
 
   // ----------------- META Endpoints -----------------
-@GET('Metadata/accountClass')
+  @GET('Metadata/accountClass')
   Future<dynamic> getAccountClass(
-    {
-     @Query('RequestId') required String? requestId,
-     @Query('AccountType') required String? accountType,
-     @Query('SeriesCode') required String? seriesCode}
-  );
+      {@Query('RequestId') required String? requestId,
+      @Query('AccountType') required String? accountType,
+      @Query('SeriesCode') required String? seriesCode});
   @GET('Metadata/accountSeries')
-  Future<dynamic> getAccountSeries({
-     @Query('RequestId') required String? requestId,
-     @Query('AccountType') required String? accountType});
+  Future<dynamic> getAccountSeries(
+      {@Query('RequestId') required String? requestId,
+      @Query('AccountType') required String? accountType});
   @GET('Metadata/accoutTypes')
   Future<dynamic> getAccoutTypes();
   @GET('Metadata/anticipatedAmounts')
@@ -130,7 +129,85 @@ abstract class RemoteApi {
   @GET('Metadata/viewAccountRequest')
   Future<dynamic> getReconStatus();
   @GET('Metadata/subBusinessNatures')
-  Future<dynamic> getSubBusinessNatures({
-    @Query('BusinessNatureId') required int? businessNatureId}
+  Future<dynamic> getSubBusinessNatures(
+      {@Query('BusinessNatureId') required int? businessNatureId});
+
+  // ----------------- Edit Endpoints -----------------
+  @GET('Operation/getPersonalDetailToEdit')
+  Future<dynamic> getPersonalDetailToEdit({
+    @Query('RequestId') required String? RequestId,
+  });
+
+   @POST('Operation/editPersonalDetail')
+  Future<dynamic> editPersonalDetail({
+    @Body()required EditPersonalDetails? editPersonalDetails,
+  });
+
+  @GET('Operation/getMonthlyActivityToEdit')
+  Future<dynamic> getMonthlyActivityToEdit({
+    @Query('RequestId') required String? RequestId,
+  });
+  @GET('Operation/getAccountPurposeToEdit')
+  Future<dynamic> getAccountPurposeToEdit({
+    @Query('RequestId') required String? RequestId,
+  });
+  @GET('Operation/getFundingSourceToEdit')
+  Future<dynamic> getFundingSourceToEdit({
+    @Query('RequestId') required String? RequestId,
+  });
+  @GET('Operation/getOtherBankAccountToEdit')
+  Future<dynamic> getOtherBankAccountToEdit({
+    @Query('RequestId') required String? RequestId,
+  });
+  @GET('Operation/getRelatedBusinessToEdit')
+  Future<dynamic> getRelatedBusinessToEdit({
+    @Query('RequestId') required String? RequestId,
+    @Query('RelatedBusinessId') required int? RelatedBusinessId,
+  });
+  @GET('Operation/getNextOfKinToEdit')
+  Future<dynamic> getNextOfKinToEdit(
+     {@Query('RequestId') required String? RequestId,
+      @Query('ChildId') required int? NextOfKinId}
   );
+  @GET('Operation/getRefereeToEdit')
+  Future<dynamic> getRefereeToEdit(
+      {@Query('RequestId') required String? RequestId,
+      @Query('RefereeId') required int? RefereeId});
+  @GET('Operation/getForeignAccountToEdit')
+  Future<dynamic> getForeignAccountToEdit({
+    @Query('RequestId') required String? RequestId,
+  });
+  @GET('Operation/getChildToEdit')
+  Future<dynamic> getChildToEdit(
+      {@Query('RequestId') required String? RequestId,
+      @Query('ChildId') required int? ChildId});
+  @GET('Operation/getStakeHolderToEdit')
+  Future<dynamic> getStakeHolderToEdit(     {@Query('RequestId') required String? RequestId,
+      @Query('ChildId') required int? StakeHolderId});
+  @GET('Operation/getDueDiligenceToEdit')
+  Future<dynamic> getDueDiligenceToEdit({
+    @Query('RequestId') required String? RequestId,
+  });
+  @GET('Operation/validateRequestForSubmission')
+  Future<dynamic> getDocumentAttachedToEdit({
+    @Query('RequestId') required String? RequestId,
+      @Query('DocumentsAttachedId') required int? DocumentsAttachedId}
+  );
+  @GET('Operation/getDocumentAttachedToEdit')
+  Future<dynamic> validateRequestForSubmission({
+    @Query('RequestId') required String? RequestId,});
+  @GET('Operation/processRequestExternal')
+  Future<dynamic> processRequestExternal({
+    @Query('RequestId') required String? RequestId,
+    }
+  );
+  @GET('Operation/completeRequest')
+  Future<dynamic> completeRequest({
+    @Query('RequestId') required String? RequestId,
+  });
+
+  // ----------------- Add Endpoints ------------------
+
 }
+
+ 

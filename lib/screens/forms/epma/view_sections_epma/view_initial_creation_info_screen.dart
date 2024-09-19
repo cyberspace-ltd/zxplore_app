@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_personal_details_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_section_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
+
+ 
 
 class ViewInitialCreationInfoScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> formIndividualData;
@@ -22,33 +27,45 @@ class _ViewInitialCreationInfoScreenState
     extends ConsumerState<ViewInitialCreationInfoScreen> {
   @override
   Widget build(BuildContext context) {
+
+      ref.listen<AsyncValue>(
+      editPersonalDetailsControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context,okAction: (){
+
+      }),
+    );
+     
     final ViewAccountRequestResponse? requestData =
         ViewAccountRequestResponse.fromMap(widget.formIndividualData);
     final sectionData = requestData?.data?.formIndividual ?? [];
 
-    return BaseFormScreen(
-        title: 'Form Individual',
-        data: _flattenData(widget.formIndividualData),
-        onTapSectionMenu: (){
-            Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) =>SectionScreen()
-                    ),
-          );
-        },
-        onTapEdit: () {
-          // to navigate to edit this section
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: sectionData.length,
-              itemBuilder: (BuildContext context, index) {
-                return FormIndividualItem(data:sectionData[index] ,);
-              }),
-        ));
+    return ZxploreProgress(
+      inAsyncCall: ref.watch(editPersonalDetailsControllerProvider).isLoading,
+      child: BaseFormScreen(
+          title: 'Form Individual',
+          data: _flattenData(widget.formIndividualData),
+          onTapSectionMenu: (){
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>SectionScreen()
+                      ),
+            );
+          },
+          onTapEdit: () {
+            // to navigate to edit this section
+         ref.read(editPersonalDetailsControllerProvider.notifier).getEditData(context, RequestId: requestData?.data?.reqId??'');
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: sectionData.length,
+                itemBuilder: (BuildContext context, index) {
+                  return FormIndividualItem(data:sectionData[index] ,);
+                }),
+          )),
+    );
   }
 
   Map<String, String> _flattenData(Map<String, dynamic> data) {
