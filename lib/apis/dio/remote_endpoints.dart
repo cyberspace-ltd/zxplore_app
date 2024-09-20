@@ -108,11 +108,11 @@ abstract class RemoteApi {
   Future<dynamic> getBusinessNatures();
   @GET('Metadata/Countries')
   Future<dynamic> getCountries();
-  @GET('Metadata/customerClassification')
+  @GET('Metadata/customerClassifications')
   Future<dynamic> getCustomerClassification();
   @GET('Metadata/documentTypes')
   Future<dynamic> getDocumentTypes();
-  @GET('Metadata/employTypes')
+  @GET('Metadata/employmentTypes')
   Future<dynamic> getEmployTypes();
   @GET('Metadata/fatcaStatus')
   Future<dynamic> getFatcaStatus();

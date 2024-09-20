@@ -531,7 +531,7 @@ class _RemoteApi implements RemoteApi {
     )
         .compose(
           _dio.options,
-          'Metadata/customerClassification',
+          'Metadata/customerClassifications',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -585,7 +585,7 @@ class _RemoteApi implements RemoteApi {
     )
         .compose(
           _dio.options,
-          'Metadata/employTypes',
+          'Metadata/employmentTypes',
           queryParameters: queryParameters,
           data: _data,
         )

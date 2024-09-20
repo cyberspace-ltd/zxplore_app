@@ -12,37 +12,41 @@ class BaseEditForm extends ConsumerWidget {
   final dynamic data;
 
   const BaseEditForm(
-      {Key? key,this.addMore,
-      required this.title,required this.widgetToGoOnCancel,
-      required this.data,this.onCancel,this.child
-   })
+      {Key? key,
+      this.addMore,
+      required this.title,
+      required this.widgetToGoOnCancel,
+      required this.data,
+      this.onCancel,
+      this.child})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: onCancel??(){
-          Navigator.pushReplacement(context,  MaterialPageRoute( 
-        builder: (BuildContext context) => widgetToGoOnCancel),
-    );
-        }, icon: Icon(Icons.close,color: ZxplorePrimaryColor,)),
+        leading: IconButton(
+            onPressed: onCancel ??
+                () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => widgetToGoOnCancel),
+                  );
+                },
+            icon: Icon(
+              Icons.close,
+              color: ZxplorePrimaryColor,
+            )),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title),
-            this.addMore??SizedBox.shrink()
-          ],
+          children: [Text(title), this.addMore ?? SizedBox.shrink()],
         ),
-         
       ),
       body: child,
-     
     );
   }
 }
-
-
 
 // Base Edit screen template
 class BaseAddForm extends ConsumerWidget {
@@ -54,25 +58,33 @@ class BaseAddForm extends ConsumerWidget {
 
   const BaseAddForm(
       {Key? key,
-      required this.title,required this.widgetToGoOnSave,
-      required this.data,this.onCancel,this.child
-   })
+      required this.title,
+      required this.widgetToGoOnSave,
+      required this.data,
+      this.onCancel,
+      this.child})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: onCancel??(){
-          Navigator.pushReplacement(context,  MaterialPageRoute( 
-        builder: (BuildContext context) => widgetToGoOnSave),
-    );
-        }, icon: Icon(Icons.close,color: ZxplorePrimaryColor,)),
+        leading: IconButton(
+            onPressed: onCancel ??
+                () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => widgetToGoOnSave),
+                  );
+                },
+            icon: Icon(
+              Icons.close,
+              color: ZxplorePrimaryColor,
+            )),
         title: Text(title),
-         
       ),
       body: child,
-     
     );
   }
 }

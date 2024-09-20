@@ -26,6 +26,7 @@ import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/screens/controllers/meta/countries.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
 import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
@@ -127,26 +128,36 @@ class _PersonalInfoEditSscreenState
 
   final TextEditingController _gpsAddressController = TextEditingController();
   final TextEditingController _genderCodeController = TextEditingController();
-  final TextEditingController _countryOrigCodeController = TextEditingController();
+  final TextEditingController _countryOrigCodeController =
+      TextEditingController();
   final TextEditingController _regionCodeController = TextEditingController();
-  final TextEditingController _maritalStatusController = TextEditingController();
-  final TextEditingController _businessNatureIdController = TextEditingController();
-  final TextEditingController _subBusinessNatureIdController = TextEditingController();
-  final TextEditingController _employmentTypeCodeController = TextEditingController();
-  final TextEditingController _citizenshipCodeController = TextEditingController();
+  final TextEditingController _maritalStatusController =
+      TextEditingController();
+  final TextEditingController _businessNatureIdController =
+      TextEditingController();
+  final TextEditingController _subBusinessNatureIdController =
+      TextEditingController();
+  final TextEditingController _employmentTypeCodeController =
+      TextEditingController();
+  final TextEditingController _citizenshipCodeController =
+      TextEditingController();
   final TextEditingController _employerNameController = TextEditingController();
-  final TextEditingController _customerClassificationIdController = TextEditingController();
+  final TextEditingController _customerClassificationIdController =
+      TextEditingController();
 
-  bool hasPermanentResidence = false;
-  bool accountOwnership = false;
-  bool customerResidentInGhana = false;
-  bool customerIsPEP = false;
-  bool setupIbank = false;
-  bool setupZPrompt = false;
-  bool setupStatementViaEmail = false;
-  bool setupEmailIndemnity = false;
-  bool isPhysicallyChallanged = false;
-  bool isNewRequest = false;
+  bool hasPermanentResidence = false;//1
+  bool accountOwnership = false;//2
+  bool customerResidentInGhana = false;//3
+  bool isPhysicallyChallenged = false;//4
+  bool customerIsPEP = false;//5
+  bool setupIbank = false;//6
+  bool setupZPrompt = false;//7
+  bool setupStatementViaEmail = false;//8
+  bool setupEmailIndemnity = false;//9
+  bool isPhysicallyChallanged = false;//10
+  bool isNewRequest = false;//11
+  bool? customerIsPep = false;//12
+
   DateTime? _selectedDate;
 
   GendersDatum? selectedGenderItem;
@@ -166,7 +177,7 @@ class _PersonalInfoEditSscreenState
   String? subBusinessNaturesName;
 
   CustomerClassificationDatum? customerClassificationsItem;
-  int? selectedCustomerClassificationsCode;
+  String? selectedCustomerClassificationsCode;
   String? selectedCustomerClassificationsName;
 
   EmploymentTypeDatum? employmentTypesItem;
@@ -197,6 +208,8 @@ class _PersonalInfoEditSscreenState
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
+
+ 
 
   @override
   void initState() {
@@ -229,11 +242,11 @@ class _PersonalInfoEditSscreenState
             "${userData?.niaVerificationNo ?? ''}";
         _ssnitNoController.text = "${userData?.ssnitNo ?? ''}";
         _tinController.text = "${userData?.tin ?? ''}";
-    _genderCodeController.text = "${userData?.genderCode ?? ''}";
+        _genderCodeController.text = "${userData?.genderCode ?? ''}";
         _countryOrigCodeController.text = "${userData?.citizenshipCode ?? ''}";
         _regionCodeController.text = "${userData?.regionCode ?? ''}";
         _maritalStatusController.text = "${userData?.maritalStatus ?? ''}";
-   _businessNatureIdController.text =
+        _businessNatureIdController.text =
             "${userData?.businessNatureId ?? ''}";
         _subBusinessNatureIdController.text =
             "${userData?.subBusinessNatureId ?? ''}";
@@ -241,9 +254,9 @@ class _PersonalInfoEditSscreenState
             "${userData?.employmentTypeCode ?? ''}";
         _citizenshipCodeController.text = "${userData?.citizenshipCode ?? ''}";
         _employerNameController.text = "${userData?.employerName ?? ''}";
-          _customerClassificationIdController.text =
+        _customerClassificationIdController.text =
             "${userData?.customerClassificationId ?? ''}";
-       
+
         _altCitizenshipCodeController.text =
             "${userData?.altCitizenshipCode ?? ''}";
         _homeTownController.text = "${userData?.homeTown ?? ''}";
@@ -275,6 +288,7 @@ class _PersonalInfoEditSscreenState
         _permanentResidentialCountryCodeController.text =
             "${userData?.permanentResidentialCountryCode ?? ''}";
         _mailingAddressController.text = "${userData?.mailingAddress ?? ''}";
+
         /// family
         _motherMaidenNameController.text =
             "${userData?.motherMaidenName ?? ''}";
@@ -290,7 +304,7 @@ class _PersonalInfoEditSscreenState
         _accountOwnershipOtherController.text =
             "${userData?.accountOwnership ?? false}";
         _pepReasonController.text = "${userData?.pepReason ?? ''}";
-     _gpsAddressController.text = "${userData?.gpsAddress ?? ''}";
+        _gpsAddressController.text = "${userData?.gpsAddress ?? ''}";
         hasPermanentResidence = userData?.hasPermanentResidence ?? false;
         accountOwnership = userData?.accountOwnership ?? false;
         customerResidentInGhana = userData?.customerResidentInGhana ?? false;
@@ -342,7 +356,7 @@ class _PersonalInfoEditSscreenState
     _employerEmailController.dispose();
     _employerTelController.dispose();
     _monthlyIncomeController.dispose();
-        _countryOrigCodeController.dispose();
+    _countryOrigCodeController.dispose();
     _homeTownController.dispose();
     _residencePermitNoController.dispose();
     _residencePermitPlaceCodeController.dispose();
@@ -350,7 +364,7 @@ class _PersonalInfoEditSscreenState
     _permitExpiryDateController.dispose();
     _districtAssemblyAreaController.dispose();
 
-        _permanentResidentialCountryCodeController.dispose();
+    _permanentResidentialCountryCodeController.dispose();
     _mailingAddressController.dispose();
     _accountOwnershipOtherController.dispose();
     _pepReasonController.dispose();
@@ -358,13 +372,92 @@ class _PersonalInfoEditSscreenState
 
     super.dispose();
   }
-
-  Future<void> editAccountRequest(BuildContext context) async{
-
-    final lat=ref.read(userLatitudeProvider);
-    final long=ref.read(userLongitudeProvider);
-    
+  // Method to handle checkbox state changes
+  void _handleCheckboxChange(int checkboxNumber, bool? value) {
+    setState(() {
+      switch (checkboxNumber) {
+        case 1:
+          hasPermanentResidence = value ?? false;
+          break;
+        case 2:
+          accountOwnership = value ?? false;
+          break;
+        case 3:
+          customerResidentInGhana = value ?? false;
+          break;
+        case 4:
+          isPhysicallyChallenged = value ?? false;
+          break;
+        case 5:
+          customerIsPEP = value ?? false;
+          break;
+        case 6:
+          setupIbank = value ?? false;
+          break;
+        case 7:
+          setupZPrompt = value ?? false;
+          break;
+        case 8:
+          setupStatementViaEmail = value ?? false;
+          break;
+        case 9:
+          setupEmailIndemnity = value ?? false;
+          break;
+        case 10:
+          isPhysicallyChallanged = value ?? false;
+          break;
+        case 11:
+          isNewRequest = value ?? false;
+          break;
+        case 12:
+          customerIsPep = value ?? false;
+          break;
+      }
+    });
+  }
+  Future<void> editAccountRequest(BuildContext context) async {
+    final lat = ref.read(userLatitudeProvider);
+    final long = ref.read(userLongitudeProvider);
+    final initialData = widget.data?.data;
     final editPersonalDetails = EditPersonalDetails(
+      formId: initialData?.formId??-1,
+
+      citizenshipCode: selectedCountryCode,
+      countryOrigCode:selectedCountryCode ,
+      customerIsPep:customerIsPep ,
+      customerResidentInGhana: customerResidentInGhana,
+      setupEmailIndemnity:setupEmailIndemnity ,
+      setupStatementViaEmail: setupStatementViaEmail,
+      setupZPrompt:setupZPrompt ,
+      residentialAddress2: _residentialAddress2Controller.text,
+      residentialAddress: _residentialAddressController.text,
+      isPhysicallyChallenged:isPhysicallyChallenged ,
+      setupIbank:setupIbank,
+      mailingAddress:_mailingAddressController.text ,
+      districtAssemblyArea:selectedRegionName ,
+      // accountOwnershipOther: ,
+      permitExpiryDate:_permitExpiryDateController.text ,
+      permitIssueDate: _permitIssueDateController.text,
+
+      hasPermanentResidence: hasPermanentResidence,
+      permanentResidentialAddress:_permanentResidentialAddressController.text ,
+      permanentResidentialCity:_permanentResidentialCityController.text ,
+      permanentResidentialCountryCode:_permanentResidentialCountryCodeController.text ,
+      residencePermitNo:_residencePermitNoController.text,
+      residencePermitPlaceCode:_residencePermitPlaceCodeController.text ,
+
+      itemStage: initialData?.itemStage??'',
+      businessNatureId: selectedBusinessNaturesCode,
+      employerTel: _employerTelController.text,
+      employmentTypeCode: selectedEmploymentTypesCode,
+      employerName:_employerNameController.text ,
+      genderCode: selectedGenderCode,
+      niaVerificationNo: _niaVerificationNoController.text,
+      spouseName: _spouseNameController.text,
+      spouseOccupation: _spouseOccupationController.text,
+      subBusinessNatureId: subBusinessNaturesCode,
+      timeWithEmployer: _timeWithEmployerController.text,
+      tin: _tinController.text,
       gpsAddress: "$lat $long",
       surname: _surnameController.text,
       firstName: _firstNameController.text,
@@ -375,29 +468,48 @@ class _PersonalInfoEditSscreenState
       maidenName: _maidenNameController.text,
       employerAddress: _employerAddressController.text,
       employerEmail: _employerEmailController.text,
-
+      ssnitNo:_ssnitNoController.text,
+      regionCode: selectedRegionCode,
+      iddCode: _iddCodeController.text,
+      idExpiryDate: dateExpire??'',
+      idIssueAuthority: _idIssueAuthorityController.text,
+      idIssueDate: datedIssued??'',
+      altCitizenshipCode: _altCitizenshipCodeController.text,
+      homeTown:_homeTownController.text,
+      requestId: widget.data?.data?.reqId??'',
+      rowVersion: initialData?.rowVersion??-1,
+      pepReason: _pepReasonController.text,
+      isNewRequest: false,
+      idCountryCode: selectedCountryCode,
+      identificationNo: _identificationNoController.text,
+      identificationTypeId: selectedIdentificationCode,
+      monthlyIncome: int.parse(_monthlyIncomeController.text),
+      maritalStatus: maritalStatusName,
+      motherMaidenName: _motherMaidenNameController.text,
+      actionFlag: initialData!.actionFlag,
+      accountOwnership:initialData.accountOwnership ,
+      birthDate: dob??'',
+      city: _cityController.text,
+      birthPlace: _birthPlaceController.text,
+      customerClassificationId: selectedCustomerClassificationsCode
     );
-
-    ref
-        .read(editPersonalDetailsControllerProvider.notifier)
+   await ref.read(editPersonalDetailsControllerProvider.notifier)
         .editPersonalDetailsData(editPersonalDetails: editPersonalDetails);
   }
 
   @override
   Widget build(BuildContext context) {
-      ref.listen<AsyncValue>(
+
+    ///check  for  errors here
+    ref.listen<AsyncValue>(
       editPersonalDetailsControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context,okAction: (){
-
-      }),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
     );
-
-///check  for  errors here
 
     return BaseEditForm(
       title: 'Editing Personal Information',
-      widgetToGoOnCancel: Container(),
-      onCancel: () {},
+      widgetToGoOnCancel: ViewInitialCreationInfoScreen(formIndividualData:widget.data!.toMap(),),
+      onCancel: () =>Navigator.pop(context),
       data: {},
       child: SingleChildScrollView(
         child: Padding(
@@ -594,8 +706,10 @@ class _PersonalInfoEditSscreenState
                                         selectedGenderItem = newValue;
                                         selectedGenderCode =
                                             newValue?.genderCode;
-                                        selectedGenderName = newValue?.genderName;
-                                        _genderCodeController.text = newValue?.genderName??'';
+                                        selectedGenderName =
+                                            newValue?.genderName;
+                                        _genderCodeController.text =
+                                            newValue?.genderName ?? '';
                                       });
                                     },
                                     buttonStyleData: ButtonStyleData(
@@ -706,8 +820,10 @@ class _PersonalInfoEditSscreenState
                                       setState(() {
                                         /// Set selected item params
                                         selectedCountry = newValue;
-                                        selectedCountryCode = newValue?.countryCode;
-                                        _countryOrigCodeController.text = newValue?.countryCode??'';
+                                        selectedCountryCode =
+                                            newValue?.countryCode;
+                                        _countryOrigCodeController.text =
+                                            newValue?.countryCode ?? '';
                                         selectedCountryName =
                                             newValue?.countryName;
                                         selectedCitizenshipCode =
@@ -716,8 +832,10 @@ class _PersonalInfoEditSscreenState
                                             newValue?.countryCode ?? '';
                                         _altCitizenshipCodeController.text =
                                             newValue?.countryName ?? '';
-                                        _altCitizenshipCodeController.text = newValue?.countryName ?? '';
-                                        _citizenshipCodeController.text = newValue?.countryName ?? '';
+                                        _altCitizenshipCodeController.text =
+                                            newValue?.countryName ?? '';
+                                        _citizenshipCodeController.text =
+                                            newValue?.countryName ?? '';
                                       });
                                     },
                                     buttonStyleData: ButtonStyleData(
@@ -953,15 +1071,20 @@ class _PersonalInfoEditSscreenState
                                     value: businessNaturesItem,
                                     onChanged:
                                         (BusinessNaturesDatum? newValue) {
-                                          // refresh subs
-                                          ref.invalidate(getSubBusinessNaturesProvider(int.parse(newValue!.businessNatureId!)));
+                                      // refresh subs
+                                      ref.invalidate(
+                                          getSubBusinessNaturesProvider(
+                                              int.parse(newValue!
+                                                  .businessNatureId!)));
                                       setState(() {
                                         /// Set selected item params
                                         businessNaturesItem = newValue;
                                         selectedCustomerClassificationsName =
                                             newValue.businessNatureName;
-                                        selectedBusinessNaturesCode = newValue.businessNatureId;
-                                        _businessNatureIdController.text = newValue.businessNatureId??'';
+                                        selectedBusinessNaturesCode =
+                                            newValue.businessNatureId;
+                                        _businessNatureIdController.text =
+                                            newValue.businessNatureId ?? '';
                                       });
                                     },
                                     buttonStyleData: ButtonStyleData(
@@ -1021,130 +1144,139 @@ class _PersonalInfoEditSscreenState
                   },
                 ),
                 const SizedBox(height: 16),
-
-                /// Sub bus category
-                Text(
-                  ' Sub  Business  class',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref
-                        .watch(getSubBusinessNaturesProvider(
-                            int.parse(selectedBusinessNaturesCode!)))
-                        .when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child:
-                                      DropdownButton2<SubBusinessNatureDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select class',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<
-                                                DropdownMenuItem<
-                                                    SubBusinessNatureDatum>>(
-                                            (item) => DropdownMenuItem<
-                                                    SubBusinessNatureDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.subBusinessNatureName ??
-                                                        '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                        .toList(),
-                                    value: subBusinessNaturesItem,
-                                    onChanged:
-                                        (SubBusinessNatureDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        subBusinessNaturesItem = newValue;
-                                        subBusinessNaturesName =
-                                            newValue?.subBusinessNatureName;
-                                        subBusinessNaturesCode =newValue?.subBusinessNatureId;
-                                        _subBusinessNatureIdController.text =newValue?.subBusinessNatureId??'';
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
+                if (selectedBusinessNaturesCode != null) ...[
+                  /// Sub bus category
+                  Text(
+                    ' Sub  Business  class',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref
+                          .watch(getSubBusinessNaturesProvider(
+                              int.parse(selectedBusinessNaturesCode!)))
+                          .when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child:
+                                        DropdownButton2<SubBusinessNatureDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select class',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
                                           color: ZxplorePrimaryColor,
                                         ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      SubBusinessNatureDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      SubBusinessNatureDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.subBusinessNatureName ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: subBusinessNaturesItem,
+                                      onChanged:
+                                          (SubBusinessNatureDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          subBusinessNaturesItem = newValue;
+                                          subBusinessNaturesName =
+                                              newValue?.subBusinessNatureName;
+                                          subBusinessNaturesCode =
+                                              newValue?.subBusinessNatureId;
+                                          _subBusinessNatureIdController.text =
+                                              newValue?.subBusinessNatureId ??
+                                                  '';
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
                                       ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
                                       ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
+                                        ),
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : Text('Empty   classification'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref.invalidate(
-                                  getSubBusinessNaturesProvider(
-                                      int.parse(selectedBusinessNaturesCode!))),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
+                                  )
+                                : Text('Empty   classification'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref.invalidate(
+                                    getSubBusinessNaturesProvider(int.parse(
+                                        selectedBusinessNaturesCode!))),
+                                child: const Text(
+                                  'An error occured fetch login modes.Tap to refresh',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                ],
 
                 /// Customer Classification category
                 const SizedBox(height: 16),
@@ -1177,7 +1309,8 @@ class _PersonalInfoEditSscreenState
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     items: data
-                                        .map<DropdownMenuItem<
+                                        .map<
+                                                DropdownMenuItem<
                                                     CustomerClassificationDatum>>(
                                             (item) => DropdownMenuItem<
                                                     CustomerClassificationDatum>(
@@ -1203,8 +1336,12 @@ class _PersonalInfoEditSscreenState
                                       setState(() {
                                         /// Set selected item params
                                         customerClassificationsItem = newValue;
-                                        selectedCustomerClassificationsName =newValue?.customerClassificationId;
-                                        _customerClassificationIdController.text =newValue?.customerClassificationId??'';
+                                        selectedCustomerClassificationsName =
+                                            newValue?.customerClassificationId;
+                                        _customerClassificationIdController
+                                            .text = newValue
+                                                ?.customerClassificationId ??
+                                            '';
                                       });
                                     },
                                     buttonStyleData: ButtonStyleData(
@@ -1318,8 +1455,10 @@ class _PersonalInfoEditSscreenState
                                         employmentTypesItem = newValue;
                                         selectedEmploymentTypessName =
                                             newValue?.employmentTypeName;
-                                        selectedEmploymentTypesCode =newValue?.employmentTypeCode;
-                                        _employmentTypeCodeController.text =newValue?.employmentTypeCode??'';
+                                        selectedEmploymentTypesCode =
+                                            newValue?.employmentTypeCode;
+                                        _employmentTypeCodeController.text =
+                                            newValue?.employmentTypeCode ?? '';
                                       });
                                     },
                                     buttonStyleData: ButtonStyleData(
@@ -1512,8 +1651,10 @@ class _PersonalInfoEditSscreenState
                                         regionsItem = newValue;
                                         selectedRegionName =
                                             newValue?.regionName;
-                                        selectedRegionCode = newValue?.regionCode;
-                                        _regionCodeController.text = newValue?.regionCode??'';
+                                        selectedRegionCode =
+                                            newValue?.regionCode;
+                                        _regionCodeController.text =
+                                            newValue?.regionCode ?? '';
                                       });
                                     },
                                     buttonStyleData: ButtonStyleData(
@@ -1571,7 +1712,130 @@ class _PersonalInfoEditSscreenState
                         );
                   },
                 ),
+                if(hasPermanentResidence)...[
                 const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: "Permanet Residential Address",
+                    fillColor: Colors.transparent,
+                    controller: _permanentResidentialAddressController,
+                    hint: 'Enter permanet address',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'permanet address is required';
+                      }
+                      return null;
+                    },
+                  ),
+                     const SizedBox(height: 16),
+
+                    CustomTextFormField(
+                    title: "Permanet Residential Address City",
+                    fillColor: Colors.transparent,
+                    controller: _permanentResidentialCityController,
+                    hint: 'Enter permanet address city',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'permanet address is required';
+                      }
+                      return null;
+                    },
+                  ),
+                     const SizedBox(height: 16),
+
+                       CustomTextFormField(
+                    title: "Permanet Address Country Code",
+                    fillColor: Colors.transparent,
+                    controller: _permanentResidentialCityController,
+                    hint: 'GH,NG,TG,CM....',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'permanet address is required';
+                      // }
+                      return null;
+                    },
+                  ),
+
+                                  const SizedBox(height: 16),
+
+                       CustomTextFormField(
+                    title: " Residence Permit PlaceCode",
+                    fillColor: Colors.transparent,
+                    controller: _residencePermitPlaceCodeController,
+                    hint: 'Enter Place code',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'permanet address is required';
+                      // }
+                      return null;
+                    },
+                  ),
+                                  const SizedBox(height: 16),
+
+                    CustomTextFormField(
+                  onTap: () {
+                    _showDatePicker(context, dateCategory: 'PERMITISSUE');
+                  },
+                  title: 'Permit Issue Date',
+                  readOnly: true,
+                  showCursor: false,
+                  suffixIcon: Icon(
+                    Icons.calendar_today_rounded,
+                    color: ZxplorePrimaryColor.withOpacity(.5),
+                  ),
+                  showDropDownSuffixIcon: true,
+                  fillColor: Colors.transparent,
+                  controller: _permitIssueDateController,
+                  hint: 'Selected permit issue date ',
+                  inputType: TextInputType.text,
+                  useDefaultErrorText: false,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Permit Issue Date required';
+                    } else if (value == 'dd-mm-yyyy') {
+                      return 'Enter a valid date';
+                    }
+                    return null;
+                  },
+                ),
+                                  const SizedBox(height: 16),
+
+   CustomTextFormField(
+                  onTap: () {
+                    _showDatePicker(context, dateCategory: 'PERMITEXP');
+                  },
+                  title: 'Permit Exp. Date',
+                  readOnly: true,
+                  showCursor: false,
+                  suffixIcon: Icon(
+                    Icons.calendar_today_rounded,
+                    color: ZxplorePrimaryColor.withOpacity(.5),
+                  ),
+                  showDropDownSuffixIcon: true,
+                  fillColor: Colors.transparent,
+                  controller: _permitExpiryDateController,
+                  hint: 'Selected permit exp. Date ',
+                  inputType: TextInputType.text,
+                  useDefaultErrorText: false,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Permit exp. date required';
+                    } else if (value == 'dd-mm-yyyy') {
+                      return 'Enter a valid date';
+                    }
+                    return null;
+                  },
+                ),
+               
+                ],
+                     const SizedBox(height: 16),
 
                 /// MaritalStatus
                 Text(
@@ -1624,8 +1888,10 @@ class _PersonalInfoEditSscreenState
                                       setState(() {
                                         /// Set selected item params
                                         maritalStatusItem = newValue;
-                                        maritalStatusName = newValue?.maritalStatusDesc;
-                                        _maritalStatusController.text = newValue?.maritalStatusDesc??'';
+                                        maritalStatusName =
+                                            newValue?.maritalStatusDesc;
+                                        _maritalStatusController.text =
+                                            newValue?.maritalStatusDesc ?? '';
                                         maritalStatusCode =
                                             newValue?.maritalStatusCode;
                                       });
@@ -1785,6 +2051,20 @@ class _PersonalInfoEditSscreenState
                     return null;
                   },
                 ),
+                   CustomTextFormField(
+                  title: "Home Town",
+                  fillColor: Colors.transparent,
+                  controller: _homeTownController,
+                  hint: 'Enter home town',
+                  inputType: TextInputType.text,
+                  useDefaultErrorText: false,
+                  validator: (value) {
+                    if (value.toString().isEmpty) {
+                      return 'Home Town is  required';
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(height: 16),
                 CustomTextFormField(
                   title: 'Other Address',
@@ -1801,21 +2081,7 @@ class _PersonalInfoEditSscreenState
                   },
                 ),
 
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Permanent Address',
-                  fillColor: Colors.transparent,
-                  controller: _permanentResidentialAddressController,
-                  hint: 'Enter permanent adress',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    // if (value.toString().isEmpty) {
-                    //   return 'Address is  required';
-                    // }
-                    return null;
-                  },
-                ),
+               
                 const SizedBox(height: 16),
                 CustomTextFormField(
                   title: 'City',
@@ -1833,21 +2099,7 @@ class _PersonalInfoEditSscreenState
                 ),
                 // const SizedBox(height: 8),
                 const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Permanent City',
-                  fillColor: Colors.transparent,
-                  controller: _permanentResidentialCityController,
-                  hint: 'Enter permanent city',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    // if (value.toString().isEmpty) {
-                    //   return 'City is  required';
-                    // }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 8),
+                
                 const Divider(
                   height: 16,
                   color: Color.fromARGB(255, 169, 189, 201),
@@ -2162,7 +2414,7 @@ class _PersonalInfoEditSscreenState
                       if (datedIssued == null) {
                         zXFlushBar(context, "ID issued date id required");
                         return;
-                      } 
+                      }
                       editAccountRequest(context);
                     },
                     title: 'Create Account')
@@ -2206,17 +2458,30 @@ class _PersonalInfoEditSscreenState
             sDobFormattedDate = sdateFormatter.format(dobInit!);
             _birthDateController.text = dobFormattedDate;
           });
+        } else if (dateCategory == 'PERMITEXP') {
+          dobInit = fPickedDate;
+          dobFormattedDate = dateFormatter.format(dobInit!);
+          sDobFormattedDate = sdateFormatter.format(dobInit!);
+          _permitExpiryDateController.text = dobFormattedDate;
+        }
+        } else if (dateCategory == 'PERMITISSUE') {
+          dobInit = fPickedDate;
+          dobFormattedDate = dateFormatter.format(dobInit!);
+          sDobFormattedDate = sdateFormatter.format(dobInit!);
+          _permitIssueDateController.text = dobFormattedDate;
+        
         } else if (dateCategory == 'ISSUE') {
           dobInit = fPickedDate;
           dobFormattedDate = dateFormatter.format(dobInit!);
           sDobFormattedDate = sdateFormatter.format(dobInit!);
           _idIssueDateController.text = dobFormattedDate;
-        } else {
+        } 
+        else {
           dobInit = fPickedDate;
           dobFormattedDate = dateFormatter.format(dobInit!);
           sDobFormattedDate = sdateFormatter.format(dobInit!);
           _idExpiryDateController.text = dobFormattedDate;
-        }
+        
       }
     }
   }

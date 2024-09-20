@@ -104,7 +104,8 @@ class _AllPendingRequestsScreenState
     return RefreshIndicator(
       onRefresh: () async => ref.invalidate(getPendingRequestsAllDatumProvider),
       child: ZxploreProgress(
-        inAsyncCall: ref.watch(getPendingRequestsAllDatumProvider).isLoading,
+        inAsyncCall: ref.watch(getPendingRequestsAllDatumProvider).isLoading|| ref
+        .watch(viewRequestControllerProvider).isLoading,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: ZxplorePrimaryColor,
@@ -330,6 +331,7 @@ class AccountRequestItem extends StatelessWidget {
     );
   }
 }
+
 class FoldableItem extends StatelessWidget {
   const FoldableItem({super.key, this.request,this.onTapDelete,
     this.onPressed,required this.onTapEdit,required this.onTapView, required this.name,required this.number,required this.requestId, required this.subRequestId});
