@@ -5,6 +5,7 @@ class SharedPreferencesKeys {
   static const titleKey = 'titleKey';
   static const phoneNumberKey = 'phoneNumberKey';
   static const accessTokenKey = 'accessTokenKey';
+  static const secAccessTokenKey = 'accessTokenKey';
   static const userOnboarded = 'userOnboarded';
     static const String isLoggedIn = 'isLoggedIn';
   static const String isFirstTime = 'isFirstTime';

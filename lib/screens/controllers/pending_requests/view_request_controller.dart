@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
-import 'package:zxplore_app/screens/controllers/epma_controllers/selected_request_provider.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 part 'view_request_controller.g.dart';
 
@@ -20,7 +19,7 @@ class ViewRequestController extends _$ViewRequestController {
     try {
       state = const AsyncLoading();
       final requestResponse =
-          await repo.viewAccountRequest(requestId: requestId);
+          await repo.viewAccountRequest(RequestId: requestId);
 
       if (requestResponse['status'] == true) {
         final result = ViewAccountRequestResponse.fromMap(requestResponse);

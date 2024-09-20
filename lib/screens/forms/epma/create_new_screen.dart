@@ -66,9 +66,36 @@ class _CreateNewAccountScreenState
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
+  DateTime? _selectedDate;
+
+    @override
+  void dispose() {
+    // Dispose the controllers to free up resources
+    firstNameController.dispose();
+    lastNameController.dispose();
+    otherNameController.dispose();
+    idIssueAuthorityController.dispose();
+    identificationNoController.dispose();
+    niaVerificationNoController.dispose();
+    iddCodeController.dispose();
+    telNoController.dispose();
+    mobileNoController.dispose();
+    residentialAddressController.dispose();
+    cityController.dispose();
+    dobController.dispose();
+    dateExpireController.dispose();
+    datedIssuedController.dispose();
+    residentialAddressController2.dispose();
+  
+  
+    super.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    
     return ZxploreProgress(
       inAsyncCall: ref.watch(createAccountControllerProvider).isLoading,
       child: Scaffold(
@@ -86,7 +113,8 @@ class _CreateNewAccountScreenState
           //   }, icon: Icon(Icons.refresh))
           // ],
         ),
-        body: SingleChildScrollView(
+        body: 
+        SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
               left: 16,
@@ -100,12 +128,7 @@ class _CreateNewAccountScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    _selectedDate == null
-                        ? 'No date selected!'
-                        : 'Selected Date: ${_selectedDate!.toLocal()}'
-                            .split(' ')[0],
-                  ),
+             
                   CustomTextFormField(
                     title: 'First name',
                     fillColor: Colors.transparent,
@@ -849,7 +872,6 @@ class _CreateNewAccountScreenState
         });
   }
 
-  DateTime? _selectedDate;
 
   // Function to show the DatePicker
   Future<void> _selectDate(BuildContext context) async {
