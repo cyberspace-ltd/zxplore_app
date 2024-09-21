@@ -2352,7 +2352,7 @@ class _PersonalInfoEditSscreenState
                 ),
 
                 const SizedBox(height: 16),
-                    Text(
+                Text(
                   'Other Informtion',
                   style: Theme.of(context)
                       .textTheme
@@ -2361,64 +2361,64 @@ class _PersonalInfoEditSscreenState
                 ),
                 div,
                 gapH12,
-                
+
                 CheckboxListTile(
                   title: Text('Account Ownership'),
                   value: accountOwnership,
                   onChanged: (value) => _handleCheckboxChange(2, value),
                 ),
                 gapH12,
-                  CheckboxListTile(
+                CheckboxListTile(
                   title: Text('Customer Resident In Ghana'),
                   value: customerResidentInGhana,
                   onChanged: (value) => _handleCheckboxChange(3, value),
                 ),
                 gapH12,
 
-                   CheckboxListTile(
+                CheckboxListTile(
                   title: Text('Is Physically Challenged'),
                   value: isPhysicallyChallenged,
                   onChanged: (value) => _handleCheckboxChange(4, value),
                 ),
                 gapH12,
-                   CheckboxListTile(
+                CheckboxListTile(
                   title: Text('Customer Is PEP'),
                   value: customerIsPEP,
                   onChanged: (value) => _handleCheckboxChange(5, value),
                 ),
                 gapH12,
 
-                  CheckboxListTile(
+                CheckboxListTile(
                   title: Text('Setup Ibank'),
                   value: setupIbank,
                   onChanged: (value) => _handleCheckboxChange(6, value),
                 ),
                 gapH12,
-                  CheckboxListTile(
+                CheckboxListTile(
                   title: Text('Setup ZPrompt'),
                   value: setupZPrompt,
                   onChanged: (value) => _handleCheckboxChange(7, value),
                 ),
                 gapH12,
-                     CheckboxListTile(
+                CheckboxListTile(
                   title: Text('Setup Statement Via Email'),
                   value: setupStatementViaEmail,
                   onChanged: (value) => _handleCheckboxChange(8, value),
                 ),
                 gapH12,
-                   CheckboxListTile(
+                CheckboxListTile(
                   title: Text('Setup Email Indemnity'),
                   value: setupEmailIndemnity,
                   onChanged: (value) => _handleCheckboxChange(9, value),
                 ),
                 gapH12,
 
-                   CheckboxListTile(
+                CheckboxListTile(
                   title: Text('New Request?'),
                   value: isNewRequest,
                   onChanged: (value) => _handleCheckboxChange(11, value),
                 ),
-                
+
                 const SizedBox(height: 16),
                 CustomTextFormField(
                   title: 'TIN',
