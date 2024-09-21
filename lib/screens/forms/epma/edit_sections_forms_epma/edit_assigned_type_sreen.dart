@@ -142,7 +142,7 @@ class _EditAssignedAccoutState extends ConsumerState<EditAssignedAccout> {
                   if (widget.data?.data?.reqId != null &&
                       widget.data?.data?.accountType != null) ...[
                     Text(
-                      'Anticipated Transactions',
+                      'Account Series',
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: Theme.of(context)
@@ -164,7 +164,7 @@ class _EditAssignedAccoutState extends ConsumerState<EditAssignedAccout> {
                                       child: DropdownButton2<AccountSeriesDatum>(
                                         isExpanded: true,
                                         hint: Text(
-                                          'Select amount',
+                                          'Select series',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
