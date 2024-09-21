@@ -20,6 +20,7 @@ import 'package:zxplore_app/screens/controllers/meta/employment_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/marital_status.dart';
 import 'package:zxplore_app/screens/controllers/meta/regions.dart';
 import 'package:zxplore_app/screens/controllers/meta/sub_business_natures.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edit_screen.dart';
 import 'package:zxplore_app/colors.dart';
@@ -35,6 +36,7 @@ import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
 final div = Divider(
   height: 0,
@@ -487,7 +489,7 @@ class _PersonalInfoEditSscreenState
         customerClassificationId: selectedCustomerClassificationsCode);
     await ref
         .read(editPersonalDetailsControllerProvider.notifier)
-        .editPersonalDetailsData(editPersonalDetails: editPersonalDetails);
+        .editPersonalDetailsData(context: context,editPersonalDetails: editPersonalDetails);
   }
 
   @override
@@ -498,651 +500,162 @@ class _PersonalInfoEditSscreenState
       (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
     );
 
-    return BaseEditForm(
-      title: 'Editing Personal Information',
-      widgetToGoOnCancel: ViewInitialCreationInfoScreen(
-        formIndividualData: widget.data!.toMap(),
-      ),
-      onCancel: () => Navigator.pop(context),
-      data: {},
-      child: 
-      SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
-            // Add bottom padding to ensure content is above the keyboard
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-          ),
-          child: Form(
-            key: _personalInfoEditFormKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                gapH24,
-                Text(
-                  'Personal',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                div,
-                gapH16,
-                CustomTextFormField(
-                  title: 'First name',
-                  fillColor: Colors.transparent,
-                  controller: _firstNameController,
-                  hint: 'Enter first name',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'first name is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Last name',
-                  fillColor: Colors.transparent,
-                  controller: _surnameController,
-                  hint: 'Enter last name',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'last name is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Other name',
-                  fillColor: Colors.transparent,
-                  controller: _otherNamesController,
-                  hint: 'Enter other name',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'other name is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Maiden name',
-                  fillColor: Colors.transparent,
-                  controller: _maidenNameController,
-                  hint: 'Maiden name',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    // if (value.toString().isEmpty) {
-                    //   return 'other name is  required';
-                    // }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  onTap: () {
-                    _showDatePicker(context, dateCategory: 'DOB');
-                  },
-                  title: 'Date Of Birth',
-                  readOnly: true,
-                  showCursor: false,
-                  suffixIcon: Icon(
-                    Icons.calendar_today_rounded,
-                    color: ZxplorePrimaryColor.withOpacity(.5),
-                  ),
-                  showDropDownSuffixIcon: true,
-                  fillColor: Colors.transparent,
-                  controller: _birthDateController,
-                  hint: 'Date Of Birth ',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Date Of Birth is required';
-                    } else if (value == 'dd-mm-yyyy') {
-                      return 'Enter a valid date';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: "Place of birth",
-                  fillColor: Colors.transparent,
-                  controller: _birthPlaceController,
-                  hint: 'Place of birth',
-                  inputType: TextInputType.text,
-                  // useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Place of birth is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                // const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: "Mother\'s maidenname",
-                  fillColor: Colors.transparent,
-                  controller: _motherMaidenNameController,
-                  hint: 'Enter Mother\'s maidenname',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Mother\'s maidenname is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Gender',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getGenderProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child: DropdownButton2<GendersDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select gender',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<DropdownMenuItem<GendersDatum>>(
-                                            (item) =>
-                                                DropdownMenuItem<GendersDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.genderName ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                        .toList(),
-                                    value: selectedGenderItem,
-                                    onChanged: (GendersDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        selectedGenderItem = newValue;
-                                        selectedGenderCode =
-                                            newValue?.genderCode;
-                                        selectedGenderName =
-                                            newValue?.genderName;
-                                        _genderCodeController.text =
-                                            newValue?.genderName ?? '';
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : Text('empty gender'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref.invalidate(getGenderProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                Text(
-                  'Country',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getCountriesProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child: DropdownButton2<CountryDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select country',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<DropdownMenuItem<CountryDatum>>(
-                                            (item) =>
-                                                DropdownMenuItem<CountryDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.countryName ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                        .toList(),
-                                    value: selectedCountry,
-                                    onChanged: (CountryDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        selectedCountry = newValue;
-                                        selectedCountryCode =
-                                            newValue?.countryCode;
-                                        _countryOrigCodeController.text =
-                                            newValue?.countryCode ?? '';
-                                        selectedCountryName =
-                                            newValue?.countryName;
-                                        selectedCitizenshipCode =
-                                            newValue?.countryCode;
-                                        _idCountryCodeController.text =
-                                            newValue?.countryCode ?? '';
-                                        _altCitizenshipCodeController.text =
-                                            newValue?.countryName ?? '';
-                                        _altCitizenshipCodeController.text =
-                                            newValue?.countryName ?? '';
-                                        _citizenshipCodeController.text =
-                                            newValue?.countryName ?? '';
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : GestureDetector(
-                                  child:
-                                      Text('No? countries?, Tap to refresh, '),
-                                  onTap: () =>
-                                      ref.invalidate(getCountriesProvider),
-                                ),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref.invalidate(getCountriesProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-
-                const SizedBox(height: 16),
-                Text(
-                  'Identification Types',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getIdentificationTypesProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child:
-                                      DropdownButton2<IdentificationTypesDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select identification Types',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<
-                                                DropdownMenuItem<
-                                                    IdentificationTypesDatum>>(
-                                            (item) => DropdownMenuItem<
-                                                    IdentificationTypesDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.identificationTypeName ??
-                                                        '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                        .toList(),
-                                    value: selectedIdentificationItem,
-                                    onChanged:
-                                        (IdentificationTypesDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        selectedIdType = newValue;
-                                        selectedIdentificationCode =
-                                            newValue!.identificationTypeId;
-                                        selectedIdentificationName =
-                                            newValue.identificationTypeName;
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : Text('Empty types'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref
-                                  .invalidate(getIdentificationTypesProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                /// business Nature
-
-                const SizedBox(height: 16),
-                Text(
-                  'Business Nature',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getBusinessNaturesProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child: DropdownButton2<BusinessNaturesDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select nature of business',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<
-                                            DropdownMenuItem<
-                                                BusinessNaturesDatum>>((item) =>
-                                            DropdownMenuItem<
-                                                BusinessNaturesDatum>(
-                                              value: item,
-                                              child: Text(
-                                                item.businessNatureName ?? '',
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: ZxplorePrimaryColor,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ))
-                                        .toList(),
-                                    value: businessNaturesItem,
-                                    onChanged:
-                                        (BusinessNaturesDatum? newValue) {
-                                      // refresh subs
-                                      ref.invalidate(
-                                          getSubBusinessNaturesProvider(
-                                              int.parse(newValue!
-                                                  .businessNatureId!)));
-                                      setState(() {
-                                        /// Set selected item params
-                                        businessNaturesItem = newValue;
-                                        selectedCustomerClassificationsName =
-                                            newValue.businessNatureName;
-                                        selectedBusinessNaturesCode =
-                                            newValue.businessNatureId;
-                                        _businessNatureIdController.text =
-                                            newValue.businessNatureId ?? '';
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : Text('Empty classification'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref
-                                  .invalidate(getIdentificationTypesProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                const SizedBox(height: 16),
-                if (selectedBusinessNaturesCode != null) ...[
-                  /// Sub bus category
+    return ZxploreProgress(
+      inAsyncCall:ref
+        .watch(editPersonalDetailsControllerProvider).isLoading ||
+     ref.watch(viewRequestControllerProvider).isLoading,
+      child: BaseEditForm(
+        title: 'Editing Personal Information',
+        widgetToGoOnCancel: ViewInitialCreationInfoScreen(
+          formIndividualData: widget.data!.toMap(),
+        ),
+        onCancel: () => Navigator.pop(context),
+        data: {},
+        child: 
+        SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              // Add bottom padding to ensure content is above the keyboard
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: Form(
+              key: _personalInfoEditFormKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  gapH24,
                   Text(
-                    ' Sub  Business  class',
+                    'Personal',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  div,
+                  gapH16,
+                  CustomTextFormField(
+                    title: 'First name',
+                    fillColor: Colors.transparent,
+                    controller: _firstNameController,
+                    hint: 'Enter first name',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'first name is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'Last name',
+                    fillColor: Colors.transparent,
+                    controller: _surnameController,
+                    hint: 'Enter last name',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'last name is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'Other name',
+                    fillColor: Colors.transparent,
+                    controller: _otherNamesController,
+                    hint: 'Enter other name',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'other name is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'Maiden name',
+                    fillColor: Colors.transparent,
+                    controller: _maidenNameController,
+                    hint: 'Maiden name',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    onTap: () {
+                      _showDatePicker(context, dateCategory: 'DOB');
+                    },
+                    title: 'Date Of Birth',
+                    readOnly: true,
+                    showCursor: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    showDropDownSuffixIcon: true,
+                    fillColor: Colors.transparent,
+                    controller: _birthDateController,
+                    hint: 'Date Of Birth ',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Date Of Birth is required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: "Place of birth",
+                    fillColor: Colors.transparent,
+                    controller: _birthPlaceController,
+                    hint: 'Place of birth',
+                    inputType: TextInputType.text,
+                    // useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Place of birth is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  // const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: "Mother\'s maidenname",
+                    fillColor: Colors.transparent,
+                    controller: _motherMaidenNameController,
+                    hint: 'Enter Mother\'s maidenname',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Mother\'s maidenname is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Gender',
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     style: Theme.of(context)
@@ -1153,18 +666,14 @@ class _PersonalInfoEditSscreenState
                   const SizedBox(height: 6),
                   Consumer(
                     builder: (context, ref, child) {
-                      return ref
-                          .watch(getSubBusinessNaturesProvider(
-                              int.parse(selectedBusinessNaturesCode!)))
-                          .when(
+                      return ref.watch(getGenderProvider).when(
                             data: (data) => (data != null &&
                                     data.isNotEmpty == true)
                                 ? DropdownButtonHideUnderline(
-                                    child:
-                                        DropdownButton2<SubBusinessNatureDatum>(
+                                    child: DropdownButton2<GendersDatum>(
                                       isExpanded: true,
                                       hint: Text(
-                                        'Select class',
+                                        'Select gender',
                                         style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.normal,
@@ -1173,15 +682,12 @@ class _PersonalInfoEditSscreenState
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      SubBusinessNatureDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      SubBusinessNatureDatum>(
+                                          .map<DropdownMenuItem<GendersDatum>>(
+                                              (item) =>
+                                                  DropdownMenuItem<GendersDatum>(
                                                     value: item,
                                                     child: Text(
-                                                      item.subBusinessNatureName ??
-                                                          '',
+                                                      item.genderName ?? '',
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -1194,19 +700,17 @@ class _PersonalInfoEditSscreenState
                                                     ),
                                                   ))
                                           .toList(),
-                                      value: subBusinessNaturesItem,
-                                      onChanged:
-                                          (SubBusinessNatureDatum? newValue) {
+                                      value: selectedGenderItem,
+                                      onChanged: (GendersDatum? newValue) {
                                         setState(() {
                                           /// Set selected item params
-                                          subBusinessNaturesItem = newValue;
-                                          subBusinessNaturesName =
-                                              newValue?.subBusinessNatureName;
-                                          subBusinessNaturesCode =
-                                              newValue?.subBusinessNatureId;
-                                          _subBusinessNatureIdController.text =
-                                              newValue?.subBusinessNatureId ??
-                                                  '';
+                                          selectedGenderItem = newValue;
+                                          selectedGenderCode =
+                                              newValue?.genderCode;
+                                          selectedGenderName =
+                                              newValue?.genderName;
+                                          _genderCodeController.text =
+                                              newValue?.genderName ?? '';
                                         });
                                       },
                                       buttonStyleData: ButtonStyleData(
@@ -1215,8 +719,7 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                          borderRadius: BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -1235,35 +738,29 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                          borderRadius: BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
+                                        scrollbarTheme: const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                              WidgetStatePropertyAll<bool>(true),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
+                                      menuItemStyleData: const MenuItemStyleData(
                                         height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
                                       ),
                                     ),
                                   )
-                                : Text('Empty   classification'),
+                                : Text('empty gender'),
                             error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(
-                                    getSubBusinessNaturesProvider(int.parse(
-                                        selectedBusinessNaturesCode!))),
+                                onTap: () => ref.invalidate(getGenderProvider),
                                 child: const Text(
-                                  'An error occured fetch login modes.Tap to refresh',
+                                  'An error occured',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -1271,531 +768,1520 @@ class _PersonalInfoEditSscreenState
                           );
                     },
                   ),
-                ],
-
-                /// Customer Classification category
-                const SizedBox(height: 16),
-                Text(
-                  'Customer Class',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getCustomerClassificationProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child: DropdownButton2<
-                                      CustomerClassificationDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select class',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<
-                                                DropdownMenuItem<
-                                                    CustomerClassificationDatum>>(
-                                            (item) => DropdownMenuItem<
-                                                    CustomerClassificationDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.customerClassificationId ??
-                                                        '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                        .toList(),
-                                    value: customerClassificationsItem,
-                                    onChanged: (CustomerClassificationDatum?
-                                        newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        customerClassificationsItem = newValue;
-                                        selectedCustomerClassificationsName =
-                                            newValue?.customerClassificationId;
-                                        _customerClassificationIdController
-                                            .text = newValue
-                                                ?.customerClassificationId ??
-                                            '';
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : Text('Empty   classification'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref
-                                  .invalidate(getIdentificationTypesProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                /// EmploymentType
-                Text(
-                  'Employment Type',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getEmploymentTypeProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child: DropdownButton2<EmploymentTypeDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select employment type',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<
-                                            DropdownMenuItem<
-                                                EmploymentTypeDatum>>((item) =>
-                                            DropdownMenuItem<
-                                                EmploymentTypeDatum>(
-                                              value: item,
-                                              child: Text(
-                                                item.employmentTypeName ?? '',
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: ZxplorePrimaryColor,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ))
-                                        .toList(),
-                                    value: employmentTypesItem,
-                                    onChanged: (EmploymentTypeDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        employmentTypesItem = newValue;
-                                        selectedEmploymentTypessName =
-                                            newValue?.employmentTypeName;
-                                        selectedEmploymentTypesCode =
-                                            newValue?.employmentTypeCode;
-                                        _employmentTypeCodeController.text =
-                                            newValue?.employmentTypeCode ?? '';
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : Text('Empty   employment types'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () =>
-                                  ref.invalidate(getEmploymentTypeProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                if (selectedEmploymentTypessName == "EMPLOYED") ...[
                   const SizedBox(height: 16),
+      
+                  Text(
+                    'Country',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getCountriesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<CountryDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select country',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<DropdownMenuItem<CountryDatum>>(
+                                              (item) =>
+                                                  DropdownMenuItem<CountryDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.countryName ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: selectedCountry,
+                                      onChanged: (CountryDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          selectedCountry = newValue;
+                                          selectedCountryCode =
+                                              newValue?.countryCode;
+                                          _countryOrigCodeController.text =
+                                              newValue?.countryCode ?? '';
+                                          selectedCountryName =
+                                              newValue?.countryName;
+                                          selectedCitizenshipCode =
+                                              newValue?.countryCode;
+                                          _idCountryCodeController.text =
+                                              newValue?.countryCode ?? '';
+                                          _altCitizenshipCodeController.text =
+                                              newValue?.countryName ?? '';
+                                          _altCitizenshipCodeController.text =
+                                              newValue?.countryName ?? '';
+                                          _citizenshipCodeController.text =
+                                              newValue?.countryName ?? '';
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    child:
+                                        Text('No? countries?, Tap to refresh, '),
+                                    onTap: () =>
+                                        ref.invalidate(getCountriesProvider),
+                                  ),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref.invalidate(getCountriesProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+      
+                  const SizedBox(height: 16),
+                  Text(
+                    'Identification Types',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getIdentificationTypesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child:
+                                        DropdownButton2<IdentificationTypesDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select identification Types',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      IdentificationTypesDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      IdentificationTypesDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.identificationTypeName ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: selectedIdentificationItem,
+                                      onChanged:
+                                          (IdentificationTypesDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          selectedIdType = newValue;
+                                          selectedIdentificationCode =
+                                              newValue!.identificationTypeId;
+                                          selectedIdentificationName =
+                                              newValue.identificationTypeName;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : Text('Empty types'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref
+                                    .invalidate(getIdentificationTypesProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+      
+                  /// business Nature
+      
+                  const SizedBox(height: 16),
+                  Text(
+                    'Business Nature',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getBusinessNaturesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<BusinessNaturesDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select nature of business',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                              DropdownMenuItem<
+                                                  BusinessNaturesDatum>>((item) =>
+                                              DropdownMenuItem<
+                                                  BusinessNaturesDatum>(
+                                                value: item,
+                                                child: Text(
+                                                  item.businessNatureName ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: ZxplorePrimaryColor,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: businessNaturesItem,
+                                      onChanged:
+                                          (BusinessNaturesDatum? newValue) {
+                                        // refresh subs
+                                        ref.invalidate(
+                                            getSubBusinessNaturesProvider(
+                                                int.parse(newValue!
+                                                    .businessNatureId!)));
+                                        setState(() {
+                                          /// Set selected item params
+                                          businessNaturesItem = newValue;
+                                          selectedCustomerClassificationsName =
+                                              newValue.businessNatureName;
+                                          selectedBusinessNaturesCode =
+                                              newValue.businessNatureId;
+                                          _businessNatureIdController.text =
+                                              newValue.businessNatureId ?? '';
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : Text('Empty classification'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref
+                                    .invalidate(getIdentificationTypesProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  if (selectedBusinessNaturesCode != null) ...[
+                    /// Sub bus category
+                    Text(
+                      ' Sub  Business  class',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref
+                            .watch(getSubBusinessNaturesProvider(
+                                int.parse(selectedBusinessNaturesCode!)))
+                            .when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child:
+                                          DropdownButton2<SubBusinessNatureDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select class',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        items: data
+                                            .map<
+                                                    DropdownMenuItem<
+                                                        SubBusinessNatureDatum>>(
+                                                (item) => DropdownMenuItem<
+                                                        SubBusinessNatureDatum>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.subBusinessNatureName ??
+                                                            '',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        value: subBusinessNaturesItem,
+                                        onChanged:
+                                            (SubBusinessNatureDatum? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            subBusinessNaturesItem = newValue;
+                                            subBusinessNaturesName =
+                                                newValue?.subBusinessNatureName;
+                                            subBusinessNaturesCode =
+                                                newValue?.subBusinessNatureId;
+                                            _subBusinessNatureIdController.text =
+                                                newValue?.subBusinessNatureId ??
+                                                    '';
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
+                                        ),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
+                                        ),
+                                      ),
+                                    )
+                                  : Text('Empty   classification'),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () => ref.invalidate(
+                                      getSubBusinessNaturesProvider(int.parse(
+                                          selectedBusinessNaturesCode!))),
+                                  child: const Text(
+                                    'An error occured',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
+      
+                  /// Customer Classification category
+                  const SizedBox(height: 16),
+                  Text(
+                    'Customer Class',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getCustomerClassificationProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<
+                                        CustomerClassificationDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select class',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      CustomerClassificationDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      CustomerClassificationDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.customerClassificationId ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: customerClassificationsItem,
+                                      onChanged: (CustomerClassificationDatum?
+                                          newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          customerClassificationsItem = newValue;
+                                          selectedCustomerClassificationsName =
+                                              newValue?.customerClassificationId;
+                                          _customerClassificationIdController
+                                              .text = newValue
+                                                  ?.customerClassificationId ??
+                                              '';
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : Text('Empty   classification'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref
+                                    .invalidate(getIdentificationTypesProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+      
+                  /// EmploymentType
+                  Text(
+                    'Employment Type',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getEmploymentTypeProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<EmploymentTypeDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select employment type',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                              DropdownMenuItem<
+                                                  EmploymentTypeDatum>>((item) =>
+                                              DropdownMenuItem<
+                                                  EmploymentTypeDatum>(
+                                                value: item,
+                                                child: Text(
+                                                  item.employmentTypeName ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: ZxplorePrimaryColor,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: employmentTypesItem,
+                                      onChanged: (EmploymentTypeDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          employmentTypesItem = newValue;
+                                          selectedEmploymentTypessName =
+                                              newValue?.employmentTypeName;
+                                          selectedEmploymentTypesCode =
+                                              newValue?.employmentTypeCode;
+                                          _employmentTypeCodeController.text =
+                                              newValue?.employmentTypeCode ?? '';
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : Text('Empty   employment types'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () =>
+                                    ref.invalidate(getEmploymentTypeProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  if (selectedEmploymentTypessName == "EMPLOYED") ...[
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: "Employer Phone",
+                      fillColor: Colors.transparent,
+                      controller: _employerTelController,
+                      hint: 'Enter employer\'s phone',
+                      inputType: TextInputType.phone,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Employer phone is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: "Employer Email",
+                      fillColor: Colors.transparent,
+                      controller: _employerEmailController,
+                      hint: 'Enter employer\'s Email',
+                      inputType: TextInputType.emailAddress,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Employer email  required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: "Employer Address",
+                      fillColor: Colors.transparent,
+                      controller: _employerAddressController,
+                      hint: 'Enter employer address',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Employer address  required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: "Time with Employer",
+                      fillColor: Colors.transparent,
+                      controller: _timeWithEmployerController,
+                      hint: 'How long have you worked',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        // if (value.toString().isEmpty) {
+                        //   return 'Employer email  required';
+                        // }
+                        return null;
+                      },
+                    ),
+                  ],
+      
+                  const SizedBox(height: 16),
+      
                   CustomTextFormField(
-                    title: "Employer Phone",
+                    title: "Monthly Income",
                     fillColor: Colors.transparent,
-                    controller: _employerTelController,
-                    hint: 'Enter employer\'s phone',
+                    controller: _monthlyIncomeController,
+                    hint: 'How long have you worked',
+                    inputType: TextInputType.number,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Monthly Income is required';
+                      }
+                      return null;
+                    },
+                  ),
+      
+                  /// Region
+                  Text(
+                    'Region',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getRegionsProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<RegionDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select region',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<DropdownMenuItem<RegionDatum>>(
+                                              (item) =>
+                                                  DropdownMenuItem<RegionDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.regionName ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: regionsItem,
+                                      onChanged: (RegionDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          regionsItem = newValue;
+                                          selectedRegionName =
+                                              newValue?.regionName;
+                                          selectedRegionCode =
+                                              newValue?.regionCode;
+                                          _regionCodeController.text =
+                                              newValue?.regionCode ?? '';
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : Text('Empty regions'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref.invalidate(getRegionsProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+      
+                  CheckboxListTile(
+                    title: Text('Has Permanent Residence'),
+                    value: hasPermanentResidence,
+                    onChanged: (value) => _handleCheckboxChange(1, value),
+                  ),
+                  if (hasPermanentResidence) ...[
+                    const SizedBox(height: 8),
+                    CustomTextFormField(
+                      title: "Permanet Residential Address",
+                      fillColor: Colors.transparent,
+                      controller: _permanentResidentialAddressController,
+                      hint: 'Enter permanet address',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'permanet address is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: "Permanet Residential Address City",
+                      fillColor: Colors.transparent,
+                      controller: _permanentResidentialCityController,
+                      hint: 'Enter permanet address city',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'permanet address is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: "Permanet Address Country Code",
+                      fillColor: Colors.transparent,
+                      controller: _permanentResidentialCityController,
+                      hint: 'GH,NG,TG,CM....',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        // if (value.toString().isEmpty) {
+                        //   return 'permanet address is required';
+                        // }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: " Residence Permit PlaceCode",
+                      fillColor: Colors.transparent,
+                      controller: _residencePermitPlaceCodeController,
+                      hint: 'Enter Place code',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        // if (value.toString().isEmpty) {
+                        //   return 'permanet address is required';
+                        // }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      onTap: () {
+                        _showDatePicker(context, dateCategory: 'PERMITISSUE');
+                      },
+                      title: 'Permit Issue Date',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(
+                        Icons.calendar_today_rounded,
+                        color: ZxplorePrimaryColor.withOpacity(.5),
+                      ),
+                      showDropDownSuffixIcon: true,
+                      fillColor: Colors.transparent,
+                      controller: _permitIssueDateController,
+                      hint: 'Selected permit issue date ',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Permit Issue Date required';
+                        } else if (value == 'dd-mm-yyyy') {
+                          return 'Enter a valid date';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      onTap: () {
+                        _showDatePicker(context, dateCategory: 'PERMITEXP');
+                      },
+                      title: 'Permit Exp. Date',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(
+                        Icons.calendar_today_rounded,
+                        color: ZxplorePrimaryColor.withOpacity(.5),
+                      ),
+                      showDropDownSuffixIcon: true,
+                      fillColor: Colors.transparent,
+                      controller: _permitExpiryDateController,
+                      hint: 'Selected permit exp. Date ',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Permit exp. date required';
+                        } else if (value == 'dd-mm-yyyy') {
+                          return 'Enter a valid date';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                  const SizedBox(height: 16),
+      
+                  /// MaritalStatus
+                  Text(
+                    'Marital Status',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getMaritalStatusProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<MaritalStatusDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select status',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<
+                                              DropdownMenuItem<
+                                                  MaritalStatusDatum>>((item) =>
+                                              DropdownMenuItem<
+                                                  MaritalStatusDatum>(
+                                                value: item,
+                                                child: Text(
+                                                  item.maritalStatusDesc ?? '',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.normal,
+                                                    color: ZxplorePrimaryColor,
+                                                  ),
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ))
+                                          .toList(),
+                                      value: maritalStatusItem,
+                                      onChanged: (MaritalStatusDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          maritalStatusItem = newValue;
+                                          maritalStatusName =
+                                              newValue?.maritalStatusDesc;
+                                          _maritalStatusController.text =
+                                              newValue?.maritalStatusDesc ?? '';
+                                          maritalStatusCode =
+                                              newValue?.maritalStatusCode;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : Text('Empty regions'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () =>
+                                    ref.invalidate(getMaritalStatusProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  if (maritalStatusName != null &&
+                      maritalStatusName == "Married") ...[
+                    CustomTextFormField(
+                      title: 'Spouse Name',
+                      fillColor: Colors.transparent,
+                      controller: _spouseNameController,
+                      hint: 'Spouse Name',
+                      inputType: TextInputType.name,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Spouse Name is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: 'Spouse Occupation',
+                      fillColor: Colors.transparent,
+                      controller: _spouseOccupationController,
+                      hint: 'Spouse occupation',
+                      inputType: TextInputType.name,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
+                          return 'Spouse occupation is required';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+      
+                  const SizedBox(height: 16),
+                  const Divider(
+                    height: 16,
+                    color: Color.fromARGB(255, 169, 189, 201),
+                    thickness: 0.5,
+                  ),
+                  const SizedBox(height: 8),
+                  CustomTextFormField(
+                    title: 'Telephone Number',
+                    fillColor: Colors.transparent,
+                    controller: _telNoController,
+                    hint: 'Enter telephone number',
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Employer phone is required';
+                        return 'Telephone Number is  required';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: "Employer Email",
+                    title: 'Mobile Number',
                     fillColor: Colors.transparent,
-                    controller: _employerEmailController,
-                    hint: 'Enter employer\'s Email',
+                    controller: _mobileNoController,
+                    hint: 'Enter mobile number',
+                    inputType: TextInputType.phone,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'Email Address',
+                    fillColor: Colors.transparent,
+                    controller: _emailAddressController,
+                    hint: 'Enter email address',
                     inputType: TextInputType.emailAddress,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Employer email  required';
+                        return 'Email is  required';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: "Employer Address",
+                    title: 'Address',
                     fillColor: Colors.transparent,
-                    controller: _employerAddressController,
-                    hint: 'Enter employer address',
+                    controller: _residentialAddressController,
+                    hint: 'Enter adress',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Employer address  required';
+                        return 'Address is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomTextFormField(
+                    title: "Home Town",
+                    fillColor: Colors.transparent,
+                    controller: _homeTownController,
+                    hint: 'Enter home town',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Home Town is  required';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: "Time with Employer",
+                    title: 'Other Address',
                     fillColor: Colors.transparent,
-                    controller: _timeWithEmployerController,
-                    hint: 'How long have you worked',
+                    controller: _residentialAddress2Controller,
+                    hint: 'Enter other adress',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       // if (value.toString().isEmpty) {
-                      //   return 'Employer email  required';
+                      //   return 'Address is  required';
                       // }
                       return null;
                     },
                   ),
-                ],
-
-                const SizedBox(height: 16),
-
-                CustomTextFormField(
-                  title: "Monthly Income",
-                  fillColor: Colors.transparent,
-                  controller: _monthlyIncomeController,
-                  hint: 'How long have you worked',
-                  inputType: TextInputType.number,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Monthly Income is required';
-                    }
-                    return null;
-                  },
-                ),
-
-                /// Region
-                Text(
-                  'Region',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getRegionsProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child: DropdownButton2<RegionDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select region',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<DropdownMenuItem<RegionDatum>>(
-                                            (item) =>
-                                                DropdownMenuItem<RegionDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.regionName ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                        .toList(),
-                                    value: regionsItem,
-                                    onChanged: (RegionDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        regionsItem = newValue;
-                                        selectedRegionName =
-                                            newValue?.regionName;
-                                        selectedRegionCode =
-                                            newValue?.regionCode;
-                                        _regionCodeController.text =
-                                            newValue?.regionCode ?? '';
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
+      
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'City',
+                    fillColor: Colors.transparent,
+                    controller: _cityController,
+                    hint: 'Enter city',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'City is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  // const SizedBox(height: 8),
+                  const SizedBox(height: 16),
+      
+                  const Divider(
+                    height: 16,
+                    color: Color.fromARGB(255, 169, 189, 201),
+                    thickness: 0.5,
+                  ),
+                  // const SizedBox(height: 8),
+                  const SizedBox(height: 16),
+                  Text(
+                    'ID Type',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getIdentificationTypesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child:
+                                        DropdownButton2<IdentificationTypesDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select ID type',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
                                           color: ZxplorePrimaryColor,
                                         ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      IdentificationTypesDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      IdentificationTypesDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.identificationTypeName ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: selectedIdType,
+                                      onChanged:
+                                          (IdentificationTypesDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          selectedIdType = newValue;
+                                          selectedIdentificationTypeCode =
+                                              newValue?.identificationTypeId;
+                                          _identificationTypeIdController.text =
+                                              '${newValue?.identificationTypeId ?? ''}';
+                                          selectedIdentificationName =
+                                              newValue?.identificationTypeName;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
                                       ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
                                       ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme: const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(true),
+                                        ),
+                                      ),
+                                      menuItemStyleData: const MenuItemStyleData(
+                                        height: 40,
+                                        padding:
+                                            EdgeInsets.only(left: 14, right: 14),
                                       ),
                                     ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
+                                  )
+                                : GestureDetector(
+                                    child: Text('No? types?, Tap to refresh, '),
+                                    onTap: () => ref.invalidate(
+                                        getIdentificationTypesProvider),
                                   ),
-                                )
-                              : Text('Empty regions'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref.invalidate(getRegionsProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                CheckboxListTile(
-                  title: Text('Has Permanent Residence'),
-                  value: hasPermanentResidence,
-                  onChanged: (value) => _handleCheckboxChange(1, value),
-                ),
-                if (hasPermanentResidence) ...[
-                  const SizedBox(height: 8),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref
+                                    .invalidate(getIdentificationTypesProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: "Permanet Residential Address",
+                    title: 'ID Issuer',
                     fillColor: Colors.transparent,
-                    controller: _permanentResidentialAddressController,
-                    hint: 'Enter permanet address',
+                    controller: _idIssueAuthorityController,
+                    hint: 'Enter ID Issuer',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'permanet address is required';
+                        return 'ID Issuer is  required';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: "Permanet Residential Address City",
+                    title: 'ID Number',
                     fillColor: Colors.transparent,
-                    controller: _permanentResidentialCityController,
-                    hint: 'Enter permanet address city',
+                    controller: _identificationNoController,
+                    hint: 'Enter ID Number',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'permanet address is required';
+                        return 'ID Number is  required';
                       }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: "Permanet Address Country Code",
-                    fillColor: Colors.transparent,
-                    controller: _permanentResidentialCityController,
-                    hint: 'GH,NG,TG,CM....',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'permanet address is required';
-                      // }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: " Residence Permit PlaceCode",
-                    fillColor: Colors.transparent,
-                    controller: _residencePermitPlaceCodeController,
-                    hint: 'Enter Place code',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'permanet address is required';
-                      // }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     onTap: () {
-                      _showDatePicker(context, dateCategory: 'PERMITISSUE');
+                      _showDatePicker(context, dateCategory: 'ISSUE');
                     },
-                    title: 'Permit Issue Date',
-                    readOnly: true,
+                    title: 'Issue Date',
                     showCursor: false,
+                    readOnly: true,
+                    fillColor: Colors.transparent,
+                    controller: _idIssueDateController,
+                    showDropDownSuffixIcon: true,
+                    hint: 'ID Issue Date',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
                     suffixIcon: Icon(
                       Icons.calendar_today_rounded,
                       color: ZxplorePrimaryColor.withOpacity(.5),
                     ),
-                    showDropDownSuffixIcon: true,
-                    fillColor: Colors.transparent,
-                    controller: _permitIssueDateController,
-                    hint: 'Selected permit issue date ',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Permit Issue Date required';
+                        return 'ID Issue is required';
                       } else if (value == 'dd-mm-yyyy') {
                         return 'Enter a valid date';
                       }
@@ -1805,687 +2291,208 @@ class _PersonalInfoEditSscreenState
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     onTap: () {
-                      _showDatePicker(context, dateCategory: 'PERMITEXP');
+                      _showDatePicker(context, dateCategory: 'EXPIRY');
                     },
-                    title: 'Permit Exp. Date',
+                    title: 'Expiry Date',
                     readOnly: true,
+                    showDropDownSuffixIcon: true,
                     showCursor: false,
                     suffixIcon: Icon(
                       Icons.calendar_today_rounded,
                       color: ZxplorePrimaryColor.withOpacity(.5),
                     ),
-                    showDropDownSuffixIcon: true,
                     fillColor: Colors.transparent,
-                    controller: _permitExpiryDateController,
-                    hint: 'Selected permit exp. Date ',
+                    controller: _idExpiryDateController,
+                    hint: 'ID Expiry Date',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Permit exp. date required';
+                        return 'ID Expiry is required';
                       } else if (value == 'dd-mm-yyyy') {
                         return 'Enter a valid date';
                       }
                       return null;
                     },
                   ),
-                ],
-                const SizedBox(height: 16),
-
-                /// MaritalStatus
-                Text(
-                  'Marital Status',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getMaritalStatusProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child: DropdownButton2<MaritalStatusDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select status',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<
-                                            DropdownMenuItem<
-                                                MaritalStatusDatum>>((item) =>
-                                            DropdownMenuItem<
-                                                MaritalStatusDatum>(
-                                              value: item,
-                                              child: Text(
-                                                item.maritalStatusDesc ?? '',
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: ZxplorePrimaryColor,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ))
-                                        .toList(),
-                                    value: maritalStatusItem,
-                                    onChanged: (MaritalStatusDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        maritalStatusItem = newValue;
-                                        maritalStatusName =
-                                            newValue?.maritalStatusDesc;
-                                        _maritalStatusController.text =
-                                            newValue?.maritalStatusDesc ?? '';
-                                        maritalStatusCode =
-                                            newValue?.maritalStatusCode;
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : Text('Empty regions'),
-                          error: (e, s) => GestureDetector(
-                              onTap: () =>
-                                  ref.invalidate(getMaritalStatusProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                if (maritalStatusName != null &&
-                    maritalStatusName == "Married") ...[
+                  const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Spouse Name',
+                    title: 'NIA Number',
                     fillColor: Colors.transparent,
-                    controller: _spouseNameController,
-                    hint: 'Spouse Name',
-                    inputType: TextInputType.name,
+                    controller: _niaVerificationNoController,
+                    hint: 'Enter NIA number',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'IDD Code',
+                    fillColor: Colors.transparent,
+                    controller: _iddCodeController,
+                    hint: 'Enter IDD code',
+                    inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Spouse Name is required';
+                        return 'IDD Code is  required';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Spouse Occupation',
+                    title: 'SSN',
                     fillColor: Colors.transparent,
-                    controller: _spouseOccupationController,
-                    hint: 'Spouse occupation',
-                    inputType: TextInputType.name,
+                    controller: _ssnitNoController,
+                    hint: 'Enter SSN code',
+                    inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Spouse occupation is required';
-                      }
                       return null;
                     },
                   ),
-                ],
-
-                const SizedBox(height: 16),
-                const Divider(
-                  height: 16,
-                  color: Color.fromARGB(255, 169, 189, 201),
-                  thickness: 0.5,
-                ),
-                const SizedBox(height: 8),
-                CustomTextFormField(
-                  title: 'Telephone Number',
-                  fillColor: Colors.transparent,
-                  controller: _telNoController,
-                  hint: 'Enter telephone number',
-                  inputType: TextInputType.phone,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Telephone Number is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Mobile Number',
-                  fillColor: Colors.transparent,
-                  controller: _mobileNoController,
-                  hint: 'Enter mobile number',
-                  inputType: TextInputType.phone,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    // if (value.toString().isEmpty) {
-                    //   return 'other name is  required';
-                    // }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Email Address',
-                  fillColor: Colors.transparent,
-                  controller: _emailAddressController,
-                  hint: 'Enter email address',
-                  inputType: TextInputType.emailAddress,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Email is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Address',
-                  fillColor: Colors.transparent,
-                  controller: _residentialAddressController,
-                  hint: 'Enter adress',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Address is  required';
-                    }
-                    return null;
-                  },
-                ),
-                CustomTextFormField(
-                  title: "Home Town",
-                  fillColor: Colors.transparent,
-                  controller: _homeTownController,
-                  hint: 'Enter home town',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'Home Town is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'Other Address',
-                  fillColor: Colors.transparent,
-                  controller: _residentialAddress2Controller,
-                  hint: 'Enter other adress',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    // if (value.toString().isEmpty) {
-                    //   return 'Address is  required';
-                    // }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'City',
-                  fillColor: Colors.transparent,
-                  controller: _cityController,
-                  hint: 'Enter city',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'City is  required';
-                    }
-                    return null;
-                  },
-                ),
-                // const SizedBox(height: 8),
-                const SizedBox(height: 16),
-
-                const Divider(
-                  height: 16,
-                  color: Color.fromARGB(255, 169, 189, 201),
-                  thickness: 0.5,
-                ),
-                // const SizedBox(height: 8),
-                const SizedBox(height: 16),
-                Text(
-                  'ID Type',
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                const SizedBox(height: 6),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ref.watch(getIdentificationTypesProvider).when(
-                          data: (data) => (data != null &&
-                                  data.isNotEmpty == true)
-                              ? DropdownButtonHideUnderline(
-                                  child:
-                                      DropdownButton2<IdentificationTypesDatum>(
-                                    isExpanded: true,
-                                    hint: Text(
-                                      'Select ID type',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                        color: ZxplorePrimaryColor,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    items: data
-                                        .map<
-                                                DropdownMenuItem<
-                                                    IdentificationTypesDatum>>(
-                                            (item) => DropdownMenuItem<
-                                                    IdentificationTypesDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.identificationTypeName ??
-                                                        '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                        .toList(),
-                                    value: selectedIdType,
-                                    onChanged:
-                                        (IdentificationTypesDatum? newValue) {
-                                      setState(() {
-                                        /// Set selected item params
-                                        selectedIdType = newValue;
-                                        selectedIdentificationTypeCode =
-                                            newValue?.identificationTypeId;
-                                        _identificationTypeIdController.text =
-                                            '${newValue?.identificationTypeId ?? ''}';
-                                        selectedIdentificationName =
-                                            newValue?.identificationTypeName;
-                                      });
-                                    },
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 60,
-                                      // width: 160,
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        border: Border.all(
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        CupertinoIcons.chevron_down,
-                                      ),
-                                      iconSize: 14,
-                                      iconEnabledColor: ZxplorePrimaryColor,
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      // width: 200,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      // offset: const Offset(0, 0),
-                                      scrollbarTheme: const ScrollbarThemeData(
-                                        radius: Radius.circular(40),
-                                        thickness:
-                                            WidgetStatePropertyAll<double>(6),
-                                        thumbVisibility:
-                                            WidgetStatePropertyAll<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding:
-                                          EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                )
-                              : GestureDetector(
-                                  child: Text('No? types?, Tap to refresh, '),
-                                  onTap: () => ref.invalidate(
-                                      getIdentificationTypesProvider),
-                                ),
-                          error: (e, s) => GestureDetector(
-                              onTap: () => ref
-                                  .invalidate(getIdentificationTypesProvider),
-                              child: const Text(
-                                'An error occured fetch login modes.Tap to refresh',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                              )),
-                          loading: () => SizedBox(height: 16.0),
-                        );
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'ID Issuer',
-                  fillColor: Colors.transparent,
-                  controller: _idIssueAuthorityController,
-                  hint: 'Enter ID Issuer',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'ID Issuer is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'ID Number',
-                  fillColor: Colors.transparent,
-                  controller: _identificationNoController,
-                  hint: 'Enter ID Number',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'ID Number is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  onTap: () {
-                    _showDatePicker(context, dateCategory: 'ISSUE');
-                  },
-                  title: 'Issue Date',
-                  showCursor: false,
-                  readOnly: true,
-                  fillColor: Colors.transparent,
-                  controller: _idIssueDateController,
-                  showDropDownSuffixIcon: true,
-                  hint: 'ID Issue Date',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  suffixIcon: Icon(
-                    Icons.calendar_today_rounded,
-                    color: ZxplorePrimaryColor.withOpacity(.5),
+      
+                  const SizedBox(height: 16),
+                  Text(
+                    'Other Informtion',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'ID Issue is required';
-                    } else if (value == 'dd-mm-yyyy') {
-                      return 'Enter a valid date';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  onTap: () {
-                    _showDatePicker(context, dateCategory: 'EXPIRY');
-                  },
-                  title: 'Expiry Date',
-                  readOnly: true,
-                  showDropDownSuffixIcon: true,
-                  showCursor: false,
-                  suffixIcon: Icon(
-                    Icons.calendar_today_rounded,
-                    color: ZxplorePrimaryColor.withOpacity(.5),
+                  div,
+                  gapH12,
+      
+                  CheckboxListTile(
+                    title: Text('Account Ownership'),
+                    value: accountOwnership,
+                    onChanged: (value) => _handleCheckboxChange(2, value),
                   ),
-                  fillColor: Colors.transparent,
-                  controller: _idExpiryDateController,
-                  hint: 'ID Expiry Date',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'ID Expiry is required';
-                    } else if (value == 'dd-mm-yyyy') {
-                      return 'Enter a valid date';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'NIA Number',
-                  fillColor: Colors.transparent,
-                  controller: _niaVerificationNoController,
-                  hint: 'Enter NIA number',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    // if (value.toString().isEmpty) {
-                    //   return 'other name is  required';
-                    // }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'IDD Code',
-                  fillColor: Colors.transparent,
-                  controller: _iddCodeController,
-                  hint: 'Enter IDD code',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value.toString().isEmpty) {
-                      return 'IDD Code is  required';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'SSN',
-                  fillColor: Colors.transparent,
-                  controller: _ssnitNoController,
-                  hint: 'Enter SSN code',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 16),
-                Text(
-                  'Other Informtion',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                ),
-                div,
-                gapH12,
-
-                CheckboxListTile(
-                  title: Text('Account Ownership'),
-                  value: accountOwnership,
-                  onChanged: (value) => _handleCheckboxChange(2, value),
-                ),
-                gapH12,
-                CheckboxListTile(
-                  title: Text('Customer Resident In Ghana'),
-                  value: customerResidentInGhana,
-                  onChanged: (value) => _handleCheckboxChange(3, value),
-                ),
-                gapH12,
-
-                CheckboxListTile(
-                  title: Text('Is Physically Challenged'),
-                  value: isPhysicallyChallenged,
-                  onChanged: (value) => _handleCheckboxChange(4, value),
-                ),
-                gapH12,
-                CheckboxListTile(
-                  title: Text('Customer Is PEP'),
-                  value: customerIsPEP,
-                  onChanged: (value) => _handleCheckboxChange(5, value),
-                ),
-                gapH12,
-
-                CheckboxListTile(
-                  title: Text('Setup Ibank'),
-                  value: setupIbank,
-                  onChanged: (value) => _handleCheckboxChange(6, value),
-                ),
-                gapH12,
-                CheckboxListTile(
-                  title: Text('Setup ZPrompt'),
-                  value: setupZPrompt,
-                  onChanged: (value) => _handleCheckboxChange(7, value),
-                ),
-                gapH12,
-                CheckboxListTile(
-                  title: Text('Setup Statement Via Email'),
-                  value: setupStatementViaEmail,
-                  onChanged: (value) => _handleCheckboxChange(8, value),
-                ),
-                gapH12,
-                CheckboxListTile(
-                  title: Text('Setup Email Indemnity'),
-                  value: setupEmailIndemnity,
-                  onChanged: (value) => _handleCheckboxChange(9, value),
-                ),
-                gapH12,
-
-                CheckboxListTile(
-                  title: Text('New Request?'),
-                  value: isNewRequest,
-                  onChanged: (value) => _handleCheckboxChange(11, value),
-                ),
-
-                const SizedBox(height: 16),
-                CustomTextFormField(
-                  title: 'TIN',
-                  fillColor: Colors.transparent,
-                  controller: _tinController,
-                  hint: 'Enter TIN code',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-                //  const SizedBox(height: 16),
-                // CustomTextFormField(
-                //   title: 'Citizenship',
-                //   fillColor: Colors.transparent,
-                //   controller: _tinController,
-                //   hint: 'Enter TIN code',
-                //   inputType: TextInputType.text,
-                //   useDefaultErrorText: false,
-                //   validator: (value) {
-
-                //     return null;
-                //   },
-                // ),
-                const SizedBox(height: 24),
-                PrimaryButton(
-                    onPressed: () {
-                      if (!_personalInfoEditFormKey.currentState!.validate()) {
-                        return;
-                      }
-                      if (selectedCountry == null) {
-                        zXFlushBar(context, "Country is required");
-                        return;
-                      }
-                      if (selectedGenderItem == null) {
-                        zXFlushBar(context, "Gender is required");
-                        return;
-                      }
-
-                      if (selectedIdType == null) {
-                        zXFlushBar(context, "ID type is required");
-                        return;
-                      }
-                      if (dob == null) {
-                        zXFlushBar(context, "Date of birth is required");
-                        return;
-                      }
-                      if (dateExpire == null) {
-                        zXFlushBar(context, "ID expiry date id required");
-                        return;
-                      }
-
-                      if (datedIssued == null) {
-                        zXFlushBar(context, "ID issued date id required");
-                        return;
-                      }
-                      editAccountRequest(context);
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Customer Resident In Ghana'),
+                    value: customerResidentInGhana,
+                    onChanged: (value) => _handleCheckboxChange(3, value),
+                  ),
+                  gapH12,
+      
+                  CheckboxListTile(
+                    title: Text('Is Physically Challenged'),
+                    value: isPhysicallyChallenged,
+                    onChanged: (value) => _handleCheckboxChange(4, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Customer Is PEP'),
+                    value: customerIsPEP,
+                    onChanged: (value) => _handleCheckboxChange(5, value),
+                  ),
+                  gapH12,
+      
+                  CheckboxListTile(
+                    title: Text('Setup Ibank'),
+                    value: setupIbank,
+                    onChanged: (value) => _handleCheckboxChange(6, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Setup ZPrompt'),
+                    value: setupZPrompt,
+                    onChanged: (value) => _handleCheckboxChange(7, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Setup Statement Via Email'),
+                    value: setupStatementViaEmail,
+                    onChanged: (value) => _handleCheckboxChange(8, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Setup Email Indemnity'),
+                    value: setupEmailIndemnity,
+                    onChanged: (value) => _handleCheckboxChange(9, value),
+                  ),
+                  gapH12,
+      
+                  CheckboxListTile(
+                    title: Text('New Request?'),
+                    value: isNewRequest,
+                    onChanged: (value) => _handleCheckboxChange(11, value),
+                  ),
+      
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'TIN',
+                    fillColor: Colors.transparent,
+                    controller: _tinController,
+                    hint: 'Enter TIN code',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      return null;
                     },
-                    title: 'Save')
-              ],
+                  ),
+                  //  const SizedBox(height: 16),
+                  // CustomTextFormField(
+                  //   title: 'Citizenship',
+                  //   fillColor: Colors.transparent,
+                  //   controller: _tinController,
+                  //   hint: 'Enter TIN code',
+                  //   inputType: TextInputType.text,
+                  //   useDefaultErrorText: false,
+                  //   validator: (value) {
+      
+                  //     return null;
+                  //   },
+                  // ),
+                  const SizedBox(height: 24),
+                  PrimaryButton(
+                      onPressed: () {
+                        if (!_personalInfoEditFormKey.currentState!.validate()) {
+                          return;
+                        }
+                        if (selectedCountry == null) {
+                          zXFlushBar(context, "Country is required");
+                          return;
+                        }
+                        if (selectedGenderItem == null) {
+                          zXFlushBar(context, "Gender is required");
+                          return;
+                        }
+      
+                        if (selectedIdType == null) {
+                          zXFlushBar(context, "ID type is required");
+                          return;
+                        }
+                        if (dob == null) {
+                          zXFlushBar(context, "Date of birth is required");
+                          return;
+                        }
+                        if (dateExpire == null) {
+                          zXFlushBar(context, "ID expiry date id required");
+                          return;
+                        }
+      
+                        if (datedIssued == null) {
+                          zXFlushBar(context, "ID issued date id required");
+                          return;
+                        }
+                        editAccountRequest(context);
+                      },
+                      title: 'Save')
+                ],
+              ),
             ),
           ),
         ),
+         
       ),
-   
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
+import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
 
@@ -147,6 +148,11 @@ abstract class RemoteApi {
   @GET('Operation/getMonthlyActivityToEdit')
   Future<dynamic> getMonthlyActivityToEdit({
     @Query('RequestId') required String? RequestId,
+  });
+
+    @POST('Operation/editMonthlyActivity')
+  Future<dynamic> editMonthlyActivity({
+    @Body() required EditMonthlyActivity? editMonthlyActivity,
   });
 
   @GET('Operation/getAccountPurposeToEdit')

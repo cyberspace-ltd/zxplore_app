@@ -8,6 +8,7 @@ import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edi
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
@@ -133,6 +134,13 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
 
   @override
   Widget build(BuildContext context) {
+     ref.listen<AsyncValue>(
+      editAccountPurposeControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context,okAction: (){
+
+      }),
+    );
+
     return ZxploreProgress(inAsyncCall: ref.watch(editAccountPurposeControllerProvider).isLoading
       || ref.watch(viewRequestControllerProvider).isLoading,
 
@@ -146,7 +154,8 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
         data: widget.data?.toJson(),
         addMore: IconButton(onPressed: () {}, icon: Icon(Icons.add_box)),
         child: SingleChildScrollView(
-          child: Padding(
+          child: 
+          Padding(
             padding: EdgeInsets.only(
               left: 16,
               right: 16,
@@ -169,9 +178,15 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
                   ),
                   div,
                   gapH16,
+                    CheckboxListTile(
+                    title: Text('Salary Processing'),
+                    value: salaryProcessing,
+                    onChanged: (value) => _handleCheckboxChange(1, value),
+                  ),
+                  gapH12,
                   CheckboxListTile(
                     title: Text('To Obtain Loan'),
-                    value: salaryProcessing,
+                    value: toOtainLoan,
                     onChanged: (value) => _handleCheckboxChange(2, value),
                   ),
                   gapH12,

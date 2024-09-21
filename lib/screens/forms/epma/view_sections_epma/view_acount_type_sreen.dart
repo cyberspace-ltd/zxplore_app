@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_monthly_activity_contrroller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
@@ -8,10 +9,10 @@ import 'package:zxplore_app/widgets/empty_view.dart';
 // import 'package:zxplore_app/utils/string_extentions.dart';
 
 class AccountTypeScreen extends ConsumerStatefulWidget {
-  final Map<String, dynamic> formIndividualData;
+  final Map<String, dynamic> requestData;
 
   const AccountTypeScreen(
-      {Key? key, required this.formIndividualData})
+      {Key? key, required this.requestData})
       : super(key: key);
 
   @override
@@ -24,15 +25,17 @@ class _AccountTypeScreenState
   @override
   Widget build(BuildContext context) {
     final ViewAccountRequestResponse? requestData =
-        ViewAccountRequestResponse.fromMap(widget.formIndividualData);
+        ViewAccountRequestResponse.fromMap(widget.requestData);
     final sectionData = requestData?.data?.accountType ?? [];
 
     return BaseFormScreen(
         title: 'Account Type',
-        data: _flattenData(widget.formIndividualData),
+        data: _flattenData(widget.requestData),
         showEdit: sectionData.isNotEmpty,
         onTapEdit: () {
           // to navigate to edit this section
+         ref.read(editMonthlyActivityControllerProvider.notifier).getEditData(context,
+          RequestId: requestData?.data?.reqId??'');
         },
         onTapAdd: (){
           // rroute to add new item page 

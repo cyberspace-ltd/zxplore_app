@@ -4,6 +4,7 @@ import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
+import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 
 /// UserInfoRepositoryImpl
@@ -244,7 +245,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
           err.response?.data['message'] ?? 'Request process failed');
     }
   }
-  
+  /// get account type
   @override
   Future getMonthlyActivityToEdit({required String? RequestId})async {
         try {
@@ -481,6 +482,27 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   Future editAccountPurpose({required EditAccountPurpose? data})async {
         try {
       final response = await api.editAccountPurpose(editAccountPurpose:data );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editMonthlyActivity({required EditMonthlyActivity? data}) async {
+        try {
+      final response = await api.editMonthlyActivity(editMonthlyActivity:data );
 
       return response;
     } on FormatException catch (_) {

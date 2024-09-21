@@ -905,6 +905,36 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
+  Future<dynamic> editMonthlyActivity(
+      {EditMonthlyActivity? editMonthlyActivity}) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(editMonthlyActivity?.toJson() ?? <String, dynamic>{});
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'Operation/editMonthlyActivity',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
   Future<dynamic> getAccountPurposeToEdit({String? RequestId}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'RequestId': RequestId};

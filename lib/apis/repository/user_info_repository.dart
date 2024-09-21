@@ -3,6 +3,7 @@
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
+import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
 
 abstract class  UserInfoRepository {
      Future <dynamic> getUserPendingStatisticsRepo();
@@ -28,6 +29,7 @@ abstract class  UserInfoRepository {
    Future<dynamic> editPersonalDetail({required   EditPersonalDetails? editPersonalDetails});
    Future<dynamic> editAccountPurpose({required   EditAccountPurpose? data});
    Future<dynamic> editFundingSources({required   EditFundingSource? data});
+   Future<dynamic> editMonthlyActivity({required   EditMonthlyActivity? data});
 
 
   

@@ -110,7 +110,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
     } else if (category.id == 8) {
       goToSelected(AccountTypeScreen (
-          formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
+          requestData: ref.read(activelyViewedRequestProvider)!.toMap()));
     } else if (category.id == 9) {
       goToSelected(ViewNextOfKinScreen (
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
@@ -134,6 +134,10 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
     else if (category.id == 15) {
       goToSelected(ViewTazJurisdictionScreen(
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
+    }
+     else if (category.id == 16) {
+      // goToSelected(EditM(
+      //     formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
     }
   }
 

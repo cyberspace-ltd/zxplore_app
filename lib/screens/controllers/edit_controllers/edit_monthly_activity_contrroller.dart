@@ -1,39 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
-import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
-import 'package:zxplore_app/models/epma_models/get_edit_personal_details_response.dart';
+import 'package:zxplore_app/models/epma_models/get_edit_monthly_activity_res.dart';
+import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
-import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
-import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
-part 'edit_personal_details_controller.g.dart';
+import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_acount_type_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_acount_type_sreen.dart';
 
+part 'edit_monthly_activity_contrroller.g.dart';
 
 @riverpod
-class EditPersonalDetailsController extends _$EditPersonalDetailsController {
+class EditMonthlyActivityController extends _$EditMonthlyActivityController {
   @override
-  FutureOr<dynamic> build(){
+  FutureOr<dynamic> build() {
     //nadaa
   }
 
-  Future<dynamic> getEditData(BuildContext context,{required String? RequestId})async{
- final repo = ref.read(userInfoRepositoryImplProvider);
+  Future<dynamic> getEditData(BuildContext context,
+      {required String? RequestId}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
       final requestResponse =
-          await repo.getPersonalDetailToEdit(RequestId: RequestId);
+          await repo.getMonthlyActivityToEdit(RequestId: RequestId);
 
       if (requestResponse['status'] == true) {
-        final result = PersonalDetailsResponse.fromMap(requestResponse);
-           Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) =>PersonalInfoEditSscreen(data:result ,)
-                    ),
-          );
+        final result =
+            GetMonthlyActivityToEditResponse.fromJson(requestResponse);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => EditAccountTypeScreen(
+                    data: result,
+                  )),
+        );
         state = AsyncValue.data(result);
         return result;
       } else {
@@ -44,10 +47,10 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
-        state = AsyncError(Exception(requestResponse['message']), StackTrace.fromString(requestResponse['message']));
+        state = AsyncError(Exception(requestResponse['message']),
+            StackTrace.fromString(requestResponse['message']));
         return null;
       }
-     
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
@@ -56,28 +59,29 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
     }
   }
 
-  Future<dynamic> editPersonalDetailsData({required EditPersonalDetails? editPersonalDetails, required  context})async{
- final repo = ref.read(userInfoRepositoryImplProvider);
+  Future<dynamic> editAccountTypeDaata(
+      {required EditMonthlyActivity? data,
+      required BuildContext context}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse =
-          await repo.editPersonalDetail(editPersonalDetails: editPersonalDetails);
+      final requestResponse = await repo.editMonthlyActivity(data: data);
 
       if (requestResponse['status'] == true) {
-        final result = PersonalDetailsResponse.fromMap(requestResponse);
+        final result =
+            EditMonthlyActivity.fromJson(requestResponse);
+     
+        // refresh the latest viewed item.
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.requestId!);
         state = AsyncValue.data(result);
-
-          // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.data?.reqId??'');
           Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => ViewInitialCreationInfoScreen(
-                    formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),
+              builder: (BuildContext context) => AccountTypeScreen(
+                    requestData: ref.read(activelyViewedRequestProvider)!.toMap(),
                   )),
         );
-         
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -97,6 +101,4 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
       return null;
     }
   }
-
-
 }
