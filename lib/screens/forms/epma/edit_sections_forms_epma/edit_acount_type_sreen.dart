@@ -150,7 +150,8 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
         widgetToGoOnCancel: Container(),
         onCancel: () {},
         data: {},
-        child: SingleChildScrollView(
+        child: 
+        SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
               left: 16,
@@ -476,7 +477,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                     fillColor: Colors.transparent,
                     controller: anticipatedDepositeAmountController,
                     hint: 'Enter aamount',
-                    inputType: TextInputType.text,
+                    inputType: TextInputType.number,
                     useDefaultErrorText: false,
                     validator: (value) {
                       return null;
@@ -484,11 +485,11 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Anticipated Deposit WWidthrawal',
+                    title: 'Anticipated Widthrawals Amount',
                     fillColor: Colors.transparent,
                     controller: anticipatedWithdrawAmountController,
-                    hint: 'Enter aamount',
-                    inputType: TextInputType.text,
+                    hint: 'Enter amount',
+                    inputType: TextInputType.number,
                     useDefaultErrorText: false,
                     validator: (value) {
                       return null;
@@ -512,6 +513,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
             ),
           ),
         ),
+    
       ),
     );
   }

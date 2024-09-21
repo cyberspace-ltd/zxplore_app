@@ -5,6 +5,7 @@ import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
+import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
 import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
@@ -167,6 +168,23 @@ abstract class RemoteApi {
   @POST('Operation/editFundingSource')
   Future<dynamic> editFundingSources({
     @Body() required EditFundingSource? editAccountPurpose,
+  });
+
+   @GET('Operation/getAssignedAccountToEdit')
+  Future<dynamic> getAssignedAccountToEdit({
+       @Query('RequestId') required String? RequestId,
+       @Query('AssignedAcctId') required int? AssignedAcctId,
+
+  });
+    @POST('Operation/deleteAssignedAccount')
+  Future<dynamic> deleteAssignedAccount({
+       @Query('RequestId') required String? RequestId,
+       @Query('AssignedAcctId') required int? AssignedAcctId,
+  });
+
+     @POST('Operation/editAssignedAccount')
+  Future<dynamic> editAssignedAccount({
+    @Body() required AssignedAccountToEditData? assignedAccount,
   });
   @POST('Operation/editAccountPurpose')
   Future<dynamic> editAccountPurpose({

@@ -4,6 +4,7 @@ import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
+import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 
@@ -519,4 +520,68 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
           err.response?.data['message'] ?? 'Request process failed');
     }
   }
+  
+  @override
+  Future getAssignedAccountToEdit({required String? RequestId, required int? AssignedAcctId}) async {
+        try {
+      final response = await api.getAssignedAccountToEdit(RequestId:RequestId,AssignedAcctId:AssignedAcctId );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editAssignedAccount({required AssignedAccountToEditData? data}) async {
+        try {
+      final response = await api.editAssignedAccount(assignedAccount:data);
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+  
+  @override
+  Future deleteAssignedAccount({required String? RequestId, required int? AssignedAcctId}) async {
+        try {
+      final response = await api.deleteAssignedAccount(RequestId:RequestId,AssignedAcctId:AssignedAcctId );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+}
+
 }

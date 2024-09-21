@@ -48,7 +48,7 @@ class EditMonthlyActivity {
           this.actionFlag,
     });
 
-    factory EditMonthlyActivity.fromJson(Map< String?, dynamic> json) => EditMonthlyActivity(
+    factory EditMonthlyActivity.fromJson(Map<String, dynamic> json) => EditMonthlyActivity(
         accountTypeId: json["accountTypeId"],
         requestId: json["requestId"],
         itemStage: json["itemStage"],
