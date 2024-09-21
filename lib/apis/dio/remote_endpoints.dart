@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
+import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
-// import 'package:zxplore_app/models/epma_models/user_pending_statistics_ressponse.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
 
@@ -138,22 +139,32 @@ abstract class RemoteApi {
     @Query('RequestId') required String? RequestId,
   });
 
-   @POST('Operation/editPersonalDetail')
+  @POST('Operation/editPersonalDetail')
   Future<dynamic> editPersonalDetail({
-    @Body()required EditPersonalDetails? editPersonalDetails,
+    @Body() required EditPersonalDetails? editPersonalDetails,
   });
 
   @GET('Operation/getMonthlyActivityToEdit')
   Future<dynamic> getMonthlyActivityToEdit({
     @Query('RequestId') required String? RequestId,
   });
+
   @GET('Operation/getAccountPurposeToEdit')
   Future<dynamic> getAccountPurposeToEdit({
     @Query('RequestId') required String? RequestId,
   });
+
   @GET('Operation/getFundingSourceToEdit')
   Future<dynamic> getFundingSourceToEdit({
     @Query('RequestId') required String? RequestId,
+  });
+  @POST('Operation/editFundingSource')
+  Future<dynamic> editFundingSources({
+    @Body() required EditFundingSource? editAccountPurpose,
+  });
+  @POST('Operation/editAccountPurpose')
+  Future<dynamic> editAccountPurpose({
+    @Body() required EditAccountPurpose? editAccountPurpose,
   });
   @GET('Operation/getOtherBankAccountToEdit')
   Future<dynamic> getOtherBankAccountToEdit({
@@ -166,9 +177,8 @@ abstract class RemoteApi {
   });
   @GET('Operation/getNextOfKinToEdit')
   Future<dynamic> getNextOfKinToEdit(
-     {@Query('RequestId') required String? RequestId,
-      @Query('ChildId') required int? NextOfKinId}
-  );
+      {@Query('RequestId') required String? RequestId,
+      @Query('ChildId') required int? NextOfKinId});
   @GET('Operation/getRefereeToEdit')
   Future<dynamic> getRefereeToEdit(
       {@Query('RequestId') required String? RequestId,
@@ -182,32 +192,29 @@ abstract class RemoteApi {
       {@Query('RequestId') required String? RequestId,
       @Query('ChildId') required int? ChildId});
   @GET('Operation/getStakeHolderToEdit')
-  Future<dynamic> getStakeHolderToEdit(     {@Query('RequestId') required String? RequestId,
+  Future<dynamic> getStakeHolderToEdit(
+      {@Query('RequestId') required String? RequestId,
       @Query('ChildId') required int? StakeHolderId});
   @GET('Operation/getDueDiligenceToEdit')
   Future<dynamic> getDueDiligenceToEdit({
     @Query('RequestId') required String? RequestId,
   });
   @GET('Operation/validateRequestForSubmission')
-  Future<dynamic> getDocumentAttachedToEdit({
-    @Query('RequestId') required String? RequestId,
-      @Query('DocumentsAttachedId') required int? DocumentsAttachedId}
-  );
+  Future<dynamic> getDocumentAttachedToEdit(
+      {@Query('RequestId') required String? RequestId,
+      @Query('DocumentsAttachedId') required int? DocumentsAttachedId});
   @GET('Operation/getDocumentAttachedToEdit')
   Future<dynamic> validateRequestForSubmission({
-    @Query('RequestId') required String? RequestId,});
+    @Query('RequestId') required String? RequestId,
+  });
   @GET('Operation/processRequestExternal')
   Future<dynamic> processRequestExternal({
     @Query('RequestId') required String? RequestId,
-    }
-  );
+  });
   @GET('Operation/completeRequest')
   Future<dynamic> completeRequest({
     @Query('RequestId') required String? RequestId,
   });
 
   // ----------------- Add Endpoints ------------------
-
 }
-
- 

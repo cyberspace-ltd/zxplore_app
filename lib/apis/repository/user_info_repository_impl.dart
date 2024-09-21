@@ -1,6 +1,8 @@
 import 'package:zxplore_app/apis/repository/user_info_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
+import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
+import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 
@@ -437,6 +439,48 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   Future editPersonalDetail({required EditPersonalDetails? editPersonalDetails})async {
         try {
       final response = await api.editPersonalDetail(editPersonalDetails:editPersonalDetails );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editFundingSources({required EditFundingSource? data}) async {
+        try {
+      final response = await api.editFundingSources(editAccountPurpose:data );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editAccountPurpose({required EditAccountPurpose? data})async {
+        try {
+      final response = await api.editAccountPurpose(editAccountPurpose:data );
 
       return response;
     } on FormatException catch (_) {

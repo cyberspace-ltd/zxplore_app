@@ -1,5 +1,7 @@
  
 
+import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
+import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 
 abstract class  UserInfoRepository {
@@ -24,6 +26,8 @@ abstract class  UserInfoRepository {
    Future<dynamic> processRequestExternal({required String? RequestId});
    Future<dynamic> completeRequest({required String? RequestId});
    Future<dynamic> editPersonalDetail({required   EditPersonalDetails? editPersonalDetails});
+   Future<dynamic> editAccountPurpose({required   EditAccountPurpose? data});
+   Future<dynamic> editFundingSources({required   EditFundingSource? data});
 
 
   

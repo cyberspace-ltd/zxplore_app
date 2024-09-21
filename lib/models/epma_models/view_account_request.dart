@@ -21,7 +21,7 @@ class ViewAccountRequestResponse {
         this.data,
     });
 
-    factory ViewAccountRequestResponse.fromMap(Map<String, dynamic> json) => ViewAccountRequestResponse(
+    factory ViewAccountRequestResponse.fromMap(Map<String?, dynamic> json) => ViewAccountRequestResponse(
         code: json["code"],
         status: json["status"],
         message: json["message"],
