@@ -145,18 +145,18 @@ class _PersonalInfoEditSscreenState
   final TextEditingController _customerClassificationIdController =
       TextEditingController();
 
-  bool hasPermanentResidence = false;//1
-  bool accountOwnership = false;//2
-  bool customerResidentInGhana = false;//3
-  bool isPhysicallyChallenged = false;//4
-  bool customerIsPEP = false;//5
-  bool setupIbank = false;//6
-  bool setupZPrompt = false;//7
-  bool setupStatementViaEmail = false;//8
-  bool setupEmailIndemnity = false;//9
-  bool isPhysicallyChallanged = false;//10
-  bool isNewRequest = false;//11
-  bool? customerIsPep = false;//12
+  bool hasPermanentResidence = false; //1
+  bool accountOwnership = false; //2
+  bool customerResidentInGhana = false; //3
+  bool isPhysicallyChallenged = false; //4
+  bool customerIsPEP = false; //5
+  bool setupIbank = false; //6
+  bool setupZPrompt = false; //7
+  bool setupStatementViaEmail = false; //8
+  bool setupEmailIndemnity = false; //9
+  bool isPhysicallyChallanged = false; //10
+  bool isNewRequest = false; //11
+  bool? customerIsPep = false; //12
 
   DateTime? _selectedDate;
 
@@ -208,8 +208,6 @@ class _PersonalInfoEditSscreenState
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
-
- 
 
   @override
   void initState() {
@@ -372,6 +370,7 @@ class _PersonalInfoEditSscreenState
 
     super.dispose();
   }
+
   // Method to handle checkbox state changes
   void _handleCheckboxChange(int checkboxNumber, bool? value) {
     setState(() {
@@ -403,103 +402,96 @@ class _PersonalInfoEditSscreenState
         case 9:
           setupEmailIndemnity = value ?? false;
           break;
-        case 10:
-          isPhysicallyChallanged = value ?? false;
-          break;
         case 11:
           isNewRequest = value ?? false;
-          break;
-        case 12:
-          customerIsPep = value ?? false;
-          break;
+       
       }
     });
   }
+
   Future<void> editAccountRequest(BuildContext context) async {
     final lat = ref.read(userLatitudeProvider);
     final long = ref.read(userLongitudeProvider);
     final initialData = widget.data?.data;
     final editPersonalDetails = EditPersonalDetails(
-      formId: initialData?.formId??-1,
-
-      citizenshipCode: selectedCountryCode,
-      countryOrigCode:selectedCountryCode ,
-      customerIsPep:customerIsPep ,
-      customerResidentInGhana: customerResidentInGhana,
-      setupEmailIndemnity:setupEmailIndemnity ,
-      setupStatementViaEmail: setupStatementViaEmail,
-      setupZPrompt:setupZPrompt ,
-      residentialAddress2: _residentialAddress2Controller.text,
-      residentialAddress: _residentialAddressController.text,
-      isPhysicallyChallenged:isPhysicallyChallenged ,
-      setupIbank:setupIbank,
-      mailingAddress:_mailingAddressController.text ,
-      districtAssemblyArea:selectedRegionName ,
-      // accountOwnershipOther: ,
-      permitExpiryDate:_permitExpiryDateController.text ,
-      permitIssueDate: _permitIssueDateController.text,
-
-      hasPermanentResidence: hasPermanentResidence,
-      permanentResidentialAddress:_permanentResidentialAddressController.text ,
-      permanentResidentialCity:_permanentResidentialCityController.text ,
-      permanentResidentialCountryCode:_permanentResidentialCountryCodeController.text ,
-      residencePermitNo:_residencePermitNoController.text,
-      residencePermitPlaceCode:_residencePermitPlaceCodeController.text ,
-
-      itemStage: initialData?.itemStage??'',
-      businessNatureId: selectedBusinessNaturesCode,
-      employerTel: _employerTelController.text,
-      employmentTypeCode: selectedEmploymentTypesCode,
-      employerName:_employerNameController.text ,
-      genderCode: selectedGenderCode,
-      niaVerificationNo: _niaVerificationNoController.text,
-      spouseName: _spouseNameController.text,
-      spouseOccupation: _spouseOccupationController.text,
-      subBusinessNatureId: subBusinessNaturesCode,
-      timeWithEmployer: _timeWithEmployerController.text,
-      tin: _tinController.text,
-      gpsAddress: "$lat $long",
-      surname: _surnameController.text,
-      firstName: _firstNameController.text,
-      otherNames: _otherNamesController.text,
-      mobileNo: _mobileNoController.text,
-      telNo: _telNoController.text,
-      emailAddress: _emailAddressController.text,
-      maidenName: _maidenNameController.text,
-      employerAddress: _employerAddressController.text,
-      employerEmail: _employerEmailController.text,
-      ssnitNo:_ssnitNoController.text,
-      regionCode: selectedRegionCode,
-      iddCode: _iddCodeController.text,
-      idExpiryDate: dateExpire??'',
-      idIssueAuthority: _idIssueAuthorityController.text,
-      idIssueDate: datedIssued??'',
-      altCitizenshipCode: _altCitizenshipCodeController.text,
-      homeTown:_homeTownController.text,
-      requestId: widget.data?.data?.reqId??'',
-      rowVersion: initialData?.rowVersion??-1,
-      pepReason: _pepReasonController.text,
-      isNewRequest: false,
-      idCountryCode: selectedCountryCode,
-      identificationNo: _identificationNoController.text,
-      identificationTypeId: selectedIdentificationCode,
-      monthlyIncome: int.parse(_monthlyIncomeController.text),
-      maritalStatus: maritalStatusName,
-      motherMaidenName: _motherMaidenNameController.text,
-      actionFlag: initialData!.actionFlag,
-      accountOwnership:initialData.accountOwnership ,
-      birthDate: dob??'',
-      city: _cityController.text,
-      birthPlace: _birthPlaceController.text,
-      customerClassificationId: selectedCustomerClassificationsCode
-    );
-   await ref.read(editPersonalDetailsControllerProvider.notifier)
+        formId: initialData?.formId ?? -1,
+        citizenshipCode: selectedCountryCode,
+        countryOrigCode: selectedCountryCode,
+        customerIsPep: customerIsPep,
+        customerResidentInGhana: customerResidentInGhana,
+        setupEmailIndemnity: setupEmailIndemnity,
+        setupStatementViaEmail: setupStatementViaEmail,
+        setupZPrompt: setupZPrompt,
+        residentialAddress2: _residentialAddress2Controller.text,
+        residentialAddress: _residentialAddressController.text,
+        isPhysicallyChallenged: isPhysicallyChallenged,
+        setupIbank: setupIbank,
+        mailingAddress: _mailingAddressController.text,
+        districtAssemblyArea: selectedRegionName,
+        // accountOwnershipOther: ,
+        permitExpiryDate: _permitExpiryDateController.text,
+        permitIssueDate: _permitIssueDateController.text,
+        hasPermanentResidence: hasPermanentResidence,
+        permanentResidentialAddress:
+            _permanentResidentialAddressController.text,
+        permanentResidentialCity: _permanentResidentialCityController.text,
+        permanentResidentialCountryCode:
+            _permanentResidentialCountryCodeController.text,
+        residencePermitNo: _residencePermitNoController.text,
+        residencePermitPlaceCode: _residencePermitPlaceCodeController.text,
+        itemStage: initialData?.itemStage ?? '',
+        businessNatureId: selectedBusinessNaturesCode,
+        employerTel: _employerTelController.text,
+        employmentTypeCode: selectedEmploymentTypesCode,
+        employerName: _employerNameController.text,
+        genderCode: selectedGenderCode,
+        niaVerificationNo: _niaVerificationNoController.text,
+        spouseName: _spouseNameController.text,
+        spouseOccupation: _spouseOccupationController.text,
+        subBusinessNatureId: subBusinessNaturesCode,
+        timeWithEmployer: _timeWithEmployerController.text,
+        tin: _tinController.text,
+        gpsAddress: "$lat $long",
+        surname: _surnameController.text,
+        firstName: _firstNameController.text,
+        otherNames: _otherNamesController.text,
+        mobileNo: _mobileNoController.text,
+        telNo: _telNoController.text,
+        emailAddress: _emailAddressController.text,
+        maidenName: _maidenNameController.text,
+        employerAddress: _employerAddressController.text,
+        employerEmail: _employerEmailController.text,
+        ssnitNo: _ssnitNoController.text,
+        regionCode: selectedRegionCode,
+        iddCode: _iddCodeController.text,
+        idExpiryDate: dateExpire ?? '',
+        idIssueAuthority: _idIssueAuthorityController.text,
+        idIssueDate: datedIssued ?? '',
+        altCitizenshipCode: _altCitizenshipCodeController.text,
+        homeTown: _homeTownController.text,
+        requestId: widget.data?.data?.reqId ?? '',
+        rowVersion: initialData?.rowVersion ?? -1,
+        pepReason: _pepReasonController.text,
+        isNewRequest: false,
+        idCountryCode: selectedCountryCode,
+        identificationNo: _identificationNoController.text,
+        identificationTypeId: selectedIdentificationCode,
+        monthlyIncome: int.parse(_monthlyIncomeController.text),
+        maritalStatus: maritalStatusName,
+        motherMaidenName: _motherMaidenNameController.text,
+        actionFlag: initialData!.actionFlag,
+        accountOwnership: accountOwnership,
+        birthDate: dob ?? '',
+        city: _cityController.text,
+        birthPlace: _birthPlaceController.text,
+        customerClassificationId: selectedCustomerClassificationsCode);
+    await ref
+        .read(editPersonalDetailsControllerProvider.notifier)
         .editPersonalDetailsData(editPersonalDetails: editPersonalDetails);
   }
 
   @override
   Widget build(BuildContext context) {
-
     ///check  for  errors here
     ref.listen<AsyncValue>(
       editPersonalDetailsControllerProvider,
@@ -508,8 +500,10 @@ class _PersonalInfoEditSscreenState
 
     return BaseEditForm(
       title: 'Editing Personal Information',
-      widgetToGoOnCancel: ViewInitialCreationInfoScreen(formIndividualData:widget.data!.toMap(),),
-      onCancel: () =>Navigator.pop(context),
+      widgetToGoOnCancel: ViewInitialCreationInfoScreen(
+        formIndividualData: widget.data!.toMap(),
+      ),
+      onCancel: () => Navigator.pop(context),
       data: {},
       child: SingleChildScrollView(
         child: Padding(
@@ -1712,8 +1706,15 @@ class _PersonalInfoEditSscreenState
                         );
                   },
                 ),
-                if(hasPermanentResidence)...[
                 const SizedBox(height: 16),
+
+                CheckboxListTile(
+                  title: Text('Has Permanent Residence'),
+                  value: hasPermanentResidence,
+                  onChanged: (value) => _handleCheckboxChange(1, value),
+                ),
+                if (hasPermanentResidence) ...[
+                  const SizedBox(height: 8),
                   CustomTextFormField(
                     title: "Permanet Residential Address",
                     fillColor: Colors.transparent,
@@ -1728,9 +1729,8 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-                     const SizedBox(height: 16),
-
-                    CustomTextFormField(
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
                     title: "Permanet Residential Address City",
                     fillColor: Colors.transparent,
                     controller: _permanentResidentialCityController,
@@ -1744,9 +1744,8 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-                     const SizedBox(height: 16),
-
-                       CustomTextFormField(
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
                     title: "Permanet Address Country Code",
                     fillColor: Colors.transparent,
                     controller: _permanentResidentialCityController,
@@ -1760,10 +1759,8 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-
-                                  const SizedBox(height: 16),
-
-                       CustomTextFormField(
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
                     title: " Residence Permit PlaceCode",
                     fillColor: Colors.transparent,
                     controller: _residencePermitPlaceCodeController,
@@ -1777,65 +1774,62 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-                                  const SizedBox(height: 16),
-
-                    CustomTextFormField(
-                  onTap: () {
-                    _showDatePicker(context, dateCategory: 'PERMITISSUE');
-                  },
-                  title: 'Permit Issue Date',
-                  readOnly: true,
-                  showCursor: false,
-                  suffixIcon: Icon(
-                    Icons.calendar_today_rounded,
-                    color: ZxplorePrimaryColor.withOpacity(.5),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    onTap: () {
+                      _showDatePicker(context, dateCategory: 'PERMITISSUE');
+                    },
+                    title: 'Permit Issue Date',
+                    readOnly: true,
+                    showCursor: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    showDropDownSuffixIcon: true,
+                    fillColor: Colors.transparent,
+                    controller: _permitIssueDateController,
+                    hint: 'Selected permit issue date ',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Permit Issue Date required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
+                      }
+                      return null;
+                    },
                   ),
-                  showDropDownSuffixIcon: true,
-                  fillColor: Colors.transparent,
-                  controller: _permitIssueDateController,
-                  hint: 'Selected permit issue date ',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Permit Issue Date required';
-                    } else if (value == 'dd-mm-yyyy') {
-                      return 'Enter a valid date';
-                    }
-                    return null;
-                  },
-                ),
-                                  const SizedBox(height: 16),
-
-   CustomTextFormField(
-                  onTap: () {
-                    _showDatePicker(context, dateCategory: 'PERMITEXP');
-                  },
-                  title: 'Permit Exp. Date',
-                  readOnly: true,
-                  showCursor: false,
-                  suffixIcon: Icon(
-                    Icons.calendar_today_rounded,
-                    color: ZxplorePrimaryColor.withOpacity(.5),
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    onTap: () {
+                      _showDatePicker(context, dateCategory: 'PERMITEXP');
+                    },
+                    title: 'Permit Exp. Date',
+                    readOnly: true,
+                    showCursor: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    showDropDownSuffixIcon: true,
+                    fillColor: Colors.transparent,
+                    controller: _permitExpiryDateController,
+                    hint: 'Selected permit exp. Date ',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Permit exp. date required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
+                      }
+                      return null;
+                    },
                   ),
-                  showDropDownSuffixIcon: true,
-                  fillColor: Colors.transparent,
-                  controller: _permitExpiryDateController,
-                  hint: 'Selected permit exp. Date ',
-                  inputType: TextInputType.text,
-                  useDefaultErrorText: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Permit exp. date required';
-                    } else if (value == 'dd-mm-yyyy') {
-                      return 'Enter a valid date';
-                    }
-                    return null;
-                  },
-                ),
-               
                 ],
-                     const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 /// MaritalStatus
                 Text(
@@ -2051,7 +2045,7 @@ class _PersonalInfoEditSscreenState
                     return null;
                   },
                 ),
-                   CustomTextFormField(
+                CustomTextFormField(
                   title: "Home Town",
                   fillColor: Colors.transparent,
                   controller: _homeTownController,
@@ -2081,7 +2075,6 @@ class _PersonalInfoEditSscreenState
                   },
                 ),
 
-               
                 const SizedBox(height: 16),
                 CustomTextFormField(
                   title: 'City',
@@ -2099,7 +2092,7 @@ class _PersonalInfoEditSscreenState
                 ),
                 // const SizedBox(height: 8),
                 const SizedBox(height: 16),
-                
+
                 const Divider(
                   height: 16,
                   color: Color.fromARGB(255, 169, 189, 201),
@@ -2264,8 +2257,7 @@ class _PersonalInfoEditSscreenState
                 const SizedBox(height: 16),
                 CustomTextFormField(
                   onTap: () {
-                    _selectDate(context);
-                    // _showDatePicker(context, dateCategory: 'ISSUE');
+                    _showDatePicker(context, dateCategory: 'ISSUE');
                   },
                   title: 'Issue Date',
                   showCursor: false,
@@ -2358,6 +2350,75 @@ class _PersonalInfoEditSscreenState
                     return null;
                   },
                 ),
+
+                const SizedBox(height: 16),
+                    Text(
+                  'Other Informtion',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                ),
+                div,
+                gapH12,
+                
+                CheckboxListTile(
+                  title: Text('Account Ownership'),
+                  value: accountOwnership,
+                  onChanged: (value) => _handleCheckboxChange(2, value),
+                ),
+                gapH12,
+                  CheckboxListTile(
+                  title: Text('Customer Resident In Ghana'),
+                  value: customerResidentInGhana,
+                  onChanged: (value) => _handleCheckboxChange(3, value),
+                ),
+                gapH12,
+
+                   CheckboxListTile(
+                  title: Text('Is Physically Challenged'),
+                  value: isPhysicallyChallenged,
+                  onChanged: (value) => _handleCheckboxChange(4, value),
+                ),
+                gapH12,
+                   CheckboxListTile(
+                  title: Text('Customer Is PEP'),
+                  value: customerIsPEP,
+                  onChanged: (value) => _handleCheckboxChange(5, value),
+                ),
+                gapH12,
+
+                  CheckboxListTile(
+                  title: Text('Setup Ibank'),
+                  value: setupIbank,
+                  onChanged: (value) => _handleCheckboxChange(6, value),
+                ),
+                gapH12,
+                  CheckboxListTile(
+                  title: Text('Setup ZPrompt'),
+                  value: setupZPrompt,
+                  onChanged: (value) => _handleCheckboxChange(7, value),
+                ),
+                gapH12,
+                     CheckboxListTile(
+                  title: Text('Setup Statement Via Email'),
+                  value: setupStatementViaEmail,
+                  onChanged: (value) => _handleCheckboxChange(8, value),
+                ),
+                gapH12,
+                   CheckboxListTile(
+                  title: Text('Setup Email Indemnity'),
+                  value: setupEmailIndemnity,
+                  onChanged: (value) => _handleCheckboxChange(9, value),
+                ),
+                gapH12,
+
+                   CheckboxListTile(
+                  title: Text('New Request?'),
+                  value: isNewRequest,
+                  onChanged: (value) => _handleCheckboxChange(11, value),
+                ),
+                
                 const SizedBox(height: 16),
                 CustomTextFormField(
                   title: 'TIN',
@@ -2426,20 +2487,6 @@ class _PersonalInfoEditSscreenState
     );
   }
 
-  // Function to show the DatePicker
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != _selectedDate)
-      setState(() {
-        _selectedDate = picked;
-      });
-  }
-
   /// Date Picker
   Future<void> _showDatePicker(BuildContext dateContext,
       {required String dateCategory}) async {
@@ -2464,24 +2511,21 @@ class _PersonalInfoEditSscreenState
           sDobFormattedDate = sdateFormatter.format(dobInit!);
           _permitExpiryDateController.text = dobFormattedDate;
         }
-        } else if (dateCategory == 'PERMITISSUE') {
-          dobInit = fPickedDate;
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          _permitIssueDateController.text = dobFormattedDate;
-        
-        } else if (dateCategory == 'ISSUE') {
-          dobInit = fPickedDate;
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          _idIssueDateController.text = dobFormattedDate;
-        } 
-        else {
-          dobInit = fPickedDate;
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          _idExpiryDateController.text = dobFormattedDate;
-        
+      } else if (dateCategory == 'PERMITISSUE') {
+        dobInit = fPickedDate;
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _permitIssueDateController.text = dobFormattedDate;
+      } else if (dateCategory == 'ISSUE') {
+        dobInit = fPickedDate;
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _idIssueDateController.text = dobFormattedDate;
+      } else {
+        dobInit = fPickedDate;
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _idExpiryDateController.text = dobFormattedDate;
       }
     }
   }
