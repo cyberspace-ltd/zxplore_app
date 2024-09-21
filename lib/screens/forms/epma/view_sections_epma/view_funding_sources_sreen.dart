@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_funding_sources_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 
 class FundingSourcesScreen extends ConsumerStatefulWidget {
-  final Map<String, dynamic> requestData;
+  final Map<String?, dynamic> requestData;
 
   const FundingSourcesScreen(
       {Key? key, required this.requestData})
@@ -30,7 +31,9 @@ class _FundingSourcesScreenState
         data: _flattenData(widget.requestData),
        showEdit: sectionData.isNotEmpty,
         onTapEdit: () {
-          // to navigate to edit this section
+         // to navigate to edit this section
+         ref.read(editFundingSourcesControllerProvider.notifier).getEditData(context,
+          RequestId: requestData?.data?.reqId??'');
         },
         onTapAdd: (){
           // rroute to add new item page 
@@ -46,7 +49,7 @@ class _FundingSourcesScreenState
         ));
   }
 
-  Map<String, String> _flattenData(Map<String, dynamic> data) {
+  Map<String, String> _flattenData(Map<String?, dynamic> data) {
     Map<String, String> flattened = {};
     data.forEach((key, value) {
       if (value is Map) {
@@ -54,7 +57,7 @@ class _FundingSourcesScreenState
           flattened['$key - $subKey'] = subValue.toString();
         });
       } else {
-        flattened[key] = value.toString();
+        flattened[key??''] = value.toString();
       }
     });
     return flattened;

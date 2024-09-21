@@ -3,10 +3,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/get_account_purpose_response.dart';
-import 'package:zxplore_app/models/epma_models/get_funding_sources_response.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_account_purposes_sreen.dart';
-import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_funding_sources_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_account_purposes_sreen.dart';
 
 part 'edit_account_purpose_controller.g.dart';
 
@@ -27,7 +28,8 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
           await repo.getAccountPurposeToEdit(RequestId: RequestId);
 
       if (requestResponse['status'] == true) {
-        final result = GetAccountPurposeToEditResponse.fromJson(requestResponse);
+        final result =
+            GetAccountPurposeToEditResponse.fromJson(requestResponse);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -57,20 +59,29 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
     }
   }
 
-  Future<dynamic> editAccountPurposeDaata({
-    required EditAccountPurpose? data,
-  }) async {
+  Future<dynamic> editAccountPurposeDaata(
+      {required EditAccountPurpose? data,
+      required BuildContext context}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse =
-          await repo.editAccountPurpose(data: data);
+      final requestResponse = await repo.editAccountPurpose(data: data);
 
       if (requestResponse['status'] == true) {
-        final result = GetAccountPurposeToEditResponse.fromJson(requestResponse);
-
+        final result =
+            GetAccountPurposeToEditResponse.fromJson(requestResponse);
+     
+        // refresh the latest viewed item.
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.data.reqId);
         state = AsyncValue.data(result);
+          Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => AccountPurposeScreen(
+                    requestData: ref.read(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/get_account_purpose_response.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_account_purpose_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edit_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
@@ -108,7 +109,7 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
 
   Future<void> _submitForm(BuildContext context) async{
     final originalData = widget.data?.data;
-     await ref.read(editAccountPurposeControllerProvider.notifier).editAccountPurposeDaata(data: EditAccountPurpose(
+     await ref.read(editAccountPurposeControllerProvider.notifier).editAccountPurposeDaata(context: context,data: EditAccountPurpose(
       accessToBankingServices:accessToBankingServices,
       accountPurposesId:originalData?.accountPurposesId ,
       actionFlag:actionFlagController.text ,
@@ -125,18 +126,23 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
       secutirySafeKeeping: secutirySafeKeeping,
       thirdPartyPayment:thirdPartyPayment ,
       toOtainLoan:toOtainLoan ,
-     ));
+     )).then((onValue){
+      // AccountPurposeScreen
+     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ZxploreProgress(inAsyncCall: ref.watch(editAccountPurposeControllerProvider).isLoading,
+    return ZxploreProgress(inAsyncCall: ref.watch(editAccountPurposeControllerProvider).isLoading
+      || ref.watch(viewRequestControllerProvider).isLoading,
+
       child: BaseEditForm(
         title: 'Editing Account Purposes',
         widgetToGoOnCancel: FundingSourcesScreen(
           requestData: widget.data!.toJson(),
         ),
         onCancel: () {},
+        
         data: widget.data?.toJson(),
         addMore: IconButton(onPressed: () {}, icon: Icon(Icons.add_box)),
         child: SingleChildScrollView(

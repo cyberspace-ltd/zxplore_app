@@ -6,7 +6,7 @@ import 'dart:convert';
 
 EditPersonalDetails editPersonalDetailsFromMap(String str) => EditPersonalDetails.fromMap(json.decode(str));
 
-String editPersonalDetailsToMap(EditPersonalDetails data) => json.encode(data.toMap());
+String editPersonalDetailsToMap(EditPersonalDetails data) => json.encode(data.toJson());
 
 class EditPersonalDetails {
     int? formId;
@@ -223,7 +223,7 @@ class EditPersonalDetails {
         gpsAddress: json["gpsAddress"],
     );
 
-    Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toJson() => {
         "formId": formId,
         "requestId": requestId,
         "rowVersion": rowVersion,

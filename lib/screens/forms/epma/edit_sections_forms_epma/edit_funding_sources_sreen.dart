@@ -1,234 +1,285 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
+import 'package:zxplore_app/models/epma_models/get_funding_sources_response.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_funding_sources_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edit_screen.dart';
+import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
+import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/widgets/custom_text_field.dart';
+import 'package:zxplore_app/widgets/submit_button.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
-class EditPersonalInfo extends StatefulWidget {
-  const EditPersonalInfo({super.key});
+class EditFundingSourceScreen extends ConsumerStatefulWidget {
+  const EditFundingSourceScreen({super.key, this.data});
+  final GetFundingSourceToEditResponse? data;
 
   @override
-  State<EditPersonalInfo> createState() => _EditPersonalInfoState();
+  ConsumerState<EditFundingSourceScreen> createState() =>
+      _EditFundingSourceScreenState();
 }
 
-class _EditPersonalInfoState extends State<EditPersonalInfo> {
-  final _personalInfoEditFormKey = GlobalKey<FormState>();
+class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScreen> {
+  final _fundingFormFormKey = GlobalKey<FormState>();
 
-  // Individual TextEditingControllers
-  final TextEditingController _surnameController = TextEditingController();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _otherNamesController = TextEditingController();
-  final TextEditingController _maidenNameController = TextEditingController();
-  final TextEditingController _genderCodeController = TextEditingController();
-  final TextEditingController _birthDateController = TextEditingController();
-  final TextEditingController _birthPlaceController = TextEditingController();
-  final TextEditingController _identificationTypeIdController = TextEditingController();
-  final TextEditingController _identificationNoController = TextEditingController();
-  final TextEditingController _idCountryCodeController = TextEditingController();
-  final TextEditingController _idIssueAuthorityController = TextEditingController();
-  final TextEditingController _idIssueDateController = TextEditingController();
-  final TextEditingController _idExpiryDateController = TextEditingController();
-  final TextEditingController _niaVerificationNoController = TextEditingController();
-  final TextEditingController _ssnitNoController = TextEditingController();
-  final TextEditingController _tinController = TextEditingController();
-  final TextEditingController _citizenshipCodeController = TextEditingController();
-  final TextEditingController _altCitizenshipCodeController = TextEditingController();
-  final TextEditingController _countryOrigCodeController = TextEditingController();
-  final TextEditingController _homeTownController = TextEditingController();
-  final TextEditingController _residencePermitNoController = TextEditingController();
-  final TextEditingController _residencePermitPlaceCodeController = TextEditingController();
-  final TextEditingController _permitIssueDateController = TextEditingController();
-  final TextEditingController _permitExpiryDateController = TextEditingController();
-  final TextEditingController _iddCodeController = TextEditingController();
-  final TextEditingController _telNoController = TextEditingController();
-  final TextEditingController _mobileNoController = TextEditingController();
-  final TextEditingController _emailAddressController = TextEditingController();
-  final TextEditingController _residentialAddressController = TextEditingController();
-  final TextEditingController _residentialAddress2Controller = TextEditingController();
-  final TextEditingController _districtAssemblyAreaController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _regionCodeController = TextEditingController();
-  final TextEditingController _permanentResidentialAddressController = TextEditingController();
-  final TextEditingController _permanentResidentialCityController = TextEditingController();
-  final TextEditingController _permanentResidentialCountryCodeController = TextEditingController();
-  final TextEditingController _mailingAddressController = TextEditingController();
-  final TextEditingController _motherMaidenNameController = TextEditingController();
-  final TextEditingController _maritalStatusController = TextEditingController();
-  final TextEditingController _spouseNameController = TextEditingController();
-  final TextEditingController _spouseOccupationController = TextEditingController();
-  final TextEditingController _businessNatureIdController = TextEditingController();
-  final TextEditingController _subBusinessNatureIdController = TextEditingController();
-  final TextEditingController _employmentTypeCodeController = TextEditingController();
-  final TextEditingController _employerNameController = TextEditingController();
-  final TextEditingController _timeWithEmployerController = TextEditingController();
-  final TextEditingController _employerAddressController = TextEditingController();
-  final TextEditingController _employerEmailController = TextEditingController();
-  final TextEditingController _employerTelController = TextEditingController();
-  final TextEditingController _monthlyIncomeController = TextEditingController();
-  final TextEditingController _accountOwnershipOtherController = TextEditingController();
-  final TextEditingController _pepReasonController = TextEditingController();
-  final TextEditingController _customerClassificationIdController = TextEditingController();
-  final TextEditingController _gpsAddressController = TextEditingController();
+  // funding TextEditingControllers
+  final TextEditingController othersController = TextEditingController();
+  final TextEditingController actionFlagController = TextEditingController();
 
-  bool _hasPermanentResidence = false;
-  bool _accountOwnership = false;
-  bool _customerResidentInGhana = false;
-  bool _customerIsPEP = false;
-  bool _setupIbank = false;
-  bool _setupZPrompt = false;
-  bool _setupStatementViaEmail = false;
-  bool _setupEmailIndemnity = false;
-  bool _isPhysicallyChallanged = false;
-  bool _isNewRequest = false;
+  bool commissions = false;
+  bool dividends = false;
+  bool businessIncome = false;
+  bool personalSavings = false;
+  bool trustFund = false;
+  bool salary = false;
+  bool familyFriends = false;
+  bool rentalIncome = false;
+  bool inheritanceGift = false;
+  bool othersSpecify = false;
+  bool others = false;
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+       final originalData = widget.data?.data;
+       WidgetsBinding.instance.addPostFrameCallback((_){
+        setState(() {
+          commissions=originalData?.commissions??false;
+          dividends=originalData?.dividends??false;
+          businessIncome=originalData?.businessIncome??false;
+          personalSavings=originalData?.personalSavings??false;
+          trustFund=originalData?.trustFund??false;
+          salary=originalData?.salary??false;
+          familyFriends=originalData?.familyFriends??false;
+          rentalIncome=originalData?.rentalIncome??false;
+          inheritanceGift=originalData?.inheritanceGift??false;
+          others=originalData?.others??false;
+        });
+       });
+ 
+    } catch (e) {}
+  }
 
   @override
   void dispose() {
     // Dispose the controllers to free up resources
-    _surnameController.dispose();
-    _firstNameController.dispose();
-    _otherNamesController.dispose();
-    _maidenNameController.dispose();
-    _genderCodeController.dispose();
-    _birthDateController.dispose();
-    _birthPlaceController.dispose();
-    _identificationTypeIdController.dispose();
-    _identificationNoController.dispose();
-    _idCountryCodeController.dispose();
-    _idIssueAuthorityController.dispose();
-    _idIssueDateController.dispose();
-    _idExpiryDateController.dispose();
-    _niaVerificationNoController.dispose();
-    _ssnitNoController.dispose();
-    _tinController.dispose();
-    _citizenshipCodeController.dispose();
-    _altCitizenshipCodeController.dispose();
-    _countryOrigCodeController.dispose();
-    _homeTownController.dispose();
-    _residencePermitNoController.dispose();
-    _residencePermitPlaceCodeController.dispose();
-    _permitIssueDateController.dispose();
-    _permitExpiryDateController.dispose();
-    _iddCodeController.dispose();
-    _telNoController.dispose();
-    _mobileNoController.dispose();
-    _emailAddressController.dispose();
-    _residentialAddressController.dispose();
-    _residentialAddress2Controller.dispose();
-    _districtAssemblyAreaController.dispose();
-    _cityController.dispose();
-    _regionCodeController.dispose();
-    _permanentResidentialAddressController.dispose();
-    _permanentResidentialCityController.dispose();
-    _permanentResidentialCountryCodeController.dispose();
-    _mailingAddressController.dispose();
-    _motherMaidenNameController.dispose();
-    _maritalStatusController.dispose();
-    _spouseNameController.dispose();
-    _spouseOccupationController.dispose();
-    _businessNatureIdController.dispose();
-    _subBusinessNatureIdController.dispose();
-    _employmentTypeCodeController.dispose();
-    _employerNameController.dispose();
-    _timeWithEmployerController.dispose();
-    _employerAddressController.dispose();
-    _employerEmailController.dispose();
-    _employerTelController.dispose();
-    _monthlyIncomeController.dispose();
-    _accountOwnershipOtherController.dispose();
-    _pepReasonController.dispose();
-    _customerClassificationIdController.dispose();
-    _gpsAddressController.dispose();
+    othersController.dispose();
+    actionFlagController.dispose();
     super.dispose();
   }
 
-  void _submitForm() {
-    if (_personalInfoEditFormKey.currentState!.validate()) {
-      // Process the input data
-      // Example: Print the data
-      print('Surname: ${_surnameController.text}');
-      print('First Name: ${_firstNameController.text}');
-      // Add prints for other fields as needed...
+  // Method to handle checkbox state changes
+  void _handleCheckboxChange(int checkboxNumber, bool? value) {
+    setState(() {
+      switch (checkboxNumber) {
+        case 1:
+          commissions = value ?? false;
+          break;
+        case 2:
+          dividends = value ?? false;
+          break;
+        case 3:
+          businessIncome = value ?? false;
+          break;
+        case 4:
+          personalSavings = value ?? false;
+          break;
+        case 5:
+          trustFund = value ?? false;
+          break;
+        case 6:
+          salary = value ?? false;
+          break;
+        case 7:
+          familyFriends = value ?? false;
+          break;
+        case 8:
+          rentalIncome = value ?? false;
+          break;
+        case 9:
+          inheritanceGift = value ?? false;
+          break;
+        case 10:
+          others = value ?? false;
+          break;
+        
+      }
+    });
+  }
 
-      // Clear the form
-      _surnameController.clear();
-      _firstNameController.clear();
-      // Clear other fields as needed...
-    }
+  Future<void> _submitForm(BuildContext context) async{
+    final originalData = widget.data?.data;
+     await ref.read(editFundingSourcesControllerProvider.notifier).editFundingSourcesData(context: context,editFundingData: EditFundingSource(
+      itemStage: originalData?.itemStage ,
+      othersSpecify:othersController.text ,
+      requestId:originalData?.reqId ,
+      rowVersion:originalData?.rowVersion ,
+      actionFlag: actionFlagController.text,
+         commissions:commissions,
+          dividends:dividends,
+          businessIncome:businessIncome,
+          personalSavings:personalSavings,
+          trustFund:trustFund,
+          salary:salary,
+          familyFriends:familyFriends,
+          rentalIncome:rentalIncome,
+          inheritanceGift:inheritanceGift,
+          others:others,
+     )).then((_){
+
+     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseEditForm(
-      title: '',
-      widgetToGoOnCancel: Container(),
-      onCancel: (){},
-      data: {},
-      child:  Form(
-            key: _personalInfoEditFormKey,
-            child: ListView(
-              children: [
-                TextFormField(
-                  controller: _surnameController,
-                  decoration: InputDecoration(labelText: 'Surname'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your surname';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _firstNameController,
-                  decoration: InputDecoration(labelText: 'First Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your first name';
-                    }
-                    return null;
-                  },
-                ),
-                // Add more TextFormFields for other fields...
+    return ZxploreProgress(
+      inAsyncCall: ref.watch(editFundingSourcesControllerProvider).isLoading
+      || ref.watch(viewRequestControllerProvider).isLoading,
+      child: BaseEditForm(
+        title: 'Editing Funding Sources',
+        widgetToGoOnCancel: FundingSourcesScreen(
+          requestData: widget.data!.toJson(),
+        ),
+        onCancel: () {},
+        data: widget.data?.toJson(),
+        addMore: IconButton(onPressed: () {}, icon: Icon(Icons.add_box)),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              // Add bottom padding to ensure content is above the keyboard
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: Form(
+              key: _fundingFormFormKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  gapH24,
+                  Text(
+                    'Funding Sources',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  div,
+                  gapH16,
+                  CheckboxListTile(
+                    title: Text('Commissions'),
+                    value: commissions,
+                    onChanged: (value) => _handleCheckboxChange(1, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Dividends'),
+                    value: dividends,
+                    onChanged: (value) => _handleCheckboxChange(2, value),
+                  ),
+                  gapH12,
       
-                // Example for genderCode
-                TextFormField(
-                  controller: _genderCodeController,
-                  decoration: InputDecoration(labelText: 'Gender Code'),
-                ),
-                TextFormField(
-                  controller: _birthDateController,
-                  decoration: InputDecoration(labelText: 'Birth Date'),
-                ),
-                TextFormField(
-                  controller: _birthPlaceController,
-                  decoration: InputDecoration(labelText: 'Birth Place'),
-                ),
-                // Add more fields as necessary...
+                  CheckboxListTile(
+                    title: Text('Business Income'),
+                    value: businessIncome,
+                    onChanged: (value) => _handleCheckboxChange(3, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Personal Savings'),
+                    value: personalSavings,
+                    onChanged: (value) => _handleCheckboxChange(4, value),
+                  ),
+                  gapH12,
       
-                CheckboxListTile(
-                  title: Text('Has Permanent Residence'),
-                  value: _hasPermanentResidence,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _hasPermanentResidence = value!;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: Text('Account Ownership'),
-                  value: _accountOwnership,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _accountOwnership = value!;
-                    });
-                  },
-                ),
-                // Add more checkboxes as necessary...
+                  CheckboxListTile(
+                    title: Text('TrustFund'),
+                    value: trustFund,
+                    onChanged: (value) => _handleCheckboxChange(5, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Salary'),
+                    value: salary,
+                    onChanged: (value) => _handleCheckboxChange(6, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Family Friends'),
+                    value: familyFriends,
+                    onChanged: (value) => _handleCheckboxChange(7, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Rental Income'),
+                    value: rentalIncome,
+                    onChanged: (value) => _handleCheckboxChange(8, value),
+                  ),
+                  gapH12,
       
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text('Submit'),
-                ),
-              ],
+                  CheckboxListTile(
+                    title: Text('Inheritance/Gift'),
+                    value: inheritanceGift,
+                    onChanged: (value) => _handleCheckboxChange(9, value),
+                  ),
+                  gapH12,
+      
+                  CheckboxListTile(
+                    title: Text('Others'),
+                    value: others,
+                    onChanged: (value) => _handleCheckboxChange(10, value),
+                  ),
+      
+                  if (others) ...[
+                    gapH12,
+                    CustomTextFormField(
+                      title: 'Specicy others',
+                      fillColor: Colors.transparent,
+                      controller: actionFlagController,
+                      hint: 'Enter others',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ],
+      
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'Action Flag',
+                    fillColor: Colors.transparent,
+                    controller: actionFlagController,
+                    hint: 'Action Flag',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                         if (value.toString().isEmpty) {
+                        return 'Action flag  is required';
+                      }
+                      return null;
+                    },
+                  ),
+            
+                  const SizedBox(height: 24),
+                  PrimaryButton(
+                      onPressed: () {
+                        if (!_fundingFormFormKey.currentState!.validate()) {
+                          return;
+                        }
+                        _submitForm( context);
+                      },
+                      title: 'Save')
+                ],
+              ),
             ),
           ),
-      
+        ),
+      ),
     );
   }
 }

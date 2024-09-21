@@ -158,7 +158,7 @@ class _PersonalInfoEditSscreenState
   bool isNewRequest = false; //11
   bool? customerIsPep = false; //12
 
-  DateTime? _selectedDate;
+  // DateTime? _selectedDate;
 
   GendersDatum? selectedGenderItem;
   String? selectedGenderCode;
@@ -505,7 +505,8 @@ class _PersonalInfoEditSscreenState
       ),
       onCancel: () => Navigator.pop(context),
       data: {},
-      child: SingleChildScrollView(
+      child: 
+      SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
             left: 16,
@@ -1522,7 +1523,7 @@ class _PersonalInfoEditSscreenState
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Employer phone  required';
+                        return 'Employer phone is required';
                       }
                       return null;
                     },
@@ -2478,12 +2479,13 @@ class _PersonalInfoEditSscreenState
                       }
                       editAccountRequest(context);
                     },
-                    title: 'Create Account')
+                    title: 'Save')
               ],
             ),
           ),
         ),
       ),
+   
     );
   }
 
