@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/get_edit_monthly_activity_res.dart';
-import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';

@@ -6,7 +6,7 @@ import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/get_edit_monthly_activity_res.dart';
 import 'package:zxplore_app/models/epma_models/meta/anticipated_amounts.dart';
 import 'package:zxplore_app/models/epma_models/meta/anticipated_transactions.dart';
-import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_monthly_activity_contrroller.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticiapted_amount.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticipated_transactions.dart';

@@ -1,13 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
+import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
-import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
 
@@ -190,15 +194,42 @@ abstract class RemoteApi {
   Future<dynamic> editAccountPurpose({
     @Body() required EditAccountPurpose? editAccountPurpose,
   });
+
   @GET('Operation/getOtherBankAccountToEdit')
   Future<dynamic> getOtherBankAccountToEdit({
     @Query('RequestId') required String? RequestId,
   });
+    @POST('Operation/addOtherBankAccount')
+  Future<dynamic> addOtherBankAccount({
+    @Body() required AddOtherBankAccount? data,
+  });
+    @POST('Operation/editOtherBankAccount')
+  Future<dynamic> editOtherBankAccount({
+    @Body() required AddOtherBankAccount? data,
+  });
+    @POST('Operation/deleteOtherBankAccount')
+  Future<dynamic> deleteOtherBankAccount({
+    @Body() required DeleteOtherBankAccount? data,
+  });
+
   @GET('Operation/getRelatedBusinessToEdit')
   Future<dynamic> getRelatedBusinessToEdit({
     @Query('RequestId') required String? RequestId,
     @Query('RelatedBusinessId') required int? RelatedBusinessId,
   });
+    @POST('Operation/addRelatedBusiness')
+  Future<dynamic> addRelatedBusiness({
+    @Body() required RelatedBusinessData? data,
+  });
+    @POST('Operation/editRelatedBusiness')
+  Future<dynamic> editRelatedBusiness({
+    @Body() required RelatedBusinessData? data,
+  });
+     @POST('Operation/deleteRelatedBusiness')
+  Future<dynamic> deleteRelatedBusiness({
+    @Body() required DeleteRelatedBusiness? data,
+  });
+
   @GET('Operation/getNextOfKinToEdit')
   Future<dynamic> getNextOfKinToEdit(
       {@Query('RequestId') required String? RequestId,

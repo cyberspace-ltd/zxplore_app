@@ -1,10 +1,14 @@
  
 
+import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
-import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
+import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 
 abstract class  UserInfoRepository {
      Future <dynamic> getUserPendingStatisticsRepo();
@@ -20,6 +24,10 @@ abstract class  UserInfoRepository {
    Future<dynamic> validateRequestForSubmission({required String? RequestId});
    Future<dynamic> getOtherBankAccountToEdit({required String? RequestId,required int? OtherAccountsId });
    Future<dynamic> getRelatedBusinessToEdit({required String? RequestId,required int? RelatedBusinessId });
+   Future<dynamic> editRelatedBusiness({required RelatedBusinessData? relatedBusiness });
+   Future<dynamic> addRelatedBusiness({required RelatedBusinessData? relatedBusiness });
+   Future<dynamic> deleteRelatedBusiness({required DeleteRelatedBusiness? relatedBusiness });
+
    Future<dynamic> getNextOfKinToEdit({required String? RequestId,required int? NextOfKinId });
    Future<dynamic> getRefereeToEdit({required String? RequestId,required int? RefereeId });
    Future<dynamic> getChildToEdit({required String? RequestId,required int? ChildId });
@@ -34,6 +42,9 @@ abstract class  UserInfoRepository {
    Future<dynamic> editFundingSources({required   EditFundingSource? data});
    Future<dynamic> editMonthlyActivity({required   EditMonthlyActivity? data});
    Future<dynamic> editAssignedAccount({required   AssignedAccountToEditData? data});
+   Future<dynamic> addOtherBankAccount({required   AddOtherBankAccount? data});
+   Future<dynamic> editOtherBankAccount({required   AddOtherBankAccount? data});
+   Future<dynamic> deleteOtherBankAccount({required   DeleteOtherBankAccount? data});
 
 
   

@@ -67,7 +67,7 @@ class EditMonthlyActivity {
         actionFlag: json["actionFlag"],
     );
 
-    Map< String?, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "accountTypeId": accountTypeId,
         "requestId": requestId,
         "itemStage": itemStage,

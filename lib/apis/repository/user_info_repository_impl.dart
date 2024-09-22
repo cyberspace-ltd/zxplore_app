@@ -1,11 +1,15 @@
 import 'package:zxplore_app/apis/repository/user_info_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
+import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
-import 'package:zxplore_app/models/epma_models/meta/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
+import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 
 /// UserInfoRepositoryImpl
@@ -583,5 +587,131 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
           err.response?.data['message'] ?? 'Request process failed');
     }
 }
+
+  @override
+  Future addOtherBankAccount({required AddOtherBankAccount? data}) async {
+        try {
+      final response = await api.addOtherBankAccount(data:data, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future deleteOtherBankAccount({required DeleteOtherBankAccount? data}) async {
+        try {
+      final response = await api.deleteOtherBankAccount(data:data, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editOtherBankAccount({required AddOtherBankAccount? data}) async {
+        try {
+      final response = await api.editOtherBankAccount(data:data, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future addRelatedBusiness({required RelatedBusinessData? relatedBusiness}) async {
+        try {
+      final response = await api.addRelatedBusiness(data:relatedBusiness, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future deleteRelatedBusiness({required DeleteRelatedBusiness? relatedBusiness})async {
+        try {
+      final response = await api.deleteRelatedBusiness(data:relatedBusiness, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editRelatedBusiness({required RelatedBusinessData? relatedBusiness})  async {
+        try {
+      final response = await api.editRelatedBusiness(data:relatedBusiness, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
 
 }

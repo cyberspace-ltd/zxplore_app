@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_assigned_account_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
-import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
-import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
 class ViewAssignedAccountScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> formIndividualData;
 
-  const ViewAssignedAccountScreen(
-      {Key? key, required this.formIndividualData})
+  const ViewAssignedAccountScreen({Key? key, required this.formIndividualData})
       : super(key: key);
 
   @override
@@ -26,26 +27,33 @@ class _ViewAssignedAccountScreenState
         ViewAccountRequestResponse.fromMap(widget.formIndividualData);
     final sectionData = requestData?.data?.assignedAccts ?? [];
 
-    return BaseFormScreen(
-        title: 'Assigned AccountTypes',
-        data: _flattenData(widget.formIndividualData),
-       showEdit: sectionData.isNotEmpty,
-        onTapEdit: () {
-          // to navigate to edit this section
-        },
-        onTapAdd: (){
-          // rroute to add new item page 
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child:sectionData.isNotEmpty?ListView.builder(
-              shrinkWrap: true,
-              itemCount: sectionData.length,
-              itemBuilder: (BuildContext context, index) {
-                return Item(data:sectionData[index] ,);
-              }):EmptyViewWidget(),
-        ));
+    return ZxploreProgress(
+      inAsyncCall: ref.watch(editAssignedAccountControllerProvider).isLoading||
+    ref.watch(viewRequestControllerProvider).isLoading  ,
+      child: BaseFormScreen(
+          title: 'Assigned AccountTypes',
+          data: _flattenData(widget.formIndividualData),
+          showEdit: sectionData.isNotEmpty,
+          onTapEdit: () {},
+          onTapAdd: () {
+            // rroute to add new item page
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: sectionData.isNotEmpty
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: sectionData.length,
+                    itemBuilder: (BuildContext context, index) {
+                      return Item(
+                        data: sectionData[index],
+                      );
+                    })
+                : EmptyViewWidget(),
+          )),
+    );
   }
+
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};
     data?.forEach((key, value) {
@@ -61,33 +69,36 @@ class _ViewAssignedAccountScreenState
   }
 }
 
-class  Item extends StatelessWidget {
-  const Item({super.key, this.data});
+class Item extends ConsumerWidget {
+  const Item({super.key, this.data, this.assignedAcctId, this.requestId});
   final AssignedAcct? data;
+  final String? requestId;
+  final int? assignedAcctId;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-//  ViewItem(title: 'Assigned Account Id', value: data?.assignedAcctId),
-    // ViewItem(title: 'Req Id', value: data?.reqId),
-    // ViewItem(title: 'Item Stage', value: data?.itemStage),
-    ViewItem(title: 'Account Name', value: data?.accountName??''),
-    ViewItem(title: 'RIM No', value: data?.rimNo??0),
-    ViewItem(title: 'Account Class', value: data?.accountClass??''),
-    ViewItem(title: 'Currency', value: data?.currency??''),
-    ViewItem(title: 'Account Type', value: data?.accountType??''),
-    ViewItem(title: 'Account Series', value: data?.accountSeries??''),
-    ViewItem(title: 'Account No', value: data?.accountNo??''),
-    ViewItem(title: 'Create Date', value: formatDate(data?.createDate??'')),
-    // ViewItem(title: 'Auth Code', value: data?.authCode),
-    ViewItem(title: 'Recon', value: data?.recon??''),
-    ViewItem(title: 'Recon Status', value: data?.reconStatus??0),
-    // ViewItem(title: 'Action Flag', value: data?.actionFlag),
-  
-   ]);
-}
-
- 
-  
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FoldableItem(
+      name: 'Name: ${data?.accountName ?? ''}',
+      number: 'Account No: ${data?.accountNo ?? ''}',
+      requestId: requestId,
+      subRequestId: assignedAcctId,
+      onPressed: () {},
+      onTapEdit: () {
+        // to navigate to edit this section
+        ref.read(editAssignedAccountControllerProvider.notifier).getEditData(
+            context,
+            RequestId: data?.reqId ?? '',
+            AssignedAcctId: data?.assignedAcctId);
+      },
+      onTapView: () {},
+      onTapDelete: () {
+        ref
+            .read(editAssignedAccountControllerProvider.notifier)
+            .deleteAssignedAccountData(context,
+                RequestId: data?.reqId ?? '',
+                AssignedAcctId: data?.assignedAcctId);
+      },
+      request: data,
+    );
+  }
 }
