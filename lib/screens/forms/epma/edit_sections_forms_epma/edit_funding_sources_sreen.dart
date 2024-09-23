@@ -8,6 +8,7 @@ import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edi
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
@@ -135,6 +136,11 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
 
   @override
   Widget build(BuildContext context) {
+           ref.listen<AsyncValue>(
+      editFundingSourcesControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+    );
+
     return ZxploreProgress(
       inAsyncCall: ref.watch(editFundingSourcesControllerProvider).isLoading
       || ref.watch(viewRequestControllerProvider).isLoading,

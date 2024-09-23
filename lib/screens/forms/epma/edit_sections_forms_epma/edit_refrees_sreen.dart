@@ -7,6 +7,7 @@ import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edi
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
@@ -79,6 +80,11 @@ class _EditRefereeScreenState extends ConsumerState< EditRefereeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+                      ref.listen<AsyncValue>(
+      editRefereeControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+    );
     return ZxploreProgress(
       inAsyncCall: ref.watch(editRefereeControllerProvider).isLoading||
       ref.watch(viewRequestControllerProvider).isLoading,
