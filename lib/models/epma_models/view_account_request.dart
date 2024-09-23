@@ -540,7 +540,7 @@ class Child {
         maturityAge: json["maturityAge"],
         createDate: json["createDate"],
         actionFlag: json["actionFlag"],
-        gender: json["gender"] == null ? null : Gender.fromMap(json["gender"]),
+        gender: json["gender"] == null ? null : Gender.fromJson(json["gender"]),
         nationality: json["nationality"] == null ? null : Nationality.fromMap(json["nationality"]),
         originCountry: json["originCountry"] == null ? null : Nationality.fromMap(json["originCountry"]),
     );
@@ -562,7 +562,7 @@ class Child {
         "maturityAge": maturityAge,
         "createDate": createDate,
         "actionFlag": actionFlag,
-        "gender": gender?.toMap(),
+        "gender": gender?.toJson(),
         "nationality": nationality?.toMap(),
         "originCountry": originCountry?.toMap(),
     };
@@ -577,12 +577,12 @@ class Gender {
         this.genderName,
     });
 
-    factory Gender.fromMap(Map<String, dynamic> json) => Gender(
+    factory Gender.fromJson(Map<String, dynamic> json) => Gender(
         genderCode: json["genderCode"],
         genderName: json["genderName"],
     );
 
-    Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toJson() => {
         "genderCode": genderCode,
         "genderName": genderName,
     };
@@ -1233,14 +1233,14 @@ class FormIndividual {
         customerClassificationId: json["customerClassificationId"],
         actionFlag: json["actionFlag"],
         fullName: json["fullName"],
-        region: json["region"] == null ? null : Region.fromMap(json["region"]),
+        region: json["region"] == null ? null : Region.fromJson(json["region"]),
         country: json["country"] == null ? null : AltCitizenship.fromMap(json["country"]),
         idCountry: json["idCountry"] == null ? null : AltCitizenship.fromMap(json["idCountry"]),
         citizenship: json["citizenship"] == null ? null : AltCitizenship.fromMap(json["citizenship"]),
         altCitizenship: json["altCitizenship"] == null ? null : AltCitizenship.fromMap(json["altCitizenship"]),
         permanentResidenceCountry: json["permanentResidenceCountry"] == null ? null : AltCitizenship.fromMap(json["permanentResidenceCountry"]),
-        identificationType: json["identificationType"] == null ? null : IdentificationType.fromMap(json["identificationType"]),
-        gender: json["gender"] == null ? null : Gender.fromMap(json["gender"]),
+        identificationType: json["identificationType"] == null ? null : IdentificationType.fromJson(json["identificationType"]),
+        gender: json["gender"] == null ? null : Gender.fromJson(json["gender"]),
         employmentType: json["employmentType"] == null ? null : EmploymentType.fromMap(json["employmentType"]),
         residencePermitIssuePlace: json["residencePermitIssuePlace"] == null ? null : AltCitizenship.fromMap(json["residencePermitIssuePlace"]),
         businessNature: json["businessNature"] == null ? null : BusinessNature.fromMap(json["businessNature"]),
@@ -1319,14 +1319,14 @@ class FormIndividual {
         "customerClassificationId": customerClassificationId,
         "actionFlag": actionFlag,
         "fullName": fullName,
-        "region": region?.toMap(),
+        "region": region?.toJson(),
         "country": country?.toMap(),
         "idCountry": idCountry?.toMap(),
         "citizenship": citizenship?.toMap(),
         "altCitizenship": altCitizenship?.toMap(),
         "permanentResidenceCountry": permanentResidenceCountry?.toMap(),
-        "identificationType": identificationType?.toMap(),
-        "gender": gender?.toMap(),
+        "identificationType": identificationType?.toJson(),
+        "gender": gender?.toJson(),
         "employmentType": employmentType?.toMap(),
         "residencePermitIssuePlace": residencePermitIssuePlace?.toMap(),
         "businessNature": businessNature?.toMap(),
@@ -1429,12 +1429,12 @@ class IdentificationType {
         this.identificationTypeName,
     });
 
-    factory IdentificationType.fromMap(Map<String, dynamic> json) => IdentificationType(
+    factory IdentificationType.fromJson(Map<String, dynamic> json) => IdentificationType(
         identificationTypeId: json["identificationTypeId"],
         identificationTypeName: json["identificationTypeName"],
     );
 
-    Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toJson() => {
         "identificationTypeId": identificationTypeId,
         "identificationTypeName": identificationTypeName,
     };
@@ -1449,12 +1449,12 @@ class Region {
         this.regionName,
     });
 
-    factory Region.fromMap(Map<String, dynamic> json) => Region(
+    factory Region.fromJson(Map<String, dynamic> json) => Region(
         regionCode: json["regionCode"],
         regionName: json["regionName"],
     );
 
-    Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toJson() => {
         "regionCode": regionCode,
         "regionName": regionName,
     };
@@ -1594,7 +1594,7 @@ class NextOfKin {
         genderCode: json["genderCode"],
         residentialAddress: json["residentialAddress"],
         actionFlag: json["actionFlag"],
-        gender: json["gender"] == null ? null : Gender.fromMap(json["gender"]),
+        gender: json["gender"] == null ? null : Gender.fromJson(json["gender"]),
     );
 
     Map<String, dynamic> toMap() => {
@@ -1608,7 +1608,7 @@ class NextOfKin {
         "genderCode": genderCode,
         "residentialAddress": residentialAddress,
         "actionFlag": actionFlag,
-        "gender": gender?.toMap(),
+        "gender": gender?.toJson(),
     };
 }
 
@@ -2067,10 +2067,10 @@ class StakeHolder {
         setupStatementViaEmail: json["setupStatementViaEmail"],
         setupEmailIndemnity: json["setupEmailIndemnity"],
         isNewRequest: json["isNewRequest"],
-        identificationType: json["identificationType"] == null ? null : IdentificationType.fromMap(json["identificationType"]),
+        identificationType: json["identificationType"] == null ? null : IdentificationType.fromJson(json["identificationType"]),
         country: json["country"] == null ? null : AltCitizenship.fromMap(json["country"]),
-        gender: json["gender"] == null ? null : Gender.fromMap(json["gender"]),
-        region: json["region"] == null ? null : Region.fromMap(json["region"]),
+        gender: json["gender"] == null ? null : Gender.fromJson(json["gender"]),
+        region: json["region"] == null ? null : Region.fromJson(json["region"]),
         permanentResidenceCountry: json["permanentResidenceCountry"] == null ? null : AltCitizenship.fromMap(json["permanentResidenceCountry"]),
         idCountry: json["idCountry"] == null ? null : AltCitizenship.fromMap(json["idCountry"]),
         gpsAddress: json["gpsAddress"],
@@ -2126,10 +2126,10 @@ class StakeHolder {
         "setupStatementViaEmail": setupStatementViaEmail,
         "setupEmailIndemnity": setupEmailIndemnity,
         "isNewRequest": isNewRequest,
-        "identificationType": identificationType?.toMap(),
+        "identificationType": identificationType?.toJson(),
         "country": country?.toMap(),
-        "gender": gender?.toMap(),
-        "region": region?.toMap(),
+        "gender": gender?.toJson(),
+        "region": region?.toJson(),
         "permanentResidenceCountry": permanentResidenceCountry?.toMap(),
         "idCountry": idCountry?.toMap(),
         "gpsAddress": gpsAddress,
