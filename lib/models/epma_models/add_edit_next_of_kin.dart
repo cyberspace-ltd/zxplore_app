@@ -47,7 +47,7 @@ class AddNextOfKin {
         actionFlag: json["actionFlag"],
     );
 
-    Map<String?, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "nextOfKinId": nextOfKinId,
         "requestId": requestId,
         "rowVersion": rowVersion,

@@ -1,6 +1,8 @@
  
 
+import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
@@ -46,6 +48,10 @@ abstract class  UserInfoRepository {
    Future<dynamic> deleteRefree({required DeleteReferee? delref });
 
    Future<dynamic> getChildToEdit({required String? RequestId,required int? ChildId });
+   Future<dynamic> editChild({required AddChild? child });
+   Future<dynamic> addChild({required AddChild? child });
+   Future<dynamic> deleteChild({required DeleteChild? delchild });
+
    Future<dynamic> getStakeHolderToEdit({required String? RequestId,required int? StakeHolderId });
    Future<dynamic> getDocumentAttachedToEdit({required String? RequestId,required int? DocumentsAttachedId });
    Future<dynamic> getAssignedAccountToEdit({required String? RequestId,required int? AssignedAcctId });

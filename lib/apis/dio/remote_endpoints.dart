@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
@@ -16,7 +18,6 @@ import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_resp
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
-import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
 
@@ -238,6 +239,20 @@ abstract class RemoteApi {
   Future<dynamic> getNextOfKinToEdit(
       {@Query('RequestId') required String? RequestId,
       @Query('ChildId') required int? NextOfKinId});
+
+       @POST('Operation/addChild')
+  Future<dynamic> addChild({
+    @Body() required AddChild? data,
+  });
+  @POST('Operation/editChild')
+  Future<dynamic> editChild({
+    @Body() required AddChild? data,
+  });
+  @POST('Operation/deleteChild')
+  Future<dynamic> deleteChild({
+    @Body() required DeleteChild? data,
+  });
+
   @POST('Operation/addNextOfKin')
   Future<dynamic> addNextOfKin({
     @Body() required AddNextOfKin? data,

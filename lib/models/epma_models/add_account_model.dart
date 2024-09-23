@@ -6,7 +6,7 @@ import 'dart:convert';
 
 AddOtherBankAccount addOtherBankAccountFromJson(String str) => AddOtherBankAccount.fromJson(json.decode(str??''));
 
-String addOtherBankAccountToJson(AddOtherBankAccount data) => json.encode(data.toJson());
+String? addOtherBankAccountToJson(AddOtherBankAccount data) => json.encode(data.toJson());
 
 class AddOtherBankAccount {
     int? otherAccountsId;
@@ -33,7 +33,7 @@ class AddOtherBankAccount {
          this.actionFlag,
     });
 
-    factory AddOtherBankAccount.fromJson(Map<String, dynamic> json) => AddOtherBankAccount(
+    factory AddOtherBankAccount.fromJson(Map<String?, dynamic> json) => AddOtherBankAccount(
         otherAccountsId: json["otherAccountsId"],
         requestId: json["requestId"],
         itemStage: json["itemStage"],
@@ -46,7 +46,7 @@ class AddOtherBankAccount {
         actionFlag: json["actionFlag"],
     );
 
-    Map<String?, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "otherAccountsId": otherAccountsId,
         "requestId": requestId,
         "itemStage": itemStage,
