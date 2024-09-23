@@ -3,8 +3,10 @@
 import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/delete_refree.dart';
@@ -26,6 +28,9 @@ abstract class  UserInfoRepository {
    Future<dynamic> getAccountPurposeToEdit({required String? RequestId});
    Future<dynamic> getFundingSourceToEdit({required String? RequestId});
    Future<dynamic> getForeignAccountToEdit({required String? RequestId});
+   Future<dynamic> editForeignAccount({required EditForeignAccount? account});
+   Future<dynamic> deleteForeignAccount({required DeleteForeignAccount? account });
+
    
    Future<dynamic> getDueDiligenceToEdit({required String? RequestId});
    Future<dynamic> editDueDiligence({required EditDueDiligence? dd });

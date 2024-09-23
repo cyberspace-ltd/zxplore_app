@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
-import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
-import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
-import 'package:zxplore_app/models/epma_models/delete_refree.dart';
-import 'package:zxplore_app/models/epma_models/get_refree_to_edit.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
+import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
+import 'package:zxplore_app/models/epma_models/get_foreign_accounts_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
-import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_refrees_sreen.dart';
-import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_refrees_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_foreign_accounts_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_foreign_accounts_sreen.dart';
 
-part 'edit_refree_controller.g.dart';
+part 'edit_foreign_accounts_controller.g.dart';
 
 @riverpod
-class EditRefereeController extends _$EditRefereeController {
+class EditForeignAaccountsControllerr extends _$EditForeignAaccountsControllerr {
   @override
   FutureOr<dynamic> build() {
     //nadaa
   }
 
   Future<dynamic> getEditData(BuildContext context,
-      {required String? RequestId, required int? RefereeId}) async {
+      {required String? RequestId}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.getRefereeToEdit(
-          RequestId: RequestId,RefereeId:RefereeId );
+      final requestResponse =
+          await repo.getForeignAccountToEdit(RequestId: RequestId);
 
       if (requestResponse['status'] == true) {
-        final result =
-            GetRefereeToEditResponse.fromJson(requestResponse);
+        final result = GetForeignAccountToEditResponse.fromJson(requestResponse);
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => EditRefereeScreen(
-                  data  : result,
+              builder: (BuildContext context) => EditForeignAaccountScreen(
+                    data: result,
                   )),
         );
         state = AsyncValue.data(result);
@@ -61,29 +59,29 @@ class EditRefereeController extends _$EditRefereeController {
     }
   }
 
-
-  Future<dynamic> editReferee(
-      {required AddReferee? data,
+  Future<dynamic> editForeignAccount(
+      {required EditForeignAccount? editAccount,
       required BuildContext context}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.editReferee(ref: data);
+      final requestResponse =
+          await repo.editForeignAccount(account: editAccount);
 
       if (requestResponse['status'] == true) {
-        final result =
-            AddNextOfKin.fromJson(requestResponse);
-
+        final result = GetForeignAccountToEditResponse.fromJson(requestResponse);
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId ?? '');
+            .getRequestDetailAsync(result.data.reqId);
+
         state = AsyncValue.data(result);
+       /// replace this present view to the last
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => ViewRefreesScreen(
+              builder: (BuildContext context) => ViewForeignAccount(
                     formIndividualData:
                         ref.read(activelyViewedRequestProvider)!.toMap(),
                   )),
@@ -107,81 +105,33 @@ class EditRefereeController extends _$EditRefereeController {
       return null;
     }
   }
-
-  
-
-  Future<dynamic> addReferee(
-       {required AddReferee? data,
-      required BuildContext context}) async {
+ 
+  Future<dynamic> deleteForeignAccount(BuildContext context,
+      {required String? RequestId, required DeleteForeignAccount? delData}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.addReferee(ref: data);
+      final requestResponse = await repo.deleteForeignAccount(
+          account: delData, );
 
       if (requestResponse['status'] == true) {
         final result =
-            AddNextOfKin.fromJson(requestResponse);
-
-        // refresh the latest viewed item.
-        ref
-            .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId ?? '');
-        state = AsyncValue.data(result);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => ViewRefreesScreen(
-                    formIndividualData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncValue.data(null);
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
-
-  Future<dynamic> deleteReferee(BuildContext context,
-      {required String? RequestId, required DeleteReferee? delData}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse = await repo.deleteRefree(
-          delref: delData, );
-
-      if (requestResponse['status'] == true) {
-        final result =
-            DeleteReferee.fromJson(requestResponse);
+            DeleteForeignAccount.fromJson(requestResponse);
         state = AsyncValue.data(result);
 
         // refresh the latest viewed item.
         ref.read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(RequestId!);
         state = AsyncValue.data(result);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => ViewRefreesScreen(
-                    formIndividualData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (BuildContext context) => ViewForeignAccount(
+        //             formIndividualData:
+        //                 ref.read(activelyViewedRequestProvider)!.toMap(),
+        //           )),
+        // );
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -202,6 +152,5 @@ class EditRefereeController extends _$EditRefereeController {
       return null;
     }
   }
-
 
 }

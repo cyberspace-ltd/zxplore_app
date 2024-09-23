@@ -4,8 +4,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/delete_refree.dart';
@@ -288,6 +290,16 @@ abstract class RemoteApi {
   Future<dynamic> getForeignAccountToEdit({
     @Query('RequestId') required String? RequestId,
   });
+  @POST('Operation/editForeignAccount')
+  Future<dynamic> editForeignAccount({
+    @Body() required EditForeignAccount? data,
+  });
+
+  @POST('Operation/deleteForeignAccount')
+  Future<dynamic> deleteForeignAccount({
+    @Body() required DeleteForeignAccount? data,
+  });
+
   @GET('Operation/getChildToEdit')
   Future<dynamic> getChildToEdit(
       {@Query('RequestId') required String? RequestId,

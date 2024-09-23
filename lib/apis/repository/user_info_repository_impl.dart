@@ -4,8 +4,10 @@ import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
 import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/delete_refree.dart';
@@ -912,6 +914,48 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   Future editChild({required AddChild? child}) async {
         try {
       final response = await api.editChild(data:child, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editForeignAccount({required EditForeignAccount? account})  async {
+        try {
+      final response = await api.editForeignAccount(data:account, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    };
+  }
+
+  @override
+  Future deleteForeignAccount({required DeleteForeignAccount? account})   async {
+        try {
+      final response = await api.deleteForeignAccount(data:account, );
 
       return response;
     } on FormatException catch (_) {

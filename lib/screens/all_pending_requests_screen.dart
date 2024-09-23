@@ -334,7 +334,7 @@ class AccountRequestItem extends StatelessWidget {
 
 class FoldableItem extends StatelessWidget {
   const FoldableItem({super.key, this.request,this.onTapDelete,
-    this.onPressed,required this.onTapEdit,required this.onTapView, required this.name,required this.number,required this.requestId, required this.subRequestId});
+    this.onPressed,required this.onTapEdit,required this.onTapView, this.userWrapper=false,required this.name,required this.number,required this.requestId, required this.subRequestId});
   final dynamic request;
   final String? name;
   final String? requestId;
@@ -344,6 +344,7 @@ class FoldableItem extends StatelessWidget {
   final Function()? onTapEdit;
   final Function()? onTapDelete;
   final Function()? onTapView;
+  final bool userWrapper;
 
   @override
   Widget build(BuildContext context) {
@@ -363,7 +364,11 @@ class FoldableItem extends StatelessWidget {
                 blurRadius: 4,
               ),
             ]),
-        child: Column(
+        child: userWrapper?Column(children: [
+          Wrap(children: [Text(name??'')],),
+          Wrap(children: [Text(number??'')],)
+        ],):
+        Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

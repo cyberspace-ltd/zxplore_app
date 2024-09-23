@@ -27,13 +27,12 @@ class _ViewRefreesScreenState extends ConsumerState<ViewRefreesScreen> {
     final sectionData = requestData?.data?.referees ?? [];
 
     return ZxploreProgress(
-      inAsyncCall: ref.watch(editRefereeControllerProvider).isLoading||
-    ref.watch(viewRequestControllerProvider).isLoading
-      ,
+      inAsyncCall: ref.watch(editRefereeControllerProvider).isLoading ||
+          ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseFormScreen(
           title: 'Referees',
           data: _flattenData(widget.formIndividualData),
-          showEdit:false ,//sectionData.isNotEmpty,
+          showEdit: false, //sectionData.isNotEmpty,
           onTapEdit: () {
             // to navigate to edit this section
           },
@@ -60,7 +59,7 @@ class _ViewRefreesScreenState extends ConsumerState<ViewRefreesScreen> {
 
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};
-    data?.forEach((key, value) {
+    data.forEach((key, value) {
       if (value is Map) {
         value.forEach((subKey, subValue) {
           flattened['$key - $subKey'] = subValue.toString();
@@ -84,30 +83,26 @@ class Item extends ConsumerWidget {
   final int? subRequestId;
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FoldableItem(
       name: 'Name: ${data?.accountName ?? ''}',
-      number: 'Account No ${data?.accountNo??''}',
+      number: 'Account No ${data?.accountNo ?? ''}',
       requestId: requestId,
       subRequestId: subRequestId,
-     onTapEdit: () {
+      onTapEdit: () {
         // to navigate to edit this section
-        ref.read(editRefereeControllerProvider.notifier).getEditData(
-            context,
-            RequestId: data?.reqId ?? '',
-            RefereeId: data?.refereeId);
+        ref.read(editRefereeControllerProvider.notifier).getEditData(context,
+            RequestId: data?.reqId ?? '', RefereeId: data?.refereeId);
       },
       onTapView: () {},
       onTapDelete: () {
-        ref
-            .read(editRefereeControllerProvider.notifier)
-            .deleteReferee(context,
-                RequestId: data?.reqId ?? '',delData:DeleteReferee(
-                  refereeId: data?.refereeId,
-                  requestId:data?.reqId ,
-                  rowVersion:data?.rowVersion ,
-                )
-                );
+        ref.read(editRefereeControllerProvider.notifier).deleteReferee(context,
+            RequestId: data?.reqId ?? '',
+            delData: DeleteReferee(
+              refereeId: data?.refereeId,
+              requestId: data?.reqId,
+              rowVersion: data?.rowVersion,
+            ));
       },
       request: data,
     );
