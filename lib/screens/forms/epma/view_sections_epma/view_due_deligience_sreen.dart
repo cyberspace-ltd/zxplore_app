@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_duedelligience_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 
@@ -28,7 +29,9 @@ class _ViewDueDilligienceState
         title: 'Due Diligence(s)',
         data: _flattenData(widget.formIndividualData),
         onTapEdit: () {
-          // to navigate to edit this section
+             // to navigate to edit this section
+         ref.read(editDueDilligienceControllerProvider.notifier).getEditData(context,
+          RequestId: requestData?.data?.reqId??'');
         },
         child: Padding(
           padding: const EdgeInsets.all(16.0),

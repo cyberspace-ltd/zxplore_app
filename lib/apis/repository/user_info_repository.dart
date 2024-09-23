@@ -1,17 +1,21 @@
  
 
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
+import 'package:zxplore_app/models/epma_models/delete_refree.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
+import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
-import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 
 abstract class  UserInfoRepository {
-     Future <dynamic> getUserPendingStatisticsRepo();
+  Future <dynamic> getUserPendingStatisticsRepo();
    Future <dynamic> getUserPendingDraftRepo();
    Future <dynamic> getUserPendingAllRepo();
    Future<dynamic> viewAccountRequest({required String? RequestId});
@@ -20,7 +24,10 @@ abstract class  UserInfoRepository {
    Future<dynamic> getAccountPurposeToEdit({required String? RequestId});
    Future<dynamic> getFundingSourceToEdit({required String? RequestId});
    Future<dynamic> getForeignAccountToEdit({required String? RequestId});
+   
    Future<dynamic> getDueDiligenceToEdit({required String? RequestId});
+   Future<dynamic> editDueDiligence({required EditDueDiligence? dd });
+
    Future<dynamic> validateRequestForSubmission({required String? RequestId});
    Future<dynamic> getOtherBankAccountToEdit({required String? RequestId,required int? OtherAccountsId });
    Future<dynamic> getRelatedBusinessToEdit({required String? RequestId,required int? RelatedBusinessId });
@@ -29,7 +36,15 @@ abstract class  UserInfoRepository {
    Future<dynamic> deleteRelatedBusiness({required DeleteRelatedBusiness? relatedBusiness });
 
    Future<dynamic> getNextOfKinToEdit({required String? RequestId,required int? NextOfKinId });
+   Future<dynamic> editNextOfKin({required AddNextOfKin? nok });
+   Future<dynamic> addNextOfKin({required AddNextOfKin? nok });
+   Future<dynamic> deleteNextOfKin({required  DeleteNextOfKin ? delnok });
+
    Future<dynamic> getRefereeToEdit({required String? RequestId,required int? RefereeId });
+    Future<dynamic> editReferee({required AddReferee? ref });
+   Future<dynamic> addReferee({required AddReferee? ref });
+   Future<dynamic> deleteRefree({required DeleteReferee? delref });
+
    Future<dynamic> getChildToEdit({required String? RequestId,required int? ChildId });
    Future<dynamic> getStakeHolderToEdit({required String? RequestId,required int? StakeHolderId });
    Future<dynamic> getDocumentAttachedToEdit({required String? RequestId,required int? DocumentsAttachedId });

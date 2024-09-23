@@ -2,14 +2,18 @@ import 'package:zxplore_app/apis/repository/user_info_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
+import 'package:zxplore_app/models/epma_models/delete_refree.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
+import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
-import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 
 /// UserInfoRepositoryImpl
@@ -697,6 +701,152 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   Future editRelatedBusiness({required RelatedBusinessData? relatedBusiness})  async {
         try {
       final response = await api.editRelatedBusiness(data:relatedBusiness, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future addNextOfKin({required AddNextOfKin? nok}) async {
+        try {
+      final response = await api.addNextOfKin(data:nok, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future deleteNextOfKin({required DeleteNextOfKin? delnok}) async {
+        try {
+      final response = await api.deleteNextOfKin(data:delnok, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editNextOfKin({required AddNextOfKin? nok})  async {
+        try {
+      final response = await api.editNextOfKin(data:nok, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future addReferee({required AddReferee? ref})  async {
+        try {
+      final response = await api.addReferee(data:ref, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future deleteRefree({required DeleteReferee? delref}) async {
+        try {
+      final response = await api.deleteRefree(data:delref, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future editReferee({required AddReferee? ref}) async {
+        try {
+      final response = await api.editReferee(data:ref, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }}
+
+  @override
+  Future editDueDiligence({required EditDueDiligence? dd}) async {
+        try {
+      final response = await api.editDueDiligence(data:dd, );
 
       return response;
     } on FormatException catch (_) {

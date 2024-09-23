@@ -33,7 +33,7 @@ class _ViewAssignedAccountScreenState
       child: BaseFormScreen(
           title: 'Assigned AccountTypes',
           data: _flattenData(widget.formIndividualData),
-          showEdit: sectionData.isNotEmpty,
+          showEdit: false ,//sectionData.isNotEmpty,
           onTapEdit: () {},
           onTapAdd: () {
             // rroute to add new item page

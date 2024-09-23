@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_next_of_kin_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 // import 'package:zxplore_app/utils/app_sizes.dart';
 // import 'package:zxplore_app/utils/string_extentions.dart';
 
@@ -27,25 +32,30 @@ class _ViewNextOfKinScreenState
         ViewAccountRequestResponse.fromMap(widget.formIndividualData);
     final sectionData = requestData?.data?.nextOfKin ?? [];
 
-    return BaseFormScreen(
-        title: 'Next of Kin',
-        data: _flattenData(widget.formIndividualData),
-        showEdit: sectionData.isNotEmpty,
-        onTapEdit: () {
-          // to navigate to edit this section
-        },
-        onTapAdd: (){
-          // rroute to add new item page 
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: sectionData.isNotEmpty?ListView.builder(
-              shrinkWrap: true,
-              itemCount: sectionData.length,
-              itemBuilder: (BuildContext context, index) {
-                return Item(data:sectionData[index] ,);
-              }):EmptyViewWidget(),
-        ));
+    return ZxploreProgress(
+        inAsyncCall: ref.watch(editNextOfKinControllerProvider).isLoading||
+    ref.watch(viewRequestControllerProvider).isLoading
+      ,
+      child: BaseFormScreen(
+          title: 'Next of Kin',
+          data: _flattenData(widget.formIndividualData),
+          showEdit: sectionData.isNotEmpty,
+          onTapEdit: () {
+            // to navigate to edit this section
+          },
+          onTapAdd: (){
+            // rroute to add new item page 
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: sectionData.isNotEmpty?ListView.builder(
+                shrinkWrap: true,
+                itemCount: sectionData.length,
+                itemBuilder: (BuildContext context, index) {
+                  return Item(data:sectionData[index] ,);
+                }):EmptyViewWidget(),
+          )),
+    );
   }
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};
@@ -62,23 +72,51 @@ class _ViewNextOfKinScreenState
   }
 }
 
-class  Item extends StatelessWidget {
+class  Item extends ConsumerWidget {
   const Item({super.key, this.data});
   final NextOfKin? data;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-    ViewItem(title: 'Item Stage', value: data?.itemStage??''),
-    ViewItem(title: 'Full Name', value: data?.fullName??''),
-    ViewItem(title: 'Tel No', value: data?.telNo??''),
-    ViewItem(title: 'Relationship', value: data?.relationship??''),
-    ViewItem(title: 'Gender Code', value: data?.genderCode??''),
-    ViewItem(title: 'Residential Address', value: data?.residentialAddress??''),
-    ViewItem(title: 'Action Flag', value: data?.actionFlag??''),
-    ViewItem(title: 'Gender Name', value: data?.gender?.genderName??''),
-   ]);
+  Widget build(BuildContext context,WidgetRef ref) {
+    return 
+    FoldableItem(
+      name: 'Name: ${data?.fullName ?? ''} - ${data?.relationship??''}',
+      number: 'Adresss ${data?.residentialAddress??''}',
+      requestId: data?.reqId,
+      subRequestId: data?.nextOfKinId,
+     onTapEdit: () {
+        // to navigate to edit this section
+        ref.read(editNextOfKinControllerProvider.notifier).getEditData(
+            context,
+            RequestId: data?.reqId ?? '',
+            NextOfKinId: data?.nextOfKinId);
+      },
+      onTapView: () {},
+      onTapDelete: () {
+        ref
+            .read(editNextOfKinControllerProvider.notifier)
+            .deleteNok(context,
+                RequestId: data?.reqId ?? '',
+                delData:DeleteNextOfKin(
+                  nextOfKinId: data?.nextOfKinId,
+                  requestId:data?.reqId ,
+                  rowVersion:data?.rowVersion ,
+                )
+                );
+      },
+      request: data,
+    );
+  //   Column(
+  //     children: [
+  //   ViewItem(title: 'Item Stage', value: data?.itemStage??''),
+  //   ViewItem(title: 'Full Name', value: data?.fullName??''),
+  //   ViewItem(title: 'Tel No', value: data?.telNo??''),
+  //   ViewItem(title: 'Relationship', value: data?.relationship??''),
+  //   ViewItem(title: 'Gender Code', value: data?.genderCode??''),
+  //   ViewItem(title: 'Residential Address', value: data?.residentialAddress??''),
+  //   ViewItem(title: 'Action Flag', value: data?.actionFlag??''),
+  //   ViewItem(title: 'Gender Name', value: data?.gender?.genderName??''),
+  //  ]);
 }
 
  

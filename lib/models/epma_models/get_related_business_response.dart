@@ -28,7 +28,7 @@ class GetRelatedBusinessToEditResponse {
         data: RelatedBusinessData.fromJson(json["data"]),
     );
 
-    Map< String?, dynamic> toJson() => {
+    Map< String, dynamic> toJson() => {
         "code": code,
         "status": status,
         "message": message,
@@ -68,7 +68,7 @@ class RelatedBusinessData {
         actionFlag: json["actionFlag"],
     );
 
-    Map< String?, dynamic> toJson() => {
+    Map< String, dynamic> toJson() => {
         "relatedBusinessId": relatedBusinessId,
         "reqId": reqId,
         "rowVersion": rowVersion,
@@ -80,7 +80,7 @@ class RelatedBusinessData {
     };
 }
  
-DeleteRelatedBusiness deleteRelatedBusinessFromJson( String? str) => DeleteRelatedBusiness.fromJson(json.decode(str??''));
+DeleteRelatedBusiness deleteRelatedBusinessFromJson( String str) => DeleteRelatedBusiness.fromJson(json.decode(str??''));
 
  String? deleteRelatedBusinessToJson(DeleteRelatedBusiness data) => json.encode(data.toJson());
 
@@ -95,13 +95,13 @@ class DeleteRelatedBusiness {
           this.rowVersion,
     });
 
-    factory DeleteRelatedBusiness.fromJson(Map< String?, dynamic> json) => DeleteRelatedBusiness(
+    factory DeleteRelatedBusiness.fromJson(Map< String, dynamic> json) => DeleteRelatedBusiness(
         relatedBusinessId: json["relatedBusinessId"],
         requestId: json["requestId"],
         rowVersion: json["rowVersion"],
     );
 
-    Map< String?, dynamic> toJson() => {
+    Map< String, dynamic> toJson() => {
         "relatedBusinessId": relatedBusinessId,
         "requestId": requestId,
         "rowVersion": rowVersion,

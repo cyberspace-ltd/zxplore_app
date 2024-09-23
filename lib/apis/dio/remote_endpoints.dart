@@ -2,8 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
+import 'package:zxplore_app/models/epma_models/delete_refree.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
+import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/epma_login_response.dart';
@@ -155,7 +160,7 @@ abstract class RemoteApi {
     @Query('RequestId') required String? RequestId,
   });
 
-    @POST('Operation/editMonthlyActivity')
+  @POST('Operation/editMonthlyActivity')
   Future<dynamic> editMonthlyActivity({
     @Body() required EditMonthlyActivity? editMonthlyActivity,
   });
@@ -174,19 +179,18 @@ abstract class RemoteApi {
     @Body() required EditFundingSource? editAccountPurpose,
   });
 
-   @GET('Operation/getAssignedAccountToEdit')
+  @GET('Operation/getAssignedAccountToEdit')
   Future<dynamic> getAssignedAccountToEdit({
-       @Query('RequestId') required String? RequestId,
-       @Query('AssignedAcctId') required int? AssignedAcctId,
-
+    @Query('RequestId') required String? RequestId,
+    @Query('AssignedAcctId') required int? AssignedAcctId,
   });
-    @POST('Operation/deleteAssignedAccount')
+  @POST('Operation/deleteAssignedAccount')
   Future<dynamic> deleteAssignedAccount({
-       @Query('RequestId') required String? RequestId,
-       @Query('AssignedAcctId') required int? AssignedAcctId,
+    @Query('RequestId') required String? RequestId,
+    @Query('AssignedAcctId') required int? AssignedAcctId,
   });
 
-     @POST('Operation/editAssignedAccount')
+  @POST('Operation/editAssignedAccount')
   Future<dynamic> editAssignedAccount({
     @Body() required AssignedAccountToEditData? assignedAccount,
   });
@@ -199,15 +203,15 @@ abstract class RemoteApi {
   Future<dynamic> getOtherBankAccountToEdit({
     @Query('RequestId') required String? RequestId,
   });
-    @POST('Operation/addOtherBankAccount')
+  @POST('Operation/addOtherBankAccount')
   Future<dynamic> addOtherBankAccount({
     @Body() required AddOtherBankAccount? data,
   });
-    @POST('Operation/editOtherBankAccount')
+  @POST('Operation/editOtherBankAccount')
   Future<dynamic> editOtherBankAccount({
     @Body() required AddOtherBankAccount? data,
   });
-    @POST('Operation/deleteOtherBankAccount')
+  @POST('Operation/deleteOtherBankAccount')
   Future<dynamic> deleteOtherBankAccount({
     @Body() required DeleteOtherBankAccount? data,
   });
@@ -217,15 +221,15 @@ abstract class RemoteApi {
     @Query('RequestId') required String? RequestId,
     @Query('RelatedBusinessId') required int? RelatedBusinessId,
   });
-    @POST('Operation/addRelatedBusiness')
+  @POST('Operation/addRelatedBusiness')
   Future<dynamic> addRelatedBusiness({
     @Body() required RelatedBusinessData? data,
   });
-    @POST('Operation/editRelatedBusiness')
+  @POST('Operation/editRelatedBusiness')
   Future<dynamic> editRelatedBusiness({
     @Body() required RelatedBusinessData? data,
   });
-     @POST('Operation/deleteRelatedBusiness')
+  @POST('Operation/deleteRelatedBusiness')
   Future<dynamic> deleteRelatedBusiness({
     @Body() required DeleteRelatedBusiness? data,
   });
@@ -234,10 +238,37 @@ abstract class RemoteApi {
   Future<dynamic> getNextOfKinToEdit(
       {@Query('RequestId') required String? RequestId,
       @Query('ChildId') required int? NextOfKinId});
+  @POST('Operation/addNextOfKin')
+  Future<dynamic> addNextOfKin({
+    @Body() required AddNextOfKin? data,
+  });
+  @POST('Operation/editNextOfKin')
+  Future<dynamic> editNextOfKin({
+    @Body() required AddNextOfKin? data,
+  });
+  @POST('Operation/deleteNextOfKin')
+  Future<dynamic> deleteNextOfKin({
+    @Body() required DeleteNextOfKin? data,
+  });
+
   @GET('Operation/getRefereeToEdit')
   Future<dynamic> getRefereeToEdit(
       {@Query('RequestId') required String? RequestId,
       @Query('RefereeId') required int? RefereeId});
+
+  @POST('Operation/addReferee')
+  Future<dynamic> addReferee({
+    @Body() required AddReferee? data,
+  });
+  @POST('Operation/editReferee')
+  Future<dynamic> editReferee({
+    @Body() required AddReferee? data,
+  });
+  @POST('Operation/deleteRefree')
+  Future<dynamic> deleteRefree({
+    @Body() required DeleteReferee? data,
+  });
+
   @GET('Operation/getForeignAccountToEdit')
   Future<dynamic> getForeignAccountToEdit({
     @Query('RequestId') required String? RequestId,
@@ -250,10 +281,16 @@ abstract class RemoteApi {
   Future<dynamic> getStakeHolderToEdit(
       {@Query('RequestId') required String? RequestId,
       @Query('ChildId') required int? StakeHolderId});
+
   @GET('Operation/getDueDiligenceToEdit')
   Future<dynamic> getDueDiligenceToEdit({
     @Query('RequestId') required String? RequestId,
   });
+    @POST('Operation/editDueDiligence')
+  Future<dynamic> editDueDiligence({
+    @Body() required EditDueDiligence? data,
+  });
+
   @GET('Operation/validateRequestForSubmission')
   Future<dynamic> getDocumentAttachedToEdit(
       {@Query('RequestId') required String? RequestId,

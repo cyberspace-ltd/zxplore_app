@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/models/epma_models/delete_refree.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_refree_controller.dart';
+import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
-import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
 class ViewRefreesScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> formIndividualData;
@@ -23,31 +26,36 @@ class _ViewRefreesScreenState extends ConsumerState<ViewRefreesScreen> {
         ViewAccountRequestResponse.fromMap(widget.formIndividualData);
     final sectionData = requestData?.data?.referees ?? [];
 
-    return BaseFormScreen(
-        title: 'Referees',
-        data: _flattenData(widget.formIndividualData),
-        showEdit: sectionData.isNotEmpty,
-        onTapEdit: () {
-          // to navigate to edit this section
-        },
-        onTapAdd: () {
-          // rroute to add new item page
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: sectionData.isNotEmpty
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: sectionData.length,
-                  itemBuilder: (BuildContext context, index) {
-                    return Item(
-                      data: sectionData[index],
-                      subRequestId: sectionData[index].refereeId,
-                      requestId: requestData?.data?.reqId,
-                    );
-                  })
-              : EmptyViewWidget(),
-        ));
+    return ZxploreProgress(
+      inAsyncCall: ref.watch(editRefereeControllerProvider).isLoading||
+    ref.watch(viewRequestControllerProvider).isLoading
+      ,
+      child: BaseFormScreen(
+          title: 'Referees',
+          data: _flattenData(widget.formIndividualData),
+          showEdit:false ,//sectionData.isNotEmpty,
+          onTapEdit: () {
+            // to navigate to edit this section
+          },
+          onTapAdd: () {
+            // rroute to add new item page
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: sectionData.isNotEmpty
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: sectionData.length,
+                    itemBuilder: (BuildContext context, index) {
+                      return Item(
+                        data: sectionData[index],
+                        subRequestId: sectionData[index].refereeId,
+                        requestId: requestData?.data?.reqId,
+                      );
+                    })
+                : EmptyViewWidget(),
+          )),
+    );
   }
 
   Map<String, String> _flattenData(Map<String, dynamic> data) {
@@ -65,7 +73,7 @@ class _ViewRefreesScreenState extends ConsumerState<ViewRefreesScreen> {
   }
 }
 
-class Item extends StatelessWidget {
+class Item extends ConsumerWidget {
   const Item(
       {super.key,
       this.data,
@@ -76,30 +84,32 @@ class Item extends StatelessWidget {
   final int? subRequestId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     return FoldableItem(
       name: 'Name: ${data?.accountName ?? ''}',
       number: 'Account No ${data?.accountNo??''}',
       requestId: requestId,
       subRequestId: subRequestId,
-      onPressed: () {},
-      onTapEdit: () {
-        /// navigate to the edit initial data page
+     onTapEdit: () {
+        // to navigate to edit this section
+        ref.read(editRefereeControllerProvider.notifier).getEditData(
+            context,
+            RequestId: data?.reqId ?? '',
+            RefereeId: data?.refereeId);
       },
-      onTapView: () {
-        /// navigate to the view initial data page
-        /// set state to viewing
+      onTapView: () {},
+      onTapDelete: () {
+        ref
+            .read(editRefereeControllerProvider.notifier)
+            .deleteReferee(context,
+                RequestId: data?.reqId ?? '',delData:DeleteReferee(
+                  refereeId: data?.refereeId,
+                  requestId:data?.reqId ,
+                  rowVersion:data?.rowVersion ,
+                )
+                );
       },
       request: data,
     );
-
-    //   Column(
-    //     children: [
-    //   // ViewItem(title: 'Name', value: data?.name??''),
-    //   // ViewItem(title: 'Address', value: data?.address??''),
-    //   // ViewItem(title: 'Account Name', value: data?.accountName??''),
-    //   // ViewItem(title: 'Bankers', value: data?.bankers??''),
-    //   // ViewItem(title: 'Account No', value: data?.accountNo??''),
-    //  ]);
   }
 }
