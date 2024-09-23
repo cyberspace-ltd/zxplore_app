@@ -3,28 +3,28 @@
 
 // To parse this JSON data, do
 //
-//     final getChildToEdit = getChildToEditFromJson(jsonString);
+//     final GetChildToEditResponse = GetChildToEditResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-GetChildToEdit getChildToEditFromJson(String str) => GetChildToEdit.fromJson(json.decode(str));
+GetChildToEditResponse GetChildToEditResponseFromJson(String str) => GetChildToEditResponse.fromJson(json.decode(str));
 
-String getChildToEditToJson(GetChildToEdit data) => json.encode(data.toJson());
+String GetChildToEditResponseToJson(GetChildToEditResponse data) => json.encode(data.toJson());
 
-class GetChildToEdit {
+class GetChildToEditResponse {
     int? code;
     bool? status;
     String? message;
     ChildData? data;
 
-    GetChildToEdit({
+    GetChildToEditResponse({
          this.code,
          this.status,
          this.message,
          this.data,
     });
 
-    factory GetChildToEdit.fromJson(Map<String, dynamic> json) => GetChildToEdit(
+    factory GetChildToEditResponse.fromJson(Map<String, dynamic> json) => GetChildToEditResponse(
         code: json["code"],
         status: json["status"],
         message: json["message"],

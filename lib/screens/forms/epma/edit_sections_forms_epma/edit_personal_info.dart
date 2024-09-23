@@ -596,7 +596,7 @@ class _PersonalInfoEditSscreenState
                     },
                   ),
                   const SizedBox(height: 16),
-                  CustomTextFormField(
+                  CustomTextFormField( 
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'DOB');
                     },
@@ -2475,12 +2475,12 @@ class _PersonalInfoEditSscreenState
                           return;
                         }
                         if (dateExpire == null) {
-                          zXFlushBar(context, "ID expiry date id required");
+                          zXFlushBar(context, "ID expiry date is required");
                           return;
                         }
       
                         if (datedIssued == null) {
-                          zXFlushBar(context, "ID issued date id required");
+                          zXFlushBar(context, "ID issued date is required");
                           return;
                         }
                         editAccountRequest(context);

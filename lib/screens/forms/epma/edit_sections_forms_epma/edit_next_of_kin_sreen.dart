@@ -142,7 +142,7 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
 
                     gapH16,
                        Text(
-                      '',
+                      'Gender',
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: Theme.of(context)

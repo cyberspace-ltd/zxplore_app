@@ -17,7 +17,7 @@ class _RemoteApi implements RemoteApi {
 
   final Dio _dio;
 
-  String? baseUrl;      
+  String? baseUrl;
 
   final ParseErrorLogger? errorLogger;
 
