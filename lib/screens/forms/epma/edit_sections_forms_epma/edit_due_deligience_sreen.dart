@@ -7,10 +7,12 @@ import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
 import 'package:zxplore_app/models/epma_models/get_due_delligience_to_edit.dart';
 import 'package:zxplore_app/models/epma_models/meta/fatca_status_response.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_duedelligience_controller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/meta/fatca_status.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edit_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_due_deligience_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
@@ -54,7 +56,8 @@ class _EditDueDilligienceScreenState extends ConsumerState<EditDueDilligienceScr
       ref.watch(editDueDilligienceControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Due Dilligience',
-        widgetToGoOnCancel: Container(),
+        widgetToGoOnCancel: ViewDueDilligience(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),),
+
         onCancel: (){},
         data: {},
         child:  SingleChildScrollView(

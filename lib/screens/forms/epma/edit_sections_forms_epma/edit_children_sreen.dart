@@ -8,6 +8,7 @@ import 'package:zxplore_app/models/epma_models/get_child_to_edite_response.dart'
 import 'package:zxplore_app/models/epma_models/meta/country_response.dart';
 import 'package:zxplore_app/models/epma_models/meta/gender_response.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_child_controller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/meta/countries.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
 import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
@@ -15,6 +16,7 @@ import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edi
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_children_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
@@ -127,7 +129,9 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Child Details',
-        widgetToGoOnCancel: Container(),
+        // widgetToGoOnCancel: Container(),
+        widgetToGoOnCancel: ViewChildrenScreen(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),),
+
         onCancel: () {},
         data: {},
         child: SingleChildScrollView(

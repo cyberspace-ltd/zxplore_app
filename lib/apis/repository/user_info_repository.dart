@@ -1,15 +1,15 @@
- 
-
-import 'package:zxplore_app/models/delete_child.dart';
+ import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/delete_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
@@ -58,6 +58,10 @@ abstract class  UserInfoRepository {
    Future<dynamic> deleteChild({required DeleteChild? delchild });
 
    Future<dynamic> getStakeHolderToEdit({required String? RequestId,required int? StakeHolderId });
+   Future<dynamic> editStakeHolder({required AddStakeholder? holder });
+   Future<dynamic> addStakeHolder({required AddStakeholder? holder });
+   Future<dynamic> deleteStakeHolder({required DeleteStakeHolder? holder });
+
    Future<dynamic> getDocumentAttachedToEdit({required String? RequestId,required int? DocumentsAttachedId });
    Future<dynamic> getAssignedAccountToEdit({required String? RequestId,required int? AssignedAcctId });
    Future<dynamic> deleteAssignedAccount({required String? RequestId,required int? AssignedAcctId });

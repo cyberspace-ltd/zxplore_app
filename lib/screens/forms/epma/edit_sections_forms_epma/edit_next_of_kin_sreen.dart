@@ -7,6 +7,7 @@ import 'package:zxplore_app/models/epma_models/get_next_of_kin_to_edit.dart';
 import 'package:zxplore_app/models/epma_models/meta/gender_response.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_next_of_kin_controller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edit_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_refree_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_next_of_kin_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
@@ -96,7 +98,9 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
       ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Next Of Kin',
-        widgetToGoOnCancel: Container(),
+        // widgetToGoOnCancel: Container(),
+        widgetToGoOnCancel: ViewNextOfKinScreen(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),),
+
         onCancel: (){},
         data: {}, 
         child:     SingleChildScrollView(

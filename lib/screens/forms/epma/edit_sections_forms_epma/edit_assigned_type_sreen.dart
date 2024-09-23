@@ -6,10 +6,12 @@ import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/meta/account_series_response.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_assigned_account_controller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/meta/get_account_series.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edit_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_assigned_type_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
@@ -89,7 +91,7 @@ class _EditAssignedAccoutState extends ConsumerState<EditAssignedAccout> {
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Assigned Accounts',
-        widgetToGoOnCancel: Container(),
+        widgetToGoOnCancel: ViewAssignedAccountScreen(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),),
         onCancel: () {},
         data: {},
         child: SingleChildScrollView(

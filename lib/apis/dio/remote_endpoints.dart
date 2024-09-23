@@ -7,10 +7,12 @@ import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/delete_refree.dart';
+import 'package:zxplore_app/models/epma_models/delete_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
 import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
@@ -242,7 +244,7 @@ abstract class RemoteApi {
       {@Query('RequestId') required String? RequestId,
       @Query('ChildId') required int? NextOfKinId});
 
-       @POST('Operation/addChild')
+  @POST('Operation/addChild')
   Future<dynamic> addChild({
     @Body() required AddChild? data,
   });
@@ -309,11 +311,25 @@ abstract class RemoteApi {
       {@Query('RequestId') required String? RequestId,
       @Query('ChildId') required int? StakeHolderId});
 
+  @POST('Operation/addStakeHolder')
+  Future<dynamic> addStakeHolder({
+    @Body() required AddStakeholder? data,
+  });
+  @POST('Operation/editStakeHolder')
+  Future<dynamic> editStakeHolder({
+    @Body() required AddStakeholder? data,
+  });
+
+  @POST('Operation/deleteStakeHolder')
+  Future<dynamic> deleteStakeHolder({
+    @Body() required DeleteStakeHolder? data,
+  });
+
   @GET('Operation/getDueDiligenceToEdit')
   Future<dynamic> getDueDiligenceToEdit({
     @Query('RequestId') required String? RequestId,
   });
-    @POST('Operation/editDueDiligence')
+  @POST('Operation/editDueDiligence')
   Future<dynamic> editDueDiligence({
     @Body() required EditDueDiligence? data,
   });

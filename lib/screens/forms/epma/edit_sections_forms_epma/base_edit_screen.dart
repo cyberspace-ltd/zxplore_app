@@ -28,11 +28,13 @@ class BaseEditForm extends ConsumerWidget {
         leading: IconButton(
             onPressed: onCancel ??
                 () {
+                  widgetToGoOnCancel!=null?
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) => widgetToGoOnCancel),
-                  );
+                  ):Navigator.pop(context);
+
                 },
             icon: Icon(
               Icons.close,
