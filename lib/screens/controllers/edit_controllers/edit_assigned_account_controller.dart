@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/delete_assigned_acc.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -69,13 +70,11 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
       final requestResponse = await repo.editAssignedAccount(data: data);
 
       if (requestResponse['status'] == true) {
-        final result =
-            GetAssignedAccountToEditResponse.fromJson(requestResponse);
+          final result = GenericResponse.fromMap(requestResponse);
+        state = AsyncValue.data(result);
 
-        // refresh the latest viewed item.
-        ref
-            .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.data?.reqId ?? '');
+          // refresh the latest viewed item.
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(data?.reqId??'');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,

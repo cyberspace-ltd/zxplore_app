@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_edit_personal_details_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -65,11 +66,11 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
           await repo.editPersonalDetail(editPersonalDetails: editPersonalDetails);
 
       if (requestResponse['status'] == true) {
-        final result = PersonalDetailsResponse.fromMap(requestResponse);
+        final result = GenericResponse.fromMap(requestResponse);
         state = AsyncValue.data(result);
 
           // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.data?.reqId??'');
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(editPersonalDetails?.requestId??'');
           Navigator.pushReplacement(
           context,
           MaterialPageRoute(

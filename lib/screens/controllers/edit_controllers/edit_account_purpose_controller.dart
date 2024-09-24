@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/edit_account_purpose.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_account_purpose_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -69,11 +70,11 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
       final requestResponse = await repo.editAccountPurpose(data: data);
 
       if (requestResponse['status'] == true) {
-        final result =
-            GetAccountPurposeToEditResponse.fromJson(requestResponse);
-     
-        // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.data.reqId);
+        final result = GenericResponse.fromMap(requestResponse);
+        state = AsyncValue.data(result);
+
+          // refresh the latest viewed item.
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(data?.requestId??'');
         state = AsyncValue.data(result);
           Navigator.pushReplacement(
           context,
