@@ -58,117 +58,66 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
  final _personalInfoEditFormKey = GlobalKey<FormState>();
 
   // Individual TextEditingControllers
-  final TextEditingController _surnameController = TextEditingController();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _otherNamesController = TextEditingController();
-  final TextEditingController _middleNameController = TextEditingController();
-  final TextEditingController _birthDateController = TextEditingController();
-  final TextEditingController _birthPlaceController = TextEditingController();
-  final TextEditingController _identificationTypeIdController =
+  final _surnameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _otherNamesController = TextEditingController();
+  final _middleNameController = TextEditingController();
+  final _birthDateController = TextEditingController();
+  final _birthPlaceController = TextEditingController();
+  final _identificationTypeIdController =
       TextEditingController();
-  final TextEditingController _identificationNoController =
+  final _identificationNoController =
       TextEditingController();
-  final TextEditingController _idCountryCodeController =
+  final _idCountryCodeController =
       TextEditingController();
-  final TextEditingController _idIssueAuthorityController =
+  final _idIssueAuthorityController =
       TextEditingController();
-  final TextEditingController _idIssueDateController = TextEditingController();
-  final TextEditingController _idExpiryDateController = TextEditingController();
-  final TextEditingController _niaVerificationNoController =
-      TextEditingController();
-  final TextEditingController _tinController = TextEditingController();
+  final _idIssueDateController = TextEditingController();
+  final _idExpiryDateController = TextEditingController();
+  final _niaVerificationNoController = TextEditingController();
+  final _permitIssueDateController = TextEditingController();
+  final _permitExpiryDateController = TextEditingController();
 
-  // final TextEditingController _ssnitNoController = TextEditingController();
-  // final TextEditingController _altCitizenshipCodeController =
-  //     TextEditingController();
-
-  final TextEditingController _homeTownController = TextEditingController();
-  final TextEditingController _residencePermitNoController =
+  final _tinController = TextEditingController();
+  final _homeTownController = TextEditingController();
+  final _residencePermitNoController =
       TextEditingController();
-  final TextEditingController _residencePermitPlaceCodeController =
+  final _residencePermitPlaceCodeController =
       TextEditingController();
-        final TextEditingController _emailAddressController = TextEditingController();
-  final TextEditingController _residentialAddressController =
+        final _emailAddressController = TextEditingController();
+  final _residentialAddressController =
       TextEditingController();
-  final TextEditingController _residentialAddress2Controller =
+  final _residentialAddress2Controller =
       TextEditingController();
-  final TextEditingController _districtAssemblyAreaController =
+  final _districtAssemblyAreaController =
       TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _permanentResidentialAddressController =
+  final _cityController = TextEditingController();
+  final _permanentResidentialAddressController =
       TextEditingController();
-  final TextEditingController _permanentResidentialCityController =
+  final _permanentResidentialCityController =
       TextEditingController();
-  final TextEditingController _permanentResidentialCountryCodeController =
+  final _permanentResidentialCountryCodeController =
       TextEditingController();
-        final TextEditingController _gpsAddressController = TextEditingController();
-  final TextEditingController _genderCodeController = TextEditingController();
-  final TextEditingController _regionCodeController = TextEditingController();
+        final _gpsAddressController = TextEditingController();
+  final _genderCodeController = TextEditingController();
+  final _regionCodeController = TextEditingController();
+  final _motherMaidenNameController = TextEditingController();
+  final residencePermitExpiryDateController = TextEditingController();
+  final residencePermitIssueDateController = TextEditingController();
+  final occupationController = TextEditingController();
+  final jobTitleController = TextEditingController();
+  final businessPhoneNoController = TextEditingController();
+  final _countryOrigCodeController = TextEditingController();
  
 
-  // final TextEditingController _ssnitNoController = TextEditingController();
-  // final TextEditingController _altCitizenshipCodeController =
-  //     TextEditingController();
-
-  // final TextEditingController _permitIssueDateController =
-  //     TextEditingController();
-  // final TextEditingController _permitExpiryDateController =
-  //     TextEditingController();
-  // final TextEditingController _iddCodeController = TextEditingController();
-  // final TextEditingController _telNoController = TextEditingController();
-  // final TextEditingController _mobileNoController = TextEditingController();
-
-  // final TextEditingController _mailingAddressController =
-  //     TextEditingController();
-  // final TextEditingController _motherMaidenNameController =
-  //     TextEditingController();
-
-  // final TextEditingController _spouseNameController = TextEditingController();
-  // final TextEditingController _spouseOccupationController =
-  //     TextEditingController();
-  // final TextEditingController _timeWithEmployerController =
-  //     TextEditingController();
-  // final TextEditingController _employerAddressController =
-  //     TextEditingController();
-  // final TextEditingController _employerEmailController =
-  //     TextEditingController();
-  // final TextEditingController _employerTelController = TextEditingController();
-  // final TextEditingController _monthlyIncomeController =
-  //     TextEditingController();
-  // final TextEditingController _accountOwnershipOtherController =
-  //     TextEditingController();
-  // final TextEditingController _pepReasonController = TextEditingController();
-
- // final TextEditingController _maritalStatusController =
-  //     TextEditingController();
-  // final TextEditingController _businessNatureIdController =
-  //     TextEditingController();
-  // final TextEditingController _subBusinessNatureIdController =
-  //     TextEditingController();
-  // final TextEditingController _employmentTypeCodeController =
-  //     TextEditingController();
-  // final TextEditingController _citizenshipCodeController =
-  //     TextEditingController();
-  // final TextEditingController _employerNameController = TextEditingController();
-  // final TextEditingController _customerClassificationIdController =
-  //     TextEditingController();
-    // final TextEditingController _countryOrigCodeController =
-  //     TextEditingController();
-
   bool hasPermanentResidence = false; //1
-  bool accountOwnership = false; //2
-  bool customerResidentInGhana = false; //3
-  bool isPhysicallyChallenged = false; //4
-  bool customerIsPEP = false; //5
-  bool setupIbank = false; //6
-  bool setupZPrompt = false; //7
-  bool setupStatementViaEmail = false; //8
-  bool setupEmailIndemnity = false; //9
-  bool isPhysicallyChallanged = false; //10
-  bool isNewRequest = false; //11
-  bool? customerIsPep = false; //12
-
-  // DateTime? _selectedDate;
+  bool setupEmailIndemnity = false; //2/
+  bool setupStatementViaEmail = false; //3
+  bool setupZPrompt = false; //4
+  bool isDirector = false; //5
+  bool isPrincipalOfficer = false; //6
+  bool isSignatory = false; //7
+  bool isNewRequest = false; //8
 
   GendersDatum? selectedGenderItem;
   String? selectedGenderCode;
@@ -205,9 +154,15 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
   IdentificationTypesDatum? selectedIdType;
   int? selectedIdentificationTypeCode;
   String? selectedIdentificationTypeName;
+
   CountryDatum? selectedCountry;
   String? selectedCountryCode;
   String? selectedCountryName;
+
+ CountryDatum? selectedPaCountry;
+  String? selectedPaCountryCode;
+  String? selectedPaCountryName;
+
   String? selectedCitizenshipCode;
 
   String? dob;
@@ -255,11 +210,15 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         _permanentResidentialAddressController.text = "${userData?.permanentResidentialAddress ?? ''}";
         _permanentResidentialCityController.text = "${userData?.permanentResidentialCity ?? ''}";
         _permanentResidentialCountryCodeController.text = "${userData?.permanentResidentialCountryCode ?? ''}";
-               _gpsAddressController.text = "${userData?.gpsAddress ?? ''}";
+        _gpsAddressController.text = "${userData?.gpsAddress ?? ''}";
+       //Booleans
         hasPermanentResidence = userData?.hasPermanentResidence ?? false;
         setupZPrompt = userData?.setupZPrompt ?? false;
         setupStatementViaEmail = userData?.setupStatementViaEmail ?? false;
         setupEmailIndemnity = userData?.setupEmailIndemnity ?? false;
+        isDirector = userData?.isDirector ?? false;
+        isPrincipalOfficer = userData?.isPrincipalOfficer ?? false;
+        isSignatory = userData?.isSignatory ?? false;
         isNewRequest = userData?.isNewRequest ?? false;
         
       } catch (e) {}
@@ -294,6 +253,9 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
     _districtAssemblyAreaController.dispose();
     _permanentResidentialCountryCodeController.dispose();
     _gpsAddressController.dispose();
+    _countryOrigCodeController.dispose();
+    jobTitleController.dispose();
+    occupationController.dispose();
 
     super.dispose();
   }
@@ -306,32 +268,26 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
           hasPermanentResidence = value ?? false;
           break;
         case 2:
-          accountOwnership = value ?? false;
-          break;
-        case 3:
-          customerResidentInGhana = value ?? false;
-          break;
-        case 4:
-          isPhysicallyChallenged = value ?? false;
-          break;
-        case 5:
-          customerIsPEP = value ?? false;
-          break;
-        case 6:
-          setupIbank = value ?? false;
-          break;
-        case 7:
-          setupZPrompt = value ?? false;
-          break;
-        case 8:
-          setupStatementViaEmail = value ?? false;
-          break;
-        case 9:
           setupEmailIndemnity = value ?? false;
           break;
-        case 11:
+        case 3:
+          setupStatementViaEmail = value ?? false;
+          break;
+        case 4:
+          setupZPrompt = value ?? false;
+          break;
+        case 5:
+          isDirector = value ?? false;
+          break;
+        case 6:
+          isPrincipalOfficer = value ?? false;
+          break;
+        case 7:
+          isSignatory = value ?? false;
+          break;
+        case 8:
           isNewRequest = value ?? false;
-       
+          break;
       }
     });
   }
@@ -344,19 +300,19 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
       requestId:initialData?.reqId ,
       rimNo: initialData?.rimNo,
         stakeHolderId: initialData?.stakeHolderId,
+        hasPermanentResidence: hasPermanentResidence,
         setupEmailIndemnity: setupEmailIndemnity,
         setupStatementViaEmail: setupStatementViaEmail,
         setupZPrompt: setupZPrompt,
+        isDirector: isDirector,
+        isPrincipalOfficer:isPrincipalOfficer ,
+        isSignatory: isSignatory,
         residentialAddress2: _residentialAddress2Controller.text,
         residentialAddress: _residentialAddressController.text,
         districtAssemblyArea: selectedRegionName,
-        // accountOwnershipOther: ,
-        hasPermanentResidence: hasPermanentResidence,
-        permanentResidentialAddress:
-            _permanentResidentialAddressController.text,
+        permanentResidentialAddress:  _permanentResidentialAddressController.text,
         permanentResidentialCity: _permanentResidentialCityController.text,
-        permanentResidentialCountryCode:
-            _permanentResidentialCountryCodeController.text,
+        permanentResidentialCountryCode:selectedPaCountryCode,
         residencePermitNo: _residencePermitNoController.text,
         residencePermitPlaceCode: _residencePermitPlaceCodeController.text,
         itemStage: initialData?.itemStage ?? '',
@@ -383,17 +339,14 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         birthDate: stringToDate(dob ?? ''),
         city: _cityController.text,
         birthPlace: _birthPlaceController.text,
-        businessPhoneNo: ,
-        countryCode: ,
-        isDirector:  ,
-        isPrincipalOfficer: ,
-        isSignatory: ,
-        jobTitle: ,
-        motherName: ,
-        occupation: ,
+        businessPhoneNo: businessPhoneNoController.text,
+        countryCode:selectedCountryCode ,
+        jobTitle:jobTitleController.text ,
+        motherName: _motherMaidenNameController.text,
+        occupation:occupationController.text ,
         relAuthCode: initialData.relAuthCode,
-        residencePermitExpiryDate: ,
-        residencePermitIssueDate: ,
+        residencePermitExpiryDate: stringToDate(residencePermitExpiryDateController.text),
+        residencePermitIssueDate: stringToDate(residencePermitIssueDateController.text),
         
 
     );
@@ -407,13 +360,13 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
   Widget build(BuildContext context) {
     ///check  for  errors here
     ref.listen<AsyncValue>(
-      editPersonalDetailsControllerProvider,
+      editStakeHoldersControllerProvider,
       (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
     );
 
     return ZxploreProgress(
       inAsyncCall:ref
-        .watch(editPersonalDetailsControllerProvider).isLoading ||
+        .watch(editStakeHoldersControllerProvider).isLoading ||
      ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Stake holder Information',
@@ -439,7 +392,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                 children: [
                   gapH24,
                   Text(
-                    'Personal',
+                    'Personal Data',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -461,7 +414,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+               gapH16,
                   CustomTextFormField(
                     title: 'Last name',
                     fillColor: Colors.transparent,
@@ -476,7 +429,23 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+               gapH16,
+                  CustomTextFormField(
+                    title: 'Middle name',
+                    fillColor: Colors.transparent,
+                    controller: _middleNameController,
+                    hint: 'Enter Middle name',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
+                      return null;
+                    },
+                  ),
+                  
+               gapH16,
                   CustomTextFormField(
                     title: 'Other name',
                     fillColor: Colors.transparent,
@@ -485,17 +454,17 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'other name is  required';
-                      }
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+               gapH16,
                   CustomTextFormField(
                     title: 'Maiden name',
                     fillColor: Colors.transparent,
-                    controller: _maidenNameController,
+                    controller: _middleNameController,
                     hint: 'Maiden name',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
@@ -506,7 +475,22 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+               gapH16,
+                  CustomTextFormField(
+                    title: 'Mother\'s name',
+                    fillColor: Colors.transparent,
+                    controller: _motherMaidenNameController,
+                    hint: 'Enter Mother\'s name',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'other name is  required';
+                      }
+                      return null;
+                    },
+                  ),
+               gapH16,
                   CustomTextFormField( 
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'DOB');
@@ -533,7 +517,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+               gapH16,
                   CustomTextFormField(
                     title: "Place of birth",
                     fillColor: Colors.transparent,
@@ -548,23 +532,9 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
-                  // const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: "Mother\'s maidenname",
-                    fillColor: Colors.transparent,
-                    controller: _motherMaidenNameController,
-                    hint: 'Enter Mother\'s maidenname',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Mother\'s maidenname is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
+                 
+              
+               gapH16,
                   Text(
                     'Gender',
                     overflow: TextOverflow.fade,
@@ -679,7 +649,150 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                           );
                     },
                   ),
-                  const SizedBox(height: 16),
+               gapH16,
+
+                           gapH16,
+                  const Divider(
+                    height: 16,
+                    color: Color.fromARGB(255, 169, 189, 201),
+                    thickness: 0.5,
+                  ),
+                  const SizedBox(height: 8),
+                  CustomTextFormField(
+                    title: 'Business Phone Number',
+                    fillColor: Colors.transparent,
+                    controller: businessPhoneNoController,
+                    hint: 'Enter busines phone number',
+                    inputType: TextInputType.phone,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Busines phone number is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                
+               gapH16,
+                  CustomTextFormField(
+                    title: 'Email Address',
+                    fillColor: Colors.transparent,
+                    controller: _emailAddressController,
+                    hint: 'Enter email address',
+                    inputType: TextInputType.emailAddress,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Email is  required';
+                      }
+                      return null;
+                    },
+                  ),
+               gapH16,
+                  CustomTextFormField(
+                    title: 'Residential Address',
+                    fillColor: Colors.transparent,
+                    controller: _residentialAddressController,
+                    hint: 'Enter adress',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Address is  required';
+                      }
+                      return null;
+                    },
+                  ),
+                  gapH16,
+                  CustomTextFormField(
+                    title: 'Residential Address 2',
+                    fillColor: Colors.transparent,
+                    controller: _residentialAddress2Controller,
+                    hint: 'Enter adress',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                    
+                      return null;
+                    },
+                  ),
+                  
+               gapH16,
+                  CustomTextFormField(
+                    title: 'District/Area',
+                    fillColor: Colors.transparent,
+                    controller: _districtAssemblyAreaController,
+                    hint: 'Enter district',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'Address is  required';
+                      // }
+                      return null;
+                    },
+                  ),
+      
+               gapH16,
+                  CustomTextFormField(
+                    title: 'City',
+                    fillColor: Colors.transparent,
+                    controller: _cityController,
+                    hint: 'Enter city',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'City is  required';
+                      }
+                      return null;
+                    },
+                  ),
+               gapH16,
+                  CustomTextFormField(
+                    title: 'Occupation',
+                    fillColor: Colors.transparent,
+                    controller: occupationController,
+                    hint: 'Enter occupation',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Occupation is  required';
+                      }
+                      return null;
+                    },
+                  ),
+               
+               gapH16,
+                  CustomTextFormField(
+                    title: 'Job Title',
+                    fillColor: Colors.transparent,
+                    controller: jobTitleController,
+                    hint: 'Enter job title',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'Job Title is  required';
+                      }
+                      return null;
+                    },
+                  ),
+               gapH16,
+
+                 CustomTextFormField(
+                    title: 'TIN',
+                    fillColor: Colors.transparent,
+                    controller: _tinController,
+                    hint: 'Enter TIN code',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+               gapH16,
       
                   Text(
                     'Country',
@@ -742,12 +855,6 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                                               newValue?.countryCode;
                                           _idCountryCodeController.text =
                                               newValue?.countryCode ?? '';
-                                          _altCitizenshipCodeController.text =
-                                              newValue?.countryName ?? '';
-                                          _altCitizenshipCodeController.text =
-                                              newValue?.countryName ?? '';
-                                          _citizenshipCodeController.text =
-                                              newValue?.countryName ?? '';
                                         });
                                       },
                                       buttonStyleData: ButtonStyleData(
@@ -811,7 +918,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                     },
                   ),
       
-                  const SizedBox(height: 16),
+               gapH16,
                   Text(
                     'Identification Types',
                     overflow: TextOverflow.fade,
@@ -821,6 +928,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                         .bodyMedium
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
+                  div,
                   const SizedBox(height: 6),
                   Consumer(
                     builder: (context, ref, child) {
@@ -930,577 +1038,107 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                           );
                     },
                   ),
-                  const SizedBox(height: 16),
-      
-                  /// business Nature
-      
-                  const SizedBox(height: 16),
-                  Text(
-                    'Business Nature',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getBusinessNaturesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<BusinessNaturesDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select nature of business',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                              DropdownMenuItem<
-                                                  BusinessNaturesDatum>>((item) =>
-                                              DropdownMenuItem<
-                                                  BusinessNaturesDatum>(
-                                                value: item,
-                                                child: Text(
-                                                  item.businessNatureName ?? '',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.normal,
-                                                    color: ZxplorePrimaryColor,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ))
-                                          .toList(),
-                                      value: businessNaturesItem,
-                                      onChanged:
-                                          (BusinessNaturesDatum? newValue) {
-                                        // refresh subs
-                                        ref.invalidate(
-                                            getSubBusinessNaturesProvider(
-                                                int.parse(newValue!
-                                                    .businessNatureId!)));
-                                        setState(() {
-                                          /// Set selected item params
-                                          businessNaturesItem = newValue;
-                                          selectedCustomerClassificationsName =
-                                              newValue.businessNatureName;
-                                          selectedBusinessNaturesCode =
-                                              newValue.businessNatureId;
-                                  
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
-                                        ),
-                                      ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty classification'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref
-                                    .invalidate(getIdentificationTypesProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  if (selectedBusinessNaturesCode != null) ...[
-                    /// Sub bus category
-                    Text(
-                      ' Sub  Business  class',
-                      overflow: TextOverflow.fade,
-                      maxLines: 1,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                    ),
-                    const SizedBox(height: 6),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        return ref
-                            .watch(getSubBusinessNaturesProvider(
-                                int.parse(selectedBusinessNaturesCode!)))
-                            .when(
-                              data: (data) => (data != null &&
-                                      data.isNotEmpty == true)
-                                  ? DropdownButtonHideUnderline(
-                                      child:
-                                          DropdownButton2<SubBusinessNatureDatum>(
-                                        isExpanded: true,
-                                        hint: Text(
-                                          'Select class',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.normal,
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        items: data
-                                            .map<
-                                                    DropdownMenuItem<
-                                                        SubBusinessNatureDatum>>(
-                                                (item) => DropdownMenuItem<
-                                                        SubBusinessNatureDatum>(
-                                                      value: item,
-                                                      child: Text(
-                                                        item.subBusinessNatureName ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          color:
-                                                              ZxplorePrimaryColor,
-                                                        ),
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
-                                                      ),
-                                                    ))
-                                            .toList(),
-                                        value: subBusinessNaturesItem,
-                                        onChanged:
-                                            (SubBusinessNatureDatum? newValue) {
-                                          setState(() {
-                                            /// Set selected item params
-                                            subBusinessNaturesItem = newValue;
-                                            subBusinessNaturesName =
-                                                newValue?.subBusinessNatureName;
-                                           
-                                          
-                                          });
-                                        },
-                                        buttonStyleData: ButtonStyleData(
-                                          height: 60,
-                                          // width: 160,
-                                          padding: const EdgeInsets.only(
-                                              left: 0, right: 14),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                            border: Border.all(
-                                              color: ZxplorePrimaryColor,
-                                            ),
-                                          ),
-                                          elevation: 0,
-                                        ),
-                                        iconStyleData: const IconStyleData(
-                                          icon: Icon(
-                                            CupertinoIcons.chevron_down,
-                                          ),
-                                          iconSize: 14,
-                                          iconEnabledColor: ZxplorePrimaryColor,
-                                          iconDisabledColor: Colors.grey,
-                                        ),
-                                        dropdownStyleData: DropdownStyleData(
-                                          maxHeight: 200,
-                                          // width: 200,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                          // offset: const Offset(0, 0),
-                                          scrollbarTheme:
-                                              const ScrollbarThemeData(
-                                            radius: Radius.circular(40),
-                                            thickness:
-                                                WidgetStatePropertyAll<double>(6),
-                                            thumbVisibility:
-                                                WidgetStatePropertyAll<bool>(
-                                                    true),
-                                          ),
-                                        ),
-                                        menuItemStyleData:
-                                            const MenuItemStyleData(
-                                          height: 40,
-                                          padding: EdgeInsets.only(
-                                              left: 14, right: 14),
-                                        ),
-                                      ),
-                                    )
-                                  : Text('Empty   classification'),
-                              error: (e, s) => GestureDetector(
-                                  onTap: () => ref.invalidate(
-                                      getSubBusinessNaturesProvider(int.parse(
-                                          selectedBusinessNaturesCode!))),
-                                  child: const Text(
-                                    'An error occured',
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  )),
-                              loading: () => SizedBox(height: 16.0),
-                            );
-                      },
-                    ),
-                  ],
-      
-                  /// Customer Classification category
-                  const SizedBox(height: 16),
-                  Text(
-                    'Customer Class',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getCustomerClassificationProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<
-                                        CustomerClassificationDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select class',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      CustomerClassificationDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      CustomerClassificationDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.customerClassificationId ??
-                                                          '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: customerClassificationsItem,
-                                      onChanged: (CustomerClassificationDatum?
-                                          newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          customerClassificationsItem = newValue;
-                                          selectedCustomerClassificationsName =
-                                              newValue?.customerClassificationId;
-                                           
-                                              '';
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
-                                        ),
-                                      ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty   classification'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref
-                                    .invalidate(getIdentificationTypesProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-      
-                  /// EmploymentType
-                  Text(
-                    'Employment Type',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getEmploymentTypeProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<EmploymentTypeDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select employment type',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                              DropdownMenuItem<
-                                                  EmploymentTypeDatum>>((item) =>
-                                              DropdownMenuItem<
-                                                  EmploymentTypeDatum>(
-                                                value: item,
-                                                child: Text(
-                                                  item.employmentTypeName ?? '',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.normal,
-                                                    color: ZxplorePrimaryColor,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ))
-                                          .toList(),
-                                      value: employmentTypesItem,
-                                      onChanged: (EmploymentTypeDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          employmentTypesItem = newValue;
-                                          selectedEmploymentTypessName =
-                                              newValue?.employmentTypeName;
-                                          selectedEmploymentTypesCode =
-                                              newValue?.employmentTypeCode;
-                                         
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
-                                        ),
-                                      ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty   employment types'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () =>
-                                    ref.invalidate(getEmploymentTypeProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  if (selectedEmploymentTypessName == "EMPLOYED") ...[
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: "Employer Phone",
-                      fillColor: Colors.transparent,
-                      controller: _employerTelController,
-                      hint: 'Enter employer\'s phone',
-                      inputType: TextInputType.phone,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return 'Employer phone is required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: "Employer Email",
-                      fillColor: Colors.transparent,
-                      controller: _employerEmailController,
-                      hint: 'Enter employer\'s Email',
-                      inputType: TextInputType.emailAddress,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return 'Employer email  required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: "Employer Address",
-                      fillColor: Colors.transparent,
-                      controller: _employerAddressController,
-                      hint: 'Enter employer address',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return 'Employer address  required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: "Time with Employer",
-                      fillColor: Colors.transparent,
-                      controller: _timeWithEmployerController,
-                      hint: 'How long have you worked',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        // if (value.toString().isEmpty) {
-                        //   return 'Employer email  required';
-                        // }
-                        return null;
-                      },
-                    ),
-                  ],
-      
-                  const SizedBox(height: 16),
-      
+               gapH16,
+           gapH16,
                   CustomTextFormField(
-                    title: "Monthly Income",
+                    title: 'ID Issuer',
                     fillColor: Colors.transparent,
-                    controller: _monthlyIncomeController,
-                    hint: 'How long have you worked',
-                    inputType: TextInputType.number,
+                    controller: _idIssueAuthorityController,
+                    hint: 'Enter ID Issuer',
+                    inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Monthly Income is required';
+                        return 'ID Issuer is  required';
                       }
                       return null;
                     },
                   ),
+               gapH16,
+                  CustomTextFormField(
+                    title: 'ID Number',
+                    fillColor: Colors.transparent,
+                    controller: _identificationNoController,
+                    hint: 'Enter ID Number',
+                    inputType: TextInputType.number,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'ID Number is  required';
+                      }
+                      return null;
+                    },
+                  ),
+               gapH16,
+                  CustomTextFormField(
+                    onTap: () {
+                      _showDatePicker(context, dateCategory: 'ISSUE');
+                    },
+                    title: 'Issue Date',
+                    showCursor: false,
+                    readOnly: true,
+                    fillColor: Colors.transparent,
+                    controller: _idIssueDateController,
+                    showDropDownSuffixIcon: true,
+                    hint: 'ID Issue Date',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'ID Issue is required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
+                      }
+                      return null;
+                    },
+                  ),
+               gapH16,
+                  CustomTextFormField(
+                    onTap: () {
+                      _showDatePicker(context, dateCategory: 'EXPIRY');
+                    },
+                    title: 'Expiry Date',
+                    readOnly: true,
+                    showDropDownSuffixIcon: true,
+                    showCursor: false,
+                    suffixIcon: Icon(
+                      Icons.calendar_today_rounded,
+                      color: ZxplorePrimaryColor.withOpacity(.5),
+                    ),
+                    fillColor: Colors.transparent,
+                    controller: _idExpiryDateController,
+                    hint: 'ID Expiry Date',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'ID Expiry is required';
+                      } else if (value == 'dd-mm-yyyy') {
+                        return 'Enter a valid date';
+                      }
+                      return null;
+                    },
+                  ),
+               gapH16,
+                  CustomTextFormField(
+                    title: 'NIA Number',
+                    fillColor: Colors.transparent,
+                    controller: _niaVerificationNoController,
+                    hint: 'Enter NIA number',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
+                      return null;
+                    },
+                  ),
+               gapH16,
       
                   /// Region
                   Text(
@@ -1617,7 +1255,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                           );
                     },
                   ),
-                  const SizedBox(height: 16),
+               gapH16,
       
                   CheckboxListTile(
                     title: Text('Has Permanent Residence'),
@@ -1640,7 +1278,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
+                 gapH16,
                     CustomTextFormField(
                       title: "Permanet Residential Address City",
                       fillColor: Colors.transparent,
@@ -1655,96 +1293,9 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: "Permanet Address Country Code",
-                      fillColor: Colors.transparent,
-                      controller: _permanentResidentialCityController,
-                      hint: 'GH,NG,TG,CM....',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        // if (value.toString().isEmpty) {
-                        //   return 'permanet address is required';
-                        // }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: " Residence Permit PlaceCode",
-                      fillColor: Colors.transparent,
-                      controller: _residencePermitPlaceCodeController,
-                      hint: 'Enter Place code',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        // if (value.toString().isEmpty) {
-                        //   return 'permanet address is required';
-                        // }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      onTap: () {
-                        _showDatePicker(context, dateCategory: 'PERMITISSUE');
-                      },
-                      title: 'Permit Issue Date',
-                      readOnly: true,
-                      showCursor: false,
-                      suffixIcon: Icon(
-                        Icons.calendar_today_rounded,
-                        color: ZxplorePrimaryColor.withOpacity(.5),
-                      ),
-                      showDropDownSuffixIcon: true,
-                      fillColor: Colors.transparent,
-                      controller: _permitIssueDateController,
-                      hint: 'Selected permit issue date ',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Permit Issue Date required';
-                        } else if (value == 'dd-mm-yyyy') {
-                          return 'Enter a valid date';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      onTap: () {
-                        _showDatePicker(context, dateCategory: 'PERMITEXP');
-                      },
-                      title: 'Permit Exp. Date',
-                      readOnly: true,
-                      showCursor: false,
-                      suffixIcon: Icon(
-                        Icons.calendar_today_rounded,
-                        color: ZxplorePrimaryColor.withOpacity(.5),
-                      ),
-                      showDropDownSuffixIcon: true,
-                      fillColor: Colors.transparent,
-                      controller: _permitExpiryDateController,
-                      hint: 'Selected permit exp. Date ',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Permit exp. date required';
-                        } else if (value == 'dd-mm-yyyy') {
-                          return 'Enter a valid date';
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
-                  const SizedBox(height: 16),
-      
-                  /// MaritalStatus
-                  Text(
-                    'Marital Status',
+                 gapH16,
+                      Text(
+                    'Permanent Address Country',
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     style: Theme.of(context)
@@ -1755,14 +1306,14 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                   const SizedBox(height: 6),
                   Consumer(
                     builder: (context, ref, child) {
-                      return ref.watch(getMaritalStatusProvider).when(
+                      return ref.watch(getCountriesProvider).when(
                             data: (data) => (data != null &&
                                     data.isNotEmpty == true)
                                 ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<MaritalStatusDatum>(
+                                    child: DropdownButton2<CountryDatum>(
                                       isExpanded: true,
                                       hint: Text(
-                                        'Select status',
+                                        'Select permanent address country',
                                         style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.normal,
@@ -1771,284 +1322,12 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       items: data
-                                          .map<
-                                              DropdownMenuItem<
-                                                  MaritalStatusDatum>>((item) =>
-                                              DropdownMenuItem<
-                                                  MaritalStatusDatum>(
-                                                value: item,
-                                                child: Text(
-                                                  item.maritalStatusDesc ?? '',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.normal,
-                                                    color: ZxplorePrimaryColor,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ))
-                                          .toList(),
-                                      value: maritalStatusItem,
-                                      onChanged: (MaritalStatusDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          maritalStatusItem = newValue;
-                                          maritalStatusName =
-                                              newValue?.maritalStatusDesc;
-                                          _maritalStatusController.text =
-                                              newValue?.maritalStatusDesc ?? '';
-                                          maritalStatusCode =
-                                              newValue?.maritalStatusCode;
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
-                                        ),
-                                      ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty regions'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () =>
-                                    ref.invalidate(getMaritalStatusProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  if (maritalStatusName != null &&
-                      maritalStatusName == "Married") ...[
-                    CustomTextFormField(
-                      title: 'Spouse Name',
-                      fillColor: Colors.transparent,
-                      controller: _spouseNameController,
-                      hint: 'Spouse Name',
-                      inputType: TextInputType.name,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return 'Spouse Name is required';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: 'Spouse Occupation',
-                      fillColor: Colors.transparent,
-                      controller: _spouseOccupationController,
-                      hint: 'Spouse occupation',
-                      inputType: TextInputType.name,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value.toString().isEmpty) {
-                          return 'Spouse occupation is required';
-                        }
-                        return null;
-                      },
-                    ),
-                  ],
-      
-                  const SizedBox(height: 16),
-                  const Divider(
-                    height: 16,
-                    color: Color.fromARGB(255, 169, 189, 201),
-                    thickness: 0.5,
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextFormField(
-                    title: 'Telephone Number',
-                    fillColor: Colors.transparent,
-                    controller: _telNoController,
-                    hint: 'Enter telephone number',
-                    inputType: TextInputType.phone,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Telephone Number is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'Mobile Number',
-                    fillColor: Colors.transparent,
-                    controller: _mobileNoController,
-                    hint: 'Enter mobile number',
-                    inputType: TextInputType.phone,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'other name is  required';
-                      // }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'Email Address',
-                    fillColor: Colors.transparent,
-                    controller: _emailAddressController,
-                    hint: 'Enter email address',
-                    inputType: TextInputType.emailAddress,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Email is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'Address',
-                    fillColor: Colors.transparent,
-                    controller: _residentialAddressController,
-                    hint: 'Enter adress',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Address is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomTextFormField(
-                    title: "Home Town",
-                    fillColor: Colors.transparent,
-                    controller: _homeTownController,
-                    hint: 'Enter home town',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Home Town is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'Other Address',
-                    fillColor: Colors.transparent,
-                    controller: _residentialAddress2Controller,
-                    hint: 'Enter other adress',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'Address is  required';
-                      // }
-                      return null;
-                    },
-                  ),
-      
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'City',
-                    fillColor: Colors.transparent,
-                    controller: _cityController,
-                    hint: 'Enter city',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'City is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  // const SizedBox(height: 8),
-                  const SizedBox(height: 16),
-      
-                  const Divider(
-                    height: 16,
-                    color: Color.fromARGB(255, 169, 189, 201),
-                    thickness: 0.5,
-                  ),
-                  // const SizedBox(height: 8),
-                  const SizedBox(height: 16),
-                  Text(
-                    'ID Type',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getIdentificationTypesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child:
-                                        DropdownButton2<IdentificationTypesDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select ID type',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      IdentificationTypesDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      IdentificationTypesDatum>(
+                                          .map<DropdownMenuItem<CountryDatum>>(
+                                              (item) =>
+                                                  DropdownMenuItem<CountryDatum>(
                                                     value: item,
                                                     child: Text(
-                                                      item.identificationTypeName ??
-                                                          '',
+                                                      item.countryName ?? '',
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -2061,18 +1340,16 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                                                     ),
                                                   ))
                                           .toList(),
-                                      value: selectedIdType,
-                                      onChanged:
-                                          (IdentificationTypesDatum? newValue) {
+                                      value: selectedPaCountry,
+                                      onChanged: (CountryDatum? newValue) {
                                         setState(() {
                                           /// Set selected item params
-                                          selectedIdType = newValue;
-                                          selectedIdentificationTypeCode =
-                                              newValue?.identificationTypeId;
-                                          _identificationTypeIdController.text =
-                                              '${newValue?.identificationTypeId ?? ''}';
-                                          selectedIdentificationName =
-                                              newValue?.identificationTypeName;
+                                          selectedPaCountry = newValue;
+                                          selectedPaCountryName =
+                                              newValue?.countryName;
+                                          selectedPaCountryCode =
+                                              newValue?.countryCode;
+                                          
                                         });
                                       },
                                       buttonStyleData: ButtonStyleData(
@@ -2119,13 +1396,13 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                                     ),
                                   )
                                 : GestureDetector(
-                                    child: Text('No? types?, Tap to refresh, '),
-                                    onTap: () => ref.invalidate(
-                                        getIdentificationTypesProvider),
+                                    child:
+                                        Text('No? countries?, Tap to refresh, '),
+                                    onTap: () =>
+                                        ref.invalidate(getCountriesProvider),
                                   ),
                             error: (e, s) => GestureDetector(
-                                onTap: () => ref
-                                    .invalidate(getIdentificationTypesProvider),
+                                onTap: () => ref.invalidate(getCountriesProvider),
                                 child: const Text(
                                   'An error occured',
                                   maxLines: 3,
@@ -2135,134 +1412,79 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                           );
                     },
                   ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'ID Issuer',
-                    fillColor: Colors.transparent,
-                    controller: _idIssueAuthorityController,
-                    hint: 'Enter ID Issuer',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'ID Issuer is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'ID Number',
-                    fillColor: Colors.transparent,
-                    controller: _identificationNoController,
-                    hint: 'Enter ID Number',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'ID Number is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    onTap: () {
-                      _showDatePicker(context, dateCategory: 'ISSUE');
-                    },
-                    title: 'Issue Date',
-                    showCursor: false,
-                    readOnly: true,
-                    fillColor: Colors.transparent,
-                    controller: _idIssueDateController,
-                    showDropDownSuffixIcon: true,
-                    hint: 'ID Issue Date',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    suffixIcon: Icon(
-                      Icons.calendar_today_rounded,
-                      color: ZxplorePrimaryColor.withOpacity(.5),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'ID Issue is required';
-                      } else if (value == 'dd-mm-yyyy') {
-                        return 'Enter a valid date';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    onTap: () {
-                      _showDatePicker(context, dateCategory: 'EXPIRY');
-                    },
-                    title: 'Expiry Date',
-                    readOnly: true,
-                    showDropDownSuffixIcon: true,
-                    showCursor: false,
-                    suffixIcon: Icon(
-                      Icons.calendar_today_rounded,
-                      color: ZxplorePrimaryColor.withOpacity(.5),
-                    ),
-                    fillColor: Colors.transparent,
-                    controller: _idExpiryDateController,
-                    hint: 'ID Expiry Date',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'ID Expiry is required';
-                      } else if (value == 'dd-mm-yyyy') {
-                        return 'Enter a valid date';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'NIA Number',
-                    fillColor: Colors.transparent,
-                    controller: _niaVerificationNoController,
-                    hint: 'Enter NIA number',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'other name is  required';
-                      // }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'IDD Code',
-                    fillColor: Colors.transparent,
-                    controller: _iddCodeController,
-                    hint: 'Enter IDD code',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'IDD Code is  required';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'SSN',
-                    fillColor: Colors.transparent,
-                    controller: _ssnitNoController,
-                    hint: 'Enter SSN code',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
       
-                  const SizedBox(height: 16),
+                 gapH16,
+                    CustomTextFormField(
+                      title: " Residence Permit PlaceCode",
+                      fillColor: Colors.transparent,
+                      controller: _residencePermitPlaceCodeController,
+                      hint: 'Enter Place code',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        // if (value.toString().isEmpty) {
+                        //   return 'permanet address is required';
+                        // }
+                        return null;
+                      },
+                    ),
+                 gapH16,
+                    CustomTextFormField(
+                      onTap: () {
+                        _showDatePicker(context, dateCategory: 'PERMITISSUE');
+                      },
+                      title: 'Permit Issue Date',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(
+                        Icons.calendar_today_rounded,
+                        color: ZxplorePrimaryColor.withOpacity(.5),
+                      ),
+                      showDropDownSuffixIcon: true,
+                      fillColor: Colors.transparent,
+                      controller: _permitIssueDateController,
+                      hint: 'Selected permit issue date ',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Permit Issue Date required';
+                        } else if (value == 'dd-mm-yyyy') {
+                          return 'Enter a valid date';
+                        }
+                        return null;
+                      },
+                    ),
+                 gapH16,
+                    CustomTextFormField(
+                      onTap: () {
+                        _showDatePicker(context, dateCategory: 'PERMITEXP');
+                      },
+                      title: 'Permit Exp. Date',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(
+                        Icons.calendar_today_rounded,
+                        color: ZxplorePrimaryColor.withOpacity(.5),
+                      ),
+                      showDropDownSuffixIcon: true,
+                      fillColor: Colors.transparent,
+                      controller: _permitExpiryDateController,
+                      hint: 'Selected permit exp. Date ',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Permit exp. date required';
+                        } else if (value == 'dd-mm-yyyy') {
+                          return 'Enter a valid date';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+               gapH16,
+       
                   Text(
                     'Other Informtion',
                     style: Theme.of(context)
@@ -2271,57 +1493,55 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
-                  gapH12,
-      
-                  CheckboxListTile(
-                    title: Text('Account Ownership'),
-                    value: accountOwnership,
-                    onChanged: (value) => _handleCheckboxChange(2, value),
-                  ),
-                  gapH12,
-                  CheckboxListTile(
-                    title: Text('Customer Resident In Ghana'),
-                    value: customerResidentInGhana,
-                    onChanged: (value) => _handleCheckboxChange(3, value),
-                  ),
-                  gapH12,
-      
-                  CheckboxListTile(
-                    title: Text('Is Physically Challenged'),
-                    value: isPhysicallyChallenged,
-                    onChanged: (value) => _handleCheckboxChange(4, value),
-                  ),
-                  gapH12,
-                  CheckboxListTile(
-                    title: Text('Customer Is PEP'),
-                    value: customerIsPEP,
-                    onChanged: (value) => _handleCheckboxChange(5, value),
-                  ),
-                  gapH12,
-      
-                  CheckboxListTile(
-                    title: Text('Setup Ibank'),
-                    value: setupIbank,
-                    onChanged: (value) => _handleCheckboxChange(6, value),
-                  ),
-                  gapH12,
-                  CheckboxListTile(
-                    title: Text('Setup ZPrompt'),
-                    value: setupZPrompt,
-                    onChanged: (value) => _handleCheckboxChange(7, value),
-                  ),
-                  gapH12,
-                  CheckboxListTile(
-                    title: Text('Setup Statement Via Email'),
-                    value: setupStatementViaEmail,
-                    onChanged: (value) => _handleCheckboxChange(8, value),
-                  ),
+                         gapH16,
+               
+               
                   gapH12,
                   CheckboxListTile(
                     title: Text('Setup Email Indemnity'),
                     value: setupEmailIndemnity,
-                    onChanged: (value) => _handleCheckboxChange(9, value),
+                    onChanged: (value) => _handleCheckboxChange(2, value),
                   ),
+                    gapH12,
+                  CheckboxListTile(
+                    title: Text('Setup Statement Via Email'),
+                    value: setupStatementViaEmail,
+                    onChanged: (value) => _handleCheckboxChange(3, value),
+                  ),
+                      gapH12,
+                  CheckboxListTile(
+                    title: Text('Setup ZPrompt'),
+                    value: setupZPrompt,
+                    onChanged: (value) => _handleCheckboxChange(4, value),
+                  ),
+      
+                  CheckboxListTile(
+                    title: Text('Is Director'),
+                    value: isDirector,
+                    onChanged: (value) => _handleCheckboxChange(5, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('Is  Principal'),
+                    value: isPrincipalOfficer,
+                    onChanged: (value) => _handleCheckboxChange(6, value),
+                  ),
+                  gapH12,
+      
+                  CheckboxListTile(
+                    title: Text('Is Signatory'),
+                    value: isSignatory,
+                    onChanged: (value) => _handleCheckboxChange(6, value),
+                  ),
+                  gapH12,
+                  CheckboxListTile(
+                    title: Text('NewRequest'),
+                    value: isNewRequest,
+                    onChanged: (value) => _handleCheckboxChange(7, value),
+                  ),
+                
+                  gapH12,
+                  
                   gapH12,
       
                   CheckboxListTile(
@@ -2329,32 +1549,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                     value: isNewRequest,
                     onChanged: (value) => _handleCheckboxChange(11, value),
                   ),
-      
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'TIN',
-                    fillColor: Colors.transparent,
-                    controller: _tinController,
-                    hint: 'Enter TIN code',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                  //  const SizedBox(height: 16),
-                  // CustomTextFormField(
-                  //   title: 'Citizenship',
-                  //   fillColor: Colors.transparent,
-                  //   controller: _tinController,
-                  //   hint: 'Enter TIN code',
-                  //   inputType: TextInputType.text,
-                  //   useDefaultErrorText: false,
-                  //   validator: (value) {
-      
-                  //     return null;
-                  //   },
-                  // ),
+       
                   const SizedBox(height: 24),
                   PrimaryButton(
                       onPressed: () {

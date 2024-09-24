@@ -70,3 +70,17 @@ String formatNumberInKs(int? number) {
   }
   return number.toString();  // Fallback, should never hit this line
 }
+DateTime? stringToDate(String? dateString, {String format = 'yyyy-MM-dd'}) {
+  if (dateString==null|| dateString.isEmpty) return null;
+  try {
+    return DateTime.parse(dateString!);
+  } catch (e) {
+    // If standard ISO 8601 format fails, try custom format
+    try {
+      return DateFormat(format).parse(dateString!);
+    } catch (e) {
+      print('Error parsing date: $e');
+      return null;
+    }
+  }
+}
