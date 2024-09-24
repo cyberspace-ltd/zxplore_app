@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_related_business.dart';
 // import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
@@ -111,21 +112,21 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
   
 
   Future<dynamic> addRelatedBusiness(
-      {required AddOtherBankAccount? data,
+      {required RelatedBusinessData? data,
       required BuildContext context}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.addOtherBankAccount(data: data);
+      final requestResponse = await repo.addRelatedBusiness(relatedBusiness: data);
 
       if (requestResponse['status'] == true) {
         final result =
-            GetRelatedBusinessToEditResponse.fromJson(requestResponse);
+            AddRelatedBusiness.fromJson(requestResponse);
 
         // refresh the latest viewed item.
         ref.read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.data?.reqId ?? '');
+            .getRequestDetailAsync(result.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,

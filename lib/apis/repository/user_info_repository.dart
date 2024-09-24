@@ -62,7 +62,7 @@ abstract class  UserInfoRepository {
    Future<dynamic> deleteStakeHolder({required DeleteStakeHolder? holder });
 
    Future<dynamic> getDocumentAttachedToEdit({required String? RequestId,required int? DocumentsAttachedId });
-   Future<dynamic> deleteDocumentAttached({required DeleteDocument? deleteDocumentData });
+   Future<dynamic> deleteDocumentAttached({required DeleteDocument? deleteDocument });
 
    Future<dynamic> getAssignedAccountToEdit({required String? RequestId,required int? AssignedAcctId });
    Future<dynamic> deleteAssignedAccount({required String? RequestId,required int? AssignedAcctId });

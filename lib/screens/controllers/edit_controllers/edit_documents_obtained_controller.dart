@@ -70,7 +70,7 @@ Future<dynamic> deletDocument(BuildContext context,
     try {
       state = const AsyncLoading();
       final requestResponse = await repo.deleteDocumentAttached(
-          deleteDocumentData:deleteDocumentData, );
+          deleteDocument:deleteDocumentData, );
 
       if (requestResponse['status'] == true) {
         final result =

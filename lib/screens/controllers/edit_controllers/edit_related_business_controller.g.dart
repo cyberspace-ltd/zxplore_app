@@ -7,7 +7,7 @@ part of 'edit_related_business_controller.dart';
 // **************************************************************************
 
 String _$editRelatedBusinessControllerHash() =>
-    r'dbe8c57ec5d282150069c0d2ff6c3324a5be04d5';
+    r'01341d3de5256ac3ba4ae5ecdb93a4ea3605f43e';
 
 /// See also [EditRelatedBusinessController].
 @ProviderFor(EditRelatedBusinessController)
