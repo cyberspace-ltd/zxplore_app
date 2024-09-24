@@ -4,6 +4,7 @@ import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_stake_holder.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_stake_holder_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -71,9 +72,9 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
           await repo.editStakeHolder(holder: editAccount);
 
       if (requestResponse['status'] == true) {
-        final result = AddStakeholder.fromJson(requestResponse);
+        final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.requestId!);
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(editAccount?.requestId??'');
 
         state = AsyncValue.data(result);
        /// replace this present view to the last
@@ -117,10 +118,10 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
           await repo.editStakeHolder(holder: editAccount);
 
       if (requestResponse['status'] == true) {
-        final result = AddStakeholder.fromJson(requestResponse);
+        final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId!);
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(editAccount?.requestId??'');
+
 
         state = AsyncValue.data(result);
        /// replace this present view to the last

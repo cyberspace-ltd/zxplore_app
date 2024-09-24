@@ -4,6 +4,7 @@ import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/delete_assigned_acc.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/get_other_bank_to_edit_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
@@ -74,12 +75,12 @@ class EditOtherBankController extends _$EditOtherBankController {
 
       if (requestResponse['status'] == true) {
         final result =
-            GetOtherBankAccountToEditResponse.fromJson(requestResponse);
+            GenericResponse.fromMap(requestResponse);
 
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.data?.reqId ?? '');
+            .getRequestDetailAsync(data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
@@ -122,12 +123,12 @@ class EditOtherBankController extends _$EditOtherBankController {
 
       if (requestResponse['status'] == true) {
         final result =
-            GetAssignedAccountToEditResponse.fromJson(requestResponse);
+            GenericResponse.fromMap(requestResponse);
 
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.data?.reqId ?? '');
+            .getRequestDetailAsync(data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,

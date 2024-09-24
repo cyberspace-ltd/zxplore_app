@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_related_business.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 // import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
@@ -74,13 +75,12 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
 
       if (requestResponse['status'] == true) {
         final result =
-            GetRelatedBusinessToEditResponse.fromJson(requestResponse);
-
+            GenericResponse.fromMap(requestResponse);
+        state = AsyncValue.data(result);
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.data?.reqId ?? '');
-        state = AsyncValue.data(result);
+            .getRequestDetailAsync(data?.reqId ?? '');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

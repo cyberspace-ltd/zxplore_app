@@ -4,6 +4,7 @@ import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_child_to_edite_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -72,13 +73,13 @@ class EditChildController extends _$EditChildController {
       final requestResponse = await repo.editChild(child: data);
 
       if (requestResponse['status'] == true) {
-        final result =
-            AddNextOfKin.fromJson(requestResponse);
+             final result = GenericResponse.fromMap(requestResponse);
+
 
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId ?? '');
+            .getRequestDetailAsync(data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
@@ -120,20 +121,18 @@ class EditChildController extends _$EditChildController {
       final requestResponse = await repo.addChild(child: data);
 
       if (requestResponse['status'] == true) {
-        final result =
-            AddNextOfKin.fromJson(requestResponse);
-
+                  final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId ?? '');
+            .getRequestDetailAsync(data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => ViewChildrenScreen(
                     formIndividualData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
+                        ref.watch(activelyViewedRequestProvider)!.toMap(),
                   )),
         );
         return result;

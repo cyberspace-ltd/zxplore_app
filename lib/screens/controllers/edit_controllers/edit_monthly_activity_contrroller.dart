@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_edit_monthly_activity_res.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
@@ -70,10 +71,10 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
 
       if (requestResponse['status'] == true) {
         final result =
-            EditMonthlyActivity.fromJson(requestResponse);
+            GenericResponse.fromMap(requestResponse);
      
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.requestId!);
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(data?.requestId??'');
         state = AsyncValue.data(result);
           Navigator.pushReplacement(
           context,

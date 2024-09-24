@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_due_delligience_to_edit.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -71,7 +72,7 @@ class EditDueDilligienceController extends _$EditDueDilligienceController {
 
       if (requestResponse['status'] == true) {
         final result =
-            EditDueDiligence.fromJson(requestResponse);
+            GenericResponse.fromMap(requestResponse);
 
         // refresh the latest viewed item.
         ref
