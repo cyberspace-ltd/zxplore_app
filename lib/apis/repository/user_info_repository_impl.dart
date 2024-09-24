@@ -490,8 +490,26 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
 
   @override
   Future editFundingSources({required EditFundingSource? data}) async {
+   
     try {
-      final response = await api.editFundingSources(editAccountPurpose: data);
+      final response = await api.editFundingSources(
+        fundingSourcesId: data?.fundingSourcesId,
+ requestId: data?.requestId,
+ rowVersion: data?.rowVersion,
+ itemStage: data?.itemStage,
+  commissions:data?.commissions,
+ dividends: data?.dividends,
+ businessIncome: data?.businessIncome,
+personalSavings:  data?.personalSavings,
+ trustFund: data?.trustFund,
+ salary: data?.salary,
+ familyFriends: data?.familyFriends,
+rentalIncome:  data?.rentalIncome,
+ inheritanceGift: data?.inheritanceGift,
+ others: data?.others,
+othersSpecify:  data?.othersSpecify,
+actionFlag:  data?.actionFlag,
+      );
 
       return response;
     } on FormatException catch (_) {

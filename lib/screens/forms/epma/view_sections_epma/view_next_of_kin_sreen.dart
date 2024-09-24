@@ -4,6 +4,7 @@ import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_next_of_kin_controller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
@@ -27,9 +28,8 @@ class _ViewNextOfKinScreenState
     extends ConsumerState<ViewNextOfKinScreen> {
   @override
   Widget build(BuildContext context) {
-    final ViewAccountRequestResponse? requestData =
-        ViewAccountRequestResponse.fromMap(widget.formIndividualData);
-    final sectionData = requestData?.data?.nextOfKin ?? [];
+      final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
+ final sectionData = requestData?.data?.nextOfKin ?? [];
 
     return ZxploreProgress(
         inAsyncCall: ref.watch(editNextOfKinControllerProvider).isLoading||

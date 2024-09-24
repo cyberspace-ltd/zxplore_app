@@ -114,7 +114,7 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
   Future<void> _submitForm(BuildContext context) async{
     final originalData = widget.data?.data;
      await ref.read(editFundingSourcesControllerProvider.notifier).editFundingSourcesData(context: context,editFundingData: EditFundingSource(
-      itemStage: originalData?.itemStage ,
+      itemStage: originalData?.itemStage??'Saved' ,
       othersSpecify:othersController.text ,
       requestId:originalData?.reqId ,
       rowVersion:originalData?.rowVersion ,
@@ -129,6 +129,8 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
           rentalIncome:rentalIncome,
           inheritanceGift:inheritanceGift,
           others:others,
+          fundingSourcesId: originalData?.fundingSourcesId,
+
      )).then((_){
 
      });
@@ -149,7 +151,7 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
         widgetToGoOnCancel: FundingSourcesScreen(
           requestData: widget.data!.toJson(),
         ),
-        onCancel: () {},
+        onCancel: ()=>Navigator.pop(context),
         data: widget.data?.toJson(),
         addMore: IconButton(onPressed: () {}, icon: Icon(Icons.add_box)),
         child: SingleChildScrollView(
@@ -174,6 +176,7 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
                         .bodyMedium
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
+                  gapH6,
                   div,
                   gapH16,
                   CheckboxListTile(
@@ -255,21 +258,21 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
                     ),
                   ],
       
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'Action Flag',
-                    fillColor: Colors.transparent,
-                    controller: actionFlagController,
-                    hint: 'Action Flag',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                         if (value.toString().isEmpty) {
-                        return 'Action flag  is required';
-                      }
-                      return null;
-                    },
-                  ),
+                  // const SizedBox(height: 16),
+                  // CustomTextFormField(
+                  //   title: 'Action Flag',
+                  //   fillColor: Colors.transparent,
+                  //   controller: actionFlagController,
+                  //   hint: 'Action Flag',
+                  //   inputType: TextInputType.text,
+                  //   useDefaultErrorText: false,
+                  //   validator: (value) {
+                  //        if (value.toString().isEmpty) {
+                  //       return 'Action flag  is required';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
             
                   const SizedBox(height: 24),
                   PrimaryButton(

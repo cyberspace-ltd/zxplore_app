@@ -185,7 +185,54 @@ abstract class RemoteApi {
   });
   @POST('Operation/editFundingSource')
   Future<dynamic> editFundingSources({
-    @Body() required EditFundingSource? editAccountPurpose,
+    
+  @Field("fundingSourcesId")
+  int? fundingSourcesId,
+
+  @Field("requestId")
+  String? requestId,
+
+  @Field("rowVersion")
+  int? rowVersion,
+
+  @Field("itemStage")
+  String? itemStage,
+
+  @Field("commissions")
+  bool? commissions,
+
+  @Field("dividends")
+  bool? dividends,
+
+  @Field("businessIncome")
+  bool? businessIncome,
+
+  @Field("personalSavings")
+  bool? personalSavings,
+
+  @Field("trustFund")
+  bool? trustFund,
+
+  @Field("salary")
+  bool? salary,
+
+  @Field("familyFriends")
+  bool? familyFriends,
+
+  @Field("rentalIncome")
+  bool? rentalIncome,
+
+  @Field("inheritanceGift")
+  bool? inheritanceGift,
+
+  @Field("others")
+  bool? others,
+
+  @Field("othersSpecify")
+  String? othersSpecify,
+
+  @Field("actionFlag")
+  String? actionFlag,
   });
 
   @GET('Operation/getAssignedAccountToEdit')
@@ -348,19 +395,19 @@ abstract class RemoteApi {
     @Body() required DeleteDocument? data,
   });
 
-  @POST('Operation/addSignature')
-  @MultiPart()
-  Future<dynamic> addSignature({
-    @Query('RequestId') required String? RequestId,
-    @Part() required File? addSignatureImage,
-  });
-    @POST('Operation/uploadFiles')
+  // @POST('Operation/addSignature')
+  // @MultiPart()
+  // Future<dynamic> addSignature({
+  //   @Query('RequestId') required String? RequestId,
+  //   @Part() required File? addSignatureImage,
+  // });
+  //   @POST('Operation/uploadFiles')
   
-  Future<dynamic> uploadFiles({
-    @Query('RequestId') required String? RequestId,
-    @Query('DocumentType') required String? DocumentType,
-    @Part() required File? addSignatureImage,
-  });
+  // Future<dynamic> uploadFiles({
+  //   @Query('RequestId') required String? RequestId,
+  //   @Query('DocumentType') required String? DocumentType,
+  //   @Part() required File? addSignatureImage,
+  // });
 
   @GET('Operation/validateRequestForSubmission')
   Future<dynamic> validateRequestForSubmission({

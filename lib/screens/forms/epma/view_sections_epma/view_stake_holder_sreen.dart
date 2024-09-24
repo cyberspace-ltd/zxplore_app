@@ -4,6 +4,7 @@ import 'package:zxplore_app/models/epma_models/delete_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_stake_holders_controller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 
@@ -23,9 +24,8 @@ class _StackHolderdersScreenState
     extends ConsumerState<StackHolderdersScreen> {
   @override
   Widget build(BuildContext context) {
-    final ViewAccountRequestResponse? requestData =
-        ViewAccountRequestResponse.fromMap(widget.formIndividualData);
-    final sectionData = requestData?.data?.stakeHolders ?? [];
+       final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
+ final sectionData = requestData?.data?.stakeHolders ?? [];
 
     return BaseFormScreen(
         title: 'Stack Holders',

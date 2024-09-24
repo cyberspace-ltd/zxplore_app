@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_monthly_activity_contrroller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 // import 'package:zxplore_app/utils/app_sizes.dart';
 // import 'package:zxplore_app/utils/string_extentions.dart';
 
@@ -23,9 +25,9 @@ class AccountTypeScreen extends ConsumerStatefulWidget {
 class _AccountTypeScreenState
     extends ConsumerState<AccountTypeScreen> {
   @override
-  Widget build(BuildContext context) {
-    final ViewAccountRequestResponse? requestData =
-        ViewAccountRequestResponse.fromMap(widget.requestData);
+  Widget build(BuildContext context) {   
+     final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
+
     final sectionData = requestData?.data?.accountType ?? [];
 
     return BaseFormScreen(

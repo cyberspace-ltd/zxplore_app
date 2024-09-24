@@ -79,8 +79,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
   void goToSelected(Widget widgetToGo) {
     Navigator.push(
       context,
-      MaterialPageRoute( 
-        builder: (BuildContext context) => widgetToGo),
+      MaterialPageRoute(  builder: (BuildContext context) => widgetToGo),
     );
   }
 

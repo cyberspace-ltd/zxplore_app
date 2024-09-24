@@ -92,9 +92,7 @@ class _AddRefereeScreenState extends ConsumerState< AddRefereeScreen> {
       ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseAddForm(
         title: 'Add Referee',
-        // widgetToGoOnCancel: Container(),
         widgetToGoOnSave: ViewRefreesScreen(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),),
-
         onCancel: (){},
         data: {}, 
         child:     SingleChildScrollView(

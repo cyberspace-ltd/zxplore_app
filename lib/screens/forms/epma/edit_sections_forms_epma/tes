@@ -1,5 +1,16 @@
- 'UserInfoRepositoryImpl.deleteDocumentAttached' 
- ('Future<dynamic> Function({required DeleteDocument? deleteDocumentData})') 
- isn't a valid override of 
- 'UserInfoRepository.deleteDocumentAttached' 
- ('Future<dynamic> Function({required DeleteDocument? deleteDocument})').
+     int? fundingSourcesId;
+     String? requestId;
+     int? rowVersion;
+     String? itemStage;
+     bool? commissions;
+     bool? dividends;
+     bool? businessIncome;
+     bool? personalSavings;
+     bool? trustFund;
+     bool? salary;
+     bool? familyFriends;
+     bool? rentalIncome;
+     bool? inheritanceGift;
+     bool? others;
+     String? othersSpecify;
+     String? actionFlag;

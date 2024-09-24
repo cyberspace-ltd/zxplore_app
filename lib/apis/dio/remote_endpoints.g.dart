@@ -991,14 +991,47 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<dynamic> editFundingSources(
-      {EditFundingSource? editAccountPurpose}) async {
+  Future<dynamic> editFundingSources({
+    int? fundingSourcesId,
+    String? requestId,
+    int? rowVersion,
+    String? itemStage,
+    bool? commissions,
+    bool? dividends,
+    bool? businessIncome,
+    bool? personalSavings,
+    bool? trustFund,
+    bool? salary,
+    bool? familyFriends,
+    bool? rentalIncome,
+    bool? inheritanceGift,
+    bool? others,
+    String? othersSpecify,
+    String? actionFlag,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(editAccountPurpose?.toJson() ?? <String, dynamic>{});
+    final _data = {
+      'fundingSourcesId': fundingSourcesId,
+      'requestId': requestId,
+      'rowVersion': rowVersion,
+      'itemStage': itemStage,
+      'commissions': commissions,
+      'dividends': dividends,
+      'businessIncome': businessIncome,
+      'personalSavings': personalSavings,
+      'trustFund': trustFund,
+      'salary': salary,
+      'familyFriends': familyFriends,
+      'rentalIncome': rentalIncome,
+      'inheritanceGift': inheritanceGift,
+      'others': others,
+      'othersSpecify': othersSpecify,
+      'actionFlag': actionFlag,
+    };
+    _data.removeWhere((k, v) => v == null);
     final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
@@ -2059,87 +2092,6 @@ class _RemoteApi implements RemoteApi {
         .compose(
           _dio.options,
           'Operation/deleteRelatedBusiness',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    return _value;
-  }
-
-  @override
-  Future<dynamic> addSignature({
-    String? RequestId,
-    File? addSignatureImage,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'RequestId': RequestId};
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.files.add(MapEntry(
-      'addSignatureImage',
-      MultipartFile.fromFileSync(
-        addSignatureImage.path,
-        filename: addSignatureImage.path.split(Platform.pathSeparator).last,
-      ),
-    ));
-    final _options = _setStreamType<dynamic>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-      contentType: 'multipart/form-data',
-    )
-        .compose(
-          _dio.options,
-          'Operation/addSignature',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        )));
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    return _value;
-  }
-
-  @override
-  Future<dynamic> uploadFiles({
-    String? RequestId,
-    String? DocumentType,
-    File? addSignatureImage,
-  }) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'RequestId': RequestId,
-      r'DocumentType': DocumentType,
-    };
-    queryParameters.removeWhere((k, v) => v == null);
-    final _headers = <String, dynamic>{};
-    final _data = FormData();
-    _data.files.add(MapEntry(
-      'addSignatureImage',
-      MultipartFile.fromFileSync(
-        addSignatureImage.path,
-        filename: addSignatureImage.path.split(Platform.pathSeparator).last,
-      ),
-    ));
-    final _options = _setStreamType<dynamic>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          'Operation/uploadFiles',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/edit_funding_sources.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_funding_sources_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -69,11 +70,11 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
           await repo.editFundingSources(data: editFundingData);
 
       if (requestResponse['status'] == true) {
-        final result = GetFundingSourceToEditResponse.fromJson(requestResponse);
+        final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.data.reqId!);
+            .getRequestDetailAsync(editFundingData!.requestId!);
 
         state = AsyncValue.data(result);
        /// replace this present view to the last
@@ -82,7 +83,7 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
           MaterialPageRoute(
               builder: (BuildContext context) => FundingSourcesScreen(
                     requestData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
+                        ref.watch(activelyViewedRequestProvider)!.toMap(),
                   )),
         );
         return result;

@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zxplore_app/apis/endpoints.dart';
 import 'package:path/path.dart' as path;
+import 'package:zxplore_app/utils/shared_preference_keys.dart';
 
 part 'document_upload_controller.g.dart';
 
@@ -30,20 +32,24 @@ class FileUploadService {
       this.typeKey,
       this.typeValue});
 
-  Future<bool> uploadFileService(File file, String url,
-  {
+  Future<bool> uploadFileService(
+    File file,
+    String url, {
     /// map value eg 12309
-  final dynamic typeValue,
+    final dynamic typeValue,
 
-  /// map key e.g Requestid,DocumentId
-  final dynamic typeKey,
+    /// map key e.g Requestid,DocumentId
+    final dynamic typeKey,
 
-  /// map value eg 12309
-  final dynamic idValue,
+    /// map value eg 12309
+    final dynamic idValue,
 
-  /// map key e.g Requestid,DocumentId
-  final dynamic idKey,
- } ) async {
+    /// map key e.g Requestid,DocumentId
+    final dynamic idKey,
+  }) async {
+    final sp = await SharedPreferences.getInstance();
+    final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
+
     try {
       final uri = Uri.parse(url).replace(queryParameters: {
         idKey ?? 'RequestId': idValue,
@@ -54,8 +60,8 @@ class FileUploadService {
 
       // Add headers
       request.headers.addAll({
-        'Authorization': 'Bearer $bearerToken',
-        'ApiKey': apiKey,
+        'Authorization': 'Bearer $token',
+        'ApiKey': Endpoints.EPMA_MIDDLEWARE_KEY,
         'Content-Type': 'multipart/form-data'
       });
 
@@ -83,21 +89,24 @@ class FileUploadService {
     }
   }
 
-
-  Future<bool> addSignatureService(File file, String url,
-  {
+  Future<bool> addSignatureService(
+    File file,
+    String url, {
     /// map value eg 12309
-  final dynamic typeValue,
+    final dynamic typeValue,
 
-  /// map key e.g Requestid,DocumentId
-  final dynamic typeKey,
+    /// map key e.g Requestid,DocumentId
+    final dynamic typeKey,
 
-  /// map value eg 12309
-  final dynamic idValue,
+    /// map value eg 12309
+    final dynamic idValue,
 
-  /// map key e.g Requestid,DocumentId
-  final dynamic idKey,
- } ) async {
+    /// map key e.g Requestid,DocumentId
+    final dynamic idKey,
+  }) async {
+    final sp = await SharedPreferences.getInstance();
+    final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
+
     try {
       final uri = Uri.parse(url).replace(queryParameters: {
         idKey ?? 'RequestId': idValue,
@@ -107,8 +116,8 @@ class FileUploadService {
 
       // Add headers
       request.headers.addAll({
-        'Authorization': 'Bearer $bearerToken',
-        'ApiKey': apiKey,
+        'Authorization': 'Bearer $token',
+        'ApiKey': Endpoints.EPMA_MIDDLEWARE_KEY,
         'Content-Type': 'multipart/form-data'
       });
 
@@ -158,7 +167,8 @@ class FileUploadController extends _$FileUploadController {
     state = const AsyncValue.loading();
     try {
       final result = await _service.uploadFileService(
-          file!, '${Endpoints.EPMA_MIDDLEWARE_BASE_URL}Opearation/uploadFiles',idValue:requestId,typeValue: documentType );
+          file!, '${Endpoints.EPMA_MIDDLEWARE_BASE_URL}Opearation/uploadFiles',
+          idValue: requestId, typeValue: documentType);
       state = AsyncValue.data(null);
       return result;
     } catch (e, stack) {
@@ -166,7 +176,8 @@ class FileUploadController extends _$FileUploadController {
       return false;
     }
   }
-    Future<bool> addSignature({
+
+  Future<bool> addSignature({
     File? file,
     String? url,
     required String? requestId,
@@ -175,7 +186,10 @@ class FileUploadController extends _$FileUploadController {
     state = const AsyncValue.loading();
     try {
       final result = await _service.addSignatureService(
-          file!, '${Endpoints.EPMA_MIDDLEWARE_BASE_URL}Opearation/addSignature',idValue:requestId, );
+        file!,
+        '${Endpoints.EPMA_MIDDLEWARE_BASE_URL}Opearation/addSignature',
+        idValue: requestId,
+      );
       state = AsyncValue.data(null);
       return result;
     } catch (e, stack) {

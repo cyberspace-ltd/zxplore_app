@@ -23,8 +23,8 @@ class ViewRequestController extends _$ViewRequestController {
 
       if (requestResponse['status'] == true) {
         final result = ViewAccountRequestResponse.fromMap(requestResponse);
-        state = AsyncValue.data(result);
         ref.read(activelyViewedRequestProvider.notifier).updateRequestState(result);
+        state = AsyncValue.data(result);
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {

@@ -4,6 +4,7 @@ import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_other_bank_controller.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
@@ -25,9 +26,8 @@ class _ViewOtherAccountsState
     extends ConsumerState<ViewOtherAccounts> {
   @override
   Widget build(BuildContext context) {
-    final ViewAccountRequestResponse? requestData =
-        ViewAccountRequestResponse.fromMap(widget.requestData);
-    final sectionData = requestData?.data?.otherAccounts ?? [];
+       final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
+ final sectionData = requestData?.data?.otherAccounts ?? [];
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(editOtherBankControllerProvider).isLoading||

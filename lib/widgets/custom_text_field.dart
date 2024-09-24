@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zxplore_app/colors.dart';
+import 'package:zxplore_app/utils/app_sizes.dart';
 
 // import 'package:responsive_builder/responsive_builder.dart';
 
@@ -211,6 +212,7 @@ class CustomTextFormField extends StatelessWidget {
               const SizedBox.shrink()
           ],
         ),
+        gapH8,
           TextFormField(
             textCapitalization: showPasswordSuffixIcon
                 ? TextCapitalization.none

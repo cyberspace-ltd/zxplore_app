@@ -86,10 +86,10 @@ class ApiInterceptor extends Interceptor {
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    // debugPrint('❌❌❌ Error  Response TypeA:${err.response}');
-    // debugPrint('❌❌❌ Error  Response Msg:${err.response?.data['message']}');
-    // debugPrint('❌❌❌ Error    Msg:${err.message}');
-    // log('❌❌❌ Error  Response code:${err.response?.statusCode}');
+    debugPrint('❌❌❌ Error  Response TypeA:${err.response}');
+    debugPrint('❌❌❌ Error  Response Msg:${err.response?.data['message']}');
+    debugPrint('❌❌❌ Error    Msg:${err.message}');
+    debugPrint('❌❌❌ Error  Response code:${err.response?.statusCode}');
 
     if (err.response != null &&
         err.response?.data != null &&
