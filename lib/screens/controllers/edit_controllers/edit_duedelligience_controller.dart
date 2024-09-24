@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
-import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
-import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/edit_duedeligience.dart';
 import 'package:zxplore_app/models/epma_models/get_due_delligience_to_edit.dart';
-import 'package:zxplore_app/models/epma_models/get_next_of_kin_to_edit.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_due_deligience_sreen.dart';
-import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_next_of_kin_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_due_deligience_sreen.dart';
-import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_next_of_kin_sreen.dart';
 
 part 'edit_duedelligience_controller.g.dart';
 
@@ -81,7 +76,7 @@ class EditDueDilligienceController extends _$EditDueDilligienceController {
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId ?? '');
+            .getRequestDetailAsync(data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
