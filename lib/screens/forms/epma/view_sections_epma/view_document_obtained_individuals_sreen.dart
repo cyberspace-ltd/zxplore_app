@@ -69,7 +69,21 @@ class  Item extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
- 
+    Row(mainAxisAlignment: MainAxisAlignment.end,
+      children: [TextButton(
+        onPressed: (){
+        //     Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (BuildContext context) => Docu(
+        //           data  : result,
+        //           )),
+        // );
+          /// call the request and nav to the file upload view when successful
+          //   ref.read(editDoc.notifier).getEditData(context,
+          // RequestId: requestData?.data?.reqId??'');
+        },
+        child: Text('Edit Documents'))],),
     ViewItem(title: 'Identification', value: data?.identification ?? ''),
     ViewItem(title: 'Identification Submission Date', value: formatDate(data?.identificationSubmissionDate??'')),
     ViewItem(title: 'Reference Letter', value: data?.referenceLetter?? ''),

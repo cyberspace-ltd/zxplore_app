@@ -7,7 +7,7 @@ import 'package:zxplore_app/models/epma_models/get_related_business_response.dar
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
-import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_related_accounts_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_related_business_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_related_business_sreen.dart';
 
 part 'edit_related_business_controller.g.dart';
@@ -34,7 +34,8 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => EditRelatedBusinessScreen(
+              builder: (BuildContext context) => 
+              EditRelatedBusinessScreen(
                     data: result,
                   )),
         );
@@ -123,8 +124,7 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
             GetRelatedBusinessToEditResponse.fromJson(requestResponse);
 
         // refresh the latest viewed item.
-        ref
-            .read(viewRequestControllerProvider.notifier)
+        ref.read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(result.data?.reqId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(

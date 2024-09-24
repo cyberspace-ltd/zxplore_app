@@ -73,7 +73,7 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
       if (requestResponse['status'] == true) {
         final result = AddStakeholder.fromJson(requestResponse);
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.requestId);
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(result.requestId!);
 
         state = AsyncValue.data(result);
        /// replace this present view to the last
@@ -120,7 +120,7 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
         final result = AddStakeholder.fromJson(requestResponse);
         // refresh the latest viewed item.
         ref.read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId);
+            .getRequestDetailAsync(result.requestId!);
 
         state = AsyncValue.data(result);
        /// replace this present view to the last

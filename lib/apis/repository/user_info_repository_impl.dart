@@ -8,6 +8,7 @@ import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
+import 'package:zxplore_app/models/epma_models/delete_document.dart';
 import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
@@ -1021,6 +1022,27 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   Future editStakeHolder({required AddStakeholder? holder})async {
         try {
       final response = await api.editStakeHolder(data:holder, );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+
+  @override
+  Future deleteDocumentAttached({required DeleteDocument? deleteDocumentData}) async {
+        try {
+      final response = await api.deleteDocument(data:deleteDocumentData, );
 
       return response;
     } on FormatException catch (_) {

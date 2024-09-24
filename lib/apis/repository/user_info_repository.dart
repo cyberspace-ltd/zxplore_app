@@ -5,6 +5,7 @@ import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
+import 'package:zxplore_app/models/epma_models/delete_document.dart';
 import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
@@ -35,8 +36,6 @@ abstract class  UserInfoRepository {
    Future<dynamic> getDueDiligenceToEdit({required String? RequestId});
    Future<dynamic> editDueDiligence({required EditDueDiligence? dd });
 
-   Future<dynamic> validateRequestForSubmission({required String? RequestId});
-   Future<dynamic> getOtherBankAccountToEdit({required String? RequestId,required int? OtherAccountsId });
    Future<dynamic> getRelatedBusinessToEdit({required String? RequestId,required int? RelatedBusinessId });
    Future<dynamic> editRelatedBusiness({required RelatedBusinessData? relatedBusiness });
    Future<dynamic> addRelatedBusiness({required RelatedBusinessData? relatedBusiness });
@@ -63,10 +62,11 @@ abstract class  UserInfoRepository {
    Future<dynamic> deleteStakeHolder({required DeleteStakeHolder? holder });
 
    Future<dynamic> getDocumentAttachedToEdit({required String? RequestId,required int? DocumentsAttachedId });
+   Future<dynamic> deleteDocumentAttached({required DeleteDocument? deleteDocumentData });
+
    Future<dynamic> getAssignedAccountToEdit({required String? RequestId,required int? AssignedAcctId });
    Future<dynamic> deleteAssignedAccount({required String? RequestId,required int? AssignedAcctId });
-   Future<dynamic> processRequestExternal({required String? RequestId});
-   Future<dynamic> completeRequest({required String? RequestId});
+ 
    Future<dynamic> editPersonalDetail({required   EditPersonalDetails? editPersonalDetails});
    Future<dynamic> editAccountPurpose({required   EditAccountPurpose? data});
    Future<dynamic> editFundingSources({required   EditFundingSource? data});
@@ -75,6 +75,10 @@ abstract class  UserInfoRepository {
    Future<dynamic> addOtherBankAccount({required   AddOtherBankAccount? data});
    Future<dynamic> editOtherBankAccount({required   AddOtherBankAccount? data});
    Future<dynamic> deleteOtherBankAccount({required   DeleteOtherBankAccount? data});
+
+   Future<dynamic> validateRequestForSubmission({required String? RequestId});
+      Future<dynamic> processRequestExternal({required String? RequestId});
+   Future<dynamic> completeRequest({required String? RequestId});
 
 
   

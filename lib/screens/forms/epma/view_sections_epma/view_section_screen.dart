@@ -10,6 +10,7 @@ import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_account_p
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_acount_type_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_assigned_type_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_children_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_document_attached_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_document_obtained_individuals_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_foreign_accounts_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
@@ -22,6 +23,7 @@ import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_refrees_s
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_related_business_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_stake_holder_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_tax_jurisdiction_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_validate_complete_process.dart';
 
 // import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 /// this is a list of all the readonly sections
@@ -48,7 +50,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
       _categories.add(Category(id: 4, name: 'Other Informations'));
       _categories.add(Category(id: 5, name: 'Other Accounts'));
       _categories.add(Category(id: 6, name: 'Foreign Accounts'));
-      _categories.add(Category(id: 7, name: 'Documents Obtained Individuals'));
+      _categories.add(Category(id: 7, name: 'Documents Attaached'));
       _categories.add(Category(id: 8, name: 'Account Type'));
       _categories.add(Category(id: 9, name: 'Next Of Kin'));
       _categories.add(Category(id: 10, name: 'Referees'));
@@ -57,6 +59,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
       _categories.add(Category(id: 13, name: 'Stake Holders'));
       _categories.add(Category(id: 14, name: 'Related Business'));
       _categories.add(Category(id: 15, name: 'Tax Jurisdiction'));
+      _categories.add(Category(id: 16, name: 'Validate and Complete'));
 
       if (categoryIndex == 0) {
         defaultCategory = _categories[0];
@@ -106,7 +109,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
       goToSelected(ViewForeignAccount (
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
     } else if (category.id == 7) {
-      goToSelected(DocumentsObtainIndividual (
+      goToSelected(ViewDocumentsAttachedScreen (
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
     } else if (category.id == 8) {
       goToSelected(AccountTypeScreen (
@@ -136,8 +139,8 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
     }
      else if (category.id == 16) {
-      // goToSelected(EditM(
-      //     formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
+      goToSelected(ProcessFlowWidget(
+          formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
     }
   }
 

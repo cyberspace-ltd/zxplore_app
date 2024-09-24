@@ -1,6 +1,7 @@
 class Endpoints {
   /// NEW
   static const String EPMA_MIDDLEWARE_BASE_URL='http://174.142.93.40:9140/api/';
+  static const String EPMA_MIDDLEWARE_KEY='Zxplore@APIKey2007ZW0RD\$2024Xyz&&60@AEJ\$';
   
   static const googleKey = 'AIzaSyCUECofQTpcRO46CnOHL1q4bmKH8dvmIyA';
 // cyb env

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/models/delete_child.dart';
@@ -8,6 +11,7 @@ import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
+import 'package:zxplore_app/models/epma_models/delete_document.dart';
 import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_next_of_kin_model.dart';
 import 'package:zxplore_app/models/epma_models/delete_other_bank_account.dart';
@@ -338,7 +342,27 @@ abstract class RemoteApi {
   Future<dynamic> getDocumentAttachedToEdit(
       {@Query('RequestId') required String? RequestId,
       @Query('DocumentsAttachedId') required int? DocumentsAttachedId});
-  @GET('Operation/getDocumentAttachedToEdit')
+  
+  @POST('Operation/deleteRelatedBusiness')
+  Future<dynamic> deleteDocument({
+    @Body() required DeleteDocument? data,
+  });
+
+  @POST('Operation/addSignature')
+  @MultiPart()
+  Future<dynamic> addSignature({
+    @Query('RequestId') required String? RequestId,
+    @Part() required File? addSignatureImage,
+  });
+    @POST('Operation/uploadFiles')
+  
+  Future<dynamic> uploadFiles({
+    @Query('RequestId') required String? RequestId,
+    @Query('DocumentType') required String? DocumentType,
+    @Part() required File? addSignatureImage,
+  });
+
+  @GET('Operation/validateRequestForSubmission')
   Future<dynamic> validateRequestForSubmission({
     @Query('RequestId') required String? RequestId,
   });
@@ -346,10 +370,12 @@ abstract class RemoteApi {
   Future<dynamic> processRequestExternal({
     @Query('RequestId') required String? RequestId,
   });
+
   @GET('Operation/completeRequest')
   Future<dynamic> completeRequest({
     @Query('RequestId') required String? RequestId,
   });
+  
 
   // ----------------- Add Endpoints ------------------
 }

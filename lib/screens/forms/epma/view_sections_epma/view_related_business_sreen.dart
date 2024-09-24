@@ -35,7 +35,7 @@ class _ViewRelatedBusinessState
       child: BaseFormScreen(
           title: 'Related Business(es)',
           data: _flattenData(widget.formIndividualData),
-          showEdit: false,
+          showEdit: sectionData.isNotEmpty,
           onTapEdit: () {
             // to navigate to edit this section
           },
