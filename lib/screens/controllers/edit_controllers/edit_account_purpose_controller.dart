@@ -70,6 +70,7 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
       final requestResponse = await repo.editAccountPurpose(data: data);
 
       if (requestResponse['status'] == true) {
+        
         final result = GenericResponse.fromMap(requestResponse);
         state = AsyncValue.data(result);
 
