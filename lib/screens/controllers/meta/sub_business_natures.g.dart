@@ -7,7 +7,7 @@ part of 'sub_business_natures.dart';
 // **************************************************************************
 
 String _$getSubBusinessNaturesHash() =>
-    r'147358b951aa882b301aaf01551ed69607b1454b';
+    r'44bc2ff656cc5ede163ae5faf0ed4e4941abce9d';
 
 /// Copied from Dart SDK
 class _SystemHash {

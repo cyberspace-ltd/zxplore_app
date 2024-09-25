@@ -18,6 +18,71 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
   FutureOr<dynamic> build() {
     //nadaa
   }
+ 
+  Future<dynamic> editFundingSourcesData(
+      {required EditFundingSource? editFundingData,
+      required BuildContext context}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
+    try {
+      state = const AsyncLoading();
+      final requestResponse =
+          await repo.editFundingSources(data: editFundingData);
+
+      if (requestResponse['status'] == true) {
+        final result = GenericResponse.fromMap(requestResponse);
+        // refresh the latest viewed item.
+   ref.invalidate(activelyViewedRequestProvider);
+
+        ref
+            .read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(editFundingData!.requestId!);
+
+        state = AsyncValue.data(result);
+       /// replace this present view to the last
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => FundingSourcesScreen(
+                    requestData:
+                        ref.watch(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          state = AsyncValue.data(requestResponse);
+
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        }
+            final ex = Exception(
+            requestResponse['message'] ?? 'Failed to complete request');
+        state = AsyncError(
+            ex,
+            StackTrace.fromString(
+                requestResponse['message'] ?? 'Failed to complete request'));
+        return requestResponse;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }
+}
+
+
+@riverpod
+class ViewFundingSourcesController extends _$ViewFundingSourcesController {
+  @override
+  FutureOr<dynamic> build() {
+    //nadaa
+  }
 
   Future<dynamic> getEditData(BuildContext context,
       {required String? RequestId}) async {
@@ -41,6 +106,7 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
+                 state = AsyncValue.data(requestResponse);
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
           final ex = Exception('Failed to complete request ');
@@ -58,51 +124,5 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
       return null;
     }
   }
-
-  Future<dynamic> editFundingSourcesData(
-      {required EditFundingSource? editFundingData,
-      required BuildContext context}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse =
-          await repo.editFundingSources(data: editFundingData);
-
-      if (requestResponse['status'] == true) {
-        final result = GenericResponse.fromMap(requestResponse);
-        // refresh the latest viewed item.
-        ref
-            .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(editFundingData!.requestId!);
-
-        state = AsyncValue.data(result);
-       /// replace this present view to the last
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => FundingSourcesScreen(
-                    requestData:
-                        ref.watch(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncValue.data(null);
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
 }
+

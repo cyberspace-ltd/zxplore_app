@@ -161,7 +161,212 @@ abstract class RemoteApi {
 
   @POST('Operation/editPersonalDetail')
   Future<dynamic> editPersonalDetail({
-    @Body() required EditPersonalDetails? editPersonalDetails,
+     @Field("formId")
+  int? formId,
+
+  @Field("requestId")
+  String? requestId,
+
+  @Field("rowVersion")
+  int? rowVersion,
+
+  @Field("itemStage")
+  String? itemStage,
+
+  @Field("surname")
+  String? surname,
+
+  @Field("firstName")
+  String? firstName,
+
+  @Field("otherNames")
+  String? otherNames,
+
+  @Field("maidenName")
+  String? maidenName,
+
+  @Field("genderCode")
+  String? genderCode,
+
+  @Field("birthDate")
+  String? birthDate,
+
+  @Field("birthPlace")
+  String? birthPlace,
+
+  @Field("identificationTypeId")
+  int? identificationTypeId,
+
+  @Field("identificationNo")
+  String? identificationNo,
+
+  @Field("idCountryCode")
+  String? idCountryCode,
+
+  @Field("idIssueAuthority")
+  String? idIssueAuthority,
+
+  @Field("idIssueDate")
+  String? idIssueDate,
+
+  @Field("idExpiryDate")
+  String? idExpiryDate,
+
+  @Field("niaVerificationNo")
+  String? niaVerificationNo,
+
+  @Field("ssnitNo")
+  String? ssnitNo,
+
+  @Field("tin")
+  String? tin,
+
+  @Field("citizenshipCode")
+  String? citizenshipCode,
+
+  @Field("altCitizenshipCode")
+  String? altCitizenshipCode,
+
+  @Field("countryOrigCode")
+  String? countryOrigCode,
+
+  @Field("homeTown")
+  String? homeTown,
+
+  @Field("hasPermanentResidence")
+  bool? hasPermanentResidence,
+
+  @Field("residencePermitNo")
+  String? residencePermitNo,
+
+  @Field("residencePermitPlaceCode")
+  String? residencePermitPlaceCode,
+
+  @Field("permitIssueDate")
+  String? permitIssueDate,
+
+  @Field("permitExpiryDate")
+  String? permitExpiryDate,
+
+  @Field("iddCode")
+  String? iddCode,
+
+  @Field("telNo")
+  String? telNo,
+
+  @Field("mobileNo")
+  String? mobileNo,
+
+  @Field("emailAddress")
+  String? emailAddress,
+
+  @Field("residentialAddress")
+  String? residentialAddress,
+
+  @Field("residentialAddress2")
+  String? residentialAddress2,
+
+  @Field("districtAssemblyArea")
+  String? districtAssemblyArea,
+
+  @Field("city")
+  String? city,
+
+  @Field("regionCode")
+  String? regionCode,
+
+  @Field("permanentResidentialAddress")
+  String? permanentResidentialAddress,
+
+  @Field("permanentResidentialCity")
+  String? permanentResidentialCity,
+
+  @Field("permanentResidentialCountryCode")
+  String? permanentResidentialCountryCode,
+
+  @Field("mailingAddress")
+  String? mailingAddress,
+
+  @Field("motherMaidenName")
+  String? motherMaidenName,
+
+  @Field("maritalStatus")
+  String? maritalStatus,
+
+  @Field("spouseName")
+  String? spouseName,
+
+  @Field("spouseOccupation")
+  String? spouseOccupation,
+
+  @Field("businessNatureId")
+  String? businessNatureId,
+
+  @Field("subBusinessNatureId")
+  String? subBusinessNatureId,
+
+  @Field("employmentTypeCode")
+  String? employmentTypeCode,
+
+  @Field("employerName")
+  String? employerName,
+
+  @Field("timeWithEmployer")
+  String? timeWithEmployer,
+
+  @Field("employerAddress")
+  String? employerAddress,
+
+  @Field("employerEmail")
+  String? employerEmail,
+
+  @Field("employerTel")
+  String? employerTel,
+
+  @Field("monthlyIncome")
+  int? monthlyIncome,
+
+  @Field("accountOwnership")
+  bool? accountOwnership,
+
+  @Field("accountOwnershipOther")
+  String? accountOwnershipOther,
+
+  @Field("customerResidentInGhana")
+  bool? customerResidentInGhana,
+
+  @Field("customerIsPep")
+  bool? customerIsPep,
+
+  @Field("pepReason")
+  String? pepReason,
+
+  @Field("customerClassificationId")
+  String? customerClassificationId,
+
+  @Field("setupIbank")
+  bool? setupIbank,
+
+  @Field("setupZPrompt")
+  bool? setupZPrompt,
+
+  @Field("setupStatementViaEmail")
+  bool? setupStatementViaEmail,
+
+  @Field("setupEmailIndemnity")
+  bool? setupEmailIndemnity,
+
+  @Field("isPhysicallyChallenged")
+  bool? isPhysicallyChallenged,
+
+  @Field("actionFlag")
+  String? actionFlag,
+
+  @Field("isNewRequest")
+  bool? isNewRequest,
+
+  @Field("gpsAddress")
+  String? gpsAddress,
   });
 
   @GET('Operation/getMonthlyActivityToEdit')

@@ -8,14 +8,13 @@ import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 extension AsyncValueUI on AsyncValue {
   void showAlertDialogOnError(BuildContext context,{dynamic okAction,dynamic cancelAction,dynamic errorMsg}) {
+    print('Print rec_mssg${errorMsg}');
     if (!isLoading && hasError) {
       showExceptionAlertDialog(
         context: context,
         title: 'Error',
-        exception: checkMessageIsString(errorMsg??error),
+        exception:errorMsg.runtimeType.toString()=='_Exception'? errorMsg.message:  "Failed to complete request try again.",
         okAction: okAction??(){},cancelAction: cancelAction??(){}
-      
-        
       );
     }
   }
@@ -35,11 +34,16 @@ extension AsyncValueUI on AsyncValue {
 
 
   String? checkMessageIsString(dynamic errorMsg){
+    debugPrint('Error>>> ${errorMsg.message}');
     if(errorMsg.runtimeType==String ){
       return errorMsg;
-    }else if(errorMsg.runtimeType==AppException){
+    }else if(errorMsg.runtimeType==Exception){
+      return errorMsg??'We are unable to process request, try again';
+    }
+    else if(errorMsg.runtimeType==AppException){
       return errorMsg.message??'We are unable to process request, try again';
-    }else{
+    }
+    else{
       return 'Something went wrong processinng  request';
     }
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/colors.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_section_screen.dart';
 
 // Base screen template
@@ -12,9 +14,14 @@ class BaseFormScreen extends ConsumerWidget {
   final Function()? onTapSectionMenu;
   final Map<String, dynamic> data;
   final bool showEdit;
+  final bool showAdd;
+  final bool showHomeIcon;
 
   const BaseFormScreen(
-      {Key? key,this.showEdit=true,
+      {Key? key,
+      this.showEdit=true,
+      this.showHomeIcon=true,
+      this.showAdd=true,
       required this.title,
       required this.data,
       this.child,
@@ -29,6 +36,19 @@ class BaseFormScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(title),
         actions: [
+           if(showHomeIcon)... [IconButton(
+              onPressed: 
+                  () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => ViewInitialCreationInfoScreen(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),)),
+                    );
+                  },
+              icon: Icon(
+                Icons.home_filled,
+                color: ZxplorePrimaryColor,
+              )),],
           IconButton(
               onPressed: onTapSectionMenu ??
                   () {
@@ -80,10 +100,12 @@ class BaseFormScreen extends ConsumerWidget {
       floatingActionButton: showEdit? FloatingActionButton(
         onPressed: onTapEdit,
         child: const Icon(Icons.edit),
-      ):FloatingActionButton(
+      ):
+      showAdd?
+      FloatingActionButton(
         onPressed: onTapAdd,
         child: const Icon(Icons.add),
-      ),
+      ):const SizedBox.shrink(),
     );
   }
 }

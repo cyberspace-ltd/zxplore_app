@@ -72,7 +72,7 @@ class  Item extends ConsumerWidget {
     return 
     FoldableItem(
       name: 'Name: ${data?.firstName ?? ''} ${data?.lastName ?? ''}',
-      number: 'Phone: ${data?.businessPhoneNo ?? ''}  \nPhone: ${data?.emailAddress ?? ''}',
+      number: 'Phone: ${data?.businessPhoneNo ?? ''}  \nEmail: ${data?.emailAddress ?? ''}',
       requestId: data?.reqId,
       subRequestId: data?.stakeHolderId,
       onTapEdit: () {

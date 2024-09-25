@@ -37,8 +37,8 @@ class SubBusinessNatureResponse {
 }
 
 class SubBusinessNatureDatum {
-    String subBusinessNatureId;
-    String subBusinessNatureName;
+    String? subBusinessNatureId;
+    String? subBusinessNatureName;
 
     SubBusinessNatureDatum({
         required this.subBusinessNatureId,
@@ -54,4 +54,15 @@ class SubBusinessNatureDatum {
         "subBusinessNatureId": subBusinessNatureId,
         "subBusinessNatureName": subBusinessNatureName,
     };
+
+    
+  @override
+  bool operator ==(Object other) =>
+    identical(this, other) ||
+    other is SubBusinessNatureDatum &&
+    runtimeType == other.runtimeType &&
+    subBusinessNatureId == other.subBusinessNatureId;
+
+  @override
+  int get hashCode => subBusinessNatureId.hashCode;
 }

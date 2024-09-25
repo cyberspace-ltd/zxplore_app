@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
+import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -8,11 +9,11 @@ part 'view_request_controller.g.dart';
 @riverpod
 class ViewRequestController extends _$ViewRequestController {
   @override
-  FutureOr<ViewAccountRequestResponse?> build() {
+  FutureOr<dynamic> build() {
     return null;
   }
 
-  Future<ViewAccountRequestResponse?> getRequestDetailAsync(
+  Future<dynamic> getRequestDetailAsync(
       String requestId) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
@@ -23,6 +24,7 @@ class ViewRequestController extends _$ViewRequestController {
 
       if (requestResponse['status'] == true) {
         final result = ViewAccountRequestResponse.fromMap(requestResponse);
+
         ref.read(activelyViewedRequestProvider.notifier).updateRequestState(result);
         state = AsyncValue.data(result);
         return result;

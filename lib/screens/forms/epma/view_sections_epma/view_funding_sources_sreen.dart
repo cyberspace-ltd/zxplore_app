@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/app.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_funding_sources_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
+import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
 class FundingSourcesScreen extends ConsumerStatefulWidget {
   final Map<String?, dynamic> requestData;
@@ -21,32 +23,38 @@ class FundingSourcesScreen extends ConsumerStatefulWidget {
 
 class _FundingSourcesScreenState
     extends ConsumerState<FundingSourcesScreen> {
+
+
+
   @override
   Widget build(BuildContext context) {
     final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
     final sectionData = requestData?.data?.fundingSources ?? [];
 
-    return BaseFormScreen(
-        title: 'Funding Sources',
-        data: _flattenData(widget.requestData),
-       showEdit: sectionData.isNotEmpty,
-        onTapEdit: () {
-         // to navigate to edit this section
-         ref.read(editFundingSourcesControllerProvider.notifier).getEditData(context,
-          RequestId: requestData?.data?.reqId??'');
-        },
-        onTapAdd: (){
-          // rroute to add new item page 
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: sectionData.isNotEmpty?ListView.builder(
-              shrinkWrap: true,
-              itemCount: sectionData.length,
-              itemBuilder: (BuildContext context, index) {
-                return FundingSourcesItem(data:sectionData[index] ,);
-              }):EmptyViewWidget(),
-        ));
+    return ZxploreProgress(
+      inAsyncCall: ref.watch(viewFundingSourcesControllerProvider).isLoading,
+      child: BaseFormScreen(
+          title: 'Funding Sources',
+          data: _flattenData(widget.requestData),
+         showEdit: sectionData.isNotEmpty,
+          onTapEdit: () {
+           // to navigate to edit this section
+           ref.read(viewFundingSourcesControllerProvider.notifier).getEditData(context,
+            RequestId: requestData?.data?.reqId??'');
+          },
+          onTapAdd: (){
+            // rroute to add new item page 
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: sectionData.isNotEmpty?ListView.builder(
+                shrinkWrap: true,
+                itemCount: sectionData.length,
+                itemBuilder: (BuildContext context, index) {
+                  return FundingSourcesItem(data:sectionData[index] ,);
+                }):EmptyViewWidget(),
+          )),
+    );
   }
 
   Map<String, String> _flattenData(Map<String?, dynamic> data) {

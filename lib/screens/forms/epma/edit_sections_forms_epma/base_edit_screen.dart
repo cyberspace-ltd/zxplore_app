@@ -7,6 +7,7 @@ class BaseEditForm extends ConsumerWidget {
   final String title;
   final Widget? child;
   final Widget? addMore;
+  final Widget? button;
   final Widget widgetToGoOnCancel;
   final Function()? onCancel;
   final dynamic data;
@@ -14,6 +15,7 @@ class BaseEditForm extends ConsumerWidget {
   const BaseEditForm(
       {Key? key,
       this.addMore,
+      this.button,
       required this.title,
       required this.widgetToGoOnCancel,
       required this.data,
@@ -24,6 +26,7 @@ class BaseEditForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      bottomNavigationBar: button,
       appBar: AppBar(
         leading: IconButton(
             onPressed: onCancel ??

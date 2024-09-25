@@ -25,9 +25,11 @@ class _ViewTazJurisdictionScreenState
  final sectionData = requestData?.data?.taxJurisdiction ?? [];
 
     return BaseFormScreen(
+      showAdd: false,
         title: 'Tax Details',
         data: _flattenData(widget.formIndividualData),
         showEdit: false,//sectionData.isNotEmpty,
+        
         onTapEdit: () {
           // to navigate to edit this section
         },

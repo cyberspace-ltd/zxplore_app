@@ -166,9 +166,10 @@ class _PersonalInfoEditSscreenState
   String? selectedGenderCode;
   String? selectedGenderName;
 
-  IdentificationTypesDatum? selectedIdentificationItem;
-  int? selectedIdentificationCode;
-  String? selectedIdentificationName;
+  String? preRegionCode;
+  // IdentificationTypesDatum? selectedIdentificationItem;
+  // int? selectedIdentificationCode;
+  // String? selectedIdentificationName;
 
   BusinessNaturesDatum? businessNaturesItem;
   String? selectedBusinessNaturesCode;
@@ -201,10 +202,16 @@ class _PersonalInfoEditSscreenState
   String? selectedCountryCode;
   String? selectedCountryName;
   String? selectedCitizenshipCode;
+  CountryDatum? permsSelectedCountry;
+  String? permsSelectedCountryCode;
+  String? permsSelectedCountryName;
+  String? permsSelectedCitizenshipCode;
 
   String? dob;
-  String? datedIssued;
-  String? dateExpire;
+  String? identityDateIssued;
+  String? identityDateExpire;
+  String? permIdentityDateIssued;
+  String? permIdentityDateExpire;
   DateTime? dobInit = DateTime.now();
   final DateFormat dateFormatter = DateFormat('dd/MM/yyyy');
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
@@ -219,12 +226,14 @@ class _PersonalInfoEditSscreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final userData = widget.data?.data;
+        preRegionCode = userData?.regionCode ?? '';
         // Initialize each controller with a unique value
         _surnameController.text = "${userData?.surname ?? ''}";
         _firstNameController.text = "${userData?.firstName ?? ''}";
         _otherNamesController.text = "${userData?.otherNames ?? ''}";
         _maidenNameController.text = "${userData?.maidenName ?? ''}";
         _birthDateController.text = "${formatDate(userData?.birthDate ?? '')}";
+        dob = userData?.birthDate ?? '';
         _birthPlaceController.text = "${userData?.birthPlace ?? ''}";
         // identfication
         _identificationTypeIdController.text =
@@ -236,6 +245,10 @@ class _PersonalInfoEditSscreenState
             "${userData?.idIssueAuthority ?? ''}";
         _idIssueDateController.text =
             "${formatDate(userData?.idIssueDate ?? '')}";
+        identityDateIssued = userData?.idIssueDate ?? '';
+        identityDateExpire = userData?.idExpiryDate ?? '';
+        permIdentityDateExpire = userData?.permitExpiryDate ?? '';
+        permIdentityDateIssued = userData?.permitIssueDate ?? '';
         _idExpiryDateController.text =
             "${formatDate(userData?.idExpiryDate ?? '')}";
         _niaVerificationNoController.text =
@@ -302,7 +315,7 @@ class _PersonalInfoEditSscreenState
         _employerTelController.text = "${userData?.employerTel ?? ''}";
         _monthlyIncomeController.text = "${userData?.monthlyIncome ?? 0}";
         _accountOwnershipOtherController.text =
-            "${userData?.accountOwnership ?? false}";
+            "${userData?.accountOwnershipOther ?? ''}";
         _pepReasonController.text = "${userData?.pepReason ?? ''}";
         _gpsAddressController.text = "${userData?.gpsAddress ?? ''}";
         hasPermanentResidence = userData?.hasPermanentResidence ?? false;
@@ -406,7 +419,6 @@ class _PersonalInfoEditSscreenState
           break;
         case 11:
           isNewRequest = value ?? false;
-       
       }
     });
   }
@@ -416,6 +428,7 @@ class _PersonalInfoEditSscreenState
     final long = ref.read(userLongitudeProvider);
     final initialData = widget.data?.data;
     final editPersonalDetails = EditPersonalDetails(
+        accountOwnershipOther: _accountOwnershipOtherController.text,
         formId: initialData?.formId ?? -1,
         citizenshipCode: selectedCountryCode,
         countryOrigCode: selectedCountryCode,
@@ -430,9 +443,10 @@ class _PersonalInfoEditSscreenState
         setupIbank: setupIbank,
         mailingAddress: _mailingAddressController.text,
         districtAssemblyArea: selectedRegionName,
-        // accountOwnershipOther: ,
-        permitExpiryDate: _permitExpiryDateController.text,
-        permitIssueDate: _permitIssueDateController.text,
+        permitExpiryDate:
+            identityDateExpire, //_permitExpiryDateController.text,
+        permitIssueDate:
+            permIdentityDateIssued, //_permitIssueDateController.text,
         hasPermanentResidence: hasPermanentResidence,
         permanentResidentialAddress:
             _permanentResidentialAddressController.text,
@@ -453,7 +467,7 @@ class _PersonalInfoEditSscreenState
         subBusinessNatureId: subBusinessNaturesCode,
         timeWithEmployer: _timeWithEmployerController.text,
         tin: _tinController.text,
-        gpsAddress: "$lat $long",
+        gpsAddress: _gpsAddressController.text,
         surname: _surnameController.text,
         firstName: _firstNameController.text,
         otherNames: _otherNamesController.text,
@@ -466,9 +480,9 @@ class _PersonalInfoEditSscreenState
         ssnitNo: _ssnitNoController.text,
         regionCode: selectedRegionCode,
         iddCode: _iddCodeController.text,
-        idExpiryDate: dateExpire ?? '',
+        idExpiryDate: identityDateExpire,
         idIssueAuthority: _idIssueAuthorityController.text,
-        idIssueDate: datedIssued ?? '',
+        idIssueDate: identityDateIssued,
         altCitizenshipCode: _altCitizenshipCodeController.text,
         homeTown: _homeTownController.text,
         requestId: widget.data?.data?.reqId ?? '',
@@ -477,33 +491,42 @@ class _PersonalInfoEditSscreenState
         isNewRequest: false,
         idCountryCode: selectedCountryCode,
         identificationNo: _identificationNoController.text,
-        identificationTypeId: selectedIdentificationCode,
+        identificationTypeId: selectedIdentificationTypeCode,
         monthlyIncome: int.parse(_monthlyIncomeController.text),
         maritalStatus: maritalStatusName,
         motherMaidenName: _motherMaidenNameController.text,
         actionFlag: initialData!.actionFlag,
         accountOwnership: accountOwnership,
-        birthDate: dob ?? '',
+        birthDate: dob,
         city: _cityController.text,
         birthPlace: _birthPlaceController.text,
         customerClassificationId: selectedCustomerClassificationsCode);
+
     await ref
         .read(editPersonalDetailsControllerProvider.notifier)
-        .editPersonalDetailsData(context: context,editPersonalDetails: editPersonalDetails);
+        .editPersonalDetailsData(
+            context: context,
+            editPersonalDetails: editPersonalDetails,
+            afterFailed: () {});
   }
 
   @override
   Widget build(BuildContext context) {
-    ///check  for  errors here
+    // /check  for  errors here
     ref.listen<AsyncValue>(
       editPersonalDetailsControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context,
+          okAction: () {}, errorMsg: state.error),
     );
+//     ref.listen<AsyncValue<dynamic>>(editPersonalDetailsControllerProvider, (previous, next) {
+//  if(next.hasError){
+// next.showAlertDialogOnError(context, okAction: () {},errorMsg: next.error);
+//  }
+//   });
 
     return ZxploreProgress(
-      inAsyncCall:ref
-        .watch(editPersonalDetailsControllerProvider).isLoading ||
-     ref.watch(viewRequestControllerProvider).isLoading,
+      inAsyncCall: ref.watch(editPersonalDetailsControllerProvider).isLoading ||
+          ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Personal Information',
         widgetToGoOnCancel: ViewInitialCreationInfoScreen(
@@ -511,8 +534,66 @@ class _PersonalInfoEditSscreenState
         ),
         onCancel: () => Navigator.pop(context),
         data: {},
-        child: 
-        SingleChildScrollView(
+        button: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: PrimaryButton(
+              onPressed: () {
+                if (!_personalInfoEditFormKey.currentState!.validate()) {
+                  zXFlushBar(context, "Required feilds are missing");
+
+                  return;
+                }
+                if (permIdentityDateExpire == null ||
+                    permIdentityDateIssued == null) {
+                  zXFlushBar(
+                      context, "Permanent ID isssue/expiry date is required");
+                  return;
+                }
+                if (regionsItem == null) {
+                  zXFlushBar(context, "Region is required");
+                  return;
+                }
+                if (selectedCountry == null) {
+                  zXFlushBar(context, "Country is required");
+                  return;
+                }
+                if (selectedGenderItem == null) {
+                  zXFlushBar(context, "Gender is required");
+                  return;
+                }
+                if (selectedBusinessNaturesCode == null) {
+                  zXFlushBar(context, "Business/work class is required");
+                  return;
+                }
+                if (subBusinessNaturesItem == null) {
+                  zXFlushBar(context, "Business/work sub class is required");
+                  return;
+                }
+
+                if (selectedIdType == null) {
+                  zXFlushBar(context, "ID type is required");
+                  return;
+                }
+                if (dob == null && widget.data?.data?.birthDate == null) {
+                  zXFlushBar(context, "Date of birth is required");
+                  return;
+                }
+                if (identityDateExpire == null &&
+                    widget.data?.data?.idExpiryDate == null) {
+                  zXFlushBar(context, "ID expiry date is required");
+                  return;
+                }
+
+                if (identityDateIssued == null &&
+                    widget.data?.data?.idIssueDate == null) {
+                  zXFlushBar(context, "ID issued date is required");
+                  return;
+                }
+                editAccountRequest(context);
+              },
+              title: 'Save'),
+        ),
+        child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
               left: 16,
@@ -574,9 +655,9 @@ class _PersonalInfoEditSscreenState
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'other name is  required';
-                      }
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
                       return null;
                     },
                   ),
@@ -596,7 +677,7 @@ class _PersonalInfoEditSscreenState
                     },
                   ),
                   const SizedBox(height: 16),
-                  CustomTextFormField( 
+                  CustomTextFormField(
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'DOB');
                     },
@@ -683,8 +764,8 @@ class _PersonalInfoEditSscreenState
                                       ),
                                       items: data
                                           .map<DropdownMenuItem<GendersDatum>>(
-                                              (item) =>
-                                                  DropdownMenuItem<GendersDatum>(
+                                              (item) => DropdownMenuItem<
+                                                      GendersDatum>(
                                                     value: item,
                                                     child: Text(
                                                       item.genderName ?? '',
@@ -719,7 +800,8 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -738,21 +820,25 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -769,7 +855,133 @@ class _PersonalInfoEditSscreenState
                     },
                   ),
                   const SizedBox(height: 16),
-      
+
+                  /// Region
+                  Text(
+                    'Region',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getRegionsProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<RegionDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Select region',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      items: data
+                                          .map<DropdownMenuItem<RegionDatum>>(
+                                              (item) =>
+                                                  DropdownMenuItem<RegionDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      //  preRegionCode!=null? data.where((item)=>item.regionCode==preRegionCode
+                                                      //   ).first.regionName??'':
+                                                      item.regionName ?? '',
+                                                      // item.regionName. ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: regionsItem,
+                                      onChanged: (RegionDatum? newValue) {
+                                        setState(() {
+                                          /// Set selected item params
+                                          regionsItem = newValue;
+                                          // preRegionCode= newValue?.regionCode;
+                                          selectedRegionName =
+                                              newValue?.regionName;
+                                          selectedRegionCode =
+                                              newValue?.regionCode;
+                                          _regionCodeController.text =
+                                              newValue?.regionCode ?? '';
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
+                                        ),
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : Text('Empty regions'),
+                            error: (e, s) => GestureDetector(
+                                onTap: () => ref.invalidate(getRegionsProvider),
+                                child: const Text(
+                                  'An error occured',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+                  const SizedBox(height: 16),
+
                   Text(
                     'Country',
                     overflow: TextOverflow.fade,
@@ -787,6 +999,11 @@ class _PersonalInfoEditSscreenState
                                     data.isNotEmpty == true)
                                 ? DropdownButtonHideUnderline(
                                     child: DropdownButton2<CountryDatum>(
+                                      //  dropdownSearchData: DropdownSearchData<CountryDatum>(
+                                      //   searchController: ,
+                                      //   searchMatchFn:(item,search){
+
+                                      //   } ),
                                       isExpanded: true,
                                       hint: Text(
                                         'Select country',
@@ -799,8 +1016,8 @@ class _PersonalInfoEditSscreenState
                                       ),
                                       items: data
                                           .map<DropdownMenuItem<CountryDatum>>(
-                                              (item) =>
-                                                  DropdownMenuItem<CountryDatum>(
+                                              (item) => DropdownMenuItem<
+                                                      CountryDatum>(
                                                     value: item,
                                                     child: Text(
                                                       item.countryName ?? '',
@@ -845,7 +1062,8 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -864,32 +1082,37 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
                                 : GestureDetector(
-                                    child:
-                                        Text('No? countries?, Tap to refresh, '),
+                                    child: Text(
+                                        'No? countries?, Tap to refresh, '),
                                     onTap: () =>
                                         ref.invalidate(getCountriesProvider),
                                   ),
                             error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(getCountriesProvider),
+                                onTap: () =>
+                                    ref.invalidate(getCountriesProvider),
                                 child: const Text(
                                   'An error occured',
                                   maxLines: 3,
@@ -899,130 +1122,9 @@ class _PersonalInfoEditSscreenState
                           );
                     },
                   ),
-      
-                  const SizedBox(height: 16),
-                  Text(
-                    'Identification Types',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getIdentificationTypesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child:
-                                        DropdownButton2<IdentificationTypesDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select identification Types',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      IdentificationTypesDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      IdentificationTypesDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.identificationTypeName ??
-                                                          '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: selectedIdentificationItem,
-                                      onChanged:
-                                          (IdentificationTypesDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          selectedIdType = newValue;
-                                          selectedIdentificationCode =
-                                              newValue!.identificationTypeId;
-                                          selectedIdentificationName =
-                                              newValue.identificationTypeName;
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
-                                        ),
-                                      ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty types'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref
-                                    .invalidate(getIdentificationTypesProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-      
+
                   /// business Nature
-      
+
                   const SizedBox(height: 16),
                   Text(
                     'Business Nature',
@@ -1037,10 +1139,16 @@ class _PersonalInfoEditSscreenState
                   Consumer(
                     builder: (context, ref, child) {
                       return ref.watch(getBusinessNaturesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<BusinessNaturesDatum>(
+                            data: (data) => (data == null ||
+                                    data.isEmpty == true)
+                                ? GestureDetector(
+                                    onTap: () => ref.invalidate(
+                                        getIdentificationTypesProvider),
+                                    child: Text(
+                                        'Empty classification.Tap  to refresh'))
+                                : DropdownButtonHideUnderline(
+                                    child:
+                                        DropdownButton2<BusinessNaturesDatum>(
                                       isExpanded: true,
                                       hint: Text(
                                         'Select nature of business',
@@ -1053,40 +1161,46 @@ class _PersonalInfoEditSscreenState
                                       ),
                                       items: data
                                           .map<
-                                              DropdownMenuItem<
-                                                  BusinessNaturesDatum>>((item) =>
-                                              DropdownMenuItem<
-                                                  BusinessNaturesDatum>(
-                                                value: item,
-                                                child: Text(
-                                                  item.businessNatureName ?? '',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.normal,
-                                                    color: ZxplorePrimaryColor,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ))
+                                                  DropdownMenuItem<
+                                                      BusinessNaturesDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      BusinessNaturesDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.businessNatureName ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
                                           .toList(),
                                       value: businessNaturesItem,
                                       onChanged:
                                           (BusinessNaturesDatum? newValue) {
+                                        setState(() {
+                                          subBusinessNaturesItem = null;
+
+                                          /// Set selected item params
+                                          businessNaturesItem = newValue;
+                                          selectedBusinessNaturesName =
+                                              newValue?.businessNatureName;
+                                          selectedBusinessNaturesCode =
+                                              newValue?.businessNatureId;
+                                          _businessNatureIdController.text =
+                                              newValue?.businessNatureId ?? '';
+                                        });
                                         // refresh subs
                                         ref.invalidate(
                                             getSubBusinessNaturesProvider(
                                                 int.parse(newValue!
                                                     .businessNatureId!)));
-                                        setState(() {
-                                          /// Set selected item params
-                                          businessNaturesItem = newValue;
-                                          selectedCustomerClassificationsName =
-                                              newValue.businessNatureName;
-                                          selectedBusinessNaturesCode =
-                                              newValue.businessNatureId;
-                                          _businessNatureIdController.text =
-                                              newValue.businessNatureId ?? '';
-                                        });
                                       },
                                       buttonStyleData: ButtonStyleData(
                                         height: 60,
@@ -1094,7 +1208,8 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -1113,25 +1228,28 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
-                                  )
-                                : Text('Empty classification'),
+                                  ),
                             error: (e, s) => GestureDetector(
                                 onTap: () => ref
                                     .invalidate(getIdentificationTypesProvider),
@@ -1145,7 +1263,8 @@ class _PersonalInfoEditSscreenState
                     },
                   ),
                   const SizedBox(height: 16),
-                  if (selectedBusinessNaturesCode != null) ...[
+                  if (selectedBusinessNaturesCode != null ||
+                      subBusinessNaturesItem != null) ...[
                     /// Sub bus category
                     Text(
                       ' Sub  Business  class',
@@ -1156,21 +1275,28 @@ class _PersonalInfoEditSscreenState
                           .bodyMedium
                           ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                     ),
-                    const SizedBox(height: 6),
+
                     Consumer(
                       builder: (context, ref, child) {
                         return ref
                             .watch(getSubBusinessNaturesProvider(
                                 int.parse(selectedBusinessNaturesCode!)))
                             .when(
-                              data: (data) => (data != null &&
-                                      data.isNotEmpty == true)
-                                  ? DropdownButtonHideUnderline(
-                                      child:
-                                          DropdownButton2<SubBusinessNatureDatum>(
+                              data: (data) => (data == null || data.isEmpty)
+                                  ? GestureDetector(
+                                      child: Text('Empty  Sub-classification'),
+                                      onTap: () => ref.invalidate(
+                                          getSubBusinessNaturesProvider(
+                                              int.parse(businessNaturesItem
+                                                      ?.businessNatureId! ??
+                                                  ''))))
+                                  : DropdownButtonHideUnderline(
+                                      key: ValueKey(subBusinessNaturesItem),
+                                      child: DropdownButton2<
+                                          SubBusinessNatureDatum>(
                                         isExpanded: true,
                                         hint: Text(
-                                          'Select class',
+                                          'Select sub business class',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
@@ -1195,14 +1321,19 @@ class _PersonalInfoEditSscreenState
                                                           color:
                                                               ZxplorePrimaryColor,
                                                         ),
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                     ))
                                             .toList(),
                                         value: subBusinessNaturesItem,
                                         onChanged:
                                             (SubBusinessNatureDatum? newValue) {
+                                          // refresh subs
+                                          ref.invalidate(
+                                              getSubBusinessNaturesProvider(
+                                                  int.parse(
+                                                      selectedBusinessNaturesCode!)));
                                           setState(() {
                                             /// Set selected item params
                                             subBusinessNaturesItem = newValue;
@@ -1210,7 +1341,8 @@ class _PersonalInfoEditSscreenState
                                                 newValue?.subBusinessNatureName;
                                             subBusinessNaturesCode =
                                                 newValue?.subBusinessNatureId;
-                                            _subBusinessNatureIdController.text =
+                                            _subBusinessNatureIdController
+                                                    .text =
                                                 newValue?.subBusinessNatureId ??
                                                     '';
                                           });
@@ -1249,7 +1381,8 @@ class _PersonalInfoEditSscreenState
                                               const ScrollbarThemeData(
                                             radius: Radius.circular(40),
                                             thickness:
-                                                WidgetStatePropertyAll<double>(6),
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
                                             thumbVisibility:
                                                 WidgetStatePropertyAll<bool>(
                                                     true),
@@ -1262,8 +1395,7 @@ class _PersonalInfoEditSscreenState
                                               left: 14, right: 14),
                                         ),
                                       ),
-                                    )
-                                  : Text('Empty   classification'),
+                                    ),
                               error: (e, s) => GestureDetector(
                                   onTap: () => ref.invalidate(
                                       getSubBusinessNaturesProvider(int.parse(
@@ -1278,7 +1410,7 @@ class _PersonalInfoEditSscreenState
                       },
                     ),
                   ],
-      
+
                   /// Customer Classification category
                   const SizedBox(height: 16),
                   Text(
@@ -1317,8 +1449,7 @@ class _PersonalInfoEditSscreenState
                                                       CustomerClassificationDatum>(
                                                     value: item,
                                                     child: Text(
-                                                      item.customerClassificationId ??
-                                                          '',
+                                                      item.description ?? '',
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -1336,9 +1467,11 @@ class _PersonalInfoEditSscreenState
                                           newValue) {
                                         setState(() {
                                           /// Set selected item params
-                                          customerClassificationsItem = newValue;
+                                          customerClassificationsItem =
+                                              newValue;
                                           selectedCustomerClassificationsName =
-                                              newValue?.customerClassificationId;
+                                              newValue
+                                                  ?.customerClassificationId;
                                           _customerClassificationIdController
                                               .text = newValue
                                                   ?.customerClassificationId ??
@@ -1351,7 +1484,8 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -1370,21 +1504,25 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -1402,7 +1540,7 @@ class _PersonalInfoEditSscreenState
                     },
                   ),
                   const SizedBox(height: 16),
-      
+
                   /// EmploymentType
                   Text(
                     'Employment Type',
@@ -1433,24 +1571,29 @@ class _PersonalInfoEditSscreenState
                                       ),
                                       items: data
                                           .map<
-                                              DropdownMenuItem<
-                                                  EmploymentTypeDatum>>((item) =>
-                                              DropdownMenuItem<
-                                                  EmploymentTypeDatum>(
-                                                value: item,
-                                                child: Text(
-                                                  item.employmentTypeName ?? '',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.normal,
-                                                    color: ZxplorePrimaryColor,
-                                                  ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ))
+                                                  DropdownMenuItem<
+                                                      EmploymentTypeDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      EmploymentTypeDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.employmentTypeName ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
                                           .toList(),
                                       value: employmentTypesItem,
-                                      onChanged: (EmploymentTypeDatum? newValue) {
+                                      onChanged:
+                                          (EmploymentTypeDatum? newValue) {
                                         setState(() {
                                           /// Set selected item params
                                           employmentTypesItem = newValue;
@@ -1459,7 +1602,8 @@ class _PersonalInfoEditSscreenState
                                           selectedEmploymentTypesCode =
                                               newValue?.employmentTypeCode;
                                           _employmentTypeCodeController.text =
-                                              newValue?.employmentTypeCode ?? '';
+                                              newValue?.employmentTypeCode ??
+                                                  '';
                                         });
                                       },
                                       buttonStyleData: ButtonStyleData(
@@ -1468,7 +1612,8 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -1487,21 +1632,25 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -1580,9 +1729,9 @@ class _PersonalInfoEditSscreenState
                       },
                     ),
                   ],
-      
+
                   const SizedBox(height: 16),
-      
+
                   CustomTextFormField(
                     title: "Monthly Income",
                     fillColor: Colors.transparent,
@@ -1597,124 +1746,7 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-      
-                  /// Region
-                  Text(
-                    'Region',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getRegionsProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<RegionDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select region',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<DropdownMenuItem<RegionDatum>>(
-                                              (item) =>
-                                                  DropdownMenuItem<RegionDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.regionName ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: regionsItem,
-                                      onChanged: (RegionDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          regionsItem = newValue;
-                                          selectedRegionName =
-                                              newValue?.regionName;
-                                          selectedRegionCode =
-                                              newValue?.regionCode;
-                                          _regionCodeController.text =
-                                              newValue?.regionCode ?? '';
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
-                                        ),
-                                      ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty regions'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(getRegionsProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-      
+
                   CheckboxListTile(
                     title: Text('Has Permanent Residence'),
                     value: hasPermanentResidence,
@@ -1752,23 +1784,134 @@ class _PersonalInfoEditSscreenState
                       },
                     ),
                     const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: "Permanet Address Country Code",
-                      fillColor: Colors.transparent,
-                      controller: _permanentResidentialCityController,
-                      hint: 'GH,NG,TG,CM....',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        // if (value.toString().isEmpty) {
-                        //   return 'permanet address is required';
-                        // }
-                        return null;
+                    Text(
+                      'Permanent Res. Country ',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getCountriesProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<CountryDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select permanent country',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    CountryDatum>>((item) =>
+                                                DropdownMenuItem<CountryDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.countryName ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: permsSelectedCountry,
+                                        onChanged: (CountryDatum? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            permsSelectedCountry = newValue;
+                                            permsSelectedCountryCode =
+                                                newValue?.countryCode;
+                                            permsSelectedCountryName =
+                                                newValue?.countryName;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
+                                        ),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
+                                        ),
+                                      ),
+                                    )
+                                  : GestureDetector(
+                                      child: Text(
+                                          'No? countries?, Tap to refresh, '),
+                                      onTap: () =>
+                                          ref.invalidate(getCountriesProvider),
+                                    ),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getCountriesProvider),
+                                  child: const Text(
+                                    'An error occured',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
                       },
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
-                      title: " Residence Permit PlaceCode",
+                      title: " Residence Permit (Place Code)",
                       fillColor: Colors.transparent,
                       controller: _residencePermitPlaceCodeController,
                       hint: 'Enter Place code',
@@ -1783,9 +1926,8 @@ class _PersonalInfoEditSscreenState
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
-                      onTap: () {
-                        _showDatePicker(context, dateCategory: 'PERMITISSUE');
-                      },
+                      onTap: () =>
+                          _showDatePicker(context, dateCategory: 'PERMITISSUE'),
                       title: 'Permit Issue Date',
                       readOnly: true,
                       showCursor: false,
@@ -1837,7 +1979,7 @@ class _PersonalInfoEditSscreenState
                     ),
                   ],
                   const SizedBox(height: 16),
-      
+
                   /// MaritalStatus
                   Text(
                     'Marital Status',
@@ -1877,15 +2019,18 @@ class _PersonalInfoEditSscreenState
                                                   item.maritalStatusDesc ?? '',
                                                   style: const TextStyle(
                                                     fontSize: 16,
-                                                    fontWeight: FontWeight.normal,
+                                                    fontWeight:
+                                                        FontWeight.normal,
                                                     color: ZxplorePrimaryColor,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ))
                                           .toList(),
                                       value: maritalStatusItem,
-                                      onChanged: (MaritalStatusDatum? newValue) {
+                                      onChanged:
+                                          (MaritalStatusDatum? newValue) {
                                         setState(() {
                                           /// Set selected item params
                                           maritalStatusItem = newValue;
@@ -1903,7 +2048,8 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -1922,21 +2068,25 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -1985,7 +2135,7 @@ class _PersonalInfoEditSscreenState
                       },
                     ),
                   ],
-      
+
                   const SizedBox(height: 16),
                   const Divider(
                     height: 16,
@@ -2081,7 +2231,7 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-      
+
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     title: 'City',
@@ -2097,9 +2247,28 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-                  // const SizedBox(height: 8),
+
                   const SizedBox(height: 16),
-      
+                  const SizedBox(height: 16),
+                  CustomTextFormField(
+                    title: 'GPS-Addresss',
+                    fillColor: Colors.transparent,
+                    controller: _gpsAddressController,
+                    hint: 'GHA-00000000-0',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'GPS-Addresss is  required';
+                      } else if (value.toString().length < 12) {
+                        return 'Minimum 12 characters';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  const SizedBox(height: 16),
+
                   const Divider(
                     height: 16,
                     color: Color.fromARGB(255, 169, 189, 201),
@@ -2123,8 +2292,8 @@ class _PersonalInfoEditSscreenState
                             data: (data) => (data != null &&
                                     data.isNotEmpty == true)
                                 ? DropdownButtonHideUnderline(
-                                    child:
-                                        DropdownButton2<IdentificationTypesDatum>(
+                                    child: DropdownButton2<
+                                        IdentificationTypesDatum>(
                                       isExpanded: true,
                                       hint: Text(
                                         'Select ID type',
@@ -2167,7 +2336,7 @@ class _PersonalInfoEditSscreenState
                                               newValue?.identificationTypeId;
                                           _identificationTypeIdController.text =
                                               '${newValue?.identificationTypeId ?? ''}';
-                                          selectedIdentificationName =
+                                          selectedIdentificationTypeName =
                                               newValue?.identificationTypeName;
                                         });
                                       },
@@ -2177,7 +2346,8 @@ class _PersonalInfoEditSscreenState
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -2196,21 +2366,25 @@ class _PersonalInfoEditSscreenState
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -2264,7 +2438,7 @@ class _PersonalInfoEditSscreenState
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     onTap: () {
-                      _showDatePicker(context, dateCategory: 'ISSUE');
+                      _showDatePicker(context, dateCategory: 'IDISSSUEDATE');
                     },
                     title: 'Issue Date',
                     showCursor: false,
@@ -2291,7 +2465,7 @@ class _PersonalInfoEditSscreenState
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     onTap: () {
-                      _showDatePicker(context, dateCategory: 'EXPIRY');
+                      _showDatePicker(context, dateCategory: 'IDEXPDATE');
                     },
                     title: 'Expiry Date',
                     readOnly: true,
@@ -2324,9 +2498,6 @@ class _PersonalInfoEditSscreenState
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'other name is  required';
-                      // }
                       return null;
                     },
                   ),
@@ -2347,7 +2518,7 @@ class _PersonalInfoEditSscreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'SSN',
+                    title: 'SSNIT  Number',
                     fillColor: Colors.transparent,
                     controller: _ssnitNoController,
                     hint: 'Enter SSN code',
@@ -2357,7 +2528,7 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-      
+
                   const SizedBox(height: 16),
                   Text(
                     'Other Informtion',
@@ -2368,12 +2539,32 @@ class _PersonalInfoEditSscreenState
                   ),
                   div,
                   gapH12,
-      
+
                   CheckboxListTile(
-                    title: Text('Account Ownership'),
+                    title: Text('Account Ownership (you/other)'),
                     value: accountOwnership,
                     onChanged: (value) => _handleCheckboxChange(2, value),
                   ),
+                  if (accountOwnership) ...[
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: 'Account Ownership Other',
+                      fillColor: Colors.transparent,
+                      controller: _accountOwnershipOtherController,
+                      hint: 'Enter Account Ownership',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        if (accountOwnership) {
+                          if (value!.isEmpty) {
+                            return 'Specify account ownership';
+                          }
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                   gapH12,
                   CheckboxListTile(
                     title: Text('Customer Resident In Ghana'),
@@ -2381,7 +2572,7 @@ class _PersonalInfoEditSscreenState
                     onChanged: (value) => _handleCheckboxChange(3, value),
                   ),
                   gapH12,
-      
+
                   CheckboxListTile(
                     title: Text('Is Physically Challenged'),
                     value: isPhysicallyChallenged,
@@ -2394,7 +2585,7 @@ class _PersonalInfoEditSscreenState
                     onChanged: (value) => _handleCheckboxChange(5, value),
                   ),
                   gapH12,
-      
+
                   CheckboxListTile(
                     title: Text('Setup Ibank'),
                     value: setupIbank,
@@ -2419,13 +2610,13 @@ class _PersonalInfoEditSscreenState
                     onChanged: (value) => _handleCheckboxChange(9, value),
                   ),
                   gapH12,
-      
+
                   CheckboxListTile(
                     title: Text('New Request?'),
                     value: isNewRequest,
                     onChanged: (value) => _handleCheckboxChange(11, value),
                   ),
-      
+
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     title: 'TIN',
@@ -2447,51 +2638,16 @@ class _PersonalInfoEditSscreenState
                   //   inputType: TextInputType.text,
                   //   useDefaultErrorText: false,
                   //   validator: (value) {
-      
+
                   //     return null;
                   //   },
                   // ),
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_personalInfoEditFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        if (selectedCountry == null) {
-                          zXFlushBar(context, "Country is required");
-                          return;
-                        }
-                        if (selectedGenderItem == null) {
-                          zXFlushBar(context, "Gender is required");
-                          return;
-                        }
-      
-                        if (selectedIdType == null) {
-                          zXFlushBar(context, "ID type is required");
-                          return;
-                        }
-                        if (dob == null) {
-                          zXFlushBar(context, "Date of birth is required");
-                          return;
-                        }
-                        if (dateExpire == null) {
-                          zXFlushBar(context, "ID expiry date is required");
-                          return;
-                        }
-      
-                        if (datedIssued == null) {
-                          zXFlushBar(context, "ID issued date is required");
-                          return;
-                        }
-                        editAccountRequest(context);
-                      },
-                      title: 'Save')
                 ],
               ),
             ),
           ),
         ),
-         
       ),
     );
   }
@@ -2499,43 +2655,49 @@ class _PersonalInfoEditSscreenState
   /// Date Picker
   Future<void> _showDatePicker(BuildContext dateContext,
       {required String dateCategory}) async {
+    print("CAAT::$dateCategory");
+    DateTime now = DateTime.now();
+    final DateTime tempnow = DateTime.now();
+    final DateTime firstDate = DateTime(now.year - 200, now.month, now.day);
+    final DateTime lastDate = DateTime(now.year + 200, now.month, now.day);
     if (mounted) {
       final DateTime? fPickedDate = await showDatePicker(
-        context: context,
-        initialDate: dobInit!,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-      );
+          context: context,
+          initialDate: tempnow,
+          firstDate: firstDate,
+          lastDate: lastDate);
+
       if (fPickedDate != null) {
+        dobFormattedDate = dateFormatter.format(fPickedDate);
+
         if (dateCategory == 'DOB') {
           setState(() {
-            dobInit = fPickedDate;
-            dobFormattedDate = dateFormatter.format(dobInit!);
-            sDobFormattedDate = sdateFormatter.format(dobInit!);
+            dob = fPickedDate.toIso8601String();
             _birthDateController.text = dobFormattedDate;
           });
-        } else if (dateCategory == 'PERMITEXP') {
-          dobInit = fPickedDate;
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          _permitExpiryDateController.text = dobFormattedDate;
+        } else if (dateCategory == 'IDISSSUEDATE') {
+          setState(() {
+            identityDateIssued = fPickedDate.toIso8601String();
+            _idIssueDateController.text = dobFormattedDate;
+          });
         }
+        else if (dateCategory == 'IDEXPDATE') {
+        setState(() {
+          identityDateExpire = fPickedDate.toIso8601String();
+          _idExpiryDateController.text = dobFormattedDate;
+        });
+      } else if (dateCategory == 'PERMITEXP') {
+        setState(() {
+          permIdentityDateExpire = fPickedDate.toIso8601String();
+          _permitExpiryDateController.text = dobFormattedDate;
+        });
       } else if (dateCategory == 'PERMITISSUE') {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _permitIssueDateController.text = dobFormattedDate;
-      } else if (dateCategory == 'ISSUE') {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _idIssueDateController.text = dobFormattedDate;
-      } else {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _idExpiryDateController.text = dobFormattedDate;
+        setState(() {
+          permIdentityDateIssued = fPickedDate.toIso8601String();
+          _permitIssueDateController.text = dobFormattedDate;
+        });
       }
+      } 
     }
   }
 }

@@ -144,8 +144,8 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
     );
 
     return ZxploreProgress(
-      inAsyncCall: ref.watch(editFundingSourcesControllerProvider).isLoading
-      || ref.watch(viewRequestControllerProvider).isLoading,
+      inAsyncCall: ref.watch(editFundingSourcesControllerProvider).isLoading,
+      // || ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Funding Sources',
         widgetToGoOnCancel: FundingSourcesScreen(

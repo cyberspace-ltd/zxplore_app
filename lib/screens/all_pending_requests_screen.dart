@@ -318,16 +318,18 @@ class AccountRequestItem extends StatelessWidget {
                 ),
               ],
             ),
-            Wrap(
-              alignment: WrapAlignment.start,
+            Row(
               children: [
-                Text(
-                  'Started on:${getDayDateAndYear(request?.createDate.toIso8601String() ?? '')}',
-                    overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(fontWeight: FontWeight.normal),
+                SizedBox(
+                 width: MediaQuery.of(context).size.width * 0.75,
+                  child: Text(
+                    'Started on:${getDayDateAndYear(request?.createDate.toIso8601String() ?? '')}',
+                      overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.normal),
+                  ),
                 ),
               ],
             ),
@@ -357,8 +359,8 @@ class FoldableItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.12,
-        padding: EdgeInsets.all(16.0),
+        height: MediaQuery.of(context).size.height * 0.15,
+        padding: EdgeInsets.symmetric(horizontal: 16.0,vertical: 10),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
@@ -379,12 +381,16 @@ class FoldableItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  name ?? '',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.normal),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.5,
+                  child: Text(
+                    name ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.normal),
+                  ),
                 ),
                 SizedBox(
                   // width: 70,

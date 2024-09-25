@@ -21,15 +21,14 @@ class ApiInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     options.headers['ApiKey'] = apiKey;
-    if (options.path !='Account/login' &&
-       options.path !='Account/loginModes' &&
-        options.path !='Account/renewToken' &&
-        options.path !='Metadata/'
-        ) {
+    if (options.path != 'Account/login' &&
+        options.path != 'Account/loginModes' &&
+        options.path != 'Account/renewToken' &&
+        options.path != 'Metadata/') {
       final sp = await SharedPreferences.getInstance();
       final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
 
-    if (token != null) {
+      if (token != null) {
         options.headers['Authorization'] = 'Bearer $token';
         _log.info('Access token added to request headers');
       }
@@ -53,18 +52,19 @@ class ApiInterceptor extends Interceptor {
       'headers: ${response.headers} data: ${response.data}',
     );
 
-    if(response.requestOptions.path =='Account/login'){
-      if(response.data['status']==true){
-        final pref= await SharedPreferences.getInstance();
-       final  secStorage= FlutterSecureStorage();
-      
-       final tk= response.data['data'];
-       if(tk!=null){
-        await pref.setString(SharedPreferencesKeys.accessTokenKey, tk);
-      await secStorage.write(key: SharedPreferencesKeys.secAccessTokenKey, value: response.data['data']);
-       }
+    if (response.requestOptions.path == 'Account/login') {
+      if (response.data['status'] == true) {
+        final pref = await SharedPreferences.getInstance();
+        final secStorage = FlutterSecureStorage();
+
+        final tk = response.data['data'];
+        if (tk != null) {
+          await pref.setString(SharedPreferencesKeys.accessTokenKey, tk);
+          await secStorage.write(
+              key: SharedPreferencesKeys.secAccessTokenKey,
+              value: response.data['data']);
+        }
       }
-      
     }
     return super.onResponse(response, handler);
   }
@@ -78,7 +78,7 @@ class ApiInterceptor extends Interceptor {
   //   );
   //   if (response.statusCode == 200) {
   //     await secStorage.write(key: SharedPreferencesKeys.secAccessTokenKey, value: response.data['data']);
- 
+
   //   } else {
   //     throw Exception('Failed to refresh token');
   //   }
@@ -86,16 +86,16 @@ class ApiInterceptor extends Interceptor {
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    debugPrint('❌❌❌ Error  Response TypeA:${err.response}');
-    debugPrint('❌❌❌ Error  Response Msg:${err.response?.data['message']}');
-    debugPrint('❌❌❌ Error    Msg:${err.message}');
-    debugPrint('❌❌❌ Error  Response code:${err.response?.statusCode}');
-
     if (err.response != null &&
         err.response?.data != null &&
         err.response!.data.toString().isNotEmpty &&
         err.response?.statusCode.runtimeType == int &&
         err.response?.data.runtimeType != String) {
+      debugPrint('❌❌❌ Error  Response TypeA:${err.response}');
+      debugPrint('❌❌❌ Error  Response Msg:${err.response?.data['message']}');
+      debugPrint('❌❌❌ Error    Msg:${err.message}');
+      debugPrint('❌❌❌ Error  Response code:${err.response?.statusCode}');
+
       debugPrint('❌❌❌ Error  Response Name2:${err.type.name}');
       return handler.resolve(Response(
         statusCode: err.response?.statusCode ?? 0,
@@ -149,6 +149,3 @@ class ApiInterceptor extends Interceptor {
     }
   }
 }
-
-
- 

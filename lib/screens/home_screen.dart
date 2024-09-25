@@ -27,8 +27,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-    ref.invalidate(getUserStatisticsDataProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.invalidate(getUserStatisticsDataProvider);
     });
   }
 
@@ -37,7 +37,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
 
     return RefreshIndicator(
-      onRefresh: ()async =>ref.invalidate(getUserStatisticsDataProvider),
+      onRefresh: () async => ref.invalidate(getUserStatisticsDataProvider),
       child: ZxploreProgress(
         inAsyncCall: ref.watch(getUserStatisticsDataProvider).isLoading,
         child: new Scaffold(
@@ -64,22 +64,26 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) => CreateNewAccountScreen()),
+                    builder: (BuildContext context) =>
+                        CreateNewAccountScreen()),
               );
             },
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           body: ListView(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
+                padding:
+                    const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
                 child: Row(
                   children: [
                     Text(
                       'Account Details',
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style:
+                          Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
                   ],
                 ),
@@ -89,22 +93,27 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     data: (data) {
                       return data != null
                           ? Padding(
-                           padding:    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-                            child: Container(
-                              
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 40),
+                              child: Container(
                                 height:
                                     MediaQuery.of(context).size.height * 0.5,
                                 padding: EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color:brightness == Brightness.light? Color(0xfff0eeee):ZxplorePrimaryColor,
-                                    boxShadow:brightness == Brightness.light? [
-                                      BoxShadow(
-                                        offset: const Offset(0, 4),
-                                        color: Colors.grey.withOpacity(0.25),
-                                        blurRadius: 4,
-                                      ),
-                                    ]:[]),
+                                    color: brightness == Brightness.light
+                                        ? Color(0xffffffff)
+                                        : ZxplorePrimaryColor,
+                                    boxShadow: brightness == Brightness.light
+                                        ? [
+                                            BoxShadow(
+                                              offset: const Offset(0, 4),
+                                              color:
+                                                  Colors.grey.withOpacity(0.25),
+                                              blurRadius: 4,
+                                            ),
+                                          ]
+                                        : []),
                                 child: Column(
                                   children: [
                                     StatisItem(
@@ -146,11 +155,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                   ],
                                 ),
                               ),
-                          )
+                            )
                           : Padding(
-                    padding:   EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(AppStrings.errorInProccessing),
-                          );
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(AppStrings.errorInProccessing),
+                            );
                     },
                     error: (error, stk) => Center(
                           child: Padding(
@@ -266,25 +275,32 @@ class StatisItem extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-           color:brightness == Brightness.light? Color(0xfff0eeee):ZxplorePrimaryColor,
-                                    boxShadow:brightness == Brightness.light? [
-                                      BoxShadow(
-                                        offset: const Offset(0, 4),
-                                        color: Colors.grey.withOpacity(0.25),
-                                        blurRadius: 4,
-                                      ),
-                                    ]:[]),
+            color: ZxplorePrimaryColor,
+            boxShadow: brightness == Brightness.light
+                ? [
+                    BoxShadow(
+                      offset: const Offset(4, 4),
+                      color: Colors.grey.withOpacity(0.25),
+                      blurRadius: 4,
+                    ),
+                  ]
+                : []),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title ?? ''),
+            Text(
+              title ?? '',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+            ),
             Chip(
-              label: Text(
-                formatNumberInKs(value),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: ZxploreRedColor,
-              side: BorderSide(color: Colors.red)
-            )
+                label: Text(
+                  formatNumberInKs(value),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                backgroundColor: ZxploreRedColor,
+                side: BorderSide(color: Colors.red))
           ],
         ),
       ),
