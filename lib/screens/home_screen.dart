@@ -34,20 +34,22 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = View.of(context).platformDispatcher.platformBrightness;
+
     return RefreshIndicator(
       onRefresh: ()async =>ref.invalidate(getUserStatisticsDataProvider),
       child: ZxploreProgress(
         inAsyncCall: ref.watch(getUserStatisticsDataProvider).isLoading,
         child: new Scaffold(
           appBar: AppBar(
-            backgroundColor: ZxplorePrimaryColor,
+            // backgroundColor: ZxplorePrimaryColor,
             automaticallyImplyLeading: false,
             // Don't show the leading button
             centerTitle: true,
             leading: Container(),
             title: const Text(
               'Zxplore Ghana',
-              style: TextStyle(color: Colors.white),
+              // style: TextStyle(color: Colors.white),
             ),
           ),
           floatingActionButton: FloatingActionButton.extended(
@@ -95,14 +97,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                 padding: EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    color: Color(0xfff0eeee),
-                                    boxShadow: [
+                                    color:brightness == Brightness.light? Color(0xfff0eeee):ZxplorePrimaryColor,
+                                    boxShadow:brightness == Brightness.light? [
                                       BoxShadow(
                                         offset: const Offset(0, 4),
                                         color: Colors.grey.withOpacity(0.25),
                                         blurRadius: 4,
                                       ),
-                                    ]),
+                                    ]:[]),
                                 child: Column(
                                   children: [
                                     StatisItem(
@@ -254,6 +256,8 @@ class StatisItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = View.of(context).platformDispatcher.platformBrightness;
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -262,14 +266,14 @@ class StatisItem extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(0, 4),
-                color: Colors.grey.withOpacity(0.25),
-                blurRadius: 4,
-              ),
-            ]),
+           color:brightness == Brightness.light? Color(0xfff0eeee):ZxplorePrimaryColor,
+                                    boxShadow:brightness == Brightness.light? [
+                                      BoxShadow(
+                                        offset: const Offset(0, 4),
+                                        color: Colors.grey.withOpacity(0.25),
+                                        blurRadius: 4,
+                                      ),
+                                    ]:[]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

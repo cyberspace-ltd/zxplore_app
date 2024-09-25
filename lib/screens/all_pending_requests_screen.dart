@@ -229,22 +229,24 @@ class AccountRequestItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = View.of(context).platformDispatcher.platformBrightness;
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.18,
-        padding: EdgeInsets.all(24.0),
+        padding: EdgeInsets.symmetric(horizontal: 20.0,vertical: 16),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(0, 4),
-                color: Colors.grey.withOpacity(0.25),
-                blurRadius: 4,
-              ),
-            ]),
+            color:brightness == Brightness.light? Color(0xfff0eeee):ZxplorePrimaryColor,
+                                    boxShadow:brightness == Brightness.light? [
+                                      BoxShadow(
+                                        offset: const Offset(0, 4),
+                                        color: Colors.grey.withOpacity(0.25),
+                                        blurRadius: 4,
+                                      ),
+                                    ]:[]),
         child: Column(
           children: [
             Row(
@@ -252,6 +254,7 @@ class AccountRequestItem extends StatelessWidget {
               children: [
                 Text(
                   request?.fullName ?? '',
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
@@ -307,6 +310,7 @@ class AccountRequestItem extends StatelessWidget {
               children: [
                 Text(
                   'Branch: ${request?.branch ?? ''}',
+                    overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
@@ -314,10 +318,12 @@ class AccountRequestItem extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
+            Wrap(
+              alignment: WrapAlignment.start,
               children: [
                 Text(
                   'Started on:${getDayDateAndYear(request?.createDate.toIso8601String() ?? '')}',
+                    overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall

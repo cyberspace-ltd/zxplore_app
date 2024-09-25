@@ -42,7 +42,9 @@ class BaseEditForm extends ConsumerWidget {
             )),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text(title), this.addMore ?? SizedBox.shrink()],
+          children: [SizedBox(
+            width: MediaQuery.of(context).size.width*0.60,
+            child: Text(title,overflow: TextOverflow.ellipsis,)), this.addMore ?? SizedBox.shrink()],
         ),
       ),
       body: child,
