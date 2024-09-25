@@ -7,7 +7,7 @@ part of 'edit_stake_holders_controller.dart';
 // **************************************************************************
 
 String _$editStakeHoldersControllerHash() =>
-    r'c948a7a3f1d9b03a58fed3b1767edc2287f4e634';
+    r'924ad53b3c104112b0be1f2b249549d25520f5de';
 
 /// See also [EditStakeHoldersController].
 @ProviderFor(EditStakeHoldersController)

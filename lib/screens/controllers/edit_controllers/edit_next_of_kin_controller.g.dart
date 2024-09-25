@@ -7,7 +7,7 @@ part of 'edit_next_of_kin_controller.dart';
 // **************************************************************************
 
 String _$editNextOfKinControllerHash() =>
-    r'a2670e3e06492776b8bf35b1bd3023131b4d2260';
+    r'1706283e8e1c6aa1d8ddf44a37aacc37f79b7471';
 
 /// See also [EditNextOfKinController].
 @ProviderFor(EditNextOfKinController)

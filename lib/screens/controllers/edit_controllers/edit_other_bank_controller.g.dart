@@ -7,7 +7,7 @@ part of 'edit_other_bank_controller.dart';
 // **************************************************************************
 
 String _$editOtherBankControllerHash() =>
-    r'1dbb03a3973de4f193dba31b5b4a022db193b103';
+    r'4945da7fc46890a002e73ec4d2f6e055fba3792a';
 
 /// See also [EditOtherBankController].
 @ProviderFor(EditOtherBankController)

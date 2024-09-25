@@ -7,7 +7,7 @@ part of 'edit_foreign_accounts_controller.dart';
 // **************************************************************************
 
 String _$editForeignAaccountsControllerrHash() =>
-    r'd69bc9b45de230a441242f304ae68c1acf23cafc';
+    r'a1702a093c2d3d4f7405ee9d05e475049201c40f';
 
 /// See also [EditForeignAaccountsControllerr].
 @ProviderFor(EditForeignAaccountsControllerr)
