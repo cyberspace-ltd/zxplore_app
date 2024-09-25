@@ -34,7 +34,8 @@ class _ViewAssignedAccountScreenState
           title: 'Assigned AccountTypes',
           data: _flattenData(widget.formIndividualData),
           showEdit: false ,//sectionData.isNotEmpty,
-          onTapEdit: () {},
+          onTapEdit: () {
+         },
           onTapAdd: () {
             // rroute to add new item page
           },

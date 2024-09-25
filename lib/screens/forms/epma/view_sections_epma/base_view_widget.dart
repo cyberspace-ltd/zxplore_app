@@ -81,7 +81,7 @@ class BaseFormScreen extends ConsumerWidget {
         onPressed: onTapEdit,
         child: const Icon(Icons.edit),
       ):FloatingActionButton(
-        onPressed: onTapEdit,
+        onPressed: onTapAdd,
         child: const Icon(Icons.add),
       ),
     );

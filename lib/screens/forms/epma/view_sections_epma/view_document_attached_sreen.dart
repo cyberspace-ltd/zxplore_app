@@ -5,6 +5,7 @@ import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_documents_obtained_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
+import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_attached_document.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
@@ -25,19 +26,30 @@ class _ViewDocumentsAttachedScreenState
     extends ConsumerState<ViewDocumentsAttachedScreen> {
   @override
   Widget build(BuildContext context) {
-      final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
- final sectionData = requestData?.data?.documentsAttached ?? [];
+    final ViewAccountRequestResponse? requestData =
+        ref.watch(activelyViewedRequestProvider);
+    final sectionData = requestData?.data?.documentsAttached ?? [];
 
     return ZxploreProgress(
-      inAsyncCall:  ref.watch(editDocumentsObtainedControllerProvider).isLoading,
+      inAsyncCall: ref.watch(editDocumentsObtainedControllerProvider).isLoading,
       child: BaseFormScreen(
           title: 'Documents Attached',
           data: _flattenData(widget.formIndividualData),
           showEdit: sectionData.isNotEmpty,
           onTapEdit: () {
-            // to navigate to edit this section
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => EditAttachedDocument()),
+            );
           },
           onTapAdd: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => EditAttachedDocument()),
+            );
+
             // rroute to add new item page
           },
           child: Padding(
