@@ -7,11 +7,10 @@ import 'package:zxplore_app/category_tile.dart';
 import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_account_purposes_sreen.dart';
-import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_acount_type_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_acount_type_monthly_activity_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_assigned_type_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_children_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_document_attached_sreen.dart';
-import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_document_obtained_individuals_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_foreign_accounts_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
@@ -111,7 +110,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
       goToSelected(ViewDocumentsAttachedScreen (
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap()));
     } else if (category.id == 8) {
-      goToSelected(AccountTypeScreen (
+      goToSelected(AccountTypeMonthlyActivityScreen (
           requestData: ref.read(activelyViewedRequestProvider)!.toMap()));
     } else if (category.id == 9) {
       goToSelected(ViewNextOfKinScreen (

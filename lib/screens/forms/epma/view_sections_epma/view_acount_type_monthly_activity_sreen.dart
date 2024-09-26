@@ -10,47 +10,50 @@ import 'package:zxplore_app/widgets/zxplore_progress.dart';
 // import 'package:zxplore_app/utils/app_sizes.dart';
 // import 'package:zxplore_app/utils/string_extentions.dart';
 
-class AccountTypeScreen extends ConsumerStatefulWidget {
+class AccountTypeMonthlyActivityScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> requestData;
 
-  const AccountTypeScreen(
+  const AccountTypeMonthlyActivityScreen(
       {Key? key, required this.requestData})
       : super(key: key);
 
   @override
-  ConsumerState<AccountTypeScreen> createState() =>
-      _AccountTypeScreenState();
+  ConsumerState<AccountTypeMonthlyActivityScreen> createState() =>
+      _AccountTypeMonthlyActivityScreenState();
 }
 
-class _AccountTypeScreenState
-    extends ConsumerState<AccountTypeScreen> {
+class _AccountTypeMonthlyActivityScreenState
+    extends ConsumerState<AccountTypeMonthlyActivityScreen> {
   @override
   Widget build(BuildContext context) {   
      final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
 
     final sectionData = requestData?.data?.accountType ?? [];
 
-    return BaseFormScreen(
-        title: 'Account Type',
-        data: _flattenData(widget.requestData),
-        showEdit: sectionData.isNotEmpty,
-        onTapEdit: () {
-          // to navigate to edit this section
-         ref.read(editMonthlyActivityControllerProvider.notifier).getEditData(context,
-          RequestId: requestData?.data?.reqId??'');
-        },
-        onTapAdd: (){
-          // rroute to add new item page 
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child:sectionData.isNotEmpty? ListView.builder(
-              shrinkWrap: true,
-              itemCount: sectionData.length,
-              itemBuilder: (BuildContext context, index) {
-                return Item(data:sectionData[index] ,);
-              }):EmptyViewWidget(),
-        ));
+    return ZxploreProgress(
+      inAsyncCall:  ref.watch(viewMonthlyActivityControllerProvider).isLoading,
+      child: BaseFormScreen(
+          title: 'Account Type',
+          data: _flattenData(widget.requestData),
+          showEdit: sectionData.isNotEmpty,
+          onTapEdit: () {
+            // to navigate to edit this section
+           ref.read(viewMonthlyActivityControllerProvider.notifier).getEditData(context,
+            RequestId: requestData?.data?.reqId??'');
+          },
+          onTapAdd: (){
+          
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child:sectionData.isNotEmpty? ListView.builder(
+                shrinkWrap: true,
+                itemCount: sectionData.length,
+                itemBuilder: (BuildContext context, index) {
+                  return Item(data:sectionData[index] ,);
+                }):EmptyViewWidget(),
+          )),
+    );
   }
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};

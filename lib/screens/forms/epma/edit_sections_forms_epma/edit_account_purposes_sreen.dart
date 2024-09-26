@@ -128,9 +128,7 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
       thirdPartyPayment:thirdPartyPayment ,
       toOtainLoan:toOtainLoan ,
 
-     )).then((onValue){
-      // AccountPurposeScreen
-     });
+     ));
   }
 
   @override
