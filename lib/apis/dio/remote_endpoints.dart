@@ -457,7 +457,54 @@ abstract class RemoteApi {
   });
   @POST('Operation/editAccountPurpose')
   Future<dynamic> editAccountPurpose({
-    @Body() required EditAccountPurpose? editAccountPurpose,
+  @Field("accountPurposesId")
+  int? accountPurposesId,
+
+  @Field("requestId")
+  String? requestId ,
+
+  @Field("rowVersion")
+  int? rowVersion ,
+
+  @Field("itemStage")
+  String? itemStage ,
+
+  @Field("salaryProcessing")
+  bool? salaryProcessing ,
+
+  @Field("toOtainLoan")
+  bool? toOtainLoan ,
+
+  @Field("businessTransactional")
+  bool? businessTransactional ,
+
+  @Field("savingsInvestment")
+  bool? savingsInvestment ,
+
+  @Field("conductSingleTransaction")
+  bool? conductSingleTransaction ,
+
+  @Field("secutirySafeKeeping")
+  bool? secutirySafeKeeping ,
+
+  @Field("accessToBankingServices")
+  bool? accessToBankingServices ,
+
+  @Field("thirdPartyPayment")
+  bool? thirdPartyPayment ,
+
+  @Field("recieptOfInflows")
+  bool? recieptOfInflows ,
+
+  @Field("others")
+  bool? others ,
+
+  @Field("othersSpecify")
+  String? othersSpecify ,
+
+  @Field("actionFlag")
+  String? actionFlag ,
+
   });
 
   @GET('Operation/getOtherBankAccountToEdit')

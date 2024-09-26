@@ -7,6 +7,7 @@ import 'package:zxplore_app/models/epma_models/get_funding_sources_response.dart
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_funding_sources_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
 
@@ -30,10 +31,9 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
           await repo.editFundingSources(data: editFundingData);
 
       if (requestResponse['status'] == true) {
+         zXFlushBar(context, requestResponse['status']);
         final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
-   ref.invalidate(activelyViewedRequestProvider);
-
         ref
             .read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(editFundingData!.requestId!);
@@ -45,7 +45,7 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
           MaterialPageRoute(
               builder: (BuildContext context) => FundingSourcesScreen(
                     requestData:
-                        ref.watch(activelyViewedRequestProvider)!.toMap(),
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
                   )),
         );
         return result;
@@ -109,9 +109,6 @@ class ViewFundingSourcesController extends _$ViewFundingSourcesController {
                  state = AsyncValue.data(requestResponse);
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));

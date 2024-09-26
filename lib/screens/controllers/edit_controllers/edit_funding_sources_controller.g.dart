@@ -7,7 +7,7 @@ part of 'edit_funding_sources_controller.dart';
 // **************************************************************************
 
 String _$editFundingSourcesControllerHash() =>
-    r'bde580965fb49155b43903a08e844e71a6c9e4d9';
+    r'4566bd9832c4e72fc08e175cba59a229a7264d5a';
 
 /// See also [EditFundingSourcesController].
 @ProviderFor(EditFundingSourcesController)
@@ -24,7 +24,7 @@ final editFundingSourcesControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditFundingSourcesController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewFundingSourcesControllerHash() =>
-    r'5447438b893d5b1e6debc92784ebb9cc8978a176';
+    r'bbde85ed9a03e4e5385f9d5e44e0fb8bf5065155';
 
 /// See also [ViewFundingSourcesController].
 @ProviderFor(ViewFundingSourcesController)

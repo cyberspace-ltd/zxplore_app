@@ -466,80 +466,79 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   }
 
   @override
-  Future editPersonalDetail(
-      {required EditPersonalDetails? data}) async {
+  Future editPersonalDetail({required EditPersonalDetails? data}) async {
     try {
       final response = await api.editPersonalDetail(
-              formId: data?.formId,
-      requestId: data?.requestId,
-      rowVersion: data?.rowVersion,
-      itemStage: data?.itemStage,
-      surname: data?.surname,
-      firstName: data?.firstName,
-      otherNames: data?.otherNames,
-      maidenName: data?.maidenName,
-      genderCode: data?.genderCode,
-      birthDate: data?.birthDate,
-      birthPlace: data?.birthPlace,
-      identificationTypeId: data?.identificationTypeId,
-      identificationNo: data?.identificationNo,
-      idCountryCode: data?.idCountryCode,
-      idIssueAuthority: data?.idIssueAuthority,
-      idIssueDate: data?.idIssueDate,
-      idExpiryDate: data?.idExpiryDate,
-      niaVerificationNo: data?.niaVerificationNo,
-      ssnitNo: data?.ssnitNo,
-      tin: data?.tin,
-      citizenshipCode: data?.citizenshipCode,
-      altCitizenshipCode: data?.altCitizenshipCode,
-      countryOrigCode: data?.countryOrigCode,
-      homeTown: data?.homeTown,
-      hasPermanentResidence: data?.hasPermanentResidence,
-      residencePermitNo: data?.residencePermitNo,
-      residencePermitPlaceCode: data?.residencePermitPlaceCode,
-      permitIssueDate: data?.permitIssueDate,
-      permitExpiryDate: data?.permitExpiryDate,
-      iddCode: data?.iddCode,
-      telNo: data?.telNo,
-      mobileNo: data?.mobileNo,
-      emailAddress: data?.emailAddress,
-      residentialAddress: data?.residentialAddress,
-      residentialAddress2: data?.residentialAddress2,
-      districtAssemblyArea: data?.districtAssemblyArea,
-      city: data?.city,
-      regionCode: data?.regionCode,
-      permanentResidentialAddress: data?.permanentResidentialAddress,
-      permanentResidentialCity: data?.permanentResidentialCity,
-      permanentResidentialCountryCode: data?.permanentResidentialCountryCode,
-      mailingAddress: data?.mailingAddress,
-      motherMaidenName: data?.motherMaidenName,
-      maritalStatus: data?.maritalStatus,
-      spouseName: data?.spouseName,
-      spouseOccupation: data?.spouseOccupation,
-      businessNatureId: data?.businessNatureId,
-      subBusinessNatureId: data?.subBusinessNatureId,
-      employmentTypeCode: data?.employmentTypeCode,
-      employerName: data?.employerName,
-      timeWithEmployer: data?.timeWithEmployer,
-      employerAddress: data?.employerAddress,
-      employerEmail: data?.employerEmail,
-      employerTel: data?.employerTel,
-      monthlyIncome: data?.monthlyIncome,
-      accountOwnership: data?.accountOwnership,
-      accountOwnershipOther: data?.accountOwnershipOther,
-      customerResidentInGhana: data?.customerResidentInGhana,
-      customerIsPep: data?.customerIsPep,
-      pepReason: data?.pepReason,
-      customerClassificationId: data?.customerClassificationId,
-      setupIbank: data?.setupIbank,
-      setupZPrompt: data?.setupZPrompt,
-      setupStatementViaEmail: data?.setupStatementViaEmail,
-      setupEmailIndemnity: data?.setupEmailIndemnity,
-      isPhysicallyChallenged: data?.isPhysicallyChallenged,
-      actionFlag: data?.actionFlag,
-      isNewRequest: data?.isNewRequest,
-      gpsAddress: data?.gpsAddress,
-          );
+        formId: data?.formId,
+        requestId: data?.requestId,
+        rowVersion: data?.rowVersion,
+        itemStage: data?.itemStage,
+        surname: data?.surname,
+        firstName: data?.firstName,
+        otherNames: data?.otherNames,
+        maidenName: data?.maidenName,
+        genderCode: data?.genderCode,
+        birthDate: data?.birthDate,
+        birthPlace: data?.birthPlace,
+        identificationTypeId: data?.identificationTypeId,
+        identificationNo: data?.identificationNo,
+        idCountryCode: data?.idCountryCode,
+        idIssueAuthority: data?.idIssueAuthority,
+        idIssueDate: data?.idIssueDate,
+        idExpiryDate: data?.idExpiryDate,
+        niaVerificationNo: data?.niaVerificationNo,
+        ssnitNo: data?.ssnitNo,
+        tin: data?.tin,
+        citizenshipCode: data?.citizenshipCode,
+        altCitizenshipCode: data?.altCitizenshipCode,
+        countryOrigCode: data?.countryOrigCode,
+        homeTown: data?.homeTown,
+        hasPermanentResidence: data?.hasPermanentResidence,
+        residencePermitNo: data?.residencePermitNo,
+        residencePermitPlaceCode: data?.residencePermitPlaceCode,
+        permitIssueDate: data?.permitIssueDate,
+        permitExpiryDate: data?.permitExpiryDate,
+        iddCode: data?.iddCode,
+        telNo: data?.telNo,
+        mobileNo: data?.mobileNo,
+        emailAddress: data?.emailAddress,
+        residentialAddress: data?.residentialAddress,
+        residentialAddress2: data?.residentialAddress2,
+        districtAssemblyArea: data?.districtAssemblyArea,
+        city: data?.city,
+        regionCode: data?.regionCode,
+        permanentResidentialAddress: data?.permanentResidentialAddress,
+        permanentResidentialCity: data?.permanentResidentialCity,
+        permanentResidentialCountryCode: data?.permanentResidentialCountryCode,
+        mailingAddress: data?.mailingAddress,
+        motherMaidenName: data?.motherMaidenName,
+        maritalStatus: data?.maritalStatus,
+        spouseName: data?.spouseName,
+        spouseOccupation: data?.spouseOccupation,
+        businessNatureId: data?.businessNatureId,
+        subBusinessNatureId: data?.subBusinessNatureId,
+        employmentTypeCode: data?.employmentTypeCode,
+        employerName: data?.employerName,
+        timeWithEmployer: data?.timeWithEmployer,
+        employerAddress: data?.employerAddress,
+        employerEmail: data?.employerEmail,
+        employerTel: data?.employerTel,
+        monthlyIncome: data?.monthlyIncome,
+        accountOwnership: data?.accountOwnership,
+        accountOwnershipOther: data?.accountOwnershipOther,
+        customerResidentInGhana: data?.customerResidentInGhana,
+        customerIsPep: data?.customerIsPep,
+        pepReason: data?.pepReason,
+        customerClassificationId: data?.customerClassificationId,
+        setupIbank: data?.setupIbank,
+        setupZPrompt: data?.setupZPrompt,
+        setupStatementViaEmail: data?.setupStatementViaEmail,
+        setupEmailIndemnity: data?.setupEmailIndemnity,
+        isPhysicallyChallenged: data?.isPhysicallyChallenged,
+        actionFlag: data?.actionFlag,
+        isNewRequest: data?.isNewRequest,
+        gpsAddress: data?.gpsAddress,
+      );
 
       return response;
     } on FormatException catch (_) {
@@ -559,25 +558,24 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
 
   @override
   Future editFundingSources({required EditFundingSource? data}) async {
-   
     try {
       final response = await api.editFundingSources(
         fundingSourcesId: data?.fundingSourcesId,
- requestId: data?.requestId,
- rowVersion: data?.rowVersion,
- itemStage: data?.itemStage,
-  commissions:data?.commissions,
- dividends: data?.dividends,
- businessIncome: data?.businessIncome,
-personalSavings:  data?.personalSavings,
- trustFund: data?.trustFund,
- salary: data?.salary,
- familyFriends: data?.familyFriends,
-rentalIncome:  data?.rentalIncome,
- inheritanceGift: data?.inheritanceGift,
- others: data?.others,
-othersSpecify:  data?.othersSpecify,
-actionFlag:  data?.actionFlag,
+        requestId: data?.requestId,
+        rowVersion: data?.rowVersion,
+        itemStage: data?.itemStage,
+        commissions: data?.commissions,
+        dividends: data?.dividends,
+        businessIncome: data?.businessIncome,
+        personalSavings: data?.personalSavings,
+        trustFund: data?.trustFund,
+        salary: data?.salary,
+        familyFriends: data?.familyFriends,
+        rentalIncome: data?.rentalIncome,
+        inheritanceGift: data?.inheritanceGift,
+        others: data?.others,
+        othersSpecify: data?.othersSpecify,
+        actionFlag: data?.actionFlag,
       );
 
       return response;
@@ -599,7 +597,24 @@ actionFlag:  data?.actionFlag,
   @override
   Future editAccountPurpose({required EditAccountPurpose? data}) async {
     try {
-      final response = await api.editAccountPurpose(editAccountPurpose: data);
+      final response = await api.editAccountPurpose(
+        accountPurposesId: data?.accountPurposesId,
+        requestId: data?.requestId,
+        rowVersion: data?.rowVersion,
+        itemStage: data?.itemStage??'Saved',
+        salaryProcessing: data?.salaryProcessing,
+        toOtainLoan: data?.toOtainLoan,
+        businessTransactional: data?.businessTransactional,
+        savingsInvestment: data?.savingsInvestment,
+        conductSingleTransaction: data?.conductSingleTransaction,
+        secutirySafeKeeping: data?.secutirySafeKeeping,
+        accessToBankingServices: data?.accessToBankingServices,
+        thirdPartyPayment: data?.thirdPartyPayment,
+        recieptOfInflows: data?.recieptOfInflows,
+        others: data?.others,
+        othersSpecify: data?.othersSpecify,
+        actionFlag: data?.actionFlag,
+      );
 
       return response;
     } on FormatException catch (_) {
@@ -1190,10 +1205,11 @@ actionFlag:  data?.actionFlag,
           err.response?.data['message'] ?? 'Request process failed');
     }
   }
-  
+
   @override
-  Future deleteDocumentAttached({required DeleteDocument? deleteDocument})async {
-   try {
+  Future deleteDocumentAttached(
+      {required DeleteDocument? deleteDocument}) async {
+    try {
       final response = await api.deleteDocument(
         data: deleteDocument,
       );
@@ -1213,5 +1229,4 @@ actionFlag:  data?.actionFlag,
           err.response?.data['message'] ?? 'Request process failed');
     }
   }
- 
 }

@@ -127,6 +127,7 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
       secutirySafeKeeping: secutirySafeKeeping,
       thirdPartyPayment:thirdPartyPayment ,
       toOtainLoan:toOtainLoan ,
+
      )).then((onValue){
       // AccountPurposeScreen
      });
@@ -138,18 +139,29 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
       editAccountPurposeControllerProvider,
       (_, state) => state.showAlertDialogOnError(context,okAction: (){
 
-      }),
+      },errorMsg: state.error),
     );
 
     return ZxploreProgress(inAsyncCall: ref.watch(editAccountPurposeControllerProvider).isLoading
       || ref.watch(viewRequestControllerProvider).isLoading,
 
       child: BaseEditForm(
+        button: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: PrimaryButton(
+                        onPressed: () {
+                          if (!_fundingFormFormKey.currentState!.validate()) {
+                            return;
+                          }
+                          _submitForm( context);
+                        },
+                        title: 'Save'),
+        ),
         title: 'Editing Account Purposes',
         widgetToGoOnCancel: FundingSourcesScreen(
           requestData: widget.data!.toJson(),
         ),
-        onCancel: () {},
+        onCancel: () =>Navigator.pop(context),
         
         data: widget.data?.toJson(),
         addMore: IconButton(onPressed: () {}, icon: Icon(Icons.add_box)),
@@ -168,7 +180,7 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  gapH24,
+                 
                   Text(
                     'Account Purpose',
                     style: Theme.of(context)
@@ -176,6 +188,8 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
                         .bodyMedium
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
+                  gapH16,
+
                   div,
                   gapH16,
                     CheckboxListTile(
@@ -257,28 +271,21 @@ class _EditAccountPurposeScreenState extends ConsumerState<EditAccountPurposeScr
                     ),
                   ],
       
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    title: 'Action Flag',
-                    fillColor: Colors.transparent,
-                    controller: actionFlagController,
-                    hint: 'Action Flag',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
+                  // const SizedBox(height: 16),
+                  // CustomTextFormField(
+                  //   title: 'Action Flag',
+                  //   fillColor: Colors.transparent,
+                  //   controller: actionFlagController,
+                  //   hint: 'Action Flag',
+                  //   inputType: TextInputType.text,
+                  //   useDefaultErrorText: false,
+                  //   validator: (value) {
+                  //     return null;
+                  //   },
+                  // ),
             
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_fundingFormFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        _submitForm( context);
-                      },
-                      title: 'Save')
+                  
                 ],
               ),
             ),

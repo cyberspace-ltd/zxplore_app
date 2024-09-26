@@ -7,13 +7,77 @@ import 'package:zxplore_app/models/epma_models/get_account_purpose_response.dart
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_account_purposes_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_account_purposes_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
 
 part 'edit_account_purpose_controller.g.dart';
 
 @riverpod
 class EditAccountPurposeController extends _$EditAccountPurposeController {
+  @override
+  FutureOr<dynamic> build() {
+    //nadaa
+  }
+
+  Future<dynamic> editAccountPurposeDaata(
+      {required EditAccountPurpose? data,
+      required BuildContext context}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
+    try {
+      state = const AsyncLoading();
+      final requestResponse = await repo.editAccountPurpose(data: data);
+
+      if (requestResponse['status'] == true) {
+        final result = GenericResponse.fromMap(requestResponse);
+        state = AsyncValue.data(result);
+
+        // refresh the latest viewed item.
+        ref
+            .read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(data?.requestId ?? '');
+        state = AsyncValue.data(result);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => AccountPurposeScreen(
+                    requestData:
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          state = AsyncValue.data(requestResponse);
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+              final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+    return requestResponse;
+        }
+      // final ex = Exception(
+      //       requestResponse['message'] ?? 'Failed to complete request');
+      //   state = AsyncError(
+      //       ex,
+      //       StackTrace.fromString(
+      //           requestResponse['message'] ?? 'Failed to complete request'));
+     
+        return requestResponse;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }
+}
+
+@riverpod
+class ViewAccountPurposeController extends _$ViewAccountPurposeController {
   @override
   FutureOr<dynamic> build() {
     //nadaa
@@ -29,6 +93,7 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
           await repo.getAccountPurposeToEdit(RequestId: RequestId);
 
       if (requestResponse['status'] == true) {
+        // zXFlushBar(context, requestResponse['status']);
         final result =
             GetAccountPurposeToEditResponse.fromJson(requestResponse);
         Navigator.push(
@@ -38,6 +103,7 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
                     data: result,
                   )),
         );
+
         state = AsyncValue.data(result);
         return result;
       } else {
@@ -48,53 +114,13 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
-
-  Future<dynamic> editAccountPurposeDaata(
-      {required EditAccountPurpose? data,
-      required BuildContext context}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse = await repo.editAccountPurpose(data: data);
-
-      if (requestResponse['status'] == true) {
-        
-        final result = GenericResponse.fromMap(requestResponse);
-        state = AsyncValue.data(result);
-
-          // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(data?.requestId??'');
-        state = AsyncValue.data(result);
-          Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => AccountPurposeScreen(
-                    requestData: ref.read(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncValue.data(null);
-        return null;
+        final ex = Exception(
+            requestResponse['message'] ?? 'Failed to complete request');
+        state = AsyncError(
+            ex,
+            StackTrace.fromString(
+                requestResponse['message'] ?? 'Failed to complete request'));
+        return requestResponse;
       }
     } catch (e, stackTrace) {
       final ex =

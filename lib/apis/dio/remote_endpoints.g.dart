@@ -1290,14 +1290,47 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<dynamic> editAccountPurpose(
-      {EditAccountPurpose? editAccountPurpose}) async {
+  Future<dynamic> editAccountPurpose({
+    int? accountPurposesId,
+    String? requestId,
+    int? rowVersion,
+    String? itemStage,
+    bool? salaryProcessing,
+    bool? toOtainLoan,
+    bool? businessTransactional,
+    bool? savingsInvestment,
+    bool? conductSingleTransaction,
+    bool? secutirySafeKeeping,
+    bool? accessToBankingServices,
+    bool? thirdPartyPayment,
+    bool? recieptOfInflows,
+    bool? others,
+    String? othersSpecify,
+    String? actionFlag,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(editAccountPurpose?.toJson() ?? <String, dynamic>{});
+    final _data = {
+      'accountPurposesId': accountPurposesId,
+      'requestId': requestId,
+      'rowVersion': rowVersion,
+      'itemStage': itemStage,
+      'salaryProcessing': salaryProcessing,
+      'toOtainLoan': toOtainLoan,
+      'businessTransactional': businessTransactional,
+      'savingsInvestment': savingsInvestment,
+      'conductSingleTransaction': conductSingleTransaction,
+      'secutirySafeKeeping': secutirySafeKeeping,
+      'accessToBankingServices': accessToBankingServices,
+      'thirdPartyPayment': thirdPartyPayment,
+      'recieptOfInflows': recieptOfInflows,
+      'others': others,
+      'othersSpecify': othersSpecify,
+      'actionFlag': actionFlag,
+    };
+    _data.removeWhere((k, v) => v == null);
     final _options = _setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
