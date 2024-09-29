@@ -1,4 +1,7 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/get_foreign_accounts_response.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_foreign_accounts_controller.dart';
@@ -9,6 +12,7 @@ import 'package:zxplore_app/screens/controllers/pending_requests/view_request_co
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
@@ -37,7 +41,16 @@ class _EditForeignAaccountScreenState
       TextEditingController();
   final TextEditingController accountPurposeOtherSpecifyCtrl =
       TextEditingController();
+  final TextEditingController prevItemStageController = TextEditingController();
 
+  bool hidePrevItemStage = false;
+  String? selectedItemStage;
+
+  void togglePrevItemStage() {
+    setState(() {
+      hidePrevItemStage = !hidePrevItemStage;
+    });
+  }
   bool hasRelatedAccount = false;
   bool maintainMandate = false;
   bool offShoreUSD = false;
@@ -72,6 +85,9 @@ class _EditForeignAaccountScreenState
           onShoreUSD = originalData?.onShoreUsd ?? false;
           onShoreGBP = originalData?.onShoreGbp ?? false;
           onShoreEUR = originalData?.onShoreEur ?? false;
+               selectedItemStage = originalData?.itemStage;
+        prevItemStageController.text = originalData?.itemStage ?? 'No selection';
+     
           accountPurposeSalary = originalData?.accountPurposeSalary ?? false;
           accountPurposeBusiness =
               originalData?.accountPurposeBusiness ?? false;
@@ -93,6 +109,7 @@ class _EditForeignAaccountScreenState
           relatedAccountCtrl.text=originalData?.relatedAccount??'';
             fundSourceOtherSpecifyCtrl.text=originalData?.fundSourceOtherSpecify??'';
             fundSourceSenderInvesterCtrl.text=originalData?.fundSourceSenderInvester??'';
+
         });
       });
     } catch (e) {}
@@ -105,6 +122,8 @@ class _EditForeignAaccountScreenState
     fundSourceOtherSpecifyCtrl.dispose();
     fundSourceSenderInvesterCtrl.dispose();
     inflowFrequencyOtherSpecifyCtrl.dispose();
+    prevItemStageController.dispose();
+
     super.dispose();
   }
 
@@ -211,15 +230,14 @@ class _EditForeignAaccountScreenState
               onShoreGbp:onShoreGBP ,
               onShoreUsd:onShoreUSD ,
 
-            ))
-        .then((_) {});
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
       editForeignAaccountsControllerrProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
     );
 
     return ZxploreProgress(
@@ -227,10 +245,48 @@ class _EditForeignAaccountScreenState
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Funding Sources',
+        button:   Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: PrimaryButton(
+                        onPressed: () {
+                          if (!_fundingFormFormKey.currentState!.validate()) {
+                            return;
+                          }
+                          //if non is selected
+                          if(
+                            !hasRelatedAccount&&
+                            !maintainMandate&&
+                            !offShoreUSD&&
+                            !offShoreGBP&&
+                            !offShoreEUR&&
+                            !onShoreUSD&&
+                            !onShoreGBP&&
+                            !onShoreEUR&&
+                            !accountPurposeSalary&&
+                            !accountPurposeBusiness&&
+                            !fundSourceSalary&&
+                            !fundSourceBusinessIncome&&
+                            !fundSourceOther&&
+                            !inflowFrequencyWeekly&&
+                            !inflowFrequencyFortnightly&&
+                            !inflowFrequencyMonthly&&
+                            !inflowFrequencyQuarterly&&
+                            !inflowFrequencyOther==false
+                            ){
+                                  zXFlushBar(context, "Select values for this account");
+                            return;
+                          }
+                                    if (selectedItemStage == null) {
+                    zXFlushBar(context, "Item stage is required");
+                  }
+                          _submitForm(context);
+                        },
+                        title: 'Save'),
+        ),
         widgetToGoOnCancel: FundingSourcesScreen(
           requestData: widget.data!.toJson(),
         ),
-        onCancel: () {},
+        onCancel: () =>Navigator.pop(context),
         data: widget.data?.toJson(),
         addMore: IconButton(onPressed: () {}, icon: Icon(Icons.add_box)),
         child: SingleChildScrollView(
@@ -256,6 +312,110 @@ class _EditForeignAaccountScreenState
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
+                gapH16,
+                  if (!hidePrevItemStage) ...[
+                    CustomTextFormField(
+                      title: "Item Stage",
+                      fillColor: Colors.transparent,
+                      controller: prevItemStageController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevItemStage();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevItemStage) ...[
+                    Row(children: [
+                      Text(
+                        "Item Stage",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 16),
+                      )
+                    ]),
+                    gapH4,
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2<String?>(
+                        isExpanded: true,
+                        hint: Text(
+                          'Select stage',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
+                            color: ZxplorePrimaryColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        items: itemStages
+                            .map<DropdownMenuItem<String?>>(
+                                (item) => DropdownMenuItem<String?>(
+                                      value: item,
+                                      child: Text(
+                                        item ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                            .toList(),
+                        value: selectedItemStage,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            /// Set selected item params
+                            selectedItemStage = newValue;
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 60,
+                          // width: 160,
+                          padding: const EdgeInsets.only(left: 0, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: ZxplorePrimaryColor,
+                            ),
+                          ),
+                          elevation: 0,
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            CupertinoIcons.chevron_down,
+                          ),
+                          iconSize: 14,
+                          iconEnabledColor: ZxplorePrimaryColor,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          // width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          // offset: const Offset(0, 0),
+                          scrollbarTheme: const ScrollbarThemeData(
+                            radius: Radius.circular(40),
+                            thickness: WidgetStatePropertyAll<double>(6),
+                            thumbVisibility: WidgetStatePropertyAll<bool>(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 14, right: 14),
+                        ),
+                      ),
+                    ),
+                  ],
                   gapH16,
                   CheckboxListTile(
                     title: Text('Has RelatedAccount'),
@@ -479,38 +639,7 @@ class _EditForeignAaccountScreenState
                     ),
                   ],
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_fundingFormFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        //if non is selected
-                        if(
-                          !hasRelatedAccount&&
-                          !maintainMandate&&
-                          !offShoreUSD&&
-                          !offShoreGBP&&
-                          !offShoreEUR&&
-                          !onShoreUSD&&
-                          !onShoreGBP&&
-                          !onShoreEUR&&
-                          !accountPurposeSalary&&
-                          !accountPurposeBusiness&&
-                          !fundSourceSalary&&
-                          !fundSourceBusinessIncome&&
-                          !fundSourceOther&&
-                          !inflowFrequencyWeekly&&
-                          !inflowFrequencyFortnightly&&
-                          !inflowFrequencyMonthly&&
-                          !inflowFrequencyQuarterly&&
-                          !inflowFrequencyOther==false
-                          ){
-                                zXFlushBar(context, "Select values for this account");
-                          return;
-                        }
-                        _submitForm(context);
-                      },
-                      title: 'Save')
+                
                 ],
               ),
             ),
