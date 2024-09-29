@@ -1606,7 +1606,6 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                     onChanged: (value) => _handleCheckboxChange(6, value),
                   ),
                   gapH12,
-
                   CheckboxListTile(
                     title: Text('Is Signatory'),
                     value: isSignatory,
