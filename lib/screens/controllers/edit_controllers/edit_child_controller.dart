@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
-import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_child_to_edite_response.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
@@ -16,6 +15,102 @@ part 'edit_child_controller.g.dart';
 
 @riverpod
 class EditChildController extends _$EditChildController {
+  @override
+  FutureOr<dynamic> build() {
+    //nadaa
+  }
+
+  Future<dynamic> editChild(
+      {required AddChild? data,
+      required BuildContext context}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
+    try {
+      state = const AsyncLoading();
+      final requestResponse = await repo.editChild(child: data);
+
+      if (requestResponse['status'] == true) {
+             final result = GenericResponse.fromMap(requestResponse);
+        // refresh the latest viewed item.
+        ref
+            .read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(data?.requestId ?? '');
+        state = AsyncValue.data(result);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => ViewChildrenScreen(
+                    formIndividualData:
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        }
+        state = AsyncValue.data(null);
+        return null;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }
+  Future<dynamic> addChild(
+         {required AddChild? data,
+      required BuildContext context}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
+    try {
+      state = const AsyncLoading();
+      final requestResponse = await repo.addChild(child: data);
+
+      if (requestResponse['status'] == true) {
+                  final result = GenericResponse.fromMap(requestResponse);
+        // refresh the latest viewed item.
+        ref
+            .read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(data?.requestId ?? '');
+        state = AsyncValue.data(result);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => ViewChildrenScreen(
+                    formIndividualData:
+                        ref.watch(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        }
+        state = AsyncValue.data(null);
+        return null;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }
+
+}
+
+@riverpod
+class ViewChildController extends _$ViewChildController {
   @override
   FutureOr<dynamic> build() {
     //nadaa
@@ -62,99 +157,6 @@ class EditChildController extends _$EditChildController {
     }
   }
 
-
-  Future<dynamic> editChild(
-      {required AddChild? data,
-      required BuildContext context}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse = await repo.editChild(child: data);
-
-      if (requestResponse['status'] == true) {
-             final result = GenericResponse.fromMap(requestResponse);
-
-
-        // refresh the latest viewed item.
-        ref
-            .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(data?.requestId ?? '');
-        state = AsyncValue.data(result);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => ViewChildrenScreen(
-                    formIndividualData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncValue.data(null);
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
-
-  
-
-  Future<dynamic> addChild(
-         {required AddChild? data,
-      required BuildContext context}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse = await repo.addChild(child: data);
-
-      if (requestResponse['status'] == true) {
-                  final result = GenericResponse.fromMap(requestResponse);
-        // refresh the latest viewed item.
-        ref
-            .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(data?.requestId ?? '');
-        state = AsyncValue.data(result);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => ViewChildrenScreen(
-                    formIndividualData:
-                        ref.watch(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncValue.data(null);
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
-
   Future<dynamic> deleteChild(BuildContext context,
       {required String? RequestId, required DeleteChild? delData}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
@@ -173,14 +175,14 @@ class EditChildController extends _$EditChildController {
         ref.read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(RequestId!);
         state = AsyncValue.data(result);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => ViewChildrenScreen(
-                    formIndividualData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (BuildContext context) => ViewChildrenScreen(
+        //             formIndividualData:
+        //                 ref.read(activelyViewedRequestProvider)!.toMap(),
+        //           )),
+        // );
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -200,5 +202,4 @@ class EditChildController extends _$EditChildController {
       state = AsyncError(ex, stackTrace);
       return null;
     }
-  }
-}
+  }}

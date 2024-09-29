@@ -25,8 +25,8 @@ import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
 class AddChildScreen extends ConsumerStatefulWidget {
-  const AddChildScreen({super.key, this.data});
-  final GetChildToEditResponse? data;
+  const AddChildScreen({super.key, this.requestId});
+  final String? requestId;
 
   @override
   ConsumerState<AddChildScreen> createState() => _AddChildScreenState();
@@ -45,7 +45,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
   final TextEditingController ageCtrl = TextEditingController();
   // final TextEditingController nationalityCodeCtrl = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
-
+  String? selectedItemStage;
   GendersDatum? selectedGenderItem;
   String? genderCode;
   String? genderName;
@@ -76,16 +76,17 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
    
 
   Future<void> _submitForm(BuildContext context) async {
-    final userData = widget.data?.data;
+    // final userData = widget.data?.data;
     final childData = AddChild(
-      childId: userData?.chidId,
-      rowVersion: userData?.rowVersion,
-      itemStage: userData?.itemStage,
-      requestId: userData?.reqId,
+      childId: 0,//userData?.chidId,
+      rowVersion:0,// ,//userData?.rowVersion,
+      itemStage:selectedItemStage,// userData?.itemStage,
+      requestId: widget.requestId,//userData?.reqId,
+      actionFlag: 'A',//userData?.actionFlag,
+
       surname: surnameCtrl.text,
       otherNames: otherNamesCtrl.text,
       birthDate: dobInit,
-      actionFlag: userData?.actionFlag,
       school: schoolCtrl.text,
       motherName: motherNameCtrl.text,
       maturityAge:int.parse( maturityAgeCtrl.text),
@@ -134,7 +135,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                   Wrap(
                     children: [
                       Text(
-                        'Child: ${widget.data?.data?.otherNames}',
+                        'Child',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -143,6 +144,91 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
                     ],
                   ),
                   div,
+                  gapH16,
+                     Row(children: [
+                    Text(
+                      "Item Stage",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    )
+                  ]),
+                  gapH4,
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2<String?>(
+                      isExpanded: true,
+                      hint: Text(
+                        'Select stage',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                          color: ZxplorePrimaryColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      items: itemStages
+                          .map<DropdownMenuItem<String?>>(
+                              (item) => DropdownMenuItem<String?>(
+                                    value: item,
+                                    child: Text(
+                                      item ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: ZxplorePrimaryColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ))
+                          .toList(),
+                      value: selectedItemStage,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          /// Set selected item params
+                          selectedItemStage = newValue;
+                        });
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        height: 60,
+                        // width: 160,
+                        padding: const EdgeInsets.only(left: 0, right: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: ZxplorePrimaryColor,
+                          ),
+                        ),
+                        elevation: 0,
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          CupertinoIcons.chevron_down,
+                        ),
+                        iconSize: 14,
+                        iconEnabledColor: ZxplorePrimaryColor,
+                        iconDisabledColor: Colors.grey,
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 200,
+                        // width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        // offset: const Offset(0, 0),
+                        scrollbarTheme: const ScrollbarThemeData(
+                          radius: Radius.circular(40),
+                          thickness: WidgetStatePropertyAll<double>(6),
+                          thumbVisibility: WidgetStatePropertyAll<bool>(true),
+                        ),
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                        padding: EdgeInsets.only(left: 14, right: 14),
+                      ),
+                    ),
+                  ),
+                 
                   gapH16,
                   CustomTextFormField(
                     title: 'Surname',

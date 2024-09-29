@@ -8,6 +8,7 @@ import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/add_data_forms/add_other_accounts_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
@@ -27,6 +28,10 @@ class _ViewOtherAccountsState extends ConsumerState<ViewOtherAccounts> {
     final ViewAccountRequestResponse? requestData =
         ref.watch(activelyViewedRequestProvider);
     final sectionData = requestData?.data?.otherAccounts ?? [];
+       ref.listen<AsyncValue>(
+      viewOtherAccountControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+    );
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(viewOtherAccountControllerProvider).isLoading ||

@@ -43,8 +43,17 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
   final TextEditingController motherNameCtrl = TextEditingController();
   final TextEditingController maturityAgeCtrl = TextEditingController();
   final TextEditingController ageCtrl = TextEditingController();
-  // final TextEditingController nationalityCodeCtrl = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController prevItemStageController = TextEditingController();
+
+  bool hidePrevItemStage = false;
+  String? selectedItemStage;
+
+  void togglePrevItemStage() {
+    setState(() {
+      hidePrevItemStage = !hidePrevItemStage;
+    });
+  }
 
   GendersDatum? selectedGenderItem;
   String? genderCode;
@@ -52,7 +61,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
   CountryDatum? selectedCountry;
   String? selectedCountryCode;
   String? selectedCountryName;
-    DateTime? dobInit = DateTime.now();
+  DateTime? dobInit = DateTime.now();
   final DateFormat dateFormatter = DateFormat('dd/MM/yyyy');
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
   String dobFormattedDate = 'dd/mm/yyy';
@@ -69,7 +78,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
     maturityAgeCtrl.dispose();
     birthDateController.dispose();
     ageCtrl.dispose();
-
+    prevItemStageController.dispose();
     super.dispose();
   }
 
@@ -87,6 +96,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
         motherNameCtrl.text = userData?.motherName ?? '';
         motherNameCtrl.text = userData?.motherName ?? '';
         ageCtrl.text = '${userData?.age ?? 0}';
+        selectedItemStage = userData?.itemStage;
+        prevItemStageController.text = userData?.itemStage ?? 'No selection';
       } catch (e) {}
     });
   }
@@ -96,20 +107,19 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
     final childData = AddChild(
       childId: userData?.chidId,
       rowVersion: userData?.rowVersion,
-      itemStage: userData?.itemStage,
+      itemStage: selectedItemStage,
       requestId: userData?.reqId,
       surname: surnameCtrl.text,
       otherNames: otherNamesCtrl.text,
       birthDate: dobInit,
-      actionFlag: userData?.actionFlag,
+      actionFlag: userData?.actionFlag ?? 'A',
       school: schoolCtrl.text,
       motherName: motherNameCtrl.text,
-      maturityAge:int.parse( maturityAgeCtrl.text),
-      age:int.parse(  ageCtrl.text),
-      nationalityCode:selectedCountryCode ,
-      countryOrigCode: selectedCountryCode ,
-      genderCode:selectedGenderItem?.genderCode ,
-       
+      maturityAge: int.parse(maturityAgeCtrl.text),
+      age: int.parse(ageCtrl.text),
+      nationalityCode: selectedCountryCode,
+      countryOrigCode: selectedCountryCode,
+      genderCode: selectedGenderItem?.genderCode,
     );
 
     ref
@@ -119,8 +129,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-       ref.listen<AsyncValue>(
+    ref.listen<AsyncValue>(
       editChildControllerProvider,
       (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
     );
@@ -129,9 +138,33 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Child Details',
-        // widgetToGoOnCancel: Container(),
-        widgetToGoOnCancel: ViewChildrenScreen(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),),
+        button: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+          child: PrimaryButton(
+              onPressed: () {
+                if (!_formkeyChild.currentState!.validate()) {
+                  return;
+                }
+                if (selectedItemStage == null) {
+                  zXFlushBar(context, "Item stage is required");
+                }
+                if (selectedGenderItem == null) {
+                  zXFlushBar(context, "Date  of birth is required");
+                  return;
+                }
+                if (selectedCountry == null) {
+                  zXFlushBar(context, "Nationality is required");
+                  return;
+                }
 
+                /// perform trn if all is well
+                _submitForm(context);
+              },
+              title: 'Save'),
+        ),
+        widgetToGoOnCancel: ViewChildrenScreen(
+          formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),
+        ),
         onCancel: () {},
         data: {},
         child: SingleChildScrollView(
@@ -161,6 +194,110 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                     ],
                   ),
                   div,
+                  gapH16,
+                  if (!hidePrevItemStage) ...[
+                    CustomTextFormField(
+                      title: "Item Stage",
+                      fillColor: Colors.transparent,
+                      controller: prevItemStageController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevItemStage();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevItemStage) ...[
+                    Row(children: [
+                      Text(
+                        "Item Stage",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 16),
+                      )
+                    ]),
+                    gapH4,
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2<String?>(
+                        isExpanded: true,
+                        hint: Text(
+                          'Select stage',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
+                            color: ZxplorePrimaryColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        items: itemStages
+                            .map<DropdownMenuItem<String?>>(
+                                (item) => DropdownMenuItem<String?>(
+                                      value: item,
+                                      child: Text(
+                                        item ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                            .toList(),
+                        value: selectedItemStage,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            /// Set selected item params
+                            selectedItemStage = newValue;
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 60,
+                          // width: 160,
+                          padding: const EdgeInsets.only(left: 0, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: ZxplorePrimaryColor,
+                            ),
+                          ),
+                          elevation: 0,
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            CupertinoIcons.chevron_down,
+                          ),
+                          iconSize: 14,
+                          iconEnabledColor: ZxplorePrimaryColor,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          // width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          // offset: const Offset(0, 0),
+                          scrollbarTheme: const ScrollbarThemeData(
+                            radius: Radius.circular(40),
+                            thickness: WidgetStatePropertyAll<double>(6),
+                            thumbVisibility: WidgetStatePropertyAll<bool>(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 14, right: 14),
+                        ),
+                      ),
+                    ),
+                  ],
                   gapH16,
                   CustomTextFormField(
                     title: 'Surname',
@@ -192,7 +329,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                     },
                   ),
                   gapH16,
-                   CustomTextFormField( 
+                  CustomTextFormField(
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'DOB');
                     },
@@ -218,7 +355,6 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                       return null;
                     },
                   ),
-                
                   gapH16,
                   CustomTextFormField(
                     title: 'Mother\'s Name',
@@ -508,25 +644,6 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_formkeyChild.currentState!.validate()) {
-                          return;
-                        }
-                        if(selectedGenderItem==null) {
-                              zXFlushBar(context, "Date  of birth is required");
-                          return;
-
-                        }
-                          if(selectedCountry==null) {
-                               zXFlushBar(context, "Nationality is required");
-                          return;
-                        }
-
-                        /// perform trn if all is well
-                        _submitForm(context);
-                      },
-                      title: 'Save')
                 ],
               ),
             ),
