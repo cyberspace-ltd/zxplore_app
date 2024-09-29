@@ -106,8 +106,10 @@ class EditOtherAccountController extends _$EditOtherAccountController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
-        state = AsyncValue.data(null);
-        return null;
+     state = AsyncError(Exception(requestResponse['message']),
+            StackTrace.fromString(requestResponse['message']));
+            
+        return requestResponse;
       }
     } catch (e, stackTrace) {
       final ex =

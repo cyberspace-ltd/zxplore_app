@@ -19,49 +19,7 @@ class EditNextOfKinController extends _$EditNextOfKinController {
   FutureOr<dynamic> build() {
     //nadaa
   }
-
-  Future<dynamic> getEditData(BuildContext context,
-      {required String? RequestId, required int? NextOfKinId}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse = await repo.getNextOfKinToEdit(
-          RequestId: RequestId,NextOfKinId:NextOfKinId );
-
-      if (requestResponse['status'] == true) {
-        final result =
-            GetNextOfKinToEditResponse.fromJson(requestResponse);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => EditNextOfKinScreen(
-                    data: result,
-                  )),
-        );
-        state = AsyncValue.data(result);
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
-
-
+ 
   Future<dynamic> editNok(
       {required AddNextOfKin? data,
       required BuildContext context}) async {
@@ -108,8 +66,6 @@ class EditNextOfKinController extends _$EditNextOfKinController {
     }
   }
 
-  
-
   Future<dynamic> addNok(
        {required AddNextOfKin? data,
       required BuildContext context}) async {
@@ -145,7 +101,59 @@ class EditNextOfKinController extends _$EditNextOfKinController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
-        state = AsyncValue.data(null);
+         state = AsyncError(Exception(requestResponse['message']),
+            StackTrace.fromString(requestResponse['message']));
+            
+        return requestResponse;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }
+
+}
+
+@riverpod
+class ViewNextOfKinController extends _$ViewNextOfKinController {
+  @override
+  FutureOr<dynamic> build() {
+    //nadaa
+  }
+
+  Future<dynamic> getEditData(BuildContext context,
+      {required String? RequestId, required int? NextOfKinId}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
+    try {
+      state = const AsyncLoading();
+      final requestResponse = await repo.getNextOfKinToEdit(
+          RequestId: RequestId,NextOfKinId:NextOfKinId );
+
+      if (requestResponse['status'] == true) {
+        final result =
+            GetNextOfKinToEditResponse.fromJson(requestResponse);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => EditNextOfKinScreen(
+                    data: result,
+                  )),
+        );
+        state = AsyncValue.data(result);
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        }
+        state = AsyncError(Exception(requestResponse['message']),
+            StackTrace.fromString(requestResponse['message']));
         return null;
       }
     } catch (e, stackTrace) {
@@ -174,14 +182,14 @@ class EditNextOfKinController extends _$EditNextOfKinController {
         ref.read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(RequestId!);
         state = AsyncValue.data(result);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => ViewNextOfKinScreen(
-                    formIndividualData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
-                  )),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (BuildContext context) => ViewNextOfKinScreen(
+        //             formIndividualData:
+        //                 ref.read(activelyViewedRequestProvider)!.toMap(),
+        //           )),
+        // );
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -202,4 +210,5 @@ class EditNextOfKinController extends _$EditNextOfKinController {
       return null;
     }
   }
+
 }

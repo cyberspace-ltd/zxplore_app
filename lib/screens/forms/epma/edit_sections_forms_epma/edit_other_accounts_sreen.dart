@@ -154,7 +154,7 @@ class _EditOherBankAccountScreenState
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
-                  gapH16,
+             
                   gapH16,
                   if (!hidePrevItemStage) ...[
                     CustomTextFormField(
