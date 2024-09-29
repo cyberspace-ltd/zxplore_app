@@ -7,7 +7,7 @@ part of 'user_pending_statistics_controller.dart';
 // **************************************************************************
 
 String _$getUserStatisticsDataHash() =>
-    r'e8d45f96c098d25c80980ce26f27dc23ca247831';
+    r'abc7b6b242fefe8442c020a14fccdbe7449538b4';
 
 /// See also [getUserStatisticsData].
 @ProviderFor(getUserStatisticsData)

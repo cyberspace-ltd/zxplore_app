@@ -750,7 +750,8 @@ class _PersonalInfoEditSscreenState
                       return ref.watch(getGenderProvider).when(
                             data: (data) => (data != null &&
                                     data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
+                                ? 
+                                DropdownButtonHideUnderline(
                                     child: DropdownButton2<GendersDatum>(
                                       isExpanded: true,
                                       hint: Text(

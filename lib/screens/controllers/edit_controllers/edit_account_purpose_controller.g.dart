@@ -7,7 +7,7 @@ part of 'edit_account_purpose_controller.dart';
 // **************************************************************************
 
 String _$editAccountPurposeControllerHash() =>
-    r'4da46352e257c6fbabd40a7fe6d89497d88006e1';
+    r'd94a6e3a240364d10bd9193d061ff48f8b035a76';
 
 /// See also [EditAccountPurposeController].
 @ProviderFor(EditAccountPurposeController)

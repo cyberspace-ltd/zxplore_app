@@ -74,7 +74,7 @@ class Data {
     });
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
-        accountPurposesId: json["accountPurposesIdr"],
+        accountPurposesId: json["accountPurposesId"],
         reqId: json["reqId"],
         rowVersion: json["rowVersion"],
         itemStage: json["itemStage"],

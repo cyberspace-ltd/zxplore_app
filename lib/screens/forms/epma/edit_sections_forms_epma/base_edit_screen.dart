@@ -11,11 +11,13 @@ class BaseEditForm extends ConsumerWidget {
   final Widget widgetToGoOnCancel;
   final Function()? onCancel;
   final dynamic data;
+  final bool showAddMore;
 
   const BaseEditForm(
       {Key? key,
       this.addMore,
       this.button,
+      this.showAddMore=true,
       required this.title,
       required this.widgetToGoOnCancel,
       required this.data,
@@ -45,9 +47,10 @@ class BaseEditForm extends ConsumerWidget {
             )),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [SizedBox(
+          children: [
+            SizedBox(
             width: MediaQuery.of(context).size.width*0.60,
-            child: Text(title,overflow: TextOverflow.ellipsis,)), this.addMore ?? SizedBox.shrink()],
+            child: Text(title,overflow: TextOverflow.ellipsis,)),this.showAddMore? (this.addMore ?? SizedBox.shrink()):SizedBox.shrink()],
         ),
       ),
       body: child,

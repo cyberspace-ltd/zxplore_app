@@ -7,7 +7,7 @@ part of 'edit_funding_sources_controller.dart';
 // **************************************************************************
 
 String _$editFundingSourcesControllerHash() =>
-    r'4566bd9832c4e72fc08e175cba59a229a7264d5a';
+    r'eca44ff8010d48889805badf83aeca2404f3ef7f';
 
 /// See also [EditFundingSourcesController].
 @ProviderFor(EditFundingSourcesController)

@@ -7,7 +7,6 @@ import 'package:zxplore_app/models/epma_models/get_funding_sources_response.dart
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
-import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_funding_sources_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
 
@@ -19,7 +18,7 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
   FutureOr<dynamic> build() {
     //nadaa
   }
- 
+
   Future<dynamic> editFundingSourcesData(
       {required EditFundingSource? editFundingData,
       required BuildContext context}) async {
@@ -29,9 +28,8 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
       state = const AsyncLoading();
       final requestResponse =
           await repo.editFundingSources(data: editFundingData);
-
       if (requestResponse['status'] == true) {
-         zXFlushBar(context, requestResponse['status']);
+      
         final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
         ref
@@ -39,7 +37,8 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
             .getRequestDetailAsync(editFundingData!.requestId!);
 
         state = AsyncValue.data(result);
-       /// replace this present view to the last
+
+        /// replace this present view to the last
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -59,7 +58,7 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
-            final ex = Exception(
+        final ex = Exception(
             requestResponse['message'] ?? 'Failed to complete request');
         state = AsyncError(
             ex,
@@ -76,7 +75,6 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
   }
 }
 
-
 @riverpod
 class ViewFundingSourcesController extends _$ViewFundingSourcesController {
   @override
@@ -92,7 +90,6 @@ class ViewFundingSourcesController extends _$ViewFundingSourcesController {
       state = const AsyncLoading();
       final requestResponse =
           await repo.getFundingSourceToEdit(RequestId: RequestId);
-
       if (requestResponse['status'] == true) {
         final result = GetFundingSourceToEditResponse.fromJson(requestResponse);
         Navigator.push(
@@ -106,7 +103,7 @@ class ViewFundingSourcesController extends _$ViewFundingSourcesController {
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
-                 state = AsyncValue.data(requestResponse);
+          state = AsyncValue.data(requestResponse);
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
         }
@@ -122,4 +119,3 @@ class ViewFundingSourcesController extends _$ViewFundingSourcesController {
     }
   }
 }
-

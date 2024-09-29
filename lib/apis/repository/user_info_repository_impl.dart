@@ -601,7 +601,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
         accountPurposesId: data?.accountPurposesId,
         requestId: data?.requestId,
         rowVersion: data?.rowVersion,
-        itemStage: data?.itemStage??'Saved',
+        itemStage: data?.itemStage,
         salaryProcessing: data?.salaryProcessing,
         toOtainLoan: data?.toOtainLoan,
         businessTransactional: data?.businessTransactional,

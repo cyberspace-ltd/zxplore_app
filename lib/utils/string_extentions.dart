@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+List<String?> itemStages =['Saved','Draft',null];
 
 extension ValidatorX on String {
  String capitalize() {

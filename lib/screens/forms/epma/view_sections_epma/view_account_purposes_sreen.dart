@@ -26,20 +26,17 @@ class _AccountPurposeScreenState
   @override
   Widget build(BuildContext context) {
        ref.listen<AsyncValue>(
-      editAccountPurposeControllerProvider,
+      viewAccountPurposeControllerProvider,
       (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
     );
-    //    ref.listen<AsyncValue>(
-    //   viewAccountPurposeControllerProvider,
-    //   (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
-    // );
+ 
 
        final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
 
     final sectionData = requestData?.data?.accountPurposes ?? [];
 
     return ZxploreProgress(
-      inAsyncCall: ref.watch(editAccountPurposeControllerProvider).isLoading
+      inAsyncCall: ref.watch(viewAccountPurposeControllerProvider).isLoading
       ||ref.watch(viewAccountPurposeControllerProvider).isLoading,
       child: BaseFormScreen(
           title: 'Account  Purpose',

@@ -4,6 +4,7 @@ import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_section_screen.dart';
+import 'package:zxplore_app/screens/home_screen.dart';
 
 // Base screen template
 class BaseFormScreen extends ConsumerWidget {
@@ -39,10 +40,13 @@ class BaseFormScreen extends ConsumerWidget {
            if(showHomeIcon)... [IconButton(
               onPressed: 
                   () {
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => ViewInitialCreationInfoScreen(formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),)),
+                          builder: (BuildContext context) => MyHomePage(),
+                          ),
+                            (Route<dynamic> route) => false,
+
                     );
                   },
               icon: Icon(

@@ -113,7 +113,7 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
 
   Future<void> _submitForm(BuildContext context) async{
     final originalData = widget.data?.data;
-     await ref.read(editFundingSourcesControllerProvider.notifier).editFundingSourcesData(context: context,editFundingData: EditFundingSource(
+       ref.read(editFundingSourcesControllerProvider.notifier).editFundingSourcesData(context: context,editFundingData: EditFundingSource(
       itemStage: originalData?.itemStage??'Saved' ,
       othersSpecify:othersController.text ,
       requestId:originalData?.reqId ,
@@ -131,22 +131,32 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
           others:others,
           fundingSourcesId: originalData?.fundingSourcesId,
 
-     )).then((_){
-
-     });
+     ));
   }
 
   @override
   Widget build(BuildContext context) {
            ref.listen<AsyncValue>(
       editFundingSourcesControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
     );
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(editFundingSourcesControllerProvider).isLoading,
       // || ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
+        showAddMore: false,
+        button:                   Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: PrimaryButton(
+                        onPressed: () {
+                          if (!_fundingFormFormKey.currentState!.validate()) {
+                            return;
+                          }
+                          _submitForm( context);
+                        },
+                        title: 'Save'),
+        ),
         title: 'Editing Funding Sources',
         widgetToGoOnCancel: FundingSourcesScreen(
           requestData: widget.data!.toJson(),
@@ -274,15 +284,8 @@ class _EditFundingSourceScreenState extends ConsumerState<EditFundingSourceScree
                   //   },
                   // ),
             
-                  const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_fundingFormFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        _submitForm( context);
-                      },
-                      title: 'Save')
+                  // const SizedBox(height: 24),
+
                 ],
               ),
             ),

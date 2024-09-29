@@ -5,7 +5,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
-import 'package:zxplore_app/screens/controllers/home/user_pending_statistics_controller.dart';
 import 'package:zxplore_app/screens/controllers/login/get_login_modes.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticiapted_amount.dart';
@@ -16,8 +15,6 @@ import 'package:zxplore_app/screens/controllers/meta/customer_classification.dar
 import 'package:zxplore_app/screens/controllers/meta/employment_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/fatca_status.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
-import 'package:zxplore_app/screens/controllers/meta/get_account_class.dart';
-import 'package:zxplore_app/screens/controllers/meta/get_account_series.dart';
 import 'package:zxplore_app/screens/controllers/meta/get_documents_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/marital_status.dart';
@@ -82,11 +79,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ref.read(getReconStatusProvider);
           ref.read(getRegionsProvider);
           ref.read(getSearchOptionsProvider);
-
-          /// Todo add recent params when i item has been selected
-          ///  set this items only when there is a recently viewed or editable request
-          // ref.read(getAccountSeriesProvider('',''));
-          ref.read(getAccountClassProvider('','',''));
+       
           ///! End
           Navigator.pushReplacement(
             context,
@@ -182,8 +175,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       items: data
-                                          .map<
-                                                  DropdownMenuItem<
+                                          .map<DropdownMenuItem<
                                                       LoginModesData>>(
                                               ( item) =>
                                                   DropdownMenuItem<
@@ -262,7 +254,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       ),
                                     ),
                                   )
-                                : const SizedBox.shrink(),
+                                : TextButton(
+                                onPressed: () =>
+                                    ref.invalidate(getLoginModesProvider),
+                                child: const Text(
+                                  'An error occured fetch login modes. Check connection ,tap to refresh',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
                             error: (e, s) => GestureDetector(
                                 onTap: () =>
                                     ref.invalidate(getLoginModesProvider),
