@@ -6,6 +6,7 @@ import 'package:zxplore_app/screens/controllers/edit_controllers/edit_assigned_a
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
@@ -24,11 +25,16 @@ class _ViewAssignedAccountScreenState
     extends ConsumerState<ViewAssignedAccountScreen> {
   @override
   Widget build(BuildContext context) {
+
+     ref.listen<AsyncValue>(
+      viewAssignedAccountControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    );
      final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
  final sectionData = requestData?.data?.assignedAccts ?? [];
 
     return ZxploreProgress(
-      inAsyncCall: ref.watch(editAssignedAccountControllerProvider).isLoading||
+      inAsyncCall: ref.watch(viewAssignedAccountControllerProvider).isLoading||
     ref.watch(viewRequestControllerProvider).isLoading  ,
       child: BaseFormScreen(
           title: 'Assigned AccountTypes',
@@ -84,9 +90,10 @@ class Item extends ConsumerWidget {
       requestId: requestId,
       subRequestId: assignedAcctId,
       onPressed: () {},
+    
       onTapEdit: () {
         // to navigate to edit this section
-        ref.read(editAssignedAccountControllerProvider.notifier).getEditData(
+        ref.read(viewAssignedAccountControllerProvider.notifier).getEditData(
             context,
             RequestId: data?.reqId ?? '',
             AssignedAcctId: data?.assignedAcctId);
@@ -94,7 +101,7 @@ class Item extends ConsumerWidget {
       onTapView: () {},
       onTapDelete: () {
         ref
-            .read(editAssignedAccountControllerProvider.notifier)
+            .read(viewAssignedAccountControllerProvider.notifier)
             .deleteAssignedAccountData(context,
                 RequestId: data?.reqId ?? '',
                 AssignedAcctId: data?.assignedAcctId);

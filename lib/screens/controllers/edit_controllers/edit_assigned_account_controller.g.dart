@@ -7,7 +7,7 @@ part of 'edit_assigned_account_controller.dart';
 // **************************************************************************
 
 String _$editAssignedAccountControllerHash() =>
-    r'a3badf20e1ead78f4c3072faff0e83c3e0cb1f6d';
+    r'36cd57abd5f5f3389951d06ebef264531e614909';
 
 /// See also [EditAssignedAccountController].
 @ProviderFor(EditAssignedAccountController)
@@ -23,5 +23,22 @@ final editAssignedAccountControllerProvider = AutoDisposeAsyncNotifierProvider<
 );
 
 typedef _$EditAssignedAccountController = AutoDisposeAsyncNotifier<dynamic>;
+String _$viewAssignedAccountControllerHash() =>
+    r'07cea47e8f64493c065d75e99509f35954aca8fd';
+
+/// See also [ViewAssignedAccountController].
+@ProviderFor(ViewAssignedAccountController)
+final viewAssignedAccountControllerProvider = AutoDisposeAsyncNotifierProvider<
+    ViewAssignedAccountController, dynamic>.internal(
+  ViewAssignedAccountController.new,
+  name: r'viewAssignedAccountControllerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$viewAssignedAccountControllerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ViewAssignedAccountController = AutoDisposeAsyncNotifier<dynamic>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
