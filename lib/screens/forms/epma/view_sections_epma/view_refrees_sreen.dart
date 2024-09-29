@@ -6,7 +6,9 @@ import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_refree_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/add_data_forms/add_refrees_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
@@ -23,11 +25,17 @@ class ViewRefreesScreen extends ConsumerStatefulWidget {
 class _ViewRefreesScreenState extends ConsumerState<ViewRefreesScreen> {
   @override
   Widget build(BuildContext context) {
-       final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
-final sectionData = requestData?.data?.referees ?? [];
+    final ViewAccountRequestResponse? requestData =
+        ref.watch(activelyViewedRequestProvider);
+    final sectionData = requestData?.data?.referees ?? [];
+
+     ref.listen<AsyncValue>(
+      viewRefereeControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    );
 
     return ZxploreProgress(
-      inAsyncCall: ref.watch(editRefereeControllerProvider).isLoading ||
+      inAsyncCall: ref.watch(viewRefereeControllerProvider).isLoading ||
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseFormScreen(
           title: 'Referees',
@@ -37,7 +45,16 @@ final sectionData = requestData?.data?.referees ?? [];
             // to navigate to edit this section
           },
           onTapAdd: () {
-            // rroute to add new item page
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => AddRefereeScreen(
+                        requestId: ref
+                            .read(activelyViewedRequestProvider)
+                            ?.data
+                            ?.reqId,
+                      )),
+            );
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -85,18 +102,19 @@ class Item extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FoldableItem(
-      name: 'Name: ${data?.accountName ?? ''}',
-      number: 'Account No ${data?.accountNo ?? ''}',
+      name: 'Name: ${data?.name ?? ''}',
+      number:
+          'Account Name: ${data?.name ?? ''}\n\nAccount No ${data?.accountNo ?? ''} \n',
       requestId: requestId,
       subRequestId: subRequestId,
       onTapEdit: () {
         // to navigate to edit this section
-        ref.read(editRefereeControllerProvider.notifier).getEditData(context,
+        ref.read(viewRefereeControllerProvider.notifier).getEditData(context,
             RequestId: data?.reqId ?? '', RefereeId: data?.refereeId);
       },
       onTapView: () {},
       onTapDelete: () {
-        ref.read(editRefereeControllerProvider.notifier).deleteReferee(context,
+        ref.read(viewRefereeControllerProvider.notifier).deleteReferee(context,
             RequestId: data?.reqId ?? '',
             delData: DeleteReferee(
               refereeId: data?.refereeId,

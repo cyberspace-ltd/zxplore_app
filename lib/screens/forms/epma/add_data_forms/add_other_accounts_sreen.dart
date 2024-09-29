@@ -123,22 +123,7 @@ class _AddOtherBankAccountScreenState
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
-                  gapH16,
-                  CustomTextFormField(
-                    title: 'Bank',
-                    fillColor: Colors.transparent,
-                    controller: bankController,
-                    hint: 'Enter bank',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value?.isEmpty == true) {
-                        return 'Bank is required';
-                      }
-                      return null;
-                    },
-                  ),
-                  gapH16,
+                     gapH16,
                        Row(children: [
                     Text(
                       "Item Stage",
@@ -223,6 +208,22 @@ class _AddOtherBankAccountScreenState
                     ),
                   ),
                  
+                  gapH16,
+                  CustomTextFormField(
+                    title: 'Bank',
+                    fillColor: Colors.transparent,
+                    controller: bankController,
+                    hint: 'Enter bank',
+                    inputType: TextInputType.text,
+                    useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value?.isEmpty == true) {
+                        return 'Bank is required';
+                      }
+                      return null;
+                    },
+                  ),
+               
                   gapH16,
                   CustomTextFormField(
                     title: 'Branch',

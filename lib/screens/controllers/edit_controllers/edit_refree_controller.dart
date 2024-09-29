@@ -21,48 +21,6 @@ class EditRefereeController extends _$EditRefereeController {
     //nadaa
   }
 
-  Future<dynamic> getEditData(BuildContext context,
-      {required String? RequestId, required int? RefereeId}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse = await repo.getRefereeToEdit(
-          RequestId: RequestId,RefereeId:RefereeId );
-
-      if (requestResponse['status'] == true) {
-        final result =
-            GetRefereeToEditResponse.fromJson(requestResponse);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => EditRefereeScreen(
-                  data  : result,
-                  )),
-        );
-        state = AsyncValue.data(result);
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
-
-
   Future<dynamic> editReferee(
       {required AddReferee? data,
       required BuildContext context}) async {
@@ -107,8 +65,6 @@ class EditRefereeController extends _$EditRefereeController {
       return null;
     }
   }
-
-  
 
   Future<dynamic> addReferee(
        {required AddReferee? data,
@@ -156,32 +112,34 @@ class EditRefereeController extends _$EditRefereeController {
     }
   }
 
-  Future<dynamic> deleteReferee(BuildContext context,
-      {required String? RequestId, required DeleteReferee? delData}) async {
+}
+@riverpod
+class ViewRefereeController extends _$ViewRefereeController {
+  @override
+  FutureOr<dynamic> build() {
+    //nadaa
+  }
+
+  Future<dynamic> getEditData(BuildContext context,
+      {required String? RequestId, required int? RefereeId}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.deleteRefree(
-          delref: delData, );
+      final requestResponse = await repo.getRefereeToEdit(
+          RequestId: RequestId,RefereeId:RefereeId );
 
       if (requestResponse['status'] == true) {
         final result =
-            DeleteReferee.fromJson(requestResponse);
-        state = AsyncValue.data(result);
-
-        // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(RequestId!);
-        state = AsyncValue.data(result);
-        Navigator.pushReplacement(
+            GetRefereeToEditResponse.fromJson(requestResponse);
+        Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => ViewRefreesScreen(
-                    formIndividualData:
-                        ref.read(activelyViewedRequestProvider)!.toMap(),
+              builder: (BuildContext context) => EditRefereeScreen(
+                  data  : result,
                   )),
         );
+        state = AsyncValue.data(result);
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -204,4 +162,42 @@ class EditRefereeController extends _$EditRefereeController {
   }
 
 
-}
+  Future<dynamic> deleteReferee(BuildContext context,
+      {required String? RequestId, required DeleteReferee? delData}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
+    try {
+      state = const AsyncLoading();
+      final requestResponse = await repo.deleteRefree(
+          delref: delData, );
+
+      if (requestResponse['status'] == true) {
+        final result =
+            DeleteReferee.fromJson(requestResponse);
+        state = AsyncValue.data(result);
+
+        // refresh the latest viewed item.
+        ref.read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(RequestId!);
+        state = AsyncValue.data(result);
+   
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        }
+        state = AsyncError(Exception(requestResponse['message']),
+            StackTrace.fromString(requestResponse['message']));
+        return null;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }}

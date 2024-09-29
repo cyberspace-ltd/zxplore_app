@@ -181,14 +181,7 @@ class ViewStakeHoldersController extends _$ViewStakeHoldersController {
         ref.read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(RequestId!);
         state = AsyncValue.data(result);
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (BuildContext context) => ViewForeignAccount(
-        //             formIndividualData:
-        //                 ref.read(activelyViewedRequestProvider)!.toMap(),
-        //           )),
-        // );
+   
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
