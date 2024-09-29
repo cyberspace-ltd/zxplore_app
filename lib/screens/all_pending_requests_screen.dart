@@ -241,7 +241,7 @@ class AccountRequestItem extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.18,
-        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
@@ -262,13 +262,16 @@ class AccountRequestItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  request?.fullName ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.w500),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.45,
+                  child: Text(
+                    request?.fullName ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w500),
+                  ),
                 ),
                 SizedBox(
                   // width: 70,

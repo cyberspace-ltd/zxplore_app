@@ -9,16 +9,16 @@ GetMonthlyActivityToEditResponse getMonthlyActivityToEditFromJson(String str) =>
 String getMonthlyActivityToEditToJson(GetMonthlyActivityToEditResponse data) => json.encode(data.toJson());
 
 class GetMonthlyActivityToEditResponse {
-    int code;
-    bool status;
-    String message;
-    Data data;
+    int? code;
+    bool?status;
+    String? message;
+    Data? data;
 
     GetMonthlyActivityToEditResponse({
-        required this.code,
-        required this.status,
-        required this.message,
-        required this.data,
+         this.code,
+         this.status,
+         this.message,
+         this.data,
     });
 
     factory GetMonthlyActivityToEditResponse.fromJson(Map<String, dynamic> json) => GetMonthlyActivityToEditResponse(
@@ -32,45 +32,45 @@ class GetMonthlyActivityToEditResponse {
         "code": code,
         "status": status,
         "message": message,
-        "data": data.toJson(),
+        "data": data?.toJson(),
     };
 }
 
 class Data {
-    int accountTypeId;
-    String reqId;
-    String itemStage;
-    int rowVersion;
-    bool current;
-    bool savings;
-    bool chequeSave;
-    bool thumbsUp;
-    bool zeca;
-    bool zecaPlus;
-    String anticipatedDepositeTrans;
-    int anticipatedDepositeAmount;
-    String anticipatedWithdrawTrans;
-    int anticipatedWithdrawAmount;
-    bool foriegnTransactionExpected;
-    String actionFlag;
+    int? accountTypeId;
+    String? reqId;
+     String?  itemStage;
+    int? rowVersion;
+     bool?  current;
+     bool?  savings;
+     bool?  chequeSave;
+     bool?  thumbsUp;
+     bool?  zeca;
+     bool?  zecaPlus;
+     String?  anticipatedDepositeTrans;
+    int? anticipatedDepositeAmount;
+     String?  anticipatedWithdrawTrans;
+    int? anticipatedWithdrawAmount;
+    bool? foriegnTransactionExpected;
+     String?  actionFlag;
 
     Data({
-        required this.accountTypeId,
-        required this.reqId,
-        required this.itemStage,
-        required this.rowVersion,
-        required this.current,
-        required this.savings,
-        required this.chequeSave,
-        required this.thumbsUp,
-        required this.zeca,
-        required this.zecaPlus,
-        required this.anticipatedDepositeTrans,
-        required this.anticipatedDepositeAmount,
-        required this.anticipatedWithdrawTrans,
-        required this.anticipatedWithdrawAmount,
-        required this.foriegnTransactionExpected,
-        required this.actionFlag,
+         this.accountTypeId,
+         this.reqId,
+         this.itemStage,
+         this.rowVersion,
+         this.current,
+         this.savings,
+         this.chequeSave,
+         this.thumbsUp,
+         this.zeca,
+         this.zecaPlus,
+         this.anticipatedDepositeTrans,
+         this.anticipatedDepositeAmount,
+         this.anticipatedWithdrawTrans,
+         this.anticipatedWithdrawAmount,
+         this.foriegnTransactionExpected,
+         this.actionFlag,
     });
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(

@@ -46,7 +46,6 @@ class _ViewForeignAccountState extends ConsumerState<ViewForeignAccount> {
           onTapEdit: () {
             // to navigate to edit this section
           },
-          showAdd: false,
           onTapAdd: () {
             // rroute to add new item page
           },

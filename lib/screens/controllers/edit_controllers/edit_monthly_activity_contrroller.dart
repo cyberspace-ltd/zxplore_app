@@ -19,7 +19,6 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
     //nadaa
   }
 
- 
   Future<dynamic> editAccountTypeDaata(
       {required EditMonthlyActivity? data,
       required BuildContext context}) async {
@@ -30,17 +29,20 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
       final requestResponse = await repo.editMonthlyActivity(data: data);
 
       if (requestResponse['status'] == true) {
-        final result =
-            GenericResponse.fromMap(requestResponse);
-     
+        final result = GenericResponse.fromMap(requestResponse);
+
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(data?.requestId??'');
+        ref
+            .read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(data?.requestId ?? '');
         state = AsyncValue.data(result);
-          Navigator.pushReplacement(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => AccountTypeMonthlyActivityScreen(
-                    requestData: ref.read(activelyViewedRequestProvider)!.toMap(),
+              builder: (BuildContext context) =>
+                  AccountTypeMonthlyActivityScreen(
+                    requestData:
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
                   )),
         );
         return result;
@@ -52,8 +54,9 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
-        state = AsyncValue.data(null);
-        return null;
+       state = AsyncError(Exception(requestResponse['message']),
+            StackTrace.fromString(requestResponse['message']));
+        return requestResponse;
       }
     } catch (e, stackTrace) {
       final ex =
@@ -63,7 +66,6 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
     }
   }
 }
-
 
 @riverpod
 class ViewMonthlyActivityController extends _$ViewMonthlyActivityController {
@@ -84,6 +86,9 @@ class ViewMonthlyActivityController extends _$ViewMonthlyActivityController {
       if (requestResponse['status'] == true) {
         final result =
             GetMonthlyActivityToEditResponse.fromJson(requestResponse);
+        state = AsyncValue.data(result);
+     
+        
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -91,19 +96,18 @@ class ViewMonthlyActivityController extends _$ViewMonthlyActivityController {
                     data: result,
                   )),
         );
-        state = AsyncValue.data(result);
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          final ex = Exception('Failed to complete request,try again. ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));
-        return null;
+        return requestResponse;
       }
     } catch (e, stackTrace) {
       final ex =
@@ -112,4 +116,4 @@ class ViewMonthlyActivityController extends _$ViewMonthlyActivityController {
       return null;
     }
   }
- }
+}

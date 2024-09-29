@@ -12,10 +12,12 @@ import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed
 import 'package:zxplore_app/screens/controllers/meta/anticiapted_amount.dart';
 import 'package:zxplore_app/screens/controllers/meta/anticipated_transactions.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edit_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_acount_type_monthly_activity_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
@@ -44,6 +46,16 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
   AnticipatedTransactionsDatum? selectedAnticipatedTransactionsItem;
   String? selectedTrxn;
   String? selectedTrxnName;
+  final TextEditingController prevItemStageController = TextEditingController();
+
+  bool hidePrevItemStage = false;
+  String? selectedItemStage;
+
+  void togglePrevItemStage() {
+    setState(() {
+      hidePrevItemStage = !hidePrevItemStage;
+    });
+  }
 
   bool current = false;
   bool chequeSave = false;
@@ -70,6 +82,9 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
               '${originalData?.anticipatedDepositeAmount ?? 0}';
           anticipatedDepositeAmountController.text =
               '${originalData?.foriegnTransactionExpected ?? 0}';
+          selectedItemStage = originalData?.itemStage;
+          prevItemStageController.text =
+              originalData?.itemStage ?? 'No selection';
         });
       });
     } catch (e) {}
@@ -80,6 +95,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
     // Dispose the controllers to free up resources
     anticipatedDepositeAmountController.dispose();
     anticipatedWithdrawAmountController.dispose();
+    prevItemStageController.dispose();
     super.dispose();
   }
 
@@ -115,7 +131,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
     final editeData = EditMonthlyActivity(
         accountTypeId: 0,
         requestId: originalData?.reqId,
-        itemStage: originalData?.itemStage,
+        itemStage: selectedItemStage,
         rowVersion: originalData?.rowVersion,
         current: current,
         savings: savings,
@@ -124,11 +140,9 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
         zeca: zeca,
         zecaPlus: zecaPlus,
         anticipatedDepositeTrans: selectedAmountName, //drop down
-        anticipatedDepositeAmount:
-            int.parse(anticipatedDepositeAmountController.text),
-        anticipatedWithdrawTrans: selectedTrxnName, //drop down
-        anticipatedWithdrawAmount:
-            int.parse(anticipatedDepositeAmountController.text),
+        anticipatedDepositeAmount:int.parse(anticipatedDepositeAmountController.text),
+        anticipatedWithdrawTrans: selectedTrxn, //drop down
+        anticipatedWithdrawAmount: int.parse(anticipatedWithdrawAmountController.text),
         foriegnTransactionExpected: foriegnTransactionExpected,
         actionFlag: originalData?.actionFlag);
 
@@ -141,7 +155,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
       editMonthlyActivityControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
     );
 
     return ZxploreProgress(
@@ -149,11 +163,40 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Monthly Expected Activity',
-        widgetToGoOnCancel: AccountTypeMonthlyActivityScreen(requestData: ref.read(activelyViewedRequestProvider)!.toMap(),),
-        onCancel: () {},
+        widgetToGoOnCancel: AccountTypeMonthlyActivityScreen(
+          requestData: ref.read(activelyViewedRequestProvider)!.toMap(),
+        ),
+        onCancel: () => Navigator.pop(context),
+        button: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+          child: PrimaryButton(
+              onPressed: () {
+                if (!_accTypeEditFormKey.currentState!.validate()) {
+                  return;
+                }
+                if (selectedItemStage == null) {
+                  zXFlushBar(context, "Item stage is required");
+                }
+                if (selectedAnticipatedTransactionsItem == null) {
+                  zXFlushBar(context, "Anticipated transaction is required");
+
+                  return;
+                }
+                ;
+                if (selectedAnticipatedAmountItem == null) {
+                  zXFlushBar(context, "Anticipated amount is required");
+
+                  return;
+                }
+                ;
+
+                /// perform trn if all is well
+                _submitForm(context);
+              },
+              title: 'Save'),
+        ),
         data: {},
-        child: 
-        SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
               left: 16,
@@ -176,6 +219,110 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
+                  gapH16,
+                  if (!hidePrevItemStage) ...[
+                    CustomTextFormField(
+                      title: "Item Stage",
+                      fillColor: Colors.transparent,
+                      controller: prevItemStageController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevItemStage();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevItemStage) ...[
+                    Row(children: [
+                      Text(
+                        "Item Stage",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 16),
+                      )
+                    ]),
+                    gapH4,
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2<String?>(
+                        isExpanded: true,
+                        hint: Text(
+                          'Select stage',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
+                            color: ZxplorePrimaryColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        items: itemStages
+                            .map<DropdownMenuItem<String?>>(
+                                (item) => DropdownMenuItem<String?>(
+                                      value: item,
+                                      child: Text(
+                                        item ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                            .toList(),
+                        value: selectedItemStage,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            /// Set selected item params
+                            selectedItemStage = newValue;
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 60,
+                          // width: 160,
+                          padding: const EdgeInsets.only(left: 0, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: ZxplorePrimaryColor,
+                            ),
+                          ),
+                          elevation: 0,
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            CupertinoIcons.chevron_down,
+                          ),
+                          iconSize: 14,
+                          iconEnabledColor: ZxplorePrimaryColor,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          // width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          // offset: const Offset(0, 0),
+                          scrollbarTheme: const ScrollbarThemeData(
+                            radius: Radius.circular(40),
+                            thickness: WidgetStatePropertyAll<double>(6),
+                            thumbVisibility: WidgetStatePropertyAll<bool>(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 14, right: 14),
+                        ),
+                      ),
+                    ),
+                  ],
                   gapH16,
                   CheckboxListTile(
                     title: Text('Current'),
@@ -212,7 +359,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                     onChanged: (value) => _handleCheckboxChange(6, value),
                   ),
                   gapH16,
-                    Text(
+                  Text(
                     'Transactions',
                     style: Theme.of(context)
                         .textTheme
@@ -220,6 +367,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
+                  gapH16,
                   Text(
                     'Anticipated Deposit Amount',
                     overflow: TextOverflow.fade,
@@ -274,7 +422,8 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                                           (AnticipatedAmountsDatum? newValue) {
                                         setState(() {
                                           /// Set selected item params
-                                          selectedAnticipatedAmountItem = newValue;
+                                          selectedAnticipatedAmountItem =
+                                              newValue;
                                           selectedAmount =
                                               newValue?.amountValue;
                                           selectedAmountName =
@@ -395,7 +544,8 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                                                     ),
                                                   ))
                                           .toList(),
-                                      value: selectedAnticipatedTransactionsItem,
+                                      value:
+                                          selectedAnticipatedTransactionsItem,
                                       onChanged: (AnticipatedTransactionsDatum?
                                           newValue) {
                                         setState(() {
@@ -478,10 +628,13 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                     title: 'Anticipated Deposit Amount',
                     fillColor: Colors.transparent,
                     controller: anticipatedDepositeAmountController,
-                    hint: 'Enter aamount',
+                    hint: 'Enter amount',
                     inputType: TextInputType.number,
                     useDefaultErrorText: false,
                     validator: (value) {
+      if (value.toString().isEmpty) {
+                        return 'Anticipated Deposit Amount is  required';
+                      }
                       return null;
                     },
                   ),
@@ -494,28 +647,18 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                     inputType: TextInputType.number,
                     useDefaultErrorText: false,
                     validator: (value) {
+                         if (value.toString().isEmpty) {
+                        return 'Anticipated Widthrawals Amount is  required';
+                      }
                       return null;
                     },
                   ),
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_accTypeEditFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        if (selectedAnticipatedTransactionsItem == null) return;
-                        if (selectedAnticipatedAmountItem == null) return;
-
-                        /// perform trn if all is well
-                        _submitForm(context);
-                      },
-                      title: 'Save')
                 ],
               ),
             ),
           ),
         ),
-    
       ),
     );
   }
