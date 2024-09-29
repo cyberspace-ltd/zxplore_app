@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
-import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
 import 'package:zxplore_app/models/epma_models/delete_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/get_stake_holder_response.dart';
@@ -21,46 +20,7 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
     //nadaa
   }
 
-  Future<dynamic> getEditData(BuildContext context,
-      {required String? RequestId}) async {
-    final repo = ref.read(userInfoRepositoryImplProvider);
-
-    try {
-      state = const AsyncLoading();
-      final requestResponse =
-          await repo.getForeignAccountToEdit(RequestId: RequestId);
-
-      if (requestResponse['status'] == true) {
-        final result = GetStakeHolderToEditResponse.fromJson(requestResponse);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => EditStakeHolderScreen(
-                    data: result,
-                  )),
-        );
-        state = AsyncValue.data(result);
-        return result;
-      } else {
-        if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-        return null;
-      }
-    } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      return null;
-    }
-  }
-
+  
   Future<dynamic> addStakeHolder(
       {required AddStakeholder? editAccount,
       required BuildContext context}) async {
@@ -122,7 +82,6 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
         // refresh the latest viewed item.
         ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(editAccount?.requestId??'');
 
-
         state = AsyncValue.data(result);
        /// replace this present view to the last
         Navigator.pushReplacement(
@@ -153,7 +112,58 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
     }
   }
  
-  Future<dynamic> deleteStakeHolder(BuildContext context,
+
+}
+
+
+@riverpod
+class ViewStakeHoldersController extends _$ViewStakeHoldersController {
+  @override
+  FutureOr<dynamic> build() {
+    //nadaa
+  }
+
+  Future<dynamic> getEditData(BuildContext context,
+      {required String? RequestId}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
+    try {
+      state = const AsyncLoading();
+      final requestResponse =
+          await repo.getForeignAccountToEdit(RequestId: RequestId);
+
+      if (requestResponse['status'] == true) {
+        final result = GetStakeHolderToEditResponse.fromJson(requestResponse);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => EditStakeHolderScreen(
+                    data: result,
+                  )),
+        );
+        state = AsyncValue.data(result);
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        }
+        state = AsyncError(Exception(requestResponse['message']),
+            StackTrace.fromString(requestResponse['message']));
+        return null;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }
+
+    Future<dynamic> deleteStakeHolder(BuildContext context,
       {required String? RequestId, required DeleteStakeHolder? delData}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 

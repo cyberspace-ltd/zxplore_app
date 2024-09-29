@@ -27,7 +27,6 @@ import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_stake_hol
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
-// import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -36,15 +35,16 @@ import 'package:zxplore_app/widgets/zxplore_progress.dart';
 import 'package:zxplore_app/models/epma_models/get_stake_holder_response.dart';
 
 class AddStakeHolderScreen extends ConsumerStatefulWidget {
-  const AddStakeHolderScreen({super.key,this.data});
-  final  GetStakeHolderToEditResponse? data;
+  const AddStakeHolderScreen({super.key, this.requestID});
+  final String? requestID;
 
   @override
-  ConsumerState<AddStakeHolderScreen> createState() => _AddStakeHolderScreenState();
+  ConsumerState<AddStakeHolderScreen> createState() =>
+      _AddStakeHolderScreenState();
 }
 
 class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
- final _personalInfoEditFormKey = GlobalKey<FormState>();
+  final _personalInfoEditFormKey = GlobalKey<FormState>();
 
   // Individual TextEditingControllers
   final _surnameController = TextEditingController();
@@ -53,14 +53,10 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
   final _middleNameController = TextEditingController();
   final _birthDateController = TextEditingController();
   final _birthPlaceController = TextEditingController();
-  final _identificationTypeIdController =
-      TextEditingController();
-  final _identificationNoController =
-      TextEditingController();
-  final _idCountryCodeController =
-      TextEditingController();
-  final _idIssueAuthorityController =
-      TextEditingController();
+  final _identificationTypeIdController = TextEditingController();
+  final _identificationNoController = TextEditingController();
+  final _idCountryCodeController = TextEditingController();
+  final _idIssueAuthorityController = TextEditingController();
   final _idIssueDateController = TextEditingController();
   final _idExpiryDateController = TextEditingController();
   final _niaVerificationNoController = TextEditingController();
@@ -69,25 +65,17 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
 
   final _tinController = TextEditingController();
   final _homeTownController = TextEditingController();
-  final _residencePermitNoController =
-      TextEditingController();
-  final _residencePermitPlaceCodeController =
-      TextEditingController();
-        final _emailAddressController = TextEditingController();
-  final _residentialAddressController =
-      TextEditingController();
-  final _residentialAddress2Controller =
-      TextEditingController();
-  final _districtAssemblyAreaController =
-      TextEditingController();
+  final _residencePermitNoController = TextEditingController();
+  final _residencePermitPlaceCodeController = TextEditingController();
+  final _emailAddressController = TextEditingController();
+  final _residentialAddressController = TextEditingController();
+  final _residentialAddress2Controller = TextEditingController();
+  final _districtAssemblyAreaController = TextEditingController();
   final _cityController = TextEditingController();
-  final _permanentResidentialAddressController =
-      TextEditingController();
-  final _permanentResidentialCityController =
-      TextEditingController();
-  final _permanentResidentialCountryCodeController =
-      TextEditingController();
-        final _gpsAddressController = TextEditingController();
+  final _permanentResidentialAddressController = TextEditingController();
+  final _permanentResidentialCityController = TextEditingController();
+  final _permanentResidentialCountryCodeController = TextEditingController();
+  final _gpsAddressController = TextEditingController();
   final _genderCodeController = TextEditingController();
   final _regionCodeController = TextEditingController();
   final _motherMaidenNameController = TextEditingController();
@@ -97,7 +85,6 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
   final jobTitleController = TextEditingController();
   final businessPhoneNoController = TextEditingController();
   final _countryOrigCodeController = TextEditingController();
- 
 
   bool hasPermanentResidence = false; //1
   bool setupEmailIndemnity = false; //2/
@@ -148,7 +135,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
   String? selectedCountryCode;
   String? selectedCountryName;
 
- CountryDatum? selectedPaCountry;
+  CountryDatum? selectedPaCountry;
   String? selectedPaCountryCode;
   String? selectedPaCountryName;
 
@@ -162,12 +149,14 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
+  String? selectedItemStage;
+
 
   @override
   void initState() {
     super.initState();
     ref.read(newLocationControllerProvider.notifier).getCurrentLocation();
- }
+  }
 
   @override
   void dispose() {
@@ -236,68 +225,68 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
     });
   }
 
-  Future<void> editAccountRequest(BuildContext context) async {
+  Future<void> addAccountRequest(BuildContext context) async {
     final lat = ref.read(userLatitudeProvider);
     final long = ref.read(userLongitudeProvider);
-    final initialData = widget.data?.data;
+    // final initialData = widget.data?.data;
     final stakeHolderDetails = AddStakeholder(
-      requestId:initialData?.reqId ,
-      rimNo: initialData?.rimNo,
-        stakeHolderId: initialData?.stakeHolderId,
-        hasPermanentResidence: hasPermanentResidence,
-        setupEmailIndemnity: setupEmailIndemnity,
-        setupStatementViaEmail: setupStatementViaEmail,
-        setupZPrompt: setupZPrompt,
-        isDirector: isDirector,
-        isPrincipalOfficer:isPrincipalOfficer ,
-        isSignatory: isSignatory,
-        residentialAddress2: _residentialAddress2Controller.text,
-        residentialAddress: _residentialAddressController.text,
-        districtAssemblyArea: selectedRegionName,
-        permanentResidentialAddress:  _permanentResidentialAddressController.text,
-        permanentResidentialCity: _permanentResidentialCityController.text,
-        permanentResidentialCountryCode:selectedPaCountryCode,
-        residencePermitNo: _residencePermitNoController.text,
-        residencePermitPlaceCode: _residencePermitPlaceCodeController.text,
-        itemStage: initialData?.itemStage ?? '',
-        genderCode: selectedGenderCode,
-        niaVerificationNo: _niaVerificationNoController.text,
-        tin: _tinController.text,
-        gpsAddress: "$lat $long",
-        lastName: _surnameController.text,
-        firstName: _firstNameController.text,
-        otherName: _otherNamesController.text,
-        emailAddress: _emailAddressController.text,
-        middleName: _middleNameController.text,
-        regionCode: selectedRegionCode,
-        idExpiryDate:stringToDate(dateExpire ?? '')  ,
-        idIssueAuthority: _idIssueAuthorityController.text,
-        idIssueDate:stringToDate(datedIssued ?? ''),
-        homeTown: _homeTownController.text,
-        rowVersion: initialData?.rowVersion ?? -1,
-        isNewRequest: false,
-        idCountryCode: selectedCountryCode,
-        identificationNo: _identificationNoController.text,
-        identificationTypeId: selectedIdentificationCode,
-        actionFlag: initialData!.actionFlag,
-        birthDate: stringToDate(dob ?? ''),
-        city: _cityController.text,
-        birthPlace: _birthPlaceController.text,
-        businessPhoneNo: businessPhoneNoController.text,
-        countryCode:selectedCountryCode ,
-        jobTitle:jobTitleController.text ,
-        motherName: _motherMaidenNameController.text,
-        occupation:occupationController.text ,
-        relAuthCode: initialData.relAuthCode,
-        residencePermitExpiryDate: stringToDate(residencePermitExpiryDateController.text),
-        residencePermitIssueDate: stringToDate(residencePermitIssueDateController.text),
-        
-
+      requestId:widget.requestID,
+      rimNo:0,// initialData?.rimNo,
+      stakeHolderId: 0,//initialData?.stakeHolderId,
+      itemStage: selectedItemStage,//initialData?.itemStage ?? '',
+      rowVersion: 0,//initialData?.rowVersion ?? -1,
+      actionFlag:'A', //initialData!.actionFlag,
+      relAuthCode: 0,//initialData.relAuthCode,
+      hasPermanentResidence: hasPermanentResidence,
+      setupEmailIndemnity: setupEmailIndemnity,
+      setupStatementViaEmail: setupStatementViaEmail,
+      setupZPrompt: setupZPrompt,
+      isDirector: isDirector,
+      isPrincipalOfficer: isPrincipalOfficer,
+      isSignatory: isSignatory,
+      residentialAddress2: _residentialAddress2Controller.text,
+      residentialAddress: _residentialAddressController.text,
+      districtAssemblyArea: selectedRegionName,
+      permanentResidentialAddress: _permanentResidentialAddressController.text,
+      permanentResidentialCity: _permanentResidentialCityController.text,
+      permanentResidentialCountryCode: selectedPaCountryCode,
+      residencePermitNo: _residencePermitNoController.text,
+      residencePermitPlaceCode: _residencePermitPlaceCodeController.text,
+      genderCode: selectedGenderCode,
+      niaVerificationNo: _niaVerificationNoController.text,
+      tin: _tinController.text,
+      gpsAddress: "$lat $long",
+      lastName: _surnameController.text,
+      firstName: _firstNameController.text,
+      otherName: _otherNamesController.text,
+      emailAddress: _emailAddressController.text,
+      middleName: _middleNameController.text,
+      regionCode: selectedRegionCode,
+      idExpiryDate: stringToDate(dateExpire ?? ''),
+      idIssueAuthority: _idIssueAuthorityController.text,
+      idIssueDate: stringToDate(datedIssued ?? ''),
+      homeTown: _homeTownController.text,
+      isNewRequest: false,
+      idCountryCode: selectedCountryCode,
+      identificationNo: _identificationNoController.text,
+      identificationTypeId: selectedIdentificationCode,
+      birthDate: stringToDate(dob ?? ''),
+      city: _cityController.text,
+      birthPlace: _birthPlaceController.text,
+      businessPhoneNo: businessPhoneNoController.text,
+      countryCode: selectedCountryCode,
+      jobTitle: jobTitleController.text,
+      motherName: _motherMaidenNameController.text,
+      occupation: occupationController.text,
+      residencePermitExpiryDate:
+          stringToDate(residencePermitExpiryDateController.text),
+      residencePermitIssueDate:
+          stringToDate(residencePermitIssueDateController.text),
     );
-  
+
     await ref
         .read(editStakeHoldersControllerProvider.notifier)
-        .addStakeHolder(context: context,editAccount:stakeHolderDetails );
+        .addStakeHolder(context: context, editAccount: stakeHolderDetails);
   }
 
   @override
@@ -305,22 +294,61 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
     ///check  for  errors here
     ref.listen<AsyncValue>(
       editStakeHoldersControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context,
+          okAction: () {}, errorMsg: state.error),
     );
 
     return ZxploreProgress(
-      inAsyncCall:ref
-        .watch(editStakeHoldersControllerProvider).isLoading ||
-     ref.watch(viewRequestControllerProvider).isLoading,
+      inAsyncCall: ref.watch(editStakeHoldersControllerProvider).isLoading ||
+          ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseAddForm(
+        button: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+          child: PrimaryButton(
+              onPressed: () {
+                if (!_personalInfoEditFormKey.currentState!.validate()) {
+                  return;
+                }
+                    if (selectedItemStage == null) {
+                  zXFlushBar(context, "Item stage is required");
+                }
+                if (selectedCountry == null) {
+                  zXFlushBar(context, "Country is required");
+                  return;
+                }
+                if (selectedGenderItem == null) {
+                  zXFlushBar(context, "Gender is required");
+                  return;
+                }
+
+                if (selectedIdType == null) {
+                  zXFlushBar(context, "ID type is required");
+                  return;
+                }
+                if (dob == null) {
+                  zXFlushBar(context, "Date of birth is required");
+                  return;
+                }
+                if (dateExpire == null) {
+                  zXFlushBar(context, "ID expiry date is required");
+                  return;
+                }
+
+                if (datedIssued == null) {
+                  zXFlushBar(context, "ID issued date is required");
+                  return;
+                }
+                addAccountRequest(context);
+              },
+              title: 'Save'),
+        ),
         title: 'Add Stake holder Information',
         widgetToGoOnSave: StackHolderdersScreen(
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),
         ),
         onCancel: () => Navigator.pop(context),
         data: {},
-        child: 
-        SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
               left: 16,
@@ -344,6 +372,92 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                   ),
                   div,
                   gapH16,
+                       Row(children: [
+                    Text(
+                      "Item Stage",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    )
+                  ]),
+                  gapH4,
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2<String?>(
+                      isExpanded: true,
+                      hint: Text(
+                        'Select stage',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                          color: ZxplorePrimaryColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      items: itemStages
+                          .map<DropdownMenuItem<String?>>(
+                              (item) => DropdownMenuItem<String?>(
+                                    value: item,
+                                    child: Text(
+                                      item ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: ZxplorePrimaryColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ))
+                          .toList(),
+                      value: selectedItemStage,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          /// Set selected item params
+                          selectedItemStage = newValue;
+                        });
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        height: 60,
+                        // width: 160,
+                        padding: const EdgeInsets.only(left: 0, right: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: ZxplorePrimaryColor,
+                          ),
+                        ),
+                        elevation: 0,
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          CupertinoIcons.chevron_down,
+                        ),
+                        iconSize: 14,
+                        iconEnabledColor: ZxplorePrimaryColor,
+                        iconDisabledColor: Colors.grey,
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 200,
+                        // width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        // offset: const Offset(0, 0),
+                        scrollbarTheme: const ScrollbarThemeData(
+                          radius: Radius.circular(40),
+                          thickness: WidgetStatePropertyAll<double>(6),
+                          thumbVisibility: WidgetStatePropertyAll<bool>(true),
+                        ),
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                        padding: EdgeInsets.only(left: 14, right: 14),
+                      ),
+                    ),
+                  ),
+                 
+                  gapH16,
+
                   CustomTextFormField(
                     title: 'First name',
                     fillColor: Colors.transparent,
@@ -358,7 +472,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'Last name',
                     fillColor: Colors.transparent,
@@ -373,7 +487,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'Middle name',
                     fillColor: Colors.transparent,
@@ -388,8 +502,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-                  
-               gapH16,
+
+                  gapH16,
                   CustomTextFormField(
                     title: 'Other name',
                     fillColor: Colors.transparent,
@@ -404,7 +518,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'Maiden name',
                     fillColor: Colors.transparent,
@@ -419,7 +533,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'Mother\'s name',
                     fillColor: Colors.transparent,
@@ -434,8 +548,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
-                  CustomTextFormField( 
+                  gapH16,
+                  CustomTextFormField(
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'DOB');
                     },
@@ -461,7 +575,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: "Place of birth",
                     fillColor: Colors.transparent,
@@ -476,9 +590,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-                 
-              
-               gapH16,
+
+                  gapH16,
                   Text(
                     'Gender',
                     overflow: TextOverflow.fade,
@@ -508,8 +621,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                       ),
                                       items: data
                                           .map<DropdownMenuItem<GendersDatum>>(
-                                              (item) =>
-                                                  DropdownMenuItem<GendersDatum>(
+                                              (item) => DropdownMenuItem<
+                                                      GendersDatum>(
                                                     value: item,
                                                     child: Text(
                                                       item.genderName ?? '',
@@ -544,7 +657,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -563,21 +677,25 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -593,9 +711,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                           );
                     },
                   ),
-               gapH16,
+                  gapH16,
 
-                           gapH16,
                   const Divider(
                     height: 16,
                     color: Color.fromARGB(255, 169, 189, 201),
@@ -616,8 +733,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-                
-               gapH16,
+
+                  gapH16,
                   CustomTextFormField(
                     title: 'Email Address',
                     fillColor: Colors.transparent,
@@ -632,7 +749,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'Residential Address',
                     fillColor: Colors.transparent,
@@ -656,12 +773,11 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
-                    
                       return null;
                     },
                   ),
-                  
-               gapH16,
+
+                  gapH16,
                   CustomTextFormField(
                     title: 'District/Area',
                     fillColor: Colors.transparent,
@@ -676,8 +792,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-      
-               gapH16,
+
+                  gapH16,
                   CustomTextFormField(
                     title: 'City',
                     fillColor: Colors.transparent,
@@ -692,7 +808,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'Occupation',
                     fillColor: Colors.transparent,
@@ -707,8 +823,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               
-               gapH16,
+
+                  gapH16,
                   CustomTextFormField(
                     title: 'Job Title',
                     fillColor: Colors.transparent,
@@ -723,9 +839,9 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
 
-                 CustomTextFormField(
+                  CustomTextFormField(
                     title: 'TIN',
                     fillColor: Colors.transparent,
                     controller: _tinController,
@@ -736,8 +852,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
-      
+                  gapH16,
+
                   Text(
                     'Country',
                     overflow: TextOverflow.fade,
@@ -767,8 +883,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                       ),
                                       items: data
                                           .map<DropdownMenuItem<CountryDatum>>(
-                                              (item) =>
-                                                  DropdownMenuItem<CountryDatum>(
+                                              (item) => DropdownMenuItem<
+                                                      CountryDatum>(
                                                     value: item,
                                                     child: Text(
                                                       item.countryName ?? '',
@@ -807,7 +923,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -826,32 +943,37 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
                                 : GestureDetector(
-                                    child:
-                                        Text('No? countries?, Tap to refresh, '),
+                                    child: Text(
+                                        'No? countries?, Tap to refresh, '),
                                     onTap: () =>
                                         ref.invalidate(getCountriesProvider),
                                   ),
                             error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(getCountriesProvider),
+                                onTap: () =>
+                                    ref.invalidate(getCountriesProvider),
                                 child: const Text(
                                   'An error occured',
                                   maxLines: 3,
@@ -861,8 +983,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                           );
                     },
                   ),
-      
-               gapH16,
+
+                  gapH16,
                   Text(
                     'Identification Types',
                     overflow: TextOverflow.fade,
@@ -880,8 +1002,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                             data: (data) => (data != null &&
                                     data.isNotEmpty == true)
                                 ? DropdownButtonHideUnderline(
-                                    child:
-                                        DropdownButton2<IdentificationTypesDatum>(
+                                    child: DropdownButton2<
+                                        IdentificationTypesDatum>(
                                       isExpanded: true,
                                       hint: Text(
                                         'Select identification Types',
@@ -932,7 +1054,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -951,21 +1074,25 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -982,8 +1109,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                           );
                     },
                   ),
-               gapH16,
-           gapH16,
+                  gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'ID Issuer',
                     fillColor: Colors.transparent,
@@ -998,7 +1125,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'ID Number',
                     fillColor: Colors.transparent,
@@ -1013,7 +1140,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'ISSUE');
@@ -1040,7 +1167,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'EXPIRY');
@@ -1067,7 +1194,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
+                  gapH16,
                   CustomTextFormField(
                     title: 'NIA Number',
                     fillColor: Colors.transparent,
@@ -1082,8 +1209,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
-      
+                  gapH16,
                   /// Region
                   Text(
                     'Region',
@@ -1150,7 +1276,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         padding: const EdgeInsets.only(
                                             left: 0, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           border: Border.all(
                                             color: ZxplorePrimaryColor,
                                           ),
@@ -1169,21 +1296,25 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         maxHeight: 200,
                                         // width: 200,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                         ),
                                         // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
                                           radius: Radius.circular(40),
                                           thickness:
                                               WidgetStatePropertyAll<double>(6),
                                           thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   )
@@ -1199,8 +1330,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                           );
                     },
                   ),
-               gapH16,
-      
+                  gapH16,
+
                   CheckboxListTile(
                     title: Text('Has Permanent Residence'),
                     value: hasPermanentResidence,
@@ -1222,7 +1353,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                         return null;
                       },
                     ),
-                 gapH16,
+                    gapH16,
                     CustomTextFormField(
                       title: "Permanet Residential Address City",
                       fillColor: Colors.transparent,
@@ -1237,127 +1368,133 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                         return null;
                       },
                     ),
-                 gapH16,
-                      Text(
-                    'Permanent Address Country',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getCountriesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<CountryDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select permanent address country',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<DropdownMenuItem<CountryDatum>>(
-                                              (item) =>
-                                                  DropdownMenuItem<CountryDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.countryName ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: selectedPaCountry,
-                                      onChanged: (CountryDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          selectedPaCountry = newValue;
-                                          selectedPaCountryName =
-                                              newValue?.countryName;
-                                          selectedPaCountryCode =
-                                              newValue?.countryCode;
-                                          
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
+                    gapH16,
+                    Text(
+                      'Permanent Address Country',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getCountriesProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<CountryDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select permanent address country',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    CountryDatum>>((item) =>
+                                                DropdownMenuItem<CountryDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.countryName ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedPaCountry,
+                                        onChanged: (CountryDatum? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            selectedPaCountry = newValue;
+                                            selectedPaCountryName =
+                                                newValue?.countryName;
+                                            selectedPaCountryCode =
+                                                newValue?.countryCode;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme: const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
-                                        height: 40,
-                                        padding:
-                                            EdgeInsets.only(left: 14, right: 14),
-                                      ),
+                                    )
+                                  : GestureDetector(
+                                      child: Text(
+                                          'No? countries?, Tap to refresh, '),
+                                      onTap: () =>
+                                          ref.invalidate(getCountriesProvider),
                                     ),
-                                  )
-                                : GestureDetector(
-                                    child:
-                                        Text('No? countries?, Tap to refresh, '),
-                                    onTap: () =>
-                                        ref.invalidate(getCountriesProvider),
-                                  ),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(getCountriesProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-      
-                 gapH16,
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getCountriesProvider),
+                                  child: const Text(
+                                    'An error occured',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                    gapH16,
                     CustomTextFormField(
                       title: " Residence Permit PlaceCode",
                       fillColor: Colors.transparent,
@@ -1372,7 +1509,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                         return null;
                       },
                     ),
-                 gapH16,
+                    gapH16,
                     CustomTextFormField(
                       onTap: () {
                         _showDatePicker(context, dateCategory: 'PERMITISSUE');
@@ -1399,7 +1536,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                         return null;
                       },
                     ),
-                 gapH16,
+                    gapH16,
                     CustomTextFormField(
                       onTap: () {
                         _showDatePicker(context, dateCategory: 'PERMITEXP');
@@ -1427,8 +1564,8 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       },
                     ),
                   ],
-               gapH16,
-       
+                  gapH16,
+
                   Text(
                     'Other Informtion',
                     style: Theme.of(context)
@@ -1436,29 +1573,27 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                         .bodyMedium
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
-                  div,
-                         gapH16,
-               
-               
                   gapH12,
+                  div,
+                  gapH16,
                   CheckboxListTile(
                     title: Text('Setup Email Indemnity'),
                     value: setupEmailIndemnity,
                     onChanged: (value) => _handleCheckboxChange(2, value),
                   ),
-                    gapH12,
+                  gapH12,
                   CheckboxListTile(
                     title: Text('Setup Statement Via Email'),
                     value: setupStatementViaEmail,
                     onChanged: (value) => _handleCheckboxChange(3, value),
                   ),
-                      gapH12,
+                  gapH12,
                   CheckboxListTile(
                     title: Text('Setup ZPrompt'),
                     value: setupZPrompt,
                     onChanged: (value) => _handleCheckboxChange(4, value),
                   ),
-      
+
                   CheckboxListTile(
                     title: Text('Is Director'),
                     value: isDirector,
@@ -1471,7 +1606,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                     onChanged: (value) => _handleCheckboxChange(6, value),
                   ),
                   gapH12,
-      
+
                   CheckboxListTile(
                     title: Text('Is Signatory'),
                     value: isSignatory,
@@ -1483,58 +1618,21 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                     value: isNewRequest,
                     onChanged: (value) => _handleCheckboxChange(7, value),
                   ),
-                
+
                   gapH12,
-                  
-                  gapH12,
-      
+
                   CheckboxListTile(
                     title: Text('New Request?'),
                     value: isNewRequest,
                     onChanged: (value) => _handleCheckboxChange(11, value),
                   ),
-       
+
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_personalInfoEditFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        if (selectedCountry == null) {
-                          zXFlushBar(context, "Country is required");
-                          return;
-                        }
-                        if (selectedGenderItem == null) {
-                          zXFlushBar(context, "Gender is required");
-                          return;
-                        }
-      
-                        if (selectedIdType == null) {
-                          zXFlushBar(context, "ID type is required");
-                          return;
-                        }
-                        if (dob == null) {
-                          zXFlushBar(context, "Date of birth is required");
-                          return;
-                        }
-                        if (dateExpire == null) {
-                          zXFlushBar(context, "ID expiry date is required");
-                          return;
-                        }
-      
-                        if (datedIssued == null) {
-                          zXFlushBar(context, "ID issued date is required");
-                          return;
-                        }
-                        editAccountRequest(context);
-                      },
-                      title: 'Save')
                 ],
               ),
             ),
           ),
         ),
-         
       ),
     );
   }
@@ -1581,5 +1679,4 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
       }
     }
   }
-
- }
+}
