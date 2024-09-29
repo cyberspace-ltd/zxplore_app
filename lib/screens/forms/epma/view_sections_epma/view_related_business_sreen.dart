@@ -6,7 +6,9 @@ import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_related_business_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/add_data_forms/add_other_accounts_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
@@ -26,21 +28,33 @@ class _ViewRelatedBusinessState
     extends ConsumerState<ViewRelatedBusiness> {
   @override
   Widget build(BuildContext context) {
+
+          ref.listen<AsyncValue>(
+      viewRelatedBusinessControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    );
       final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
  final sectionData = requestData?.data?.relatedBusiness ?? [];
 
     return ZxploreProgress(
-      inAsyncCall: ref.watch(editRelatedBusinessControllerProvider).isLoading
+      inAsyncCall: ref.watch(viewRelatedBusinessControllerProvider).isLoading
       ||ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseFormScreen(
           title: 'Related Business(es)',
           data: _flattenData(widget.formIndividualData),
           showEdit: sectionData.isNotEmpty,
+          
           onTapEdit: () {
             // to navigate to edit this section
           },
          onTapAdd: (){
-            // rroute to add new item page 
+           Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => AddOtherBankAccountScreen(
+                        requestId: ref.read(activelyViewedRequestProvider)?.data?.reqId,
+                      )),
+            );
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -55,7 +69,7 @@ class _ViewRelatedBusinessState
   }
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};
-    data?.forEach((key, value) {
+    data.forEach((key, value) {
       if (value is Map) {
         value.forEach((subKey, subValue) {
           flattened['$key - $subKey'] = subValue.toString();
@@ -83,7 +97,7 @@ class  Item extends ConsumerWidget {
       onPressed: () {},
       onTapEdit: () {
         // to navigate to edit this section
-        ref.read(editRelatedBusinessControllerProvider.notifier).getEditData(
+        ref.read(viewRelatedBusinessControllerProvider.notifier).getEditData(
             context,
             relatedBusinessId: data?.relatedBusinessId ?? -1,
             RequestId: data?.reqId);
@@ -91,7 +105,7 @@ class  Item extends ConsumerWidget {
       onTapView: () {},
       onTapDelete: () {
         ref
-            .read(editRelatedBusinessControllerProvider.notifier)
+            .read(viewRelatedBusinessControllerProvider.notifier)
             .deleteRelatedBusiness(context,
                 RequestId: data?.reqId ?? '',
                delData : DeleteRelatedBusiness(

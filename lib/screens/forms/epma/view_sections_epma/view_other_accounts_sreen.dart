@@ -30,7 +30,7 @@ class _ViewOtherAccountsState extends ConsumerState<ViewOtherAccounts> {
     final sectionData = requestData?.data?.otherAccounts ?? [];
        ref.listen<AsyncValue>(
       viewOtherAccountControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
     );
 
     return ZxploreProgress(

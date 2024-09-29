@@ -7,7 +7,7 @@ part of 'edit_related_business_controller.dart';
 // **************************************************************************
 
 String _$editRelatedBusinessControllerHash() =>
-    r'9d616fedcc55c4b56ebfe30398259e6e0cec5218';
+    r'e7e7e3debc1890efa4cfdfedad4efb6c9ca829d4';
 
 /// See also [EditRelatedBusinessController].
 @ProviderFor(EditRelatedBusinessController)
@@ -23,5 +23,22 @@ final editRelatedBusinessControllerProvider = AutoDisposeAsyncNotifierProvider<
 );
 
 typedef _$EditRelatedBusinessController = AutoDisposeAsyncNotifier<dynamic>;
+String _$viewRelatedBusinessControllerHash() =>
+    r'e051cdca6633516252cf2884e2d81d20623f5d4e';
+
+/// See also [ViewRelatedBusinessController].
+@ProviderFor(ViewRelatedBusinessController)
+final viewRelatedBusinessControllerProvider = AutoDisposeAsyncNotifierProvider<
+    ViewRelatedBusinessController, dynamic>.internal(
+  ViewRelatedBusinessController.new,
+  name: r'viewRelatedBusinessControllerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$viewRelatedBusinessControllerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ViewRelatedBusinessController = AutoDisposeAsyncNotifier<dynamic>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

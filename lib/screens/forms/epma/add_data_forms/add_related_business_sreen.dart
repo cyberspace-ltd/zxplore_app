@@ -1,5 +1,8 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zxplore_app/colors.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_related_business_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
@@ -8,14 +11,15 @@ import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/base_edi
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_related_business_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
+import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
 class AddRelatedBusinessScreen extends ConsumerStatefulWidget {
-  const AddRelatedBusinessScreen({super.key, this.data});
-  final GetRelatedBusinessToEditResponse? data;
+  const AddRelatedBusinessScreen({super.key, this.requestId});
+  final String? requestId;
 
   @override
   ConsumerState<AddRelatedBusinessScreen> createState() =>
@@ -24,7 +28,7 @@ class AddRelatedBusinessScreen extends ConsumerStatefulWidget {
 
 class _AddRelatedBusinessScreenState
     extends ConsumerState<AddRelatedBusinessScreen> {
-  final _formkeyOtherAcc = GlobalKey<FormState>();
+  final _bizFormkey = GlobalKey<FormState>();
 
   // Individual TextEditingControllers
   final TextEditingController addressController = TextEditingController();
@@ -32,6 +36,7 @@ class _AddRelatedBusinessScreenState
   final TextEditingController relationshipNatureController =
       TextEditingController();
   final TextEditingController accountNumberController = TextEditingController();
+  String? selectedItemStage;
 
   @override
   void dispose() {
@@ -43,21 +48,16 @@ class _AddRelatedBusinessScreenState
     super.dispose();
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  // }
-
   Future<void> _submitForm(BuildContext context) async {
-    final userData = widget.data?.data;
+    // final userData = widget.data?.data;
     final account = RelatedBusinessData(
-      reqId: userData?.reqId,
-      relatedBusinessId: userData?.relatedBusinessId,
-      actionFlag: userData?.actionFlag,
+      reqId: widget.requestId,
+      relatedBusinessId: 0, //userData?.relatedBusinessId,
+      actionFlag: 'A', //userData?.actionFlag,
+      itemStage: selectedItemStage,
+      rowVersion: 0, //userData?.rowVersion,
       address: addressController.text,
-      itemStage: userData?.itemStage,
-      rowVersion: userData?.rowVersion,
+
       name: nameController.text,
       relationshipNature: relationshipNatureController.text,
     );
@@ -71,13 +71,27 @@ class _AddRelatedBusinessScreenState
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
       editRelatedBusinessControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
     );
     return ZxploreProgress(
       inAsyncCall: ref.watch(editRelatedBusinessControllerProvider).isLoading ||
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseAddForm(
         title: 'Add Related Business',
+        
+        button:    Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: PrimaryButton(
+                        onPressed: () {
+                          if (!_bizFormkey.currentState!.validate()) {
+                            return;
+                          }
+          
+                          /// perform trn if all is well
+                          _submitForm(context);
+                        },
+                        title: 'Save'),
+        ),
         widgetToGoOnSave: ViewRelatedBusiness(
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),
         ),
@@ -92,7 +106,7 @@ class _AddRelatedBusinessScreenState
               bottom: MediaQuery.of(context).viewInsets.bottom + 16,
             ),
             child: Form(
-              key: _formkeyOtherAcc,
+              key: _bizFormkey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -105,6 +119,91 @@ class _AddRelatedBusinessScreenState
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
+                        gapH16,
+                       Row(children: [
+                    Text(
+                      "Item Stage",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    )
+                  ]),
+                  gapH4,
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2<String?>(
+                      isExpanded: true,
+                      hint: Text(
+                        'Select stage',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                          color: ZxplorePrimaryColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      items: itemStages
+                          .map<DropdownMenuItem<String?>>(
+                              (item) => DropdownMenuItem<String?>(
+                                    value: item,
+                                    child: Text(
+                                      item ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: ZxplorePrimaryColor,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ))
+                          .toList(),
+                      value: selectedItemStage,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          /// Set selected item params
+                          selectedItemStage = newValue;
+                        });
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        height: 60,
+                        // width: 160,
+                        padding: const EdgeInsets.only(left: 0, right: 14),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: ZxplorePrimaryColor,
+                          ),
+                        ),
+                        elevation: 0,
+                      ),
+                      iconStyleData: const IconStyleData(
+                        icon: Icon(
+                          CupertinoIcons.chevron_down,
+                        ),
+                        iconSize: 14,
+                        iconEnabledColor: ZxplorePrimaryColor,
+                        iconDisabledColor: Colors.grey,
+                      ),
+                      dropdownStyleData: DropdownStyleData(
+                        maxHeight: 200,
+                        // width: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        // offset: const Offset(0, 0),
+                        scrollbarTheme: const ScrollbarThemeData(
+                          radius: Radius.circular(40),
+                          thickness: WidgetStatePropertyAll<double>(6),
+                          thumbVisibility: WidgetStatePropertyAll<bool>(true),
+                        ),
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                        padding: EdgeInsets.only(left: 14, right: 14),
+                      ),
+                    ),
+                  ),
+                 
                   gapH16,
                   CustomTextFormField(
                     title: 'Name',
@@ -166,15 +265,7 @@ class _AddRelatedBusinessScreenState
                     },
                   ),
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_formkeyOtherAcc.currentState!.validate()) {
-                          return;
-                        }
-                        /// perform trn if all is well
-                        _submitForm(context);
-                      },
-                      title: 'Save')
+               
                 ],
               ),
             ),
