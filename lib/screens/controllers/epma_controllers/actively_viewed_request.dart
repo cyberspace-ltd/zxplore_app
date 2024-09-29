@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
+import 'package:zxplore_app/utils/enums.dart';
 part 'actively_viewed_request.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -26,4 +27,4 @@ class ViewedRequestType extends _$ViewedRequestType {
   }
 }
 
-enum ViewedRequestTypeEnum { All, Draft, None }
+

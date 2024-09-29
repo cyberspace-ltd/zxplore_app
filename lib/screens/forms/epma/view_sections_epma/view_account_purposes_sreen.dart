@@ -12,8 +12,7 @@ import 'package:zxplore_app/widgets/zxplore_progress.dart';
 class AccountPurposeScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> requestData;
 
-  const AccountPurposeScreen(
-      {Key? key, required this.requestData})
+  const AccountPurposeScreen({Key? key, required this.requestData})
       : super(key: key);
 
   @override
@@ -21,8 +20,7 @@ class AccountPurposeScreen extends ConsumerStatefulWidget {
       _AccountPurposeScreenState();
 }
 
-class _AccountPurposeScreenState
-    extends ConsumerState<AccountPurposeScreen> {
+class _AccountPurposeScreenState extends ConsumerState<AccountPurposeScreen> {
   @override
   Widget build(BuildContext context) {
        ref.listen<AsyncValue>(
@@ -41,23 +39,28 @@ class _AccountPurposeScreenState
       child: BaseFormScreen(
           title: 'Account  Purpose',
           data: _flattenData(widget.requestData),
-           showEdit: sectionData.isNotEmpty,
-           onTapEdit: () {
-           // to navigate to edit this section
-           ref.read(viewAccountPurposeControllerProvider.notifier).getEditData(context,
-            RequestId: requestData?.data?.reqId??'');
+          showEdit: sectionData.isNotEmpty,
+          onTapEdit: () {
+            // to navigate to edit this section
+            ref.read(viewAccountPurposeControllerProvider.notifier).getEditData(
+                context,
+                RequestId: requestData?.data?.reqId ?? '');
           },
-          onTapAdd: (){
-            // rroute to add new item page 
+          onTapAdd: () {
+            // rroute to add new item page
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: sectionData.isNotEmpty?ListView.builder(
-                shrinkWrap: true,
-                itemCount: sectionData.length,
-                itemBuilder: (BuildContext context, index) {
-                  return AccountPurposeItem(data:sectionData[index] ,);
-                }):EmptyViewWidget(),
+            child: sectionData.isNotEmpty
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: sectionData.length,
+                    itemBuilder: (BuildContext context, index) {
+                      return AccountPurposeItem(
+                        data: sectionData[index],
+                      );
+                    })
+                : EmptyViewWidget(),
           )),
     );
   }
@@ -85,16 +88,46 @@ class AccountPurposeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-       ViewItem(title: 'Salary Processing',value: data?.salaryProcessing??false,),
-       ViewItem(title: 'toOtain Loan',value: data?.toOtainLoan??false,),
-       ViewItem(title: 'BusinessTransactional',value: data?.businessTransactional??false,),
-       ViewItem(title: 'Savings Investment',value: data?.savingsInvestment??false,),
-       ViewItem(title: 'Conduct Single Transaction',value: data?.conductSingleTransaction??false,),
-       ViewItem(title: 'Secutiry Safe Keeping',value: data?.secutirySafeKeeping??false,),
-       ViewItem(title: 'Access To BankingServices',value: data?.accessToBankingServices??false,),
-       ViewItem(title: 'Third Party Payment',value: data?.thirdPartyPayment??false,),
-       ViewItem(title: 'Secutiry Safe Keeping',value: data?.secutirySafeKeeping??false,),
-       ViewItem(title: 'Secutiry Safe Keeping',value: data?.secutirySafeKeeping??false,),
+        ViewItem(
+          title: 'Salary Processing',
+          value: data?.salaryProcessing ?? false,
+        ),
+        ViewItem(
+          title: 'toOtain Loan',
+          value: data?.toOtainLoan ?? false,
+        ),
+        ViewItem(
+          title: 'BusinessTransactional',
+          value: data?.businessTransactional ?? false,
+        ),
+        ViewItem(
+          title: 'Savings Investment',
+          value: data?.savingsInvestment ?? false,
+        ),
+        ViewItem(
+          title: 'Conduct Single Transaction',
+          value: data?.conductSingleTransaction ?? false,
+        ),
+        ViewItem(
+          title: 'Secutiry Safe Keeping',
+          value: data?.secutirySafeKeeping ?? false,
+        ),
+        ViewItem(
+          title: 'Access To BankingServices',
+          value: data?.accessToBankingServices ?? false,
+        ),
+        ViewItem(
+          title: 'Third Party Payment',
+          value: data?.thirdPartyPayment ?? false,
+        ),
+        ViewItem(
+          title: 'Secutiry Safe Keeping',
+          value: data?.secutirySafeKeeping ?? false,
+        ),
+        ViewItem(
+          title: 'Secutiry Safe Keeping',
+          value: data?.secutirySafeKeeping ?? false,
+        ),
       ],
     );
   }

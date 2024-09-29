@@ -54,28 +54,20 @@ class _AddNextOfKinScreenState extends ConsumerState<AddNextOfKinScreen> {
   @override
   void initState() {
     super.initState();
-    final userData = widget.data?.data;
-    WidgetsBinding.instance.addPostFrameCallback((callback){
-      try {
-        fullNameController.text = userData?.fullName??'';
-        addressController.text = userData?.residentialAddress??'';
-        relationshipeController.text = userData?.relationship??'';
-        telNoController.text = userData?.telNo??'';
-      } catch (e) { }
-    });
+ 
   }
 
   Future<void> _submitForm(BuildContext context)async {
     final userData = widget.data?.data;
     final account = AddNextOfKin(
-      nextOfKinId: userData?.nextOfKinId,
-        rowVersion:userData?.rowVersion ,
+      nextOfKinId: 0,
+        rowVersion:0 ,
         itemStage: userData?.itemStage,
         requestId: userData?.reqId,
         fullName: fullNameController.text,
         relationship:relationshipeController.text ,
         genderCode:genderCode ,
-        actionFlag: userData?.actionFlag,
+        actionFlag: "A",
         telNo:telNoController.text ,
         residentialAddress: addressController.text,
     );
@@ -160,7 +152,8 @@ class _AddNextOfKinScreenState extends ConsumerState<AddNextOfKinScreen> {
                         return ref.watch(getGenderProvider).when(
                               data: (data) => (data != null &&
                                       data.isNotEmpty == true)
-                                  ? DropdownButtonHideUnderline(
+                                  ? 
+                                  DropdownButtonHideUnderline(
                                       child: DropdownButton2<
                                           GendersDatum>(
                                         isExpanded: true,
@@ -254,6 +247,7 @@ class _AddNextOfKinScreenState extends ConsumerState<AddNextOfKinScreen> {
                                         ),
                                       ),
                                     )
+                                 
                                   : TextButton(
                                       onPressed: () => ref.invalidate(
                                           getGenderProvider),

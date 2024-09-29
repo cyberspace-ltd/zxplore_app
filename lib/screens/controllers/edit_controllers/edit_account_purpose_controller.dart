@@ -34,8 +34,7 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
         state = AsyncValue.data(result);
 
         // refresh the latest viewed item.
-        ref
-            .read(viewRequestControllerProvider.notifier)
+        ref.read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(data?.requestId ?? '');
 
         state = AsyncValue.data(result);
@@ -53,6 +52,7 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
           state = AsyncValue.data(requestResponse);
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
