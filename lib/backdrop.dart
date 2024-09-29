@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -214,15 +216,15 @@ class _BackdropState extends State<Backdrop>
   }
 
   Widget _buildStack(BuildContext context, BoxConstraints constraints) {
-    const double panelTitleHeight = 48.0;
-    final Size panelSize = constraints.biggest;
-    final double panelTop = panelSize.height - panelTitleHeight;
+    // const double panelTitleHeight = 48.0;
+    // final Size panelSize = constraints.biggest;
+    // final double panelTop = panelSize.height - panelTitleHeight;
 
-    Animation<RelativeRect> panelAnimation = RelativeRectTween(
-      begin: RelativeRect.fromLTRB(
-          0.0, panelTop, 0.0, panelTop - panelSize.height),
-      end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
-    ).animate(_controller.view);
+    // Animation<RelativeRect> panelAnimation = RelativeRectTween(
+    //   begin: RelativeRect.fromLTRB(
+    //       0.0, panelTop, 0.0, panelTop - panelSize.height),
+    //   end: RelativeRect.fromLTRB(0.0, 0.0, 0.0, 0.0),
+    // ).animate(_controller.view);
 
     return Container(
       key: _backdropKey,

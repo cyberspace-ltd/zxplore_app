@@ -50,7 +50,7 @@ class _StackHolderdersScreenState
   }
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};
-    data?.forEach((key, value) {
+    data.forEach((key, value) {
       if (value is Map) {
         value.forEach((subKey, subValue) {
           flattened['$key - $subKey'] = subValue.toString();
@@ -72,7 +72,7 @@ class  Item extends ConsumerWidget {
     return 
     FoldableItem(
       name: 'Name: ${data?.firstName ?? ''} ${data?.lastName ?? ''}',
-      number: 'Phone: ${data?.businessPhoneNo ?? ''}  \nEmail: ${data?.emailAddress ?? ''}',
+      number: 'Phone: ${data?.businessPhoneNo ?? ''}\n\nEmail: ${data?.emailAddress ?? ''}\n',
       requestId: data?.reqId,
       subRequestId: data?.stakeHolderId,
       onTapEdit: () {

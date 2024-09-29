@@ -65,12 +65,14 @@ class BaseAddForm extends ConsumerWidget {
   final Widget widgetToGoOnSave;
   final Function()? onCancel;
   final dynamic data;
+    final Widget? button;
 
   const BaseAddForm(
       {Key? key,
       required this.title,
       required this.widgetToGoOnSave,
       required this.data,
+          this.button,
       this.onCancel,
       this.child})
       : super(key: key);
@@ -78,6 +80,7 @@ class BaseAddForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+        bottomNavigationBar: button,
       appBar: AppBar(
         leading: IconButton(
             onPressed: onCancel ??

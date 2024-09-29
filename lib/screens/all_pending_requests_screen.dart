@@ -49,7 +49,6 @@ class _AllPendingRequestsScreenState
     });
   }
 
- 
   Future<void> getSelectedRequestDetails(String? requestId) async {
     final requestResponse = await ref
         .read(viewRequestControllerProvider.notifier)
@@ -65,22 +64,24 @@ class _AllPendingRequestsScreenState
       );
     } else {}
   }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
       getPendingRequestsAllDatumProvider,
-      (_, state) => state.showAlertDialogOnError(context,okAction: (){
-
-      }),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
     );
-        ref.listen<AsyncValue>(
-      viewRequestControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, errorMsg:  state.error,okAction: (){
-                                getSelectedRequestDetails( ref
-                                    .read(latestSelectRequestProvider)?.reqId!);
-
-      },cancelAction: ()=>Navigator.pop(context),
-    ));
+    ref.listen<AsyncValue>(
+        viewRequestControllerProvider,
+        (_, state) => state.showAlertDialogOnError(
+              context,
+              errorMsg: state.error,
+              okAction: () {
+                getSelectedRequestDetails(
+                    ref.read(latestSelectRequestProvider)?.reqId!);
+              },
+              cancelAction: () => Navigator.pop(context),
+            ));
     // ref.listen<AsyncValue>(
     //   getPendingRequestsAllDatumProvider,
     //   (_, state) {
@@ -104,8 +105,8 @@ class _AllPendingRequestsScreenState
     return RefreshIndicator(
       onRefresh: () async => ref.invalidate(getPendingRequestsAllDatumProvider),
       child: ZxploreProgress(
-        inAsyncCall: ref.watch(getPendingRequestsAllDatumProvider).isLoading|| ref
-        .watch(viewRequestControllerProvider).isLoading,
+        inAsyncCall: ref.watch(getPendingRequestsAllDatumProvider).isLoading ||
+            ref.watch(viewRequestControllerProvider).isLoading,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: ZxplorePrimaryColor,
@@ -119,10 +120,9 @@ class _AllPendingRequestsScreenState
             ),
           ),
           body: Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
             child: ListView(
               children: [
-              
                 Text(
                   'All Requests',
                   style: Theme.of(context)
@@ -130,7 +130,6 @@ class _AllPendingRequestsScreenState
                       .headlineMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
-               
                 CustomTextFormField(
                   fillColor: Colors.transparent,
                   prefixIcon: const Icon(
@@ -162,7 +161,8 @@ class _AllPendingRequestsScreenState
                     return requestItemsAsyncValue.when(
                       data: (requestItems) {
                         if (requestItems == null || requestItems.isEmpty) {
-                          return const Center(child: Text('No items available.'));
+                          return const Center(
+                              child: Text('No items available.'));
                         }
                         final requestsToShow = _filteredItems ?? requestItems;
                         return ListView.separated(
@@ -173,10 +173,10 @@ class _AllPendingRequestsScreenState
                           itemCount: requestsToShow.length,
                           itemBuilder: (context, index) {
                             final item = requestsToShow[index];
-            
+
                             return AccountRequestItem(
                               onPressed: () {},
-                            onTapEdit: () {
+                              onTapEdit: () {
                                 ref
                                     .read(combinedFormStateProvider.notifier)
                                     .updateState(RequestState.EDITING,
@@ -220,7 +220,13 @@ class _AllPendingRequestsScreenState
 }
 
 class AccountRequestItem extends StatelessWidget {
-  const AccountRequestItem({super.key, this.request,this.onTapDelete,  this.onPressed,required this.onTapEdit,required this.onTapView});
+  const AccountRequestItem(
+      {super.key,
+      this.request,
+      this.onTapDelete,
+      this.onPressed,
+      required this.onTapEdit,
+      required this.onTapView});
   final PendingRequestsDatum? request;
   final Function()? onPressed;
   final Function()? onTapEdit;
@@ -235,18 +241,22 @@ class AccountRequestItem extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.18,
-        padding: EdgeInsets.symmetric(horizontal: 20.0,vertical: 16),
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color:brightness == Brightness.light? Color(0xfff0eeee):ZxplorePrimaryColor,
-                                    boxShadow:brightness == Brightness.light? [
-                                      BoxShadow(
-                                        offset: const Offset(0, 4),
-                                        color: Colors.grey.withOpacity(0.25),
-                                        blurRadius: 4,
-                                      ),
-                                    ]:[]),
+            color: brightness == Brightness.light
+                ? Color(0xfff0eeee)
+                : ZxplorePrimaryColor,
+            boxShadow: brightness == Brightness.light
+                ? [
+                    BoxShadow(
+                      offset: const Offset(0, 4),
+                      color: Colors.grey.withOpacity(0.25),
+                      blurRadius: 4,
+                    ),
+                  ]
+                : []),
         child: Column(
           children: [
             Row(
@@ -262,42 +272,39 @@ class AccountRequestItem extends StatelessWidget {
                 ),
                 SizedBox(
                   // width: 70,
-                  child: Row(mainAxisSize: MainAxisSize.min,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        radius: 10,
-                        backgroundColor: request?.stage?.toLowerCase()=='draft'?Colors.purpleAccent:request?.stage?.toLowerCase()=='pending posting'?Colors.yellow:Colors.green
-                      ),
-                      PopupMenuButton<int>(
-                        onSelected: (value){
-                          if(value==0){
-                            onTapView!();
-
-                          }
-                          else{
-                            onTapEdit!();
-
-                          }
-                        },
-                        itemBuilder: (BuildContext context){
+                          radius: 10,
+                          backgroundColor:
+                              request?.stage?.toLowerCase() == 'draft'
+                                  ? Colors.purpleAccent
+                                  : request?.stage?.toLowerCase() ==
+                                          'pending posting'
+                                      ? Colors.yellow
+                                      : Colors.green),
+                      PopupMenuButton<int>(onSelected: (value) {
+                        if (value == 0) {
+                          onTapView!();
+                        } else {
+                          onTapEdit!();
+                        }
+                      }, itemBuilder: (BuildContext context) {
                         return <PopupMenuEntry<int>>[
-                        
                           PopupMenuItem<int>(
-                            value: 0,
-                            child: GestureDetector(
-                              onTap: onTapView,
-                              child: Text('View'))),
-                            //   PopupMenuItem<int>(
-                            // value: 1,
-                            // child: GestureDetector(
-                            //   onTap: onTapEdit,
-                            //   child: Text('Edit')))
-                                 PopupMenuItem<int>(
-                            value: 1,
-                            child: GestureDetector(
-                              onTap: onTapDelete,
-                              child: Text('Delete'))),
-
+                              value: 0,
+                              child: GestureDetector(
+                                  onTap: onTapView, child: Text('View'))),
+                          //   PopupMenuItem<int>(
+                          // value: 1,
+                          // child: GestureDetector(
+                          //   onTap: onTapEdit,
+                          //   child: Text('Edit')))
+                          PopupMenuItem<int>(
+                              value: 1,
+                              child: GestureDetector(
+                                  onTap: onTapDelete, child: Text('Delete'))),
                         ];
                       })
                     ],
@@ -310,7 +317,7 @@ class AccountRequestItem extends StatelessWidget {
               children: [
                 Text(
                   'Branch: ${request?.branch ?? ''}',
-                    overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
@@ -321,10 +328,10 @@ class AccountRequestItem extends StatelessWidget {
             Row(
               children: [
                 SizedBox(
-                 width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width * 0.75,
                   child: Text(
                     'Started on:${getDayDateAndYear(request?.createDate.toIso8601String() ?? '')}',
-                      overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
@@ -341,8 +348,18 @@ class AccountRequestItem extends StatelessWidget {
 }
 
 class FoldableItem extends StatelessWidget {
-  const FoldableItem({super.key, this.request,this.onTapDelete,
-    this.onPressed,required this.onTapEdit,required this.onTapView, this.userWrapper=false,required this.name,required this.number,required this.requestId, required this.subRequestId});
+  const FoldableItem(
+      {super.key,
+      this.request,
+      this.onTapDelete,
+      this.onPressed,
+      required this.onTapEdit,
+      required this.onTapView,
+      this.userWrapper = false,
+      required this.name,
+      required this.number,
+      required this.requestId,
+      required this.subRequestId});
   final dynamic request;
   final String? name;
   final String? requestId;
@@ -359,103 +376,99 @@ class FoldableItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.15,
-        padding: EdgeInsets.symmetric(horizontal: 16.0,vertical: 10),
+        // height: MediaQuery.of(context).size.height * 0.15,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            color: Colors.white,
-            boxShadow: [
+            border: Border.all(color: Colors.grey.withOpacity(0.25) ,width: 0.5),
+            boxShadow:Theme.of(context).brightness== ThemeMode.light? [
               BoxShadow(
                 offset: const Offset(0, 4),
                 color: Colors.grey.withOpacity(0.25),
                 blurRadius: 4,
               ),
-            ]),
-        child: userWrapper?Column(children: [
-          Wrap(children: [Text(name??'')],),
-          Wrap(children: [Text(number??'')],)
-        ],):
-        Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width*0.5,
-                  child: Text(
-                    name ?? '',
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.normal),
+            ]:[]),
+        child: userWrapper
+            ? Column(
+                children: [
+                  Wrap(
+                    children: [Text(name ?? '')],
                   ),
-                ),
-                SizedBox(
-                  // width: 70,
-                  child: Row(mainAxisSize: MainAxisSize.min,
+                  Wrap(
+                    children: [Text(number ?? '')],
+                  )
+                ],
+              )
+            : Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      PopupMenuButton<int>(
-                        onSelected: (value){
-                          if(value==0){
-                            onTapView!();
-
-                          }else if(value==1){
-                            onTapEdit!();
-
-                          }
-                          else{
-                            onTapDelete!();
-
-                          }
-                        },
-                        itemBuilder: (BuildContext context){
-                        return <PopupMenuEntry<int>>[
-                        
-                          PopupMenuItem<int>(
-                                  height: 24,
-
-                            value: 0,
-                            child: GestureDetector(
-                              onTap: onTapView,
-                              child: Text('View'))),
-                              PopupMenuItem<int>(
-                                  height: 24,
-
-                            value: 1,
-                            child: GestureDetector(
-                              onTap: onTapEdit,
-                              child: Text('Edit'))),
-                                 PopupMenuItem<int>(
-                                  height: 24,
-                            value: 2,
-                            child: GestureDetector(
-                              onTap: onTapDelete,
-                              child: Text('Delete'))),
-
-                        ];
-                      })
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Text(
+                          name ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.normal),
+                        ),
+                      ),
+                      SizedBox(
+                        // width: 70,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            PopupMenuButton<int>(onSelected: (value) {
+                              // if (value == 0) {
+                              //   onTapView!();
+                              // } else
+                               if (value == 1) {
+                                onTapEdit!();
+                              } else {
+                                onTapDelete!();
+                              }
+                            }, itemBuilder: (BuildContext context) {
+                              return <PopupMenuEntry<int>>[
+                                // PopupMenuItem<int>(
+                                //     height: 24,
+                                //     value: 0,
+                                //     child: GestureDetector(
+                                //         onTap: onTapView, child: Text('View'))),
+                                PopupMenuItem<int>(
+                                    height: 34,
+                                    value: 1,
+                                    child: GestureDetector(
+                                        onTap: onTapEdit, child: Text('Edit'))),
+                                PopupMenuItem<int>(
+                                    height: 34,
+                                    value: 2,
+                                    child: GestureDetector(
+                                        onTap: onTapDelete,
+                                        child: Text('Delete'))),
+                              ];
+                            })
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                )
-              ],
-            ),
-            gapH4,
-            Row(
-              children: [
-                Text(
-                  number?? '',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontWeight: FontWeight.normal),
-                ),
-              ],
-            ),
-           
-          ],
-        ),
+                  gapH4,
+                  Row(
+                    children: [
+                      Text(
+                        number ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
       ),
     );
   }

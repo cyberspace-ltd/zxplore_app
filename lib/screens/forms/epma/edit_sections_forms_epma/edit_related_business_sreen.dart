@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
-import 'package:zxplore_app/screens/controllers/edit_controllers/edit_other_bank_controller.dart';
+import 'package:zxplore_app/screens/controllers/edit_controllers/edit_other_account_controller.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_related_business_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';

@@ -25,7 +25,6 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
-      print(">>>>${data?.toJson()}");
       state = const AsyncLoading();
       final requestResponse = await repo.editAccountPurpose(data: data);
 
@@ -52,7 +51,6 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
           state = AsyncValue.data(requestResponse);
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
@@ -97,6 +95,7 @@ class ViewAccountPurposeController extends _$ViewAccountPurposeController {
       if (requestResponse['status'] == true) {
         final result =
             GetAccountPurposeToEditResponse.fromJson(requestResponse);
+        state = AsyncValue.data(result);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -105,7 +104,6 @@ class ViewAccountPurposeController extends _$ViewAccountPurposeController {
                   )),
         );
 
-        state = AsyncValue.data(result);
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
