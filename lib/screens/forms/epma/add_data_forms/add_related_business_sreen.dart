@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zxplore_app/colors.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_related_business.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_related_business_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
@@ -50,8 +51,8 @@ class _AddRelatedBusinessScreenState
 
   Future<void> _submitForm(BuildContext context) async {
     // final userData = widget.data?.data;
-    final account = RelatedBusinessData(
-      reqId: widget.requestId,
+    final account = AddRelatedBusiness(
+      requestId: widget.requestId,
       relatedBusinessId: 0, //userData?.relatedBusinessId,
       actionFlag: 'A', //userData?.actionFlag,
       itemStage: selectedItemStage,
@@ -78,7 +79,6 @@ class _AddRelatedBusinessScreenState
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseAddForm(
         title: 'Add Related Business',
-        
         button:    Padding(
           padding: const EdgeInsets.all(16.0),
           child: PrimaryButton(
@@ -95,7 +95,7 @@ class _AddRelatedBusinessScreenState
         widgetToGoOnSave: ViewRelatedBusiness(
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),
         ),
-        onCancel: () {},
+        onCancel: () =>Navigator.pop(context),
         data: {},
         child: SingleChildScrollView(
           child: Padding(
@@ -219,21 +219,21 @@ class _AddRelatedBusinessScreenState
                       return null;
                     },
                   ),
-                  gapH16,
-                  CustomTextFormField(
-                    title: 'Account Number',
-                    fillColor: Colors.transparent,
-                    controller: accountNumberController,
-                    hint: 'Enter Number',
-                    inputType: TextInputType.number,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      if (value?.isEmpty == true) {
-                        return 'Number is required';
-                      }
-                      return null;
-                    },
-                  ),
+                  // gapH16,
+                  // CustomTextFormField(
+                  //   title: 'Account Number',
+                  //   fillColor: Colors.transparent,
+                  //   controller: accountNumberController,
+                  //   hint: 'Enter Number',
+                  //   inputType: TextInputType.number,
+                  //   useDefaultErrorText: false,
+                  //   validator: (value) {
+                  //     if (value?.isEmpty == true) {
+                  //       return 'Number is required';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   gapH16,
                   CustomTextFormField(
                     title: 'Address',

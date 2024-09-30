@@ -65,7 +65,7 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
   }
 
   Future<dynamic> addRelatedBusiness(
-      {required RelatedBusinessData? data,
+      {required AddRelatedBusiness? data,
       required BuildContext context}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
@@ -79,7 +79,7 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
 
         // refresh the latest viewed item.
         ref.read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(result.requestId ?? '');
+            .getRequestDetailAsync(data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
@@ -94,11 +94,15 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          final ex = Exception(requestResponse['message']??'Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+                 return requestResponse;
         }
-        state = AsyncValue.data(null);
+             final ex = Exception('Failed to complete request,try again');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+               
         return null;
       }
     } catch (e, stackTrace) {

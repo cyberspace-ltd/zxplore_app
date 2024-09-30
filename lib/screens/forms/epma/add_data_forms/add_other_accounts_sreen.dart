@@ -80,11 +80,12 @@ class _AddOtherBankAccountScreenState
     return ZxploreProgress(
       inAsyncCall: ref.watch(editOtherAccountControllerProvider).isLoading,
       child: BaseAddForm(
+        
         title: 'Add Other Account',
         widgetToGoOnSave: ViewOtherAccounts(
           requestData: ref.read(activelyViewedRequestProvider)!.toMap(),
         ),
-        onCancel: () {},
+        onCancel: () =>Navigator.pop(context),
         button: Padding(
           padding: const EdgeInsets.all(16.0),
           child: PrimaryButton(

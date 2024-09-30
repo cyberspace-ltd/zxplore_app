@@ -7,6 +7,7 @@ import 'package:zxplore_app/screens/controllers/edit_controllers/edit_related_bu
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/add_data_forms/add_other_accounts_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/add_data_forms/add_related_business_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
@@ -51,7 +52,7 @@ class _ViewRelatedBusinessState
            Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (BuildContext context) => AddOtherBankAccountScreen(
+                  builder: (BuildContext context) => AddRelatedBusinessScreen(
                         requestId: ref.read(activelyViewedRequestProvider)?.data?.reqId,
                       )),
             );

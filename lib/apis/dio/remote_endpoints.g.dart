@@ -1502,7 +1502,7 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
-  Future<dynamic> addRelatedBusiness({RelatedBusinessData? data}) async {
+  Future<dynamic> addRelatedBusiness({AddRelatedBusiness? data}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);

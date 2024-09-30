@@ -7,6 +7,7 @@ import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_foreign_account.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_next_of_kin.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_refree.dart';
+import 'package:zxplore_app/models/epma_models/add_edit_related_business.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_stake_holder.dart';
 import 'package:zxplore_app/models/epma_models/delete_document.dart';
 import 'package:zxplore_app/models/epma_models/delete_foreign.dart';
@@ -791,7 +792,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
 
   @override
   Future addRelatedBusiness(
-      {required RelatedBusinessData? relatedBusiness}) async {
+      {required AddRelatedBusiness? relatedBusiness}) async {
     try {
       final response = await api.addRelatedBusiness(
         data: relatedBusiness,
