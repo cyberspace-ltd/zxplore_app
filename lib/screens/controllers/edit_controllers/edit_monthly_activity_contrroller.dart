@@ -54,8 +54,8 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
         }
-       state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
+       state = AsyncError(Exception(requestResponse['message']??"Failed to coplete request. Try again"),
+            StackTrace.fromString(requestResponse['message']??"Failed to coplete request. Try again"));
         return requestResponse;
       }
     } catch (e, stackTrace) {

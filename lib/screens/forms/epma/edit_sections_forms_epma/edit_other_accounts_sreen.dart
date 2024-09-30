@@ -41,6 +41,7 @@ class _EditOherBankAccountScreenState
   final TextEditingController prevItemStageController = TextEditingController();
 
   bool hidePrevItemStage = false;
+
   String? selectedItemStage;
 
   void togglePrevItemStage() {
@@ -48,6 +49,7 @@ class _EditOherBankAccountScreenState
       hidePrevItemStage = !hidePrevItemStage;
     });
   }
+
 
   @override
   void dispose() {
@@ -115,7 +117,7 @@ class _EditOherBankAccountScreenState
         ),
         onCancel: () => Navigator.pop(context),
         button: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
           child: PrimaryButton(
               onPressed: () {
                 if (!_formkeyOtherAcc.currentState!.validate()) {

@@ -7,7 +7,7 @@ part of 'edit_monthly_activity_contrroller.dart';
 // **************************************************************************
 
 String _$editMonthlyActivityControllerHash() =>
-    r'0186119d95bf20da263b04db8d2b6304c809365d';
+    r'048251d1187c92d426e3353737dc1c749f58f1b3';
 
 /// See also [EditMonthlyActivityController].
 @ProviderFor(EditMonthlyActivityController)

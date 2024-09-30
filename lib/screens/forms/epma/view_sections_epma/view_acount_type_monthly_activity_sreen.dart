@@ -63,7 +63,7 @@ class _AccountTypeMonthlyActivityScreenState
   }
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};
-    data?.forEach((key, value) {
+    data.forEach((key, value) {
       if (value is Map) {
         value.forEach((subKey, subValue) {
           flattened['$key - $subKey'] = subValue.toString();
@@ -84,8 +84,7 @@ class  Item extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-    ViewItem(title: 'Account Type Id', value: data?.accountTypeId??''),
-    ViewItem(title: 'Req Id', value: data?.reqId??''),
+  
     ViewItem(title: 'Current', value: data?.current??false),
     ViewItem(title: 'Savings', value: data?.savings??false),
     ViewItem(title: 'Cheque Save', value: data?.chequeSave??false),
