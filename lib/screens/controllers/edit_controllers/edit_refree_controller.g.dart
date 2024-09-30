@@ -7,7 +7,7 @@ part of 'edit_refree_controller.dart';
 // **************************************************************************
 
 String _$editRefereeControllerHash() =>
-    r'eea5d7fa14eeb3e3fe58dceab552544ffda2c1e2';
+    r'eca8989ca3c334abb04b2429c462771c8f529d15';
 
 /// See also [EditRefereeController].
 @ProviderFor(EditRefereeController)

@@ -101,7 +101,7 @@ class _AddRefereeScreenState extends ConsumerState<AddRefereeScreen> {
         widgetToGoOnSave: ViewRefreesScreen(
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),
         ),
-        onCancel: () {},
+        onCancel: () =>Navigator.pop(context),
         data: {},
         child: SingleChildScrollView(
           child: Padding(
@@ -214,7 +214,7 @@ class _AddRefereeScreenState extends ConsumerState<AddRefereeScreen> {
                       ),
                     ),
                   ),
-
+                  gapH16,
                   CustomTextFormField(
                     title: 'Name',
                     fillColor: Colors.transparent,
@@ -246,20 +246,7 @@ class _AddRefereeScreenState extends ConsumerState<AddRefereeScreen> {
                   ),
                   // gapH16,
 
-                  // CustomTextFormField(
-                  //   title: 'Branch',
-                  //   fillColor: Colors.transparent,
-                  //   controller: branchController,
-                  //   hint: 'Enter amount',
-                  //   inputType: TextInputType.text,
-                  //   useDefaultErrorText: false,
-                  //   validator: (value) {
-                  //     if(value?.isEmpty==true){
-                  //       return 'Branch is required';
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
+                 
                   gapH16,
 
                   CustomTextFormField(

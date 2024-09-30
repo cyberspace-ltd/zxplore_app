@@ -46,7 +46,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
 
       _categories.add(Category(id: 2, name: 'Account Purposes'));
       _categories.add(Category(id: 3, name: 'Products Services'));
-      _categories.add(Category(id: 4, name: 'Other Information'));
+      // _categories.add(Category(id: 4, name: 'Other Information'));
       _categories.add(Category(id: 5, name: 'Other Accounts'));
       _categories.add(Category(id: 6, name: 'Foreign Accounts'));
       _categories.add(Category(id: 7, name: 'Documents Attached'));
@@ -97,10 +97,12 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
     } else if (category.id == 3) {
       goToSelected(ViewProductServicesScreen  (
           requestData: ref.read(activelyViewedRequestProvider)!.toMap()));
-    } else if (category.id == 4) {
-      goToSelected(ViewOtherInformationSreen (
-          requestData: ref.read(activelyViewedRequestProvider)!.toMap()));
-    } else if (category.id == 5) {
+    } 
+    // else if (category.id == 4) {
+    //   goToSelected(ViewOtherInformationSreen (
+    //       requestData: ref.read(activelyViewedRequestProvider)!.toMap()));
+    // }
+     else if (category.id == 5) {
       goToSelected(ViewOtherAccounts (
           requestData: ref.read(activelyViewedRequestProvider)!.toMap()));
     } else if (category.id == 6) {
