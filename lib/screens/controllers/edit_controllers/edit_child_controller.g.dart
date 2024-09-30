@@ -7,7 +7,7 @@ part of 'edit_child_controller.dart';
 // **************************************************************************
 
 String _$editChildControllerHash() =>
-    r'97341bca7861686c3a836c446fd3f36a8aa2f44d';
+    r'a5d032f8cdc6af3a95ee41e03a493b0dd7475a35';
 
 /// See also [EditChildController].
 @ProviderFor(EditChildController)

@@ -92,11 +92,14 @@ class EditChildController extends _$EditChildController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          final ex = Exception(requestResponse['message']??'Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
+        }
+            final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncValue.data(null);
+       
         return null;
       }
     } catch (e, stackTrace) {
