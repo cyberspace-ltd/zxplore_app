@@ -112,6 +112,7 @@ class ViewAccountPurposeController extends _$ViewAccountPurposeController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+               return requestResponse;
         }
         final ex = Exception(
             requestResponse['message'] ?? 'Failed to complete request');

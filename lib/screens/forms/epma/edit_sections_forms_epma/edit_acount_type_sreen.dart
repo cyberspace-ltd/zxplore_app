@@ -203,7 +203,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
             anticipatedDepositDepositAmount, //int.parse(anticipatedDepositeAmountController.text),
 
         anticipatedWithdrawTrans:
-            anticipatedWithdrawalTransactionsItem?.transactionValue, //drop down
+           anticipatedWithdrawalsTrxn, //drop down
         anticipatedWithdrawAmount:
             anticipatedWithdrawalsAmount, //int.parse(anticipatedWithdrawAmountController.text),
         foriegnTransactionExpected: foriegnTransactionExpected,
@@ -241,24 +241,24 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                 if (selectedItemStage == null) {
                   zXFlushBar(context, "Item stage is required");
                 }
-                if (selectedAnticipatedTransactionsItem == null || anticipaatedDepositTrxn==null) {
+                if ( anticipaatedDepositTrxn==null) {
                   zXFlushBar(context, "Anticipated transaction is required");
                   return;
                 }
 
-                if (anticipatedDepositAmountItem == null || anticipatedDepositDepositAmount==null) {
+                if ( anticipatedDepositDepositAmount==null) {
                   zXFlushBar(context, "Anticipated Deposit amount is required");
 
                   return;
                 }
 
-                if (anticipatedWithdrawalTransactionsItem == null) {
+                if (anticipatedWithdrawalsTrxn == null) {
                   zXFlushBar(context,
-                      "Anticipated withdrawal transaction is required");
+                      "Anticipated withdrawal transactions is required");
                   return;
                 }
 
-                if (anticipatedWithdrawalsAmountItem == null) {
+                if (anticipatedWithdrawalsAmount == null) {
                   zXFlushBar(
                       context, "Anticipated withdrawal amount is required");
 
