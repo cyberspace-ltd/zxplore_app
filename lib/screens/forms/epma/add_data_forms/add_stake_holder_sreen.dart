@@ -144,6 +144,9 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
   String? dob;
   String? datedIssued;
   String? dateExpire;
+  String? residenctPermIssueDate;
+  String? residenctPermExpiryDate;
+
   DateTime? dobInit = DateTime.now();
   final DateFormat dateFormatter = DateFormat('dd/MM/yyyy');
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
@@ -226,10 +229,9 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
   }
 
   Future<void> addAccountRequest(BuildContext context) async {
-    final lat = ref.read(userLatitudeProvider);
-    final long = ref.read(userLongitudeProvider);
-    // final initialData = widget.data?.data;
+ 
     final stakeHolderDetails = AddStakeholder(
+     
       requestId:widget.requestID,
       rimNo:0,// initialData?.rimNo,
       stakeHolderId: 0,//initialData?.stakeHolderId,
@@ -255,7 +257,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
       genderCode: selectedGenderCode,
       niaVerificationNo: _niaVerificationNoController.text,
       tin: _tinController.text,
-      gpsAddress: "$lat $long",
+      gpsAddress: _gpsAddressController.text,
       lastName: _surnameController.text,
       firstName: _firstNameController.text,
       otherName: _otherNamesController.text,
@@ -279,15 +281,82 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
       motherName: _motherMaidenNameController.text,
       occupation: occupationController.text,
       residencePermitExpiryDate:
-          stringToDate(residencePermitExpiryDateController.text),
+          stringToDate(residenctPermExpiryDate),
       residencePermitIssueDate:
-          stringToDate(residencePermitIssueDateController.text),
+          stringToDate(residenctPermIssueDate),
     );
 
     await ref
         .read(editStakeHoldersControllerProvider.notifier)
         .addStakeHolder(context: context, editAccount: stakeHolderDetails);
   }
+
+
+  /// Date Picker
+  Future<void> _showDatePicker(BuildContext dateContext,
+      {required String dateCategory}) async {
+    if (mounted) {
+      final DateTime? fPickedDate = await showDatePicker(
+        context: context,
+        initialDate: dobInit!,
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now().add(Duration(days: 365 * 50)),
+      );
+      if (fPickedDate != null) {
+        if (dateCategory == 'DOB') {
+          setState(() {
+            dobInit = fPickedDate;
+            dob= fPickedDate.toIso8601String();
+            dobFormattedDate = dateFormatter.format(dobInit!);
+            sDobFormattedDate = sdateFormatter.format(dobInit!);
+            _birthDateController.text = dobFormattedDate;
+          });
+        } else if (dateCategory == 'PERMITEXP') {
+           setState(() {
+          dobInit = fPickedDate;
+        residenctPermExpiryDate=fPickedDate.toIso8601String();
+
+          dobFormattedDate = dateFormatter.format(dobInit!);
+          sDobFormattedDate = sdateFormatter.format(dobInit!);
+          _permitExpiryDateController.text = dobFormattedDate;});
+        //  print("PERMITEXP :: $fPickedDate");
+        
+      } else if (dateCategory == 'PERMITISSUE') {
+         setState(() {
+        dobInit = fPickedDate;
+        residenctPermIssueDate=fPickedDate.toIso8601String();
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _permitIssueDateController.text = dobFormattedDate;
+         });
+        //  print("PERMITISSUE :: $fPickedDate");
+      } else if (dateCategory == 'ISSUE') {
+          setState(() {
+        dobInit = fPickedDate;
+            datedIssued= fPickedDate.toIso8601String();
+
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _idIssueDateController.text = dobFormattedDate;
+          });
+        //  print("ISSUE :: $fPickedDate");
+
+      } else {
+             setState(() {
+            dateExpire= fPickedDate.toIso8601String();
+
+        dobInit = fPickedDate;
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _idExpiryDateController.text = dobFormattedDate;
+        });
+        //  print("IDExp  :: $fPickedDate");
+
+      
+    }
+  }
+}}
+
 
   @override
   Widget build(BuildContext context) {
@@ -311,6 +380,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                 }
                     if (selectedItemStage == null) {
                   zXFlushBar(context, "Item stage is required");
+                  return;
                 }
                 if (selectedCountry == null) {
                   zXFlushBar(context, "Country is required");
@@ -336,6 +406,16 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
 
                 if (datedIssued == null) {
                   zXFlushBar(context, "ID issued date is required");
+                  return;
+                }
+
+                 if (residenctPermIssueDate == null) {
+                  zXFlushBar(context, "Perm. Residence  issue date is required");
+                  return;
+                }
+
+                if (residenctPermExpiryDate == null) {
+                  zXFlushBar(context, "Perm. Residence expiry date is required");
                   return;
                 }
                 addAccountRequest(context);
@@ -518,21 +598,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                       return null;
                     },
                   ),
-                  gapH16,
-                  CustomTextFormField(
-                    title: 'Maiden name',
-                    fillColor: Colors.transparent,
-                    controller: _middleNameController,
-                    hint: 'Maiden name',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'other name is  required';
-                      // }
-                      return null;
-                    },
-                  ),
+               
                   gapH16,
                   CustomTextFormField(
                     title: 'Mother\'s name',
@@ -712,7 +778,25 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                     },
                   ),
                   gapH16,
-
+  
+                  CustomTextFormField(
+                    title: "GPS Address",
+                    fillColor: Colors.transparent,
+                    controller: _gpsAddressController,
+                    hint: 'GH-930030-3393',
+                    inputType: TextInputType.text,
+                    // useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'GPS Address is  required';
+                      }
+                      if (value.toString().length!=12) {
+                        return 'Maximum lenght of 12';
+                      }
+                      return null;
+                    },
+                  ),
+                    gapH16,
                   const Divider(
                     height: 16,
                     color: Color.fromARGB(255, 169, 189, 201),
@@ -1036,7 +1120,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                                     ),
                                                   ))
                                           .toList(),
-                                      value: selectedIdentificationItem,
+                                      value: selectedIdType,
                                       onChanged:
                                           (IdentificationTypesDatum? newValue) {
                                         setState(() {
@@ -1496,7 +1580,23 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                     ),
                     gapH16,
                     CustomTextFormField(
-                      title: " Residence Permit PlaceCode",
+                      title: " Residence Permit No.",
+                      fillColor: Colors.transparent,
+                      controller: _residencePermitNoController,
+                      hint: 'Enter permit number',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        // if (value.toString().isEmpty) {
+                        //   return 'permanet address is required';
+                        // }
+                        return null;
+                      },
+                    ),
+                   
+                    gapH16,
+                    CustomTextFormField(
+                      title: " Residence Permit Place Code",
                       fillColor: Colors.transparent,
                       controller: _residencePermitPlaceCodeController,
                       hint: 'Enter Place code',
@@ -1509,6 +1609,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                         return null;
                       },
                     ),
+                  
                     gapH16,
                     CustomTextFormField(
                       onTap: () {
@@ -1567,7 +1668,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                   gapH16,
 
                   Text(
-                    'Other Informtion',
+                    'Other Information',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -1609,13 +1710,13 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                   CheckboxListTile(
                     title: Text('Is Signatory'),
                     value: isSignatory,
-                    onChanged: (value) => _handleCheckboxChange(6, value),
+                    onChanged: (value) => _handleCheckboxChange(7, value),
                   ),
                   gapH12,
                   CheckboxListTile(
                     title: Text('NewRequest'),
                     value: isNewRequest,
-                    onChanged: (value) => _handleCheckboxChange(7, value),
+                    onChanged: (value) => _handleCheckboxChange(8, value),
                   ),
 
                   gapH12,
@@ -1636,46 +1737,4 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
     );
   }
 
-  /// Date Picker
-  Future<void> _showDatePicker(BuildContext dateContext,
-      {required String dateCategory}) async {
-    if (mounted) {
-      final DateTime? fPickedDate = await showDatePicker(
-        context: context,
-        initialDate: dobInit!,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-      );
-      if (fPickedDate != null) {
-        if (dateCategory == 'DOB') {
-          setState(() {
-            dobInit = fPickedDate;
-            dobFormattedDate = dateFormatter.format(dobInit!);
-            sDobFormattedDate = sdateFormatter.format(dobInit!);
-            _birthDateController.text = dobFormattedDate;
-          });
-        } else if (dateCategory == 'PERMITEXP') {
-          dobInit = fPickedDate;
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          _permitExpiryDateController.text = dobFormattedDate;
-        }
-      } else if (dateCategory == 'PERMITISSUE') {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _permitIssueDateController.text = dobFormattedDate;
-      } else if (dateCategory == 'ISSUE') {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _idIssueDateController.text = dobFormattedDate;
-      } else {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _idExpiryDateController.text = dobFormattedDate;
-      }
-    }
-  }
 }

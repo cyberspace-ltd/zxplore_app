@@ -7,7 +7,7 @@ part of 'edit_stake_holders_controller.dart';
 // **************************************************************************
 
 String _$editStakeHoldersControllerHash() =>
-    r'1f29ab3240b2e4049196f08aa3e7744bfe2984ff';
+    r'd35176a9923aee1ccd59860e1182e2b948a250a9';
 
 /// See also [EditStakeHoldersController].
 @ProviderFor(EditStakeHoldersController)
@@ -24,7 +24,7 @@ final editStakeHoldersControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditStakeHoldersController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewStakeHoldersControllerHash() =>
-    r'20810e99b9f73b939c5a098b864a565f5d9f647f';
+    r'2fab98b1c9a2990bfbe0c2d8ce69698b13b7b994';
 
 /// See also [ViewStakeHoldersController].
 @ProviderFor(ViewStakeHoldersController)

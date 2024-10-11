@@ -50,6 +50,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
   final _firstNameController = TextEditingController();
   final _otherNamesController = TextEditingController();
   final _middleNameController = TextEditingController();
+  final _maidenNameController = TextEditingController();
   final _birthDateController = TextEditingController();
   final _birthPlaceController = TextEditingController();
   final _identificationTypeIdController =
@@ -111,9 +112,9 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
   String? selectedGenderCode;
   String? selectedGenderName;
 
-  IdentificationTypesDatum? selectedIdentificationItem;
-  int? selectedIdentificationCode;
-  String? selectedIdentificationName;
+  IdentificationTypesDatum? identificationTypeItem;
+  int? identificationTypeId;
+  String? identificationTypeName;
 
   BusinessNaturesDatum? businessNaturesItem;
   String? selectedBusinessNaturesCode;
@@ -139,9 +140,8 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
   String? maritalStatusCode;
   String? maritalStatusName;
 
-  IdentificationTypesDatum? selectedIdType;
-  int? selectedIdentificationTypeCode;
-  String? selectedIdentificationTypeName;
+ 
+
 
   CountryDatum? selectedCountry;
   String? selectedCountryCode;
@@ -170,12 +170,23 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final userData = widget.data?.data;
+         businessPhoneNoController.text="${userData?.businessPhoneNo ?? ''}";
+        _firstNameController.text = "${userData?.firstName ?? ''}";
+        identificationTypeId = userData?.identificationTypeId;
+        selectedCountryCode= userData?.countryCode;
         // Initialize each controller with a unique value
         _surnameController.text = "${userData?.lastName ?? ''}";
         _firstNameController.text = "${userData?.firstName ?? ''}";
+        _motherMaidenNameController.text= "${userData?.motherName ?? ''}";
         _otherNamesController.text = "${userData?.otherName ?? ''}";
         _middleNameController.text = "${userData?.middleName ?? ''}";
+        occupationController.text = "${userData?.occupation ?? ''}";
+        jobTitleController.text= "${userData?.jobTitle ?? ''}";
+        
+        dateExpire="${formatDate(userData?.idExpiryDate.toIso8601String() ?? '')}";
+        datedIssued="${formatDate(userData?.idIssueDate.toIso8601String() ?? '')}";
         _birthDateController.text = "${formatDate(userData?.birthDate.toIso8601String() ?? '')}";
+        dob = "${formatDate(userData?.birthDate.toIso8601String() ?? '')}";
         _birthPlaceController.text = "${userData?.birthPlace ?? ''}";
         _identificationTypeIdController.text = "${userData?.identificationNo ?? ''}";
         _identificationNoController.text ="${userData?.identificationNo ?? ''}";
@@ -186,6 +197,9 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         _niaVerificationNoController.text =  "${userData?.niaVerificationNo ?? ''}";
         _tinController.text = "${userData?.tin ?? ''}";
         _genderCodeController.text = "${userData?.genderCode ?? ''}";
+          selectedGenderCode = "${userData?.genderCode ?? ''}";
+          selectedGenderCode=userData?.genderCode??'';
+
         _regionCodeController.text = "${userData?.regionCode ?? ''}";
         _homeTownController.text = "${userData?.homeTown ?? ''}";
         _residencePermitNoController.text =   "${userData?.residencePermitNo ?? ''}";
@@ -195,6 +209,8 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         _residentialAddress2Controller.text =  "${userData?.residentialAddress2 ?? ''}";
         _districtAssemblyAreaController.text = "${userData?.districtAssemblyArea ?? ''}";
         _cityController.text = "${userData?.city ?? ''}";
+        _permitIssueDateController.text=   "${formatDate(userData?.residencePermitIssueDate.toIso8601String() ?? '')}";
+        _permitExpiryDateController.text=   "${formatDate(userData?.residencePermitExpiryDate.toIso8601String() ?? '')}";
         _permanentResidentialAddressController.text = "${userData?.permanentResidentialAddress ?? ''}";
         _permanentResidentialCityController.text = "${userData?.permanentResidentialCity ?? ''}";
         _permanentResidentialCountryCodeController.text = "${userData?.permanentResidentialCountryCode ?? ''}";
@@ -281,8 +297,8 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
   }
 
   Future<void> editAccountRequest(BuildContext context) async {
-    final lat = ref.read(userLatitudeProvider);
-    final long = ref.read(userLongitudeProvider);
+    // final lat = ref.read(userLatitudeProvider);
+    // final long = ref.read(userLongitudeProvider);
     final initialData = widget.data?.data;
     final stakeHolderDetails = AddStakeholder(
       requestId:initialData?.reqId ,
@@ -297,7 +313,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         isSignatory: isSignatory,
         residentialAddress2: _residentialAddress2Controller.text,
         residentialAddress: _residentialAddressController.text,
-        districtAssemblyArea: selectedRegionName,
+        districtAssemblyArea: _districtAssemblyAreaController.text,
         permanentResidentialAddress:  _permanentResidentialAddressController.text,
         permanentResidentialCity: _permanentResidentialCityController.text,
         permanentResidentialCountryCode:selectedPaCountryCode,
@@ -307,7 +323,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         genderCode: selectedGenderCode,
         niaVerificationNo: _niaVerificationNoController.text,
         tin: _tinController.text,
-        gpsAddress: "$lat $long",
+        gpsAddress: _gpsAddressController.text,
         lastName: _surnameController.text,
         firstName: _firstNameController.text,
         otherName: _otherNamesController.text,
@@ -322,7 +338,7 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         isNewRequest: false,
         idCountryCode: selectedCountryCode,
         identificationNo: _identificationNoController.text,
-        identificationTypeId: selectedIdentificationCode,
+        identificationTypeId: identificationTypeId,
         actionFlag: initialData!.actionFlag,
         birthDate: stringToDate(dob ?? ''),
         city: _cityController.text,
@@ -333,8 +349,8 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         motherName: _motherMaidenNameController.text,
         occupation:occupationController.text ,
         relAuthCode: initialData.relAuthCode,
-        residencePermitExpiryDate: stringToDate(residencePermitExpiryDateController.text),
-        residencePermitIssueDate: stringToDate(residencePermitIssueDateController.text),
+        residencePermitExpiryDate: stringToDate(permitExpiryDate),
+        residencePermitIssueDate: stringToDate(permitIssueDate),
         
 
     );
@@ -343,6 +359,70 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
         .read(editStakeHoldersControllerProvider.notifier)
         .editStakeHolder(context: context,editAccount:stakeHolderDetails );
   }
+  String? permitIssueDate;
+String? permitExpiryDate;
+    /// Date Picker
+  Future<void> _showDatePicker(BuildContext dateContext,
+      {required String dateCategory}) async {
+    if (mounted) {
+      final DateTime? fPickedDate = await showDatePicker(
+        context: context,
+        initialDate: dobInit!,
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now().add(Duration(days: 365 * 50)),
+      );
+      if (fPickedDate != null) {
+        if (dateCategory == 'DOB') {
+          setState(() {
+            dobInit = fPickedDate;
+            dob= fPickedDate.toIso8601String();
+            dobFormattedDate = dateFormatter.format(dobInit!);
+            sDobFormattedDate = sdateFormatter.format(dobInit!);
+            _birthDateController.text = dobFormattedDate;
+          });
+        } else if (dateCategory == 'PERMITEXP') {
+           setState(() {
+          dobInit = fPickedDate;
+          permitExpiryDate= fPickedDate.toIso8601String();
+
+          dobFormattedDate = dateFormatter.format(dobInit!);
+          sDobFormattedDate = sdateFormatter.format(dobInit!);
+          _permitExpiryDateController.text = dobFormattedDate;
+          });
+        
+      } else if (dateCategory == 'PERMITISSUE') {
+         setState(() {
+        dobInit = fPickedDate;
+          permitIssueDate= fPickedDate.toIso8601String();
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _permitIssueDateController.text = dobFormattedDate;
+
+         });
+      } else if (dateCategory == 'ISSUE') {
+          setState(() {
+        dobInit = fPickedDate;
+            datedIssued= fPickedDate.toIso8601String();
+
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _idIssueDateController.text = dobFormattedDate;
+          });
+      } else {
+             setState(() {
+            dateExpire= fPickedDate.toIso8601String();
+
+        dobInit = fPickedDate;
+        dobFormattedDate = dateFormatter.format(dobInit!);
+        sDobFormattedDate = sdateFormatter.format(dobInit!);
+        _idExpiryDateController.text = dobFormattedDate;
+        });
+      
+    }
+  }
+}}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -358,6 +438,43 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
      ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
         title: 'Editing Stake holder Information',
+        button:  Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16,vertical:  8.0),
+          child: PrimaryButton(
+                        onPressed: () {
+                          if (!_personalInfoEditFormKey.currentState!.validate()) {
+                            return;
+                          }
+                          if (selectedCountry == null ) {
+                            zXFlushBar(context, "Country is required");
+                            return;
+                          }
+                          if (selectedGenderItem == null) {
+                            zXFlushBar(context, "Gender is required");
+                            return;
+                          }
+                
+                          if (identificationTypeItem == null) {
+                            zXFlushBar(context, "ID type is required");
+                            return;
+                          }
+                          if (dob == null) {
+                            zXFlushBar(context, "Date of birth is required");
+                            return;
+                          }
+                          if (dateExpire == null ) {
+                            zXFlushBar(context, "ID expiry date is required");
+                            return;
+                          }
+                
+                          if (datedIssued == null) {
+                            zXFlushBar(context, "ID issued date is required");
+                            return;
+                          }
+                          editAccountRequest(context);
+                        },
+                        title: 'Save '),
+        ),
         widgetToGoOnCancel: StackHolderdersScreen(
           formIndividualData: ref.read(activelyViewedRequestProvider)!.toMap(),
         ),
@@ -448,21 +565,21 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                       return null;
                     },
                   ),
-               gapH16,
-                  CustomTextFormField(
-                    title: 'Maiden name',
-                    fillColor: Colors.transparent,
-                    controller: _middleNameController,
-                    hint: 'Maiden name',
-                    inputType: TextInputType.text,
-                    useDefaultErrorText: false,
-                    validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'other name is  required';
-                      // }
-                      return null;
-                    },
-                  ),
+              //  gapH16,
+              //     CustomTextFormField(
+              //       title: 'Maiden name',
+              //       fillColor: Colors.transparent,
+              //       controller: _middleNameController,
+              //       hint: 'Maiden name',
+              //       inputType: TextInputType.text,
+              //       useDefaultErrorText: false,
+              //       validator: (value) {
+              //         // if (value.toString().isEmpty) {
+              //         //   return 'other name is  required';
+              //         // }
+              //         return null;
+              //       },
+              //     ),
                gapH16,
                   CustomTextFormField(
                     title: 'Mother\'s name',
@@ -520,6 +637,25 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                       return null;
                     },
                   ),
+                 
+              
+              // if(selectedGenderCode!=null)...[],
+                     gapH16,
+                  // CustomTextFormField(
+                  //   title: "Gender",
+                  //   fillColor: Colors.transparent,
+                  //   controller: _birthPlaceController,
+                  //   hint: 'Gender',
+                  //   showDropDownSuffixIcon: true,
+                  //   readOnly: true,
+                  //   showCursor: false,
+                  //   inputType: TextInputType.text,
+                  //   // useDefaultErrorText: false,
+                  //   validator: (value) {
+                     
+                  //     return null;
+                  //   },
+                  // ),
                  
               
                gapH16,
@@ -637,8 +773,23 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                           );
                     },
                   ),
-               gapH16,
-
+     gapH16,
+  
+                  CustomTextFormField(
+                    title: "GPS Address",
+                    fillColor: Colors.transparent,
+                    controller: _gpsAddressController,
+                    hint: 'GH-930030-3393',
+                    inputType: TextInputType.text,
+                    // useDefaultErrorText: false,
+                    validator: (value) {
+                      if (value.toString().isEmpty) {
+                        return 'GPS Address is  required';
+                      }
+                      // 
+                      return null;
+                    },
+                  ),
                            gapH16,
                   const Divider(
                     height: 16,
@@ -958,15 +1109,15 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                                                     ),
                                                   ))
                                           .toList(),
-                                      value: selectedIdentificationItem,
+                                      value: identificationTypeItem,
                                       onChanged:
                                           (IdentificationTypesDatum? newValue) {
                                         setState(() {
                                           /// Set selected item params
-                                          selectedIdType = newValue;
-                                          selectedIdentificationCode =
+                                          identificationTypeItem = newValue;
+                                          identificationTypeId =
                                               newValue!.identificationTypeId;
-                                          selectedIdentificationName =
+                                          identificationTypeName =
                                               newValue.identificationTypeName;
                                         });
                                       },
@@ -1519,60 +1670,19 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
                   CheckboxListTile(
                     title: Text('Is Signatory'),
                     value: isSignatory,
-                    onChanged: (value) => _handleCheckboxChange(6, value),
+                    onChanged: (value) => _handleCheckboxChange(7, value),
                   ),
                   gapH12,
                   CheckboxListTile(
                     title: Text('NewRequest'),
                     value: isNewRequest,
-                    onChanged: (value) => _handleCheckboxChange(7, value),
+                    onChanged: (value) => _handleCheckboxChange(8, value),
                   ),
                 
-                  gapH12,
                   
-                  gapH12,
-      
-                  CheckboxListTile(
-                    title: Text('New Request?'),
-                    value: isNewRequest,
-                    onChanged: (value) => _handleCheckboxChange(11, value),
-                  ),
        
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                      onPressed: () {
-                        if (!_personalInfoEditFormKey.currentState!.validate()) {
-                          return;
-                        }
-                        if (selectedCountry == null) {
-                          zXFlushBar(context, "Country is required");
-                          return;
-                        }
-                        if (selectedGenderItem == null) {
-                          zXFlushBar(context, "Gender is required");
-                          return;
-                        }
-      
-                        if (selectedIdType == null) {
-                          zXFlushBar(context, "ID type is required");
-                          return;
-                        }
-                        if (dob == null) {
-                          zXFlushBar(context, "Date of birth is required");
-                          return;
-                        }
-                        if (dateExpire == null) {
-                          zXFlushBar(context, "ID expiry date is required");
-                          return;
-                        }
-      
-                        if (datedIssued == null) {
-                          zXFlushBar(context, "ID issued date is required");
-                          return;
-                        }
-                        editAccountRequest(context);
-                      },
-                      title: 'Save')
+                 
                 ],
               ),
             ),
@@ -1583,47 +1693,5 @@ class _EditStakeHolderScreenState extends ConsumerState<EditStakeHolderScreen> {
     );
   }
 
-  /// Date Picker
-  Future<void> _showDatePicker(BuildContext dateContext,
-      {required String dateCategory}) async {
-    if (mounted) {
-      final DateTime? fPickedDate = await showDatePicker(
-        context: context,
-        initialDate: dobInit!,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
-      );
-      if (fPickedDate != null) {
-        if (dateCategory == 'DOB') {
-          setState(() {
-            dobInit = fPickedDate;
-            dobFormattedDate = dateFormatter.format(dobInit!);
-            sDobFormattedDate = sdateFormatter.format(dobInit!);
-            _birthDateController.text = dobFormattedDate;
-          });
-        } else if (dateCategory == 'PERMITEXP') {
-          dobInit = fPickedDate;
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          _permitExpiryDateController.text = dobFormattedDate;
-        }
-      } else if (dateCategory == 'PERMITISSUE') {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _permitIssueDateController.text = dobFormattedDate;
-      } else if (dateCategory == 'ISSUE') {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _idIssueDateController.text = dobFormattedDate;
-      } else {
-        dobInit = fPickedDate;
-        dobFormattedDate = dateFormatter.format(dobInit!);
-        sDobFormattedDate = sdateFormatter.format(dobInit!);
-        _idExpiryDateController.text = dobFormattedDate;
-      }
-    }
-  }
-
- }
+ 
+}

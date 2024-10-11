@@ -1,26 +1,24 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/meta_data_provider.dart';
-import 'package:zxplore_app/models/epma_models/meta/gender_response.dart';
+import 'package:zxplore_app/models/epma_models/meta/account_types.dart';
 
-part 'gender.g.dart';
+part 'get_account_types.g.dart';
 
 @Riverpod(keepAlive: true)
 
-/// Get getGender
-Future<List<GendersDatum>?> getGender(
- GetGenderRef ref,
+/// Get getAccountTypes
+Future<List< AccountTypesDatum>?> getAccountTypes(
+ GetAccountTypesRef ref,
 ) async {
   final repo = ref.read(metaRepositoryImplProvider);
-  final responseList = <GendersDatum>[];
+  final responseList = <AccountTypesDatum>[];
 
   try {
     const AsyncLoading();
-    final response =    await repo.getGenders();
+    final response =    await repo.getDocumentTypes();
+
     if (response['status']==true) {
-
-      final result = GendersResponse.fromJson(response);
-    
-
+      final result = AccountTypesResponse.fromJson(response);
       if (result.data.isNotEmpty == true) {
         for (final element in result.data) {
           responseList.add(element);

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +38,8 @@ import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
+
+import '../../../../utils/app_exception.dart';
 
 final div = Divider(
   height: 0,
@@ -146,7 +149,19 @@ class _PersonalInfoEditSscreenState
   final TextEditingController _employerNameController = TextEditingController();
   final TextEditingController _customerClassificationIdController =
       TextEditingController();
+/// country
+  final countryValueListenable = ValueNotifier<CountryDatum?>(null);
+  final TextEditingController? searchCountryController = TextEditingController();
+    /// resident permit country
+    final resPermitCountryValueListenable = ValueNotifier<CountryDatum?>(null);
+  final TextEditingController? resPermitSearchCountryController = TextEditingController();
+    /// region 
+  final regionValueListenable = ValueNotifier<RegionDatum?>(null);
+final TextEditingController regionSearchEditingController = TextEditingController();
+  final TextEditingController prevItemStageController = TextEditingController();
 
+  bool? residentPermitStatus;
+  bool isSelected = false;
   bool hasPermanentResidence = false; //1
   bool accountOwnership = false; //2
   bool customerResidentInGhana = false; //3
@@ -194,6 +209,7 @@ class _PersonalInfoEditSscreenState
   MaritalStatusDatum? maritalStatusItem;
   String? maritalStatusCode;
   String? maritalStatusName;
+ 
 
   IdentificationTypesDatum? selectedIdType;
   int? selectedIdentificationTypeCode;
@@ -218,6 +234,15 @@ class _PersonalInfoEditSscreenState
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
 
+    bool hidePrevItemStage = false;
+  String? selectedItemStage;
+
+  void togglePrevItemStage() {
+    setState(() {
+      hidePrevItemStage = !hidePrevItemStage;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -226,6 +251,8 @@ class _PersonalInfoEditSscreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final userData = widget.data?.data;
+          selectedItemStage = userData?.itemStage;
+                 prevItemStageController.text = userData?.itemStage ?? 'No selection';
         preRegionCode = userData?.regionCode ?? '';
         // Initialize each controller with a unique value
         _surnameController.text = "${userData?.surname ?? ''}";
@@ -319,6 +346,7 @@ class _PersonalInfoEditSscreenState
         _pepReasonController.text = "${userData?.pepReason ?? ''}";
         _gpsAddressController.text = "${userData?.gpsAddress ?? ''}";
         hasPermanentResidence = userData?.hasPermanentResidence ?? false;
+        residentPermitStatus = userData?.hasPermanentResidence;
         accountOwnership = userData?.accountOwnership ?? false;
         customerResidentInGhana = userData?.customerResidentInGhana ?? false;
         customerIsPEP = userData?.customerIsPep ?? false;
@@ -376,14 +404,20 @@ class _PersonalInfoEditSscreenState
     _permitIssueDateController.dispose();
     _permitExpiryDateController.dispose();
     _districtAssemblyAreaController.dispose();
-
     _permanentResidentialCountryCodeController.dispose();
     _mailingAddressController.dispose();
     _accountOwnershipOtherController.dispose();
     _pepReasonController.dispose();
     _gpsAddressController.dispose();
+    prevItemStageController.dispose();
 
     super.dispose();
+  }
+
+  void onResidentPermitChanged(bool? value) {
+    setState(() {
+      residentPermitStatus = value;
+    });
   }
 
   // Method to handle checkbox state changes
@@ -424,8 +458,9 @@ class _PersonalInfoEditSscreenState
   }
 
   Future<void> editAccountRequest(BuildContext context) async {
-    final lat = ref.read(userLatitudeProvider);
-    final long = ref.read(userLongitudeProvider);
+    // final lat = ref.read(userLatitudeProvider);
+    // final long = ref.read(userLongitudeProvider);
+    final DateTime tempnow = DateTime.now();
     final initialData = widget.data?.data;
     final editPersonalDetails = EditPersonalDetails(
         accountOwnershipOther: _accountOwnershipOtherController.text,
@@ -443,8 +478,12 @@ class _PersonalInfoEditSscreenState
         setupIbank: setupIbank,
         mailingAddress: _mailingAddressController.text,
         districtAssemblyArea: selectedRegionName,
-        permitExpiryDate:
-            identityDateExpire, //_permitExpiryDateController.text,
+
+        /// if user has an indefinite permission set  expiry to 200 years
+        permitExpiryDate: residentPermitStatus == true
+            ? DateTime(tempnow.year + 200, tempnow.month, tempnow.day)
+                .toIso8601String()
+            : identityDateExpire, //_permitExpiryDateController.text,
         permitIssueDate:
             permIdentityDateIssued, //_permitIssueDateController.text,
         hasPermanentResidence: hasPermanentResidence,
@@ -508,6 +547,14 @@ class _PersonalInfoEditSscreenState
             context: context,
             editPersonalDetails: editPersonalDetails,
             afterFailed: () {});
+  }
+
+  Future<List<CountryDatum>?> fetchCountries() async {
+    try {
+      return ref.read(getCountriesProvider).value;
+    } on DioException catch (err, _) {
+      throw AppException('$err. Please try again');
+    }
   }
 
   @override
@@ -607,7 +654,7 @@ class _PersonalInfoEditSscreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  gapH24,
+                    gapH24,
                   Text(
                     'Personal',
                     style: Theme.of(context)
@@ -616,6 +663,110 @@ class _PersonalInfoEditSscreenState
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
+                      gapH16,
+                  if (!hidePrevItemStage) ...[
+                    CustomTextFormField(
+                      title: "Item Stage",
+                      fillColor: Colors.transparent,
+                      controller: prevItemStageController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevItemStage();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevItemStage) ...[
+                    Row(children: [
+                      Text(
+                        "Item Stage",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700, fontSize: 16),
+                      )
+                    ]),
+                    gapH4,
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2<String?>(
+                        isExpanded: true,
+                        hint: Text(
+                          'Select stage',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
+                            color: ZxplorePrimaryColor,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        items: itemStages
+                            .map<DropdownMenuItem<String?>>(
+                                (item) => DropdownMenuItem<String?>(
+                                      value: item,
+                                      child: Text(
+                                        item ?? '',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                            .toList(),
+                        value: selectedItemStage,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            /// Set selected item params
+                            selectedItemStage = newValue;
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 60,
+                          // width: 160,
+                          padding: const EdgeInsets.only(left: 0, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: ZxplorePrimaryColor,
+                            ),
+                          ),
+                          elevation: 0,
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            CupertinoIcons.chevron_down,
+                          ),
+                          iconSize: 14,
+                          iconEnabledColor: ZxplorePrimaryColor,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          // width: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          // offset: const Offset(0, 0),
+                          scrollbarTheme: const ScrollbarThemeData(
+                            radius: Radius.circular(40),
+                            thickness: WidgetStatePropertyAll<double>(6),
+                            thumbVisibility: WidgetStatePropertyAll<bool>(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 14, right: 14),
+                        ),
+                      ),
+                    ),
+                  ],
                   gapH16,
                   CustomTextFormField(
                     title: 'First name',
@@ -721,15 +872,15 @@ class _PersonalInfoEditSscreenState
                   const SizedBox(height: 16),
                   // const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: "Mother\'s maidenname",
+                    title: "Mother\'s Maiden Name",
                     fillColor: Colors.transparent,
                     controller: _motherMaidenNameController,
-                    hint: 'Enter Mother\'s maidenname',
+                    hint: 'Enter Mother\'s Maiden Name',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Mother\'s maidenname is  required';
+                        return 'Mother\'s Maiden Name is  required';
                       }
                       return null;
                     },
@@ -750,8 +901,7 @@ class _PersonalInfoEditSscreenState
                       return ref.watch(getGenderProvider).when(
                             data: (data) => (data != null &&
                                     data.isNotEmpty == true)
-                                ? 
-                                DropdownButtonHideUnderline(
+                                ? DropdownButtonHideUnderline(
                                     child: DropdownButton2<GendersDatum>(
                                       isExpanded: true,
                                       hint: Text(
@@ -885,6 +1035,51 @@ class _PersonalInfoEditSscreenState
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
+                                      dropdownSearchData: DropdownSearchData<
+                                              RegionDatum>(
+                                          searchInnerWidgetHeight: 150,
+                                          searchInnerWidget: Container(
+                                            height: 50,
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 4,
+                                              right: 8,
+                                              left: 8,
+                                            ),
+                                            child: TextFormField(
+                                              expands: true,
+                                              maxLines: null,
+                                              controller:
+                                                  regionSearchEditingController,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                hintText:
+                                                    'Search for region...',
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                           searchController :
+                                              regionSearchEditingController,
+                                          searchMatchFn: (item, searchValue) {
+                                            return item.value!.regionName!.toUpperCase()
+                                            .startsWith(searchValue.toUpperCase());
+                                          }),
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          regionSearchEditingController.clear();
+                                        }
+                                      },
                                       items: data
                                           .map<DropdownMenuItem<RegionDatum>>(
                                               (item) =>
@@ -909,6 +1104,8 @@ class _PersonalInfoEditSscreenState
                                           .toList(),
                                       value: regionsItem,
                                       onChanged: (RegionDatum? newValue) {
+                                         regionValueListenable.value = newValue;
+
                                         setState(() {
                                           /// Set selected item params
                                           regionsItem = newValue;
@@ -945,7 +1142,6 @@ class _PersonalInfoEditSscreenState
                                       ),
                                       dropdownStyleData: DropdownStyleData(
                                         maxHeight: 200,
-                                        // width: 200,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(14),
@@ -1000,13 +1196,8 @@ class _PersonalInfoEditSscreenState
                                     data.isNotEmpty == true)
                                 ? DropdownButtonHideUnderline(
                                     child: DropdownButton2<CountryDatum>(
-                                      //  dropdownSearchData: DropdownSearchData<CountryDatum>(
-                                      //   searchController: ,
-                                      //   searchMatchFn:(item,search){
-
-                                      //   } ),
-                                      isExpanded: true,
-                                      hint: Text(
+                                           isExpanded: true,
+                                        hint: Text(
                                         'Select country',
                                         style: TextStyle(
                                           fontSize: 16.0,
@@ -1015,13 +1206,57 @@ class _PersonalInfoEditSscreenState
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
+                                      dropdownSearchData: DropdownSearchData<
+                                              CountryDatum>(
+                                          searchInnerWidgetHeight: 150,
+                                          searchInnerWidget: Container(
+                                            height: 50,
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 4,
+                                              right: 8,
+                                              left: 8,
+                                            ),
+                                            child: TextFormField(
+                                              expands: true,
+                                              maxLines: null,
+                                              controller:
+                                                  searchCountryController,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                hintText:
+                                                    'Search for country...',
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                   
+                                          searchController:
+                                              searchCountryController,
+                                          searchMatchFn: (item, searchValue) {
+                                            return item.value!.countryName!.toUpperCase()
+                                            .startsWith(searchValue.toUpperCase());
+                                          }),
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchCountryController?.clear();
+                                        }
+                                      },
                                       items: data
                                           .map<DropdownMenuItem<CountryDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      CountryDatum>(
+                                              (item) => DropdownMenuItem<CountryDatum>(
                                                     value: item,
-                                                    child: Text(
-                                                      item.countryName ?? '',
+                                                    child: Text( item.countryName ?? '',
                                                       style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -1029,13 +1264,14 @@ class _PersonalInfoEditSscreenState
                                                         color:
                                                             ZxplorePrimaryColor,
                                                       ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
+                                                      overflow:  TextOverflow.ellipsis,
                                                     ),
                                                   ))
                                           .toList(),
                                       value: selectedCountry,
                                       onChanged: (CountryDatum? newValue) {
+                                          countryValueListenable.value = newValue;
+
                                         setState(() {
                                           /// Set selected item params
                                           selectedCountry = newValue;
@@ -1747,54 +1983,108 @@ class _PersonalInfoEditSscreenState
                       return null;
                     },
                   ),
-
-                  CheckboxListTile(
-                    title: Text('Has Permanent Residence'),
-                    value: hasPermanentResidence,
-                    onChanged: (value) => _handleCheckboxChange(1, value),
+                  gapH16,
+                  Text(
+                    'Permanent Resident Permit',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
-                  if (hasPermanentResidence) ...[
-                    const SizedBox(height: 8),
+                  RadioListTile<bool?>(
+                    title: const Text('Not Applicable'),
+                    value: null,
+                    groupValue: residentPermitStatus,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        residentPermitStatus = value;
+                      });
+                    },
+                  ),
+                  RadioListTile<bool?>(
+                    title: const Text('Indefinite'),
+                    value: true,
+                    groupValue: residentPermitStatus,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        residentPermitStatus = value;
+                      });
+                    },
+                  ),
+                  RadioListTile<bool?>(
+                    title: const Text('Not Indefinite'),
+                    value: false,
+                    groupValue: residentPermitStatus,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        residentPermitStatus = value;
+                      });
+                    },
+                  ),
+                  // CheckboxListTile(
+                  //   title: Text('Has Permanent Residence'),
+                  //   value: hasPermanentResidence,
+                  //   onChanged: (value) => _handleCheckboxChange(1, value),
+                  // ),
+                  if (residentPermitStatus != null &&
+                      (residentPermitStatus == true ||
+                          residentPermitStatus == false)) ...[
+                    const SizedBox(height: 16),
                     CustomTextFormField(
-                      title: "Permanet Residential Address",
+                      title: "Permanent Residence Permit Number",
+                      fillColor: Colors.transparent,
+                      controller: _residencePermitNoController,
+                      hint: 'Enter Resident Permit Number',
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      validator: (value) {
+                        // if (value.toString().isEmpty) {
+                        //   return 'Permanent address is required';
+                        // }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      title: "Permanent Residential Address",
                       fillColor: Colors.transparent,
                       controller: _permanentResidentialAddressController,
-                      hint: 'Enter permanet address',
+                      hint: 'Enter Permanent address',
                       inputType: TextInputType.text,
                       useDefaultErrorText: false,
                       validator: (value) {
                         if (value.toString().isEmpty) {
-                          return 'permanet address is required';
+                          return 'Permanent address is required';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
-                      title: "Permanet Residential Address City",
+                      title: "Permanent Residential Address City",
                       fillColor: Colors.transparent,
                       controller: _permanentResidentialCityController,
-                      hint: 'Enter permanet address city',
+                      hint: 'Enter Permanent address city',
                       inputType: TextInputType.text,
                       useDefaultErrorText: false,
                       validator: (value) {
                         if (value.toString().isEmpty) {
-                          return 'permanet address is required';
+                          return 'Permanent address is required';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      'Permanent Res. Country ',
-                      overflow: TextOverflow.fade,
-                      maxLines: 1,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                    ),
-                    const SizedBox(height: 6),
+                         Text(
+                    'Customer Class',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
                     Consumer(
                       builder: (context, ref, child) {
                         return ref.watch(getCountriesProvider).when(
@@ -1812,6 +2102,52 @@ class _PersonalInfoEditSscreenState
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
+                                        dropdownSearchData: DropdownSearchData<
+                                              CountryDatum>(
+                                          searchInnerWidgetHeight: 150,
+                                          searchInnerWidget: Container(
+                                            height: 50,
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 4,
+                                              right: 8,
+                                              left: 8,
+                                            ),
+                                            child: TextFormField(
+                                              expands: true,
+                                              maxLines: null,
+                                              controller:
+                                                  resPermitSearchCountryController,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                hintText:
+                                                    'Search for country...',
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                   
+                                          searchController:
+                                              resPermitSearchCountryController,
+                                          searchMatchFn: (item, searchValue) {
+                                            return item.value!.countryName!.toUpperCase()
+                                            .startsWith(searchValue.toUpperCase());
+                                          }),
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          resPermitSearchCountryController?.clear();
+                                        }
+                                      },
                                         items: data
                                             .map<
                                                 DropdownMenuItem<
@@ -1834,6 +2170,7 @@ class _PersonalInfoEditSscreenState
                                             .toList(),
                                         value: permsSelectedCountry,
                                         onChanged: (CountryDatum? newValue) {
+                                          resPermitCountryValueListenable.value=newValue;
                                           setState(() {
                                             /// Set selected item params
                                             permsSelectedCountry = newValue;
@@ -1912,15 +2249,15 @@ class _PersonalInfoEditSscreenState
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
-                      title: " Residence Permit (Place Code)",
+                      title: "Place Of Issue",
                       fillColor: Colors.transparent,
                       controller: _residencePermitPlaceCodeController,
-                      hint: 'Enter Place code',
+                      hint: 'Enter place of issue',
                       inputType: TextInputType.text,
                       useDefaultErrorText: false,
                       validator: (value) {
                         // if (value.toString().isEmpty) {
-                        //   return 'permanet address is required';
+                        //   return 'Permanent address is required';
                         // }
                         return null;
                       },
@@ -1952,32 +2289,37 @@ class _PersonalInfoEditSscreenState
                       },
                     ),
                     const SizedBox(height: 16),
-                    CustomTextFormField(
-                      onTap: () {
-                        _showDatePicker(context, dateCategory: 'PERMITEXP');
-                      },
-                      title: 'Permit Exp. Date',
-                      readOnly: true,
-                      showCursor: false,
-                      suffixIcon: Icon(
-                        Icons.calendar_today_rounded,
-                        color: ZxplorePrimaryColor.withOpacity(.5),
+
+                    ///  show this only  if not indefinite is the  choice i.e residentPermitStatus==false
+                    if (residentPermitStatus == false) ...[
+                      ///  not indefinite
+                      CustomTextFormField(
+                        onTap: () {
+                          _showDatePicker(context, dateCategory: 'PERMITEXP');
+                        },
+                        title: 'Permit Expiry Date',
+                        readOnly: true,
+                        showCursor: false,
+                        suffixIcon: Icon(
+                          Icons.calendar_today_rounded,
+                          color: ZxplorePrimaryColor.withOpacity(.5),
+                        ),
+                        showDropDownSuffixIcon: true,
+                        fillColor: Colors.transparent,
+                        controller: _permitExpiryDateController,
+                        hint: 'Selected permit exp. Date ',
+                        inputType: TextInputType.text,
+                        useDefaultErrorText: false,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Permit exp. date required';
+                          } else if (value == 'dd-mm-yyyy') {
+                            return 'Enter a valid date';
+                          }
+                          return null;
+                        },
                       ),
-                      showDropDownSuffixIcon: true,
-                      fillColor: Colors.transparent,
-                      controller: _permitExpiryDateController,
-                      hint: 'Selected permit exp. Date ',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Permit exp. date required';
-                        } else if (value == 'dd-mm-yyyy') {
-                          return 'Enter a valid date';
-                        }
-                        return null;
-                      },
-                    ),
+                    ],
                   ],
                   const SizedBox(height: 16),
 
@@ -2656,7 +2998,7 @@ class _PersonalInfoEditSscreenState
   /// Date Picker
   Future<void> _showDatePicker(BuildContext dateContext,
       {required String dateCategory}) async {
-    print("CAAT::$dateCategory");
+    // print("CAAT::$dateCategory");
     DateTime now = DateTime.now();
     final DateTime tempnow = DateTime.now();
     final DateTime firstDate = DateTime(now.year - 200, now.month, now.day);
@@ -2681,24 +3023,23 @@ class _PersonalInfoEditSscreenState
             identityDateIssued = fPickedDate.toIso8601String();
             _idIssueDateController.text = dobFormattedDate;
           });
+        } else if (dateCategory == 'IDEXPDATE') {
+          setState(() {
+            identityDateExpire = fPickedDate.toIso8601String();
+            _idExpiryDateController.text = dobFormattedDate;
+          });
+        } else if (dateCategory == 'PERMITEXP') {
+          setState(() {
+            permIdentityDateExpire = fPickedDate.toIso8601String();
+            _permitExpiryDateController.text = dobFormattedDate;
+          });
+        } else if (dateCategory == 'PERMITISSUE') {
+          setState(() {
+            permIdentityDateIssued = fPickedDate.toIso8601String();
+            _permitIssueDateController.text = dobFormattedDate;
+          });
         }
-        else if (dateCategory == 'IDEXPDATE') {
-        setState(() {
-          identityDateExpire = fPickedDate.toIso8601String();
-          _idExpiryDateController.text = dobFormattedDate;
-        });
-      } else if (dateCategory == 'PERMITEXP') {
-        setState(() {
-          permIdentityDateExpire = fPickedDate.toIso8601String();
-          _permitExpiryDateController.text = dobFormattedDate;
-        });
-      } else if (dateCategory == 'PERMITISSUE') {
-        setState(() {
-          permIdentityDateIssued = fPickedDate.toIso8601String();
-          _permitIssueDateController.text = dobFormattedDate;
-        });
       }
-      } 
     }
   }
 }

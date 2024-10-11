@@ -313,7 +313,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
       {required String? RequestId, required int? OtherAccountsId}) async {
     try {
       final response =
-          await api.getOtherBankAccountToEdit(RequestId: RequestId);
+          await api.getOtherBankAccountToEdit(RequestId: RequestId,OtherAccountsId:OtherAccountsId);
 
       return response;
     } on FormatException catch (_) {
@@ -403,6 +403,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   @override
   Future getStakeHolderToEdit(
       {required String? RequestId, required int? StakeHolderId}) async {
+
     try {
       final response = await api.getStakeHolderToEdit(
           RequestId: RequestId, StakeHolderId: StakeHolderId);
@@ -1187,6 +1188,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   @override
   Future editStakeHolder({required AddStakeholder? holder}) async {
     try {
+
       final response = await api.editStakeHolder(
         data: holder,
       );
@@ -1213,6 +1215,29 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
     try {
       final response = await api.deleteDocument(
         data: deleteDocument,
+      );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+  
+  @override
+  Future addAssignedAccount({required GenerateAssignedAccount? data}) async{
+     try {
+      final response = await api.addAssignedAccount(
+        account: data,
       );
 
       return response;

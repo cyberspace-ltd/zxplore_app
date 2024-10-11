@@ -27,7 +27,7 @@ class _ViewChildrenScreenState extends ConsumerState<ViewChildrenScreen> {
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
       viewChildControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {}),
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
     );
 
     final ViewAccountRequestResponse? requestData =

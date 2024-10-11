@@ -87,3 +87,57 @@ class AssignedAccountToEditData {
         "isNewRequest": isNewRequest,
     };
 }
+
+
+// To parse this JSON data, do
+//
+//     final generateAssignedAccount = generateAssignedAccountFromMap(jsonString);
+
+
+GenerateAssignedAccount generateAssignedAccountFromMap(String str) => GenerateAssignedAccount.fromMap(json.decode(str));
+
+String generateAssignedAccountToMap(GenerateAssignedAccount data) => json.encode(data.toMap());
+
+class GenerateAssignedAccount {
+    int? assignedAcctId;
+    String? requestId;
+    String? accountName;
+    String? accountClass;
+    String? accountType;
+    String? accountSeries;
+    String? recon;
+    String? actionFlag;
+
+    GenerateAssignedAccount({
+        this.assignedAcctId,
+        this.requestId,
+        this.accountName,
+        this.accountClass,
+        this.accountType,
+        this.accountSeries,
+        this.recon,
+        this.actionFlag,
+    });
+
+    factory GenerateAssignedAccount.fromMap(Map<String, dynamic> json) => GenerateAssignedAccount(
+        assignedAcctId: json["assignedAcctId"],
+        requestId: json["requestId"],
+        accountName: json["accountName"],
+        accountClass: json["accountClass"],
+        accountType: json["accountType"],
+        accountSeries: json["accountSeries"],
+        recon: json["recon"],
+        actionFlag: json["actionFlag"],
+    );
+
+    Map<String, dynamic> toMap() => {
+        "assignedAcctId": assignedAcctId,
+        "requestId": requestId,
+        "accountName": accountName,
+        "accountClass": accountClass,
+        "accountType": accountType,
+        "accountSeries": accountSeries,
+        "recon": recon,
+        "actionFlag": actionFlag,
+    };
+}

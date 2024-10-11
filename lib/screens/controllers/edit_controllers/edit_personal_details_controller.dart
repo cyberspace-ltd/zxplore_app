@@ -117,20 +117,24 @@ class ViewPersonalDetailsController extends _$ViewPersonalDetailsController {
 
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
+          throw Exception(Exception(requestResponse['message']??'Failed to complete request '));
+          // final ex = Exception('Failed to complete request ');
+          // state = AsyncError(
+          //     ex, StackTrace.fromString('An error occured please try again'));
+          //          return null;
         }
-
-         state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-        return null;
+          throw Exception(Exception(requestResponse['message']??'Failed to complete request '));
+        //  state = AsyncError(Exception(requestResponse['message']),
+        //     StackTrace.fromString(requestResponse['message']));
+        // return null;
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+          throw Exception('Failed to complete request ');
+
+      // return null;
     }
   }
  }

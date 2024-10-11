@@ -1,27 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'view_request_controller.dart';
+part of 'get_account_types.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$viewRequestControllerHash() =>
-    r'4c19b8f5d4b8d4687b65a51216608572d8a36c43';
+String _$getAccountTypesHash() => r'7953b48ad53f886d8fcc32fdb75064d6fd01ac33';
 
-/// See also [ViewRequestController].
-@ProviderFor(ViewRequestController)
-final viewRequestControllerProvider =
-    AutoDisposeAsyncNotifierProvider<ViewRequestController, dynamic>.internal(
-  ViewRequestController.new,
-  name: r'viewRequestControllerProvider',
+/// Get getAccountTypes
+///
+/// Copied from [getAccountTypes].
+@ProviderFor(getAccountTypes)
+final getAccountTypesProvider =
+    FutureProvider<List<AccountTypesDatum>?>.internal(
+  getAccountTypes,
+  name: r'getAccountTypesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$viewRequestControllerHash,
+      : _$getAccountTypesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ViewRequestController = AutoDisposeAsyncNotifier<dynamic>;
+typedef GetAccountTypesRef = FutureProviderRef<List<AccountTypesDatum>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

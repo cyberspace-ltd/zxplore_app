@@ -77,6 +77,9 @@ abstract class UserInfoRepository {
 
   Future<dynamic> getAssignedAccountToEdit(
       {required String? RequestId, required int? AssignedAcctId});
+  Future<dynamic> editAssignedAccount({required AssignedAccountToEditData? data});
+  Future<dynamic> addAssignedAccount({required GenerateAssignedAccount? data});
+
   Future<dynamic> deleteAssignedAccount(
       {required String? RequestId, required int? AssignedAcctId});
 
@@ -84,8 +87,6 @@ abstract class UserInfoRepository {
   Future<dynamic> editAccountPurpose({required EditAccountPurpose? data});
   Future<dynamic> editFundingSources({required EditFundingSource? data});
   Future<dynamic> editMonthlyActivity({required EditMonthlyActivity? data});
-  Future<dynamic> editAssignedAccount(
-      {required AssignedAccountToEditData? data});
   Future getOtherBankAccountToEdit(
       {required String? RequestId, required int? OtherAccountsId});
   Future<dynamic> addOtherBankAccount({required AddOtherBankAccount? data});

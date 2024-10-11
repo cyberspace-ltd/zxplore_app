@@ -24,7 +24,7 @@ final editPersonalDetailsControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditPersonalDetailsController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewPersonalDetailsControllerHash() =>
-    r'93103cb884880837583dcbe8ef676f587a42214b';
+    r'e6579e388d31e411b7b05cf3d5f40f17adfd8dec';
 
 /// See also [ViewPersonalDetailsController].
 @ProviderFor(ViewPersonalDetailsController)

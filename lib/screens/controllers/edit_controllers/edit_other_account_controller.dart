@@ -130,6 +130,7 @@ class ViewOtherAccountController extends _$ViewOtherAccountController {
   Future<dynamic> getEditData(BuildContext context,
       {required String? RequestId, required int? OtherAccountsId}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
+   
 
     try {
       state = const AsyncLoading();
@@ -155,9 +156,10 @@ class ViewOtherAccountController extends _$ViewOtherAccountController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          final ex = Exception(requestResponse['message']??'Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
+              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
+                     return requestResponse;
         }
           
         state = AsyncError(Exception(requestResponse['message']),
@@ -202,6 +204,7 @@ class ViewOtherAccountController extends _$ViewOtherAccountController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+                return requestResponse;
         }
 
         state = AsyncError(Exception(requestResponse['message']),

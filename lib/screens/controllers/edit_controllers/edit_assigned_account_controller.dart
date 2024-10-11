@@ -52,6 +52,7 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+        return null;
         }
         state = AsyncValue.data(null);
         return null;
@@ -64,7 +65,50 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
     }
   }
 
+ Future<dynamic> addAssignedAccount(
+      {required GenerateAssignedAccount? data,String?  reqId,
+      required BuildContext context}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
 
+    try {
+      state = const AsyncLoading();
+      final requestResponse = await repo.addAssignedAccount(data: data);
+
+      if (requestResponse['status'] == true) {
+          final result = GenericResponse.fromMap(requestResponse);
+        state = AsyncValue.data(result);
+
+          // refresh the latest viewed item.
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(reqId??'');
+        state = AsyncValue.data(result);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => ViewAssignedAccountScreen(
+                    formIndividualData:
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
+        return result;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+        return null;
+        }
+        state = AsyncValue.data(null);
+        return null;
+      }
+    } catch (e, stackTrace) {
+      final ex =
+          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      state = AsyncError(ex, stackTrace);
+      return null;
+    }
+  }
 
 }
 

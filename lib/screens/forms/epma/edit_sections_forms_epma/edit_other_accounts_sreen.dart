@@ -41,7 +41,6 @@ class _EditOherBankAccountScreenState
   final TextEditingController prevItemStageController = TextEditingController();
 
   bool hidePrevItemStage = false;
-
   String? selectedItemStage;
 
   void togglePrevItemStage() {

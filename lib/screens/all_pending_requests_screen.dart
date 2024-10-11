@@ -290,9 +290,10 @@ class AccountRequestItem extends StatelessWidget {
                       PopupMenuButton<int>(onSelected: (value) {
                         if (value == 0) {
                           onTapView!();
-                        } else {
-                          onTapEdit!();
-                        }
+                        } 
+                        // else {
+                        //   onTapEdit!();
+                        // }
                       }, itemBuilder: (BuildContext context) {
                         return <PopupMenuEntry<int>>[
                           PopupMenuItem<int>(
@@ -304,10 +305,10 @@ class AccountRequestItem extends StatelessWidget {
                           // child: GestureDetector(
                           //   onTap: onTapEdit,
                           //   child: Text('Edit')))
-                          PopupMenuItem<int>(
-                              value: 1,
-                              child: GestureDetector(
-                                  onTap: onTapDelete, child: Text('Delete'))),
+                          // PopupMenuItem<int>(
+                          //     value: 1,
+                          //     child: GestureDetector(
+                          //         onTap: onTapDelete, child: Text('Delete'))),
                         ];
                       })
                     ],

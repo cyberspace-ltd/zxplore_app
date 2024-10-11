@@ -451,6 +451,12 @@ abstract class RemoteApi {
   Future<dynamic> editAssignedAccount({
     @Body() required AssignedAccountToEditData? assignedAccount,
   });
+
+    @POST('Operation/generateAccount')
+  Future<dynamic> addAssignedAccount({
+    @Body() required GenerateAssignedAccount? account,
+  });
+
   @POST('Operation/editAccountPurpose')
   Future<dynamic> editAccountPurpose({
   @Field("accountPurposesId")
@@ -506,6 +512,8 @@ abstract class RemoteApi {
   @GET('Operation/getOtherBankAccountToEdit')
   Future<dynamic> getOtherBankAccountToEdit({
     @Query('RequestId') required String? RequestId,
+
+    @Query('OtherAccountsId') required int? OtherAccountsId,
   });
   @POST('Operation/addOtherBankAccount')
   Future<dynamic> addOtherBankAccount({
@@ -608,7 +616,7 @@ abstract class RemoteApi {
   @GET('Operation/getStakeHolderToEdit')
   Future<dynamic> getStakeHolderToEdit(
       {@Query('RequestId') required String? RequestId,
-      @Query('ChildId') required int? StakeHolderId});
+      @Query('StakeHolderId') required int? StakeHolderId});
 
   @POST('Operation/addStakeHolder')
   Future<dynamic> addStakeHolder({

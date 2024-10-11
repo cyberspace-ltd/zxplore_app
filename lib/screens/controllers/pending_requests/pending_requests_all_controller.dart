@@ -35,10 +35,11 @@ Future<List<PendingRequestsDatum>?> getPendingRequestsAllDatum(
       if (allPendingResponse['message'] == 'token expired/invalid' ||
           allPendingResponse['code'] == 401) {
             ref.read(loginControllerProvider.notifier).extRenewToken();
-        throw AppException('${allPendingResponse['message']}');
-       
+            AsyncError(Exception(allPendingResponse['message']), StackTrace.fromString(allPendingResponse['message']));
+           return [];
       } else {
-        throw AppException('${allPendingResponse['message']}');
+           AsyncError(Exception(allPendingResponse['message']), StackTrace.fromString(allPendingResponse['message']));
+           return [];
       }
     }
 

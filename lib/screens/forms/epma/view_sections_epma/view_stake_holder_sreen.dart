@@ -7,6 +7,7 @@ import 'package:zxplore_app/screens/controllers/edit_controllers/edit_stake_hold
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/forms/epma/add_data_forms/add_stake_holder_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
@@ -26,6 +27,10 @@ class _StackHolderdersScreenState
     extends ConsumerState<StackHolderdersScreen> {
   @override
   Widget build(BuildContext context) {
+        ref.listen<AsyncValue>(
+      viewStakeHoldersControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    );
        final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
  final sectionData = requestData?.data?.stakeHolders ?? [];
 
@@ -89,7 +94,7 @@ class  Item extends ConsumerWidget {
       onTapEdit: () {
         // to navigate to edit this section
         ref.read(viewStakeHoldersControllerProvider.notifier).getEditData(context,
-            RequestId: data?.reqId ?? '',);
+            RequestId: data?.reqId ?? '' ,StakeHolderId: data?.stakeHolderId ?? -1,);
       },
       onTapView: () {},
       onTapDelete: () {

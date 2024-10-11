@@ -98,7 +98,7 @@ class OtherAccountsItem extends ConsumerWidget {
         // to navigate to edit this section
         ref.read(viewOtherAccountControllerProvider.notifier).getEditData(
             context,
-            RequestId: data?.reqId ?? '',
+            RequestId:ref.read(activelyViewedRequestProvider)?.data?.reqId,
             OtherAccountsId: data?.otherAccountsId);
       },
       onTapView: () {},

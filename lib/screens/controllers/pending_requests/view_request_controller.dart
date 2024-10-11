@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
-import 'package:zxplore_app/models/epma_models/generic_response.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
@@ -32,12 +31,14 @@ class ViewRequestController extends _$ViewRequestController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
+          throw  Exception('Failed to complete request ');
+          // final ex = Exception('Failed to complete request ');
+          // state = AsyncError(
+          //     ex, StackTrace.fromString('An error occured please try again'));
+          //     return null;
         }
-        state = AsyncValue.data(null);
-        return null;
+        state = AsyncValue.data(requestResponse);
+         throw  Exception(requestResponse['message']??'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =

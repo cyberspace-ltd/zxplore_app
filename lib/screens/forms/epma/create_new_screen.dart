@@ -104,7 +104,7 @@ class _CreateNewAccountScreenState
           automaticallyImplyLeading: true,
           centerTitle: true,
           title: const Text(
-            'Create account',
+            'Create Account',
             style: TextStyle(color: Colors.white),
           ),
           // actions: [
@@ -515,7 +515,7 @@ class _CreateNewAccountScreenState
                   CustomTextFormField(
                     title: 'City',
                     fillColor: Colors.transparent,
-                    controller: residentialAddressController2,
+                    controller: cityController,
                     hint: 'Enter city',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
@@ -694,7 +694,8 @@ class _CreateNewAccountScreenState
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     onTap: () {
-                      _selectDate(context);
+                                       _showDatePicker(context, dateCategory: 'ISSUE');
+
                       // _showDatePicker(context, dateCategory: 'ISSUE');
                     },
                     title: 'Issue Date',
@@ -850,11 +851,9 @@ class _CreateNewAccountScreenState
                 barrierDismissible: false,
                 builder: (builder) {
                   return AlertDialog.adaptive(
-                    content: Column(
-                      children: [
-                        Text('Account created successfully'),
-                        gapH20,
-                        TextButton(
+                    content: Text('Personal infomation saved'),
+                    actions: [
+                              TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -864,8 +863,7 @@ class _CreateNewAccountScreenState
                               );
                             },
                             child: Text('Done'))
-                      ],
-                    ),
+                    ],
                   );
                 });
           }
@@ -873,19 +871,7 @@ class _CreateNewAccountScreenState
   }
 
 
-  // Function to show the DatePicker
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != _selectedDate)
-      setState(() {
-        _selectedDate = picked;
-      });
-  }
+ 
 
   /// Date Picker
   Future<void> _showDatePicker(BuildContext dateContext,
@@ -901,20 +887,31 @@ class _CreateNewAccountScreenState
         if (dateCategory == 'DOB') {
           setState(() {
             dobInit = fPickedDate;
+            dob=fPickedDate.toIso8601String();
             dobFormattedDate = dateFormatter.format(dobInit!);
             sDobFormattedDate = sdateFormatter.format(dobInit!);
             dobController.text = dobFormattedDate;
           });
         } else if (dateCategory == 'ISSUE') {
-          dobInit = fPickedDate;
+          setState(() {
+             dobInit = fPickedDate;
+            datedIssued=fPickedDate.toIso8601String();
+
           dobFormattedDate = dateFormatter.format(dobInit!);
           sDobFormattedDate = sdateFormatter.format(dobInit!);
           datedIssuedController.text = dobFormattedDate;
+          });
+         
         } else {
+          setState(() {
+
           dobInit = fPickedDate;
+            dateExpire=fPickedDate.toIso8601String();
+
           dobFormattedDate = dateFormatter.format(dobInit!);
           sDobFormattedDate = sdateFormatter.format(dobInit!);
           dateExpireController.text = dobFormattedDate;
+        });
         }
       }
     }

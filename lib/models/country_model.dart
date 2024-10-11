@@ -20,9 +20,9 @@ class Country {
   });
 
   factory Country.fromJson(Map<String, dynamic> json) => new Country(
-    responseCode: json["ResponseCode"],
-    responseMessage: json["ResponseMessage"],
-    menu: new List<String>.from(json["Menu"].map((x) => x)),
+    responseCode: json["ResponseCode"]??'',
+    responseMessage: json["ResponseMessage"]??'',
+    menu:json["Menu"]!=null? new List<String>.from(json["Menu"].map((x) => x)):[],
   );
 
   Map<String, dynamic> toJson() => {

@@ -54,11 +54,12 @@ class _PendingDraftsRequestsScreenState
 
        ref.listen<AsyncValue>(
       viewRequestControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, errorMsg:  state.error,okAction: (){
-                                getSelectedRequestDetails( ref
-                                    .read(latestSelectRequestProvider)?.reqId!);
+      (_, state) => state.showAlertDialogOnError(context, errorMsg:  state.error,
+      // okAction: (){
+      //                           getSelectedRequestDetails( ref
+      //                               .read(latestSelectRequestProvider)?.reqId!);
 
-      },cancelAction: ()=>Navigator.pop(context),
+      // },cancelAction: ()=>Navigator.pop(context),
     ));
     return RefreshIndicator(
       onRefresh: () async =>

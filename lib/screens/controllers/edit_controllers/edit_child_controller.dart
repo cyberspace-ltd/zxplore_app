@@ -21,8 +21,7 @@ class EditChildController extends _$EditChildController {
   }
 
   Future<dynamic> editChild(
-      {required AddChild? data,
-      required BuildContext context}) async {
+      {required AddChild? data, required BuildContext context}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
@@ -30,7 +29,7 @@ class EditChildController extends _$EditChildController {
       final requestResponse = await repo.editChild(child: data);
 
       if (requestResponse['status'] == true) {
-             final result = GenericResponse.fromMap(requestResponse);
+        final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
@@ -63,9 +62,9 @@ class EditChildController extends _$EditChildController {
       return null;
     }
   }
+
   Future<dynamic> addChild(
-         {required AddChild? data,
-      required BuildContext context}) async {
+      {required AddChild? data, required BuildContext context}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
@@ -73,7 +72,7 @@ class EditChildController extends _$EditChildController {
       final requestResponse = await repo.addChild(child: data);
 
       if (requestResponse['status'] == true) {
-                  final result = GenericResponse.fromMap(requestResponse);
+        final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
@@ -84,7 +83,7 @@ class EditChildController extends _$EditChildController {
           MaterialPageRoute(
               builder: (BuildContext context) => ViewChildrenScreen(
                     formIndividualData:
-                        ref.watch(activelyViewedRequestProvider)!.toMap(),
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
                   )),
         );
         return result;
@@ -92,24 +91,26 @@ class EditChildController extends _$EditChildController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception(requestResponse['message']??'Failed to complete request ');
+          final ex = Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
+              ex,
+              StackTrace.fromString(requestResponse['message'] ??
+                  'An error occured please try again'));
         }
-            final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-       
+        final ex = Exception('Failed to complete request ');
+        state = AsyncError(
+            ex, StackTrace.fromString('An error occured please try again'));
+
         return null;
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      final ex = Exception('Failed to complete request,try again ');
+      debugPrint('${stackTrace.toString()}');
       state = AsyncError(ex, stackTrace);
       return null;
     }
   }
-
 }
 
 @riverpod
@@ -125,17 +126,16 @@ class ViewChildController extends _$ViewChildController {
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.getChildToEdit(
-          RequestId: RequestId,ChildId:ChildId );
+      final requestResponse =
+          await repo.getChildToEdit(RequestId: RequestId, ChildId: ChildId);
 
       if (requestResponse['status'] == true) {
-        final result =
-            GetChildToEditResponse.fromJson(requestResponse);
+        final result = GetChildToEditResponse.fromJson(requestResponse);
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => EditChildScreen(
-                  data  : result,
+                    data: result,
                   )),
         );
         state = AsyncValue.data(result);
@@ -147,14 +147,16 @@ class ViewChildController extends _$ViewChildController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+          return requestResponse;
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));
-        return null;
+        return requestResponse;
       }
+      
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
+      final ex = Exception('Failed to complete request,try again ');
+      debugPrint('${stackTrace.toString()}');
       state = AsyncError(ex, stackTrace);
       return null;
     }
@@ -167,42 +169,42 @@ class ViewChildController extends _$ViewChildController {
     try {
       state = const AsyncLoading();
       final requestResponse = await repo.deleteChild(
-          delchild: delData, );
+        delchild: delData,
+      );
 
       if (requestResponse['status'] == true) {
-        final result =
-            DeleteChild.fromJson(requestResponse);
+        final result = DeleteChild.fromJson(requestResponse);
         state = AsyncValue.data(result);
 
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier)
+        ref
+            .read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(RequestId!);
         state = AsyncValue.data(result);
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (BuildContext context) => ViewChildrenScreen(
-        //             formIndividualData:
-        //                 ref.read(activelyViewedRequestProvider)!.toMap(),
-        //           )),
-        // );
+
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          final ex = Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
+              ex,
+              StackTrace.fromString(requestResponse['message'] ??
+                  'An error occured please try again'));
+          return requestResponse;
         }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-        return null;
+        state = AsyncError(Exception(requestResponse['message'] ??'An error occured please try again'),
+            StackTrace.fromString(requestResponse['message'] ??'An error occured please try again'));
+        return requestResponse;
       }
     } catch (e, stackTrace) {
       final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
+          Exception('Failed to complete request: ');
+          debugPrint('${stackTrace.toString()}');
       state = AsyncError(ex, stackTrace);
       return null;
     }
-  }}
+  }
+}
