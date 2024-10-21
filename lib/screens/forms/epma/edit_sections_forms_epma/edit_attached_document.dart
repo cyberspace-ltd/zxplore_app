@@ -384,11 +384,17 @@ class _EditAttachedDocumentState extends ConsumerState<EditAttachedDocument> {
                   PrimaryButton(
                     title: 'Save',
                     onPressed: () {
+                      /// validaate feilds and values annd submit
                       if (!_uploadFormKey.currentState!.validate()) {
                         return;
                       }
-                      /// validaate feilds and values annd submit
-                      uploadSelectedDocument(context: context);
+                      if (_documentTypeName!
+                          .toLowerCase()
+                          .contains('signature')) {
+                        uploadSignature(context: context);
+                      } else {
+                        uploadSelectedDocument(context: context);
+                      }
                     },
                   ),
                 ],
@@ -447,10 +453,36 @@ class _EditAttachedDocumentState extends ConsumerState<EditAttachedDocument> {
     }
   }
 
-  Future<void> uploadSelectedDocument({required BuildContext  context,}) async {
+  Future<void> uploadSelectedDocument({
+    required BuildContext context,
+  }) async {
     if (fileSizeInMB.toInt() <= 10) {
       if (selectedFile != null) {
-        await ref.watch(fileUploadControllerProvider.notifier).uploadFile(context: context,
+        await ref.watch(fileUploadControllerProvider.notifier).uploadFile(
+            context: context,
+            file: File(selectedFile!.path),
+            documentType: _documentTypeCode,
+            requestId: ref.read(activelyViewedRequestProvider)?.data?.reqId,
+            afterSuccess: () {
+              if (mounted) {
+                zXFlushBar(context, "Document Uploaded successfully");
+              }
+            });
+      }
+    } else {
+      if (mounted) {
+        zXFlushBar(context, 'File lager than 10 MB');
+      }
+    }
+  }
+
+  Future<void> uploadSignature({
+    required BuildContext context,
+  }) async {
+    if (fileSizeInMB.toInt() <= 10) {
+      if (selectedFile != null) {
+        await ref.read(fileUploadControllerProvider.notifier).uploadSignaature(
+            context: context,
             file: File(selectedFile!.path),
             documentType: _documentTypeCode,
             requestId: ref.read(activelyViewedRequestProvider)?.data?.reqId,

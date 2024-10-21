@@ -60,31 +60,50 @@ class FileUploadController extends _$FileUploadController {
     }
   }
 
-  Future<bool> addSignature({
-    required File file,
-    String? url,
-    required String? requestId,
-    required String? documentType,
-  }) async {
+
+  Future<bool> uploadSignaature(
+      {required File file,
+      String? url,
+      required String? requestId,
+      required String? documentType,
+      required BuildContext context,
+      dynamic afterSuccess}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncValue.loading();
-      final requestResponse =
-          await repo.uploadSignaature(RequestId: requestId, File: file);
-
+      final requestResponse = await repo.uploadSignaature(
+         
+              File: file,
+              RequestId: requestId ?? '',
+               );
       if (requestResponse['status'] == true) {
         state = AsyncValue.data(null);
-
-        /// nav ack  to edit
+        afterSuccess();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => ViewInitialCreationInfoScreen(
+                    formIndividualData:
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
         return requestResponse;
       } else {
-        //check for token exp. and throw
+        if (requestResponse['message'] == 'token expired/invalid') {
+          state = AsyncValue.data(requestResponse);
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+
+          throw Exception("${requestResponse['message']}");
+        }
         throw Exception("${requestResponse['message']}");
       }
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
       throw Exception("An error ocurred}");
     }
-  }
-}
+  }}

@@ -69,14 +69,14 @@ class _EditPersonalInfoState extends State<EditPersonalInfo> {
 
   bool _hasPermanentResidence = false;
   bool _accountOwnership = false;
-  bool _customerResidentInGhana = false;
-  bool _customerIsPEP = false;
-  bool _setupIbank = false;
-  bool _setupZPrompt = false;
-  bool _setupStatementViaEmail = false;
-  bool _setupEmailIndemnity = false;
-  bool _isPhysicallyChallanged = false;
-  bool _isNewRequest = false;
+  // bool _customerResidentInGhana = false;
+  // bool _customerIsPEP = false;
+  // bool _setupIbank = false;
+  // bool _setupZPrompt = false;
+  // bool _setupStatementViaEmail = false;
+  // bool _setupEmailIndemnity = false;
+  // bool _isPhysicallyChallanged = false;
+  // bool _isNewRequest = false;
 
   @override
   void dispose() {
