@@ -1,200 +1,90 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zxplore_app/apis/endpoints.dart';
-import 'package:path/path.dart' as path;
-import 'package:zxplore_app/utils/shared_preference_keys.dart';
-
+import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
+import 'package:zxplore_app/models/epma_models/upload_request.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
+import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 part 'document_upload_controller.g.dart';
-
-class FileUploadService {
-  final String apiKey;
-  final String bearerToken;
-
-  /// map value eg 12309
-  final dynamic typeValue;
-
-  /// map key e.g Requestid,DocumentId
-  final dynamic typeKey;
-
-  /// map value eg 12309
-  final dynamic idValue;
-
-  /// map key e.g Requestid,DocumentId
-  final dynamic idKey;
-
-  FileUploadService(
-      {required this.apiKey,
-      required this.bearerToken,
-      this.idKey,
-      this.idValue,
-      this.typeKey,
-      this.typeValue});
-
-  Future<bool> uploadFileService(
-    File file,
-    String url, {
-    /// map value eg 12309
-    final dynamic typeValue,
-
-    /// map key e.g Requestid,DocumentId
-    final dynamic typeKey,
-
-    /// map value eg 12309
-    final dynamic idValue,
-
-    /// map key e.g Requestid,DocumentId
-    final dynamic idKey,
-  }) async {
-    final sp = await SharedPreferences.getInstance();
-    final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
-
-    try {
-      final uri = Uri.parse(url).replace(queryParameters: {
-        idKey ?? 'RequestId': idValue,
-        typeKey ?? 'DocumentType': typeValue,
-      });
-
-      var request = http.MultipartRequest('POST', uri);
-
-      // Add headers
-      request.headers.addAll({
-        'Authorization': 'Bearer $token',
-        'ApiKey': Endpoints.EPMA_MIDDLEWARE_KEY,
-        'Content-Type': 'multipart/form-data'
-      });
-
-      // Add file to the request
-      var multipartFile = await http.MultipartFile.fromPath(
-        'file',
-        file.path,
-        filename: path.basename(file.path),
-      );
-      request.files.add(multipartFile);
-
-      // Send the request
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print('File uploaded successfully');
-        return true;
-      } else {
-        print('Failed to upload file. Status code: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      print('Error uploading file: $e');
-      return false;
-    }
-  }
-
-  Future<bool> addSignatureService(
-    File file,
-    String url, {
-    /// map value eg 12309
-    final dynamic typeValue,
-
-    /// map key e.g Requestid,DocumentId
-    final dynamic typeKey,
-
-    /// map value eg 12309
-    final dynamic idValue,
-
-    /// map key e.g Requestid,DocumentId
-    final dynamic idKey,
-  }) async {
-    final sp = await SharedPreferences.getInstance();
-    final token = sp.getString(SharedPreferencesKeys.accessTokenKey);
-
-    try {
-      final uri = Uri.parse(url).replace(queryParameters: {
-        idKey ?? 'RequestId': idValue,
-      });
-
-      var request = http.MultipartRequest('POST', uri);
-
-      // Add headers
-      request.headers.addAll({
-        'Authorization': 'Bearer $token',
-        'ApiKey': Endpoints.EPMA_MIDDLEWARE_KEY,
-        'Content-Type': 'multipart/form-data'
-      });
-
-      // Add file to the request
-      var multipartFile = await http.MultipartFile.fromPath(
-        'file',
-        file.path,
-        filename: path.basename(file.path),
-      );
-      request.files.add(multipartFile);
-
-      // Send the request
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print('File uploaded successfully');
-        return true;
-      } else {
-        print('Failed to upload file. Status code: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      print('Error uploading file: $e');
-      return false;
-    }
-  }
-}
 
 @riverpod
 class FileUploadController extends _$FileUploadController {
-  late FileUploadService _service;
-
   @override
-  FutureOr<void> build() {
-    _service = FileUploadService(
-      apiKey: 'YOUR_API_KEY',
-      bearerToken: 'YOUR_BEARER_TOKEN',
-    );
-  }
+  FutureOr<void> build() {}
 
-  Future<bool> uploadFile({
-    File? file,
-    String? url,
-    required String? requestId,
-    required String? documentType,
-  }) async {
-    state = const AsyncValue.loading();
+  Future<bool> uploadFile(
+      {required File file,
+      String? url,
+      required String? requestId,
+      required String? documentType,
+      required BuildContext context,
+      dynamic afterSuccess}) async {
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
     try {
-      final result = await _service.uploadFileService(
-          file!, '${Endpoints.EPMA_MIDDLEWARE_BASE_URL}Opearation/uploadFiles',
-          idValue: requestId, typeValue: documentType);
-      state = AsyncValue.data(null);
-      return result;
+      state = const AsyncValue.loading();
+      final requestResponse = await repo.uploadDocument(
+          uploadRequest: UploadRequest(
+              files: file,
+              requestId: requestId ?? '',
+              documentType: documentType ?? ''));
+      if (requestResponse['status'] == true) {
+        state = AsyncValue.data(null);
+        afterSuccess();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => ViewInitialCreationInfoScreen(
+                    formIndividualData:
+                        ref.read(activelyViewedRequestProvider)!.toMap(),
+                  )),
+        );
+        return requestResponse;
+      } else {
+        if (requestResponse['message'] == 'token expired/invalid') {
+          state = AsyncValue.data(requestResponse);
+          // renew token
+          ref.read(loginControllerProvider.notifier).extRenewToken();
+          final ex = Exception('Failed to complete request ');
+          state = AsyncError(
+              ex, StackTrace.fromString('An error occured please try again'));
+
+          throw Exception("${requestResponse['message']}");
+        }
+        throw Exception("${requestResponse['message']}");
+      }
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
-      return false;
+      throw Exception("An error ocurred}");
     }
   }
 
   Future<bool> addSignature({
-    File? file,
+    required File file,
     String? url,
     required String? requestId,
     required String? documentType,
   }) async {
-    state = const AsyncValue.loading();
+    final repo = ref.read(userInfoRepositoryImplProvider);
+
     try {
-      final result = await _service.addSignatureService(
-        file!,
-        '${Endpoints.EPMA_MIDDLEWARE_BASE_URL}Opearation/addSignature',
-        idValue: requestId,
-      );
-      state = AsyncValue.data(null);
-      return result;
+      state = const AsyncValue.loading();
+      final requestResponse =
+          await repo.uploadSignaature(RequestId: requestId, File: file);
+
+      if (requestResponse['status'] == true) {
+        state = AsyncValue.data(null);
+
+        /// nav ack  to edit
+        return requestResponse;
+      } else {
+        //check for token exp. and throw
+        throw Exception("${requestResponse['message']}");
+      }
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
-      return false;
+      throw Exception("An error ocurred}");
     }
   }
 }

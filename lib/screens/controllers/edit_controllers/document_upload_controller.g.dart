@@ -7,7 +7,7 @@ part of 'document_upload_controller.dart';
 // **************************************************************************
 
 String _$fileUploadControllerHash() =>
-    r'a5d71fe5841ab5eac313a507f5c5f6b2530ecc33';
+    r'ed148ce4dcbd7198b2d0db0fb1ea47703a7846ef';
 
 /// See also [FileUploadController].
 @ProviderFor(FileUploadController)
