@@ -39,7 +39,8 @@ if (keystorePropertiesFile.exists()) {
 android {
     compileSdkVersion 34
     namespace 'com.zenith.zxplore_app'
-      ndkVersion flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
+    //   ndkVersion flutter.ndkVersion
       compileOptions {
        sourceCompatibility JavaVersion.VERSION_1_8
        targetCompatibility JavaVersion.VERSION_1_8
