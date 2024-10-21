@@ -24,7 +24,7 @@ final editOtherAccountControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditOtherAccountController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewOtherAccountControllerHash() =>
-    r'f37bff090213cd0c2c03dc914aaea1e3019cfeba';
+    r'2be88925f79664e9c4bb2bc2784346b9cb5a6251';
 
 /// See also [ViewOtherAccountController].
 @ProviderFor(ViewOtherAccountController)

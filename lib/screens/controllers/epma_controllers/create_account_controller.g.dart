@@ -7,7 +7,7 @@ part of 'create_account_controller.dart';
 // **************************************************************************
 
 String _$createAccountControllerHash() =>
-    r'70a3106d24bef55ca846d655e434afbe255952ff';
+    r'01f69b8fd3d4a170067715c96cd1afa411e06b97';
 
 /// See also [CreateAccountController].
 @ProviderFor(CreateAccountController)

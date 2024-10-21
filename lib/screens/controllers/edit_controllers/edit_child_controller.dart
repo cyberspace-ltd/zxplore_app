@@ -51,15 +51,18 @@ class EditChildController extends _$EditChildController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
         state = AsyncValue.data(null);
-        return null;
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 
@@ -97,18 +100,21 @@ class EditChildController extends _$EditChildController {
               ex,
               StackTrace.fromString(requestResponse['message'] ??
                   'An error occured please try again'));
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
         final ex = Exception('Failed to complete request ');
         state = AsyncError(
             ex, StackTrace.fromString('An error occured please try again'));
 
-        return null;
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex = Exception('Failed to complete request,try again ');
       debugPrint('${stackTrace.toString()}');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 }
@@ -139,7 +145,7 @@ class ViewChildController extends _$ViewChildController {
                   )),
         );
         state = AsyncValue.data(result);
-        return result;
+        return requestResponse;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
@@ -147,18 +153,19 @@ class ViewChildController extends _$ViewChildController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
-          return requestResponse;
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));
-        return requestResponse;
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
-      
     } catch (e, stackTrace) {
       final ex = Exception('Failed to complete request,try again ');
       debugPrint('${stackTrace.toString()}');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 
@@ -193,18 +200,23 @@ class ViewChildController extends _$ViewChildController {
               ex,
               StackTrace.fromString(requestResponse['message'] ??
                   'An error occured please try again'));
-          return requestResponse;
+                             throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
         }
-        state = AsyncError(Exception(requestResponse['message'] ??'An error occured please try again'),
-            StackTrace.fromString(requestResponse['message'] ??'An error occured please try again'));
-        return requestResponse;
+        state = AsyncError(
+            Exception(requestResponse['message'] ??
+                'An error occured please try again'),
+            StackTrace.fromString(requestResponse['message'] ??
+                'An error occured please try again'));
+                             throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ');
-          debugPrint('${stackTrace.toString()}');
+      final ex = Exception('Failed to complete request: ');
+      debugPrint('${stackTrace.toString()}');
       state = AsyncError(ex, stackTrace);
-      return null;
+                       throw Exception('Failed to complete request ');
+
     }
   }
 }

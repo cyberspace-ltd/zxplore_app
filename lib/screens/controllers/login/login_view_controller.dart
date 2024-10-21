@@ -29,7 +29,7 @@ class LoginController extends _$LoginController {
           loginMode: loginMode!, username: username!, password: password!);
 
       if (loginRes.status) {
-        state = AsyncValue.data(loginRes);
+        state = AsyncValue.data(loginRes.data);
         onSuccess!.call();
         return loginRes;
       } else {
@@ -41,14 +41,15 @@ class LoginController extends _$LoginController {
               username: username,
               password: password);
         } else {
-          throw AppException('${loginRes.message}');
+
+          throw Exception('${loginRes.message}');
         }
+          throw Exception('${loginRes.message}');
+
       }
     } catch (e, s) {
       state = AsyncError(e, s);
-      throw AppException('${s.toString()}');
-
-      // return null;
+      throw Exception('${s.toString()}');
     }
   }
 

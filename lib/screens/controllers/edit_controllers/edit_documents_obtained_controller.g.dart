@@ -7,7 +7,7 @@ part of 'edit_documents_obtained_controller.dart';
 // **************************************************************************
 
 String _$editDocumentsObtainedControllerHash() =>
-    r'2bb0d0c8db76b73799a5cf6bece9ca83e420b452';
+    r'fea44ccd5d3a6fe6921ced1f9576539b5131ae59';
 
 /// See also [EditDocumentsObtainedController].
 @ProviderFor(EditDocumentsObtainedController)

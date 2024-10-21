@@ -7,7 +7,7 @@ part of 'pending_requests_draft_controller.dart';
 // **************************************************************************
 
 String _$getPendingRequestsDraftDatumHash() =>
-    r'a4e8b1ac39009787f5218d3b8c1aee45106fdf15';
+    r'eae5bbc3ee8416698a5d796482ef50a6cfcbd8b5';
 
 /// Get getPendingRequestsDraftDatum
 ///

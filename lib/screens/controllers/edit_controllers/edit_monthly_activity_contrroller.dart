@@ -53,16 +53,22 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
-       state = AsyncError(Exception(requestResponse['message']??"Failed to coplete request. Try again"),
-            StackTrace.fromString(requestResponse['message']??"Failed to coplete request. Try again"));
-        return requestResponse;
+        state = AsyncError(
+            Exception(requestResponse['message'] ??
+                "Failed to coplete request. Try again"),
+            StackTrace.fromString(requestResponse['message'] ??
+                "Failed to coplete request. Try again"));
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 }
@@ -87,8 +93,7 @@ class ViewMonthlyActivityController extends _$ViewMonthlyActivityController {
         final result =
             GetMonthlyActivityToEditResponse.fromJson(requestResponse);
         state = AsyncValue.data(result);
-     
-        
+
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -104,16 +109,20 @@ class ViewMonthlyActivityController extends _$ViewMonthlyActivityController {
           final ex = Exception('Failed to complete request,try again. ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+                     throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));
-        return requestResponse;
+                            throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+                      throw Exception( 'Failed to complete request ');
+
     }
   }
 }

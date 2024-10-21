@@ -24,7 +24,7 @@ final editRelatedBusinessControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditRelatedBusinessController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewRelatedBusinessControllerHash() =>
-    r'e051cdca6633516252cf2884e2d81d20623f5d4e';
+    r'78754a6e18da1801307bf6916f4616a29b48d193';
 
 /// See also [ViewRelatedBusinessController].
 @ProviderFor(ViewRelatedBusinessController)

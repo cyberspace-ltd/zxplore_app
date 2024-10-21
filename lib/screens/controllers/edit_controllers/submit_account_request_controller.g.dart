@@ -7,7 +7,7 @@ part of 'submit_account_request_controller.dart';
 // **************************************************************************
 
 String _$submitAccountRequestControllerHash() =>
-    r'39a89ccef5dec113ead52d761cb3a52e9726a5dd';
+    r'dd4604666ad18b11715036746b4b8b8b4efbea8f';
 
 /// See also [SubmitAccountRequestController].
 @ProviderFor(SubmitAccountRequestController)

@@ -13,6 +13,7 @@ import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
@@ -46,6 +47,10 @@ class _CreateNewAccountScreenState
   final dateExpireController = TextEditingController();
   final dobController = TextEditingController();
   final datedIssuedController = TextEditingController();
+  /// country
+  final countryValueListenable = ValueNotifier<CountryDatum?>(null);
+  final TextEditingController? searchCountryController = TextEditingController();
+    
   GendersDatum? selectedGenderItem;
   String? selectedGenderCode;
   String? selectedGenderName;
@@ -68,9 +73,10 @@ class _CreateNewAccountScreenState
   String sDobFormattedDate = 'yyyy/mm/dd';
   DateTime? _selectedDate;
 
-    @override
+  @override
   void dispose() {
     // Dispose the controllers to free up resources
+    countryValueListenable.dispose();
     firstNameController.dispose();
     lastNameController.dispose();
     otherNameController.dispose();
@@ -86,16 +92,19 @@ class _CreateNewAccountScreenState
     dateExpireController.dispose();
     datedIssuedController.dispose();
     residentialAddressController2.dispose();
-  
-  
+
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    
+
+        // /check  for  errors here
+    ref.listen<AsyncValue>(
+      createAccountControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context,
+          okAction: () {}, errorMsg: state.error),
+    );
     return ZxploreProgress(
       inAsyncCall: ref.watch(createAccountControllerProvider).isLoading,
       child: Scaffold(
@@ -113,8 +122,7 @@ class _CreateNewAccountScreenState
           //   }, icon: Icon(Icons.refresh))
           // ],
         ),
-        body: 
-        SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
               left: 16,
@@ -128,7 +136,6 @@ class _CreateNewAccountScreenState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-             
                   CustomTextFormField(
                     title: 'First name',
                     fillColor: Colors.transparent,
@@ -347,6 +354,51 @@ class _CreateNewAccountScreenState
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
+                                      dropdownSearchData: DropdownSearchData<
+                                              CountryDatum>(
+                                          searchInnerWidgetHeight: 150,
+                                          searchInnerWidget: Container(
+                                            height: 50,
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 4,
+                                              right: 8,
+                                              left: 8,
+                                            ),
+                                            child: TextFormField(
+                                              expands: true,
+                                              maxLines: null,
+                                              controller:
+                                                  searchCountryController,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                hintText:
+                                                    'Search for country...',
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          searchController:
+                                              searchCountryController,
+                                          searchMatchFn: (item, searchValue) {
+                                            return item.value!.countryName!.toUpperCase()
+                                            .startsWith(searchValue.toUpperCase());
+                                          }),
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          searchCountryController?.clear();
+                                        }
+                                      },
                                       items: data
                                           .map<DropdownMenuItem<CountryDatum>>(
                                               (item) => DropdownMenuItem<
@@ -694,9 +746,7 @@ class _CreateNewAccountScreenState
                   const SizedBox(height: 16),
                   CustomTextFormField(
                     onTap: () {
-                                       _showDatePicker(context, dateCategory: 'ISSUE');
-
-                      // _showDatePicker(context, dateCategory: 'ISSUE');
+                      _showDatePicker(context, dateCategory: 'ISSUE');
                     },
                     title: 'Issue Date',
                     showCursor: false,
@@ -853,16 +903,16 @@ class _CreateNewAccountScreenState
                   return AlertDialog.adaptive(
                     content: Text('Personal infomation saved'),
                     actions: [
-                              TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        MyHomePage()),
-                              );
-                            },
-                            child: Text('Done'))
+                      TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      MyHomePage()),
+                            );
+                          },
+                          child: Text('Done'))
                     ],
                   );
                 });
@@ -870,48 +920,45 @@ class _CreateNewAccountScreenState
         });
   }
 
-
- 
-
   /// Date Picker
   Future<void> _showDatePicker(BuildContext dateContext,
       {required String dateCategory}) async {
+    final DateTime firstDate = DateTime(1900);
+    final DateTime lastDate = DateTime(2060);
     if (mounted) {
       final DateTime? fPickedDate = await showDatePicker(
         context: context,
         initialDate: dobInit!,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now(),
+        firstDate: firstDate,
+        lastDate: lastDate,
       );
       if (fPickedDate != null) {
         if (dateCategory == 'DOB') {
           setState(() {
             dobInit = fPickedDate;
-            dob=fPickedDate.toIso8601String();
+            dob = fPickedDate.toIso8601String();
             dobFormattedDate = dateFormatter.format(dobInit!);
             sDobFormattedDate = sdateFormatter.format(dobInit!);
             dobController.text = dobFormattedDate;
           });
         } else if (dateCategory == 'ISSUE') {
           setState(() {
-             dobInit = fPickedDate;
-            datedIssued=fPickedDate.toIso8601String();
+            dobInit = fPickedDate;
+            datedIssued = fPickedDate.toIso8601String();
 
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          datedIssuedController.text = dobFormattedDate;
+            dobFormattedDate = dateFormatter.format(dobInit!);
+            sDobFormattedDate = sdateFormatter.format(dobInit!);
+            datedIssuedController.text = dobFormattedDate;
           });
-         
         } else {
           setState(() {
+            dobInit = fPickedDate;
+            dateExpire = fPickedDate.toIso8601String();
 
-          dobInit = fPickedDate;
-            dateExpire=fPickedDate.toIso8601String();
-
-          dobFormattedDate = dateFormatter.format(dobInit!);
-          sDobFormattedDate = sdateFormatter.format(dobInit!);
-          dateExpireController.text = dobFormattedDate;
-        });
+            dobFormattedDate = dateFormatter.format(dobInit!);
+            sDobFormattedDate = sdateFormatter.format(dobInit!);
+            dateExpireController.text = dobFormattedDate;
+          });
         }
       }
     }

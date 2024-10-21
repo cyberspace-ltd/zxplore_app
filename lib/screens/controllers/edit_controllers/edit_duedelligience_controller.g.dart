@@ -7,7 +7,7 @@ part of 'edit_duedelligience_controller.dart';
 // **************************************************************************
 
 String _$editDueDilligienceControllerHash() =>
-    r'a913213d98fead63dabe9d741213a3a040186b2d';
+    r'29d18669f85db85079b65f323528b96e37420838';
 
 /// See also [EditDueDilligienceController].
 @ProviderFor(EditDueDilligienceController)

@@ -95,7 +95,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
       loginControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context),
+      (_, state) => state.showAlertDialogOnError(context,errorMsg: state.error),
+    );
+
+       ref.listen<AsyncValue>(
+      getLoginModesProvider,
+      (_, state) => state.showAlertDialogOnError(context,errorMsg: state.error),
     );
     return ZxploreProgress(
       inAsyncCall: ref.watch(getLoginModesProvider).isLoading ||

@@ -47,16 +47,20 @@ class EditDueDilligienceController extends _$EditDueDilligienceController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+                     throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));
-        return null;
+                            throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+                      throw Exception('Failed to complete request ');
+
     }
   }
 
@@ -95,15 +99,19 @@ class EditDueDilligienceController extends _$EditDueDilligienceController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+                     throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
         }
         state = AsyncValue.data(null);
-        return null;
+                            throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+                       throw Exception('Failed to complete request ');
+
     }
   }
  

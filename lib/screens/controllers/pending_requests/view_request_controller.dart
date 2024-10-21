@@ -12,8 +12,7 @@ class ViewRequestController extends _$ViewRequestController {
     return null;
   }
 
-  Future<dynamic> getRequestDetailAsync(
-      String requestId) async {
+  Future<dynamic> getRequestDetailAsync(String requestId) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
@@ -24,27 +23,30 @@ class ViewRequestController extends _$ViewRequestController {
       if (requestResponse['status'] == true) {
         final result = ViewAccountRequestResponse.fromMap(requestResponse);
 
-        ref.read(activelyViewedRequestProvider.notifier).updateRequestState(result);
+        ref
+            .read(activelyViewedRequestProvider.notifier)
+            .updateRequestState(result);
         state = AsyncValue.data(result);
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          throw  Exception('Failed to complete request ');
+          throw Exception('Failed to complete request ');
           // final ex = Exception('Failed to complete request ');
           // state = AsyncError(
           //     ex, StackTrace.fromString('An error occured please try again'));
           //     return null;
         }
         state = AsyncValue.data(requestResponse);
-         throw  Exception(requestResponse['message']??'Failed to complete request ');
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 }

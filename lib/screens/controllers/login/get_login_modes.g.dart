@@ -6,7 +6,7 @@ part of 'get_login_modes.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getLoginModesHash() => r'769e2e7d247ecbc464be61651c792a4d34482be6';
+String _$getLoginModesHash() => r'c056bf1d380d8c28e9c8c3623d79de4d2935b9b3';
 
 /// Get getLoginModes
 ///

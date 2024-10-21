@@ -58,7 +58,8 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
   
-          return requestResponse;
+                           throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
         }
         final ex = Exception(
             requestResponse['message'] ?? 'Failed to complete request');
@@ -67,13 +68,15 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
             StackTrace.fromString(
                 requestResponse['message'] ?? 'Failed to complete request'));
         afterFailed!.call();
-        return requestResponse;
+                           throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+                          throw Exception('Failed to complete request ');
+
     }
   }
 }

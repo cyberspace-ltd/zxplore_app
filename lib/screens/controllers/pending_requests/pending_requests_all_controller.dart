@@ -29,23 +29,27 @@ Future<List<PendingRequestsDatum>?> getPendingRequestsAllDatum(
         return requestsList;
       } else {
         const AsyncData([]);
-        return [];
+                                  throw Exception(allPendingResponse['message'] ??'Failed to complete request ');
+
       }
     } else {
       if (allPendingResponse['message'] == 'token expired/invalid' ||
           allPendingResponse['code'] == 401) {
             ref.read(loginControllerProvider.notifier).extRenewToken();
             AsyncError(Exception(allPendingResponse['message']), StackTrace.fromString(allPendingResponse['message']));
-           return [];
+                                   throw Exception(allPendingResponse['message'] ??'Failed to complete request ');
+
       } else {
            AsyncError(Exception(allPendingResponse['message']), StackTrace.fromString(allPendingResponse['message']));
-           return [];
+                            throw Exception(allPendingResponse['message'] ??'Failed to complete request ');
+
       }
     }
 
   } catch (e, stackTrace) {
     final ex = Exception('Failed to requests: ${stackTrace.toString()} ');
     AsyncError(ex, stackTrace);
-    return null;
+    throw Exception('Failed to requests: ${stackTrace.toString()} ');
+    // return null;
   }
 }

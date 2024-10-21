@@ -28,11 +28,12 @@ Future<List<PendingRequestsDatum>?> getPendingRequestsDraftDatum(
         for (final element in allDrats.data!) {
           requestsList.add(element);
         }
-        AsyncData(requestsList);
+        AsyncData(requestsList.reversed);
         return requestsList;
       } else {
         const AsyncData([]);
-        return [];
+                                  throw Exception(draftPendingResponse['message'] ??'Failed to complete request ');
+
       }
     } else {
       if (draftPendingResponse['message'] == 'token expired/invalid' ||
@@ -46,6 +47,7 @@ Future<List<PendingRequestsDatum>?> getPendingRequestsDraftDatum(
   } catch (e, stackTrace) {
     final ex = Exception('Failed to requests: ${stackTrace.toString()} ');
     AsyncError(ex, stackTrace);
-    return null;
+                                    throw Exception('Failed to complete request ');
+
   }
 }

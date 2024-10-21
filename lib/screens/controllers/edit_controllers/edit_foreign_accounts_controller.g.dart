@@ -25,7 +25,7 @@ final editForeignAaccountsControllerrProvider =
 
 typedef _$EditForeignAaccountsControllerr = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewForeignAaccountsControllerHash() =>
-    r'792a188c65d42504accf2ebc9f7f44b709650936';
+    r'0005b4174ae5c644eaca07cbbc56aa93bba5e52e';
 
 /// See also [ViewForeignAaccountsController].
 @ProviderFor(ViewForeignAaccountsController)

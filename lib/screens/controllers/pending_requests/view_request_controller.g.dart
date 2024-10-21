@@ -7,7 +7,7 @@ part of 'view_request_controller.dart';
 // **************************************************************************
 
 String _$viewRequestControllerHash() =>
-    r'4c19b8f5d4b8d4687b65a51216608572d8a36c43';
+    r'91162cb41332710d0df34f022dbc8f8f4cc22761';
 
 /// See also [ViewRequestController].
 @ProviderFor(ViewRequestController)

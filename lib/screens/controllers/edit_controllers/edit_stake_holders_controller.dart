@@ -20,7 +20,6 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
     //nadaa
   }
 
-  
   Future<dynamic> addStakeHolder(
       {required AddStakeholder? editAccount,
       required BuildContext context}) async {
@@ -28,16 +27,18 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
 
     try {
       state = const AsyncLoading();
-      final requestResponse =
-          await repo.addStakeHolder(holder: editAccount);
+      final requestResponse = await repo.addStakeHolder(holder: editAccount);
 
       if (requestResponse['status'] == true) {
         final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(editAccount?.requestId??'');
+        ref
+            .read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(editAccount?.requestId ?? '');
 
         state = AsyncValue.data(result);
-       /// replace this present view to the last
+
+        /// replace this present view to the last
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -52,22 +53,30 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception(requestResponse['message']??'Failed to complete request ');
+          final ex = Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
-          return requestResponse;
+              ex,
+              StackTrace.fromString(requestResponse['message'] ??
+                  'An error occured please try again'));
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
-      final ex = Exception(requestResponse['message']??'Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
-       
-        return requestResponse;
+        final ex = Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
+        state = AsyncError(
+            ex,
+            StackTrace.fromString(requestResponse['message'] ??
+                'An error occured please try again'));
+
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 
@@ -82,10 +91,13 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
       if (requestResponse['status'] == true) {
         final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(editAccount?.requestId??'');
+        ref
+            .read(viewRequestControllerProvider.notifier)
+            .getRequestDetailAsync(editAccount?.requestId ?? '');
 
         state = AsyncValue.data(result);
-       /// replace this present view to the last
+
+        /// replace this present view to the last
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -99,28 +111,30 @@ class EditStakeHoldersController extends _$EditStakeHoldersController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception(requestResponse['message']??'Failed to complete request ');
+          final ex = Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
-         return requestResponse;
+              ex,
+              StackTrace.fromString(requestResponse['message'] ??
+                  'An error occured please try again'));
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
-           final ex = Exception('Failed to complete request ');
-          state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-      
-        return requestResponse;
+        final ex = Exception('Failed to complete request ');
+        state = AsyncError(
+            ex, StackTrace.fromString('An error occured please try again'));
+
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
- 
-
 }
-
 
 @riverpod
 class ViewStakeHoldersController extends _$ViewStakeHoldersController {
@@ -129,16 +143,14 @@ class ViewStakeHoldersController extends _$ViewStakeHoldersController {
     //nadaa
   }
 
-  Future<dynamic> getEditData
-  
-  (BuildContext context,
-      {required int? StakeHolderId,required String? RequestId}) async {
+  Future<dynamic> getEditData(BuildContext context,
+      {required int? StakeHolderId, required String? RequestId}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse =
-          await repo.getStakeHolderToEdit(StakeHolderId: StakeHolderId,RequestId:RequestId );
+      final requestResponse = await repo.getStakeHolderToEdit(
+          StakeHolderId: StakeHolderId, RequestId: RequestId);
 
       if (requestResponse['status'] == true) {
         final result = GetStakeHolderToEditResponse.fromJson(requestResponse);
@@ -154,19 +166,26 @@ class ViewStakeHoldersController extends _$ViewStakeHoldersController {
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
-            // renew token
+          // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception(requestResponse['message']??'Failed to complete request ');
+          final ex = Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
-        
+              ex,
+              StackTrace.fromString(requestResponse['message'] ??
+                  'An error occured please try again'));
+
           return requestResponse;
-        }else{
-         final ex = Exception(requestResponse['message']??'Failed to complete request ');
+        } else {
+          final ex = Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString(requestResponse['message']??'An error occured please try again'));
-       
-        return requestResponse;
+              ex,
+              StackTrace.fromString(requestResponse['message'] ??
+                  'An error occured please try again'));
+
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
       }
     } catch (e, stackTrace) {
@@ -177,25 +196,24 @@ class ViewStakeHoldersController extends _$ViewStakeHoldersController {
     }
   }
 
-    Future<dynamic> deleteStakeHolder(BuildContext context,
+  Future<dynamic> deleteStakeHolder(BuildContext context,
       {required String? RequestId, required DeleteStakeHolder? delData}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.deleteStakeHolder(
-          holder: delData);
+      final requestResponse = await repo.deleteStakeHolder(holder: delData);
 
       if (requestResponse['status'] == true) {
-        final result =
-            DeleteStakeHolder.fromJson(requestResponse);
+        final result = DeleteStakeHolder.fromJson(requestResponse);
         state = AsyncValue.data(result);
 
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier)
+        ref
+            .read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(RequestId!);
         state = AsyncValue.data(result);
-   
+
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -204,17 +222,19 @@ class ViewStakeHoldersController extends _$ViewStakeHoldersController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));
-        return null;
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
-
 }

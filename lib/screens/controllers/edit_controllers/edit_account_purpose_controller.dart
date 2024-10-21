@@ -33,7 +33,8 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
         state = AsyncValue.data(result);
 
         // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier)
+        ref
+            .read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(data?.requestId ?? '');
 
         state = AsyncValue.data(result);
@@ -112,7 +113,9 @@ class ViewAccountPurposeController extends _$ViewAccountPurposeController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
-               return requestResponse;
+          //  return requestResponse;
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
         final ex = Exception(
             requestResponse['message'] ?? 'Failed to complete request');
@@ -120,13 +123,14 @@ class ViewAccountPurposeController extends _$ViewAccountPurposeController {
             ex,
             StackTrace.fromString(
                 requestResponse['message'] ?? 'Failed to complete request'));
-        return requestResponse;
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 }

@@ -29,7 +29,6 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
       final requestResponse =
           await repo.editFundingSources(data: editFundingData);
       if (requestResponse['status'] == true) {
-      
         final result = GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
         ref
@@ -57,6 +56,8 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
               ex, StackTrace.fromString('An error occured please try again'));
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
         final ex = Exception(
             requestResponse['message'] ?? 'Failed to complete request');
@@ -64,13 +65,14 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
             ex,
             StackTrace.fromString(
                 requestResponse['message'] ?? 'Failed to complete request'));
-        return requestResponse;
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+      throw Exception('Failed to complete request ');
     }
   }
 }
@@ -109,13 +111,15 @@ class ViewFundingSourcesController extends _$ViewFundingSourcesController {
         }
         state = AsyncError(Exception(requestResponse['message']),
             StackTrace.fromString(requestResponse['message']));
-        return null;
+                            throw Exception(requestResponse['message'] ??'Failed to complete request ');
+
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-      return null;
+                        throw Exception('Failed to complete request ');
+
     }
   }
 }

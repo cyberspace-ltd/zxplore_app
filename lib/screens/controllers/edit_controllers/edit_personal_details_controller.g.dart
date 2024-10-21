@@ -7,7 +7,7 @@ part of 'edit_personal_details_controller.dart';
 // **************************************************************************
 
 String _$editPersonalDetailsControllerHash() =>
-    r'f779138c0864944eff165522d0f69be1ea4cc106';
+    r'f5af0c4511614e15fe7f7cdb12cf1b1a54714284';
 
 /// See also [EditPersonalDetailsController].
 @ProviderFor(EditPersonalDetailsController)

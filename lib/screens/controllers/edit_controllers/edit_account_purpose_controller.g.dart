@@ -24,7 +24,7 @@ final editAccountPurposeControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditAccountPurposeController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewAccountPurposeControllerHash() =>
-    r'ed2e3b20a5014d408eca99cd004e95f56094cabd';
+    r'b1b37030eb37e8673125f3caab3ce06d6006fbf4';
 
 /// See also [ViewAccountPurposeController].
 @ProviderFor(ViewAccountPurposeController)

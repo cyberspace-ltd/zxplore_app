@@ -7,7 +7,7 @@ part of 'edit_refree_controller.dart';
 // **************************************************************************
 
 String _$editRefereeControllerHash() =>
-    r'eca8989ca3c334abb04b2429c462771c8f529d15';
+    r'f55c7ccb38f5fe4ecf21e08e8fbb7adce22853b2';
 
 /// See also [EditRefereeController].
 @ProviderFor(EditRefereeController)
@@ -24,7 +24,7 @@ final editRefereeControllerProvider =
 
 typedef _$EditRefereeController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewRefereeControllerHash() =>
-    r'c5ef8fac5f80055564d7d7313371a39642840f14';
+    r'ab8fd6c07a681f8945029dec879ba4cdcb4c0f65';
 
 /// See also [ViewRefereeController].
 @ProviderFor(ViewRefereeController)

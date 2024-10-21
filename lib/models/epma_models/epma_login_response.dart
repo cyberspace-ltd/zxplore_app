@@ -22,10 +22,10 @@ class EpmaLoginResponse {
     });
 
     factory EpmaLoginResponse.fromJson(Map<String, dynamic> json) => EpmaLoginResponse(
-        code: json["code"],
-        status: json["status"],
-        message: json["message"],
-        data: json["data"],
+        code: json["code"]??-1,
+        status: json["status"]??false,
+        message: json["message"]??'',
+        data: json["data"]??'',
     );
 
     Map<String, dynamic> toJson() => {

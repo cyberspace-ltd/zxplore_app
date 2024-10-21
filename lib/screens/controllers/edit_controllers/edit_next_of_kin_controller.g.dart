@@ -7,7 +7,7 @@ part of 'edit_next_of_kin_controller.dart';
 // **************************************************************************
 
 String _$editNextOfKinControllerHash() =>
-    r'ddd98dc7fe7cf5a3a0e086a09924335789e4cc3c';
+    r'fe3d78820ccff0bd0c4e0869e383b91d4291d737';
 
 /// See also [EditNextOfKinController].
 @ProviderFor(EditNextOfKinController)
@@ -24,7 +24,7 @@ final editNextOfKinControllerProvider =
 
 typedef _$EditNextOfKinController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewNextOfKinControllerHash() =>
-    r'6d4751cad73aad2b2d5c6c7a0a2e3ed19bb81543';
+    r'3ce4dc254b4bfc543f146d437ad6b670a731448b';
 
 /// See also [ViewNextOfKinController].
 @ProviderFor(ViewNextOfKinController)

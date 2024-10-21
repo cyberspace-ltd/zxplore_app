@@ -363,6 +363,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   @override
   void dispose() {
     // Dispose the controllers to free up resources
+    countryValueListenable.dispose();
     _surnameController.dispose();
     _firstNameController.dispose();
     _otherNamesController.dispose();
@@ -458,6 +459,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   }
 
   Future<void> editAccountRequest(BuildContext context) async {
+    print(">>>>$permIdentityDateIssued");
     // final lat = ref.read(userLatitudeProvider);
     // final long = ref.read(userLongitudeProvider);
     final DateTime tempnow = DateTime.now();
@@ -486,7 +488,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
             : identityDateExpire, //_permitExpiryDateController.text,
         permitIssueDate:
             permIdentityDateIssued, //_permitIssueDateController.text,
-        hasPermanentResidence: hasPermanentResidence,
+        hasPermanentResidence: residentPermitStatus,
         permanentResidentialAddress:
             _permanentResidentialAddressController.text,
         permanentResidentialCity: _permanentResidentialCityController.text,
@@ -590,12 +592,15 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
 
                   return;
                 }
-                if (permIdentityDateExpire == null ||
-                    permIdentityDateIssued == null) {
+                if(residentPermitStatus!=null){
+ if (permIdentityDateExpire == null ||
+                    permIdentityDateIssued == null || permIdentityDateIssued!.isEmpty||permIdentityDateExpire!.isEmpty) {
                   zXFlushBar(
                       context, "Permanent ID isssue/expiry date is required");
                   return;
                 }
+                }
+               
                 if (regionsItem == null) {
                   zXFlushBar(context, "Region is required");
                   return;
@@ -2998,11 +3003,10 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   /// Date Picker
   Future<void> _showDatePicker(BuildContext dateContext,
       {required String dateCategory}) async {
-    // print("CAAT::$dateCategory");
-    DateTime now = DateTime.now();
     final DateTime tempnow = DateTime.now();
-    final DateTime firstDate = DateTime(now.year - 200, now.month, now.day);
-    final DateTime lastDate = DateTime(now.year + 200, now.month, now.day);
+   
+    final DateTime firstDate =   DateTime(1900);
+    final DateTime lastDate = DateTime(2060);
     if (mounted) {
       final DateTime? fPickedDate = await showDatePicker(
           context: context,
