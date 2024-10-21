@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:zxplore_app/models/delete_child.dart';
 import 'package:zxplore_app/models/epma_models/add_account_model.dart';
 import 'package:zxplore_app/models/epma_models/add_edit_child.dart';
@@ -19,9 +21,12 @@ import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
+import 'package:zxplore_app/models/epma_models/upload_request.dart';
 
 abstract class UserInfoRepository {
   Future<dynamic> getUserPendingStatisticsRepo();
+  Future<dynamic> uploadDocument({ required UploadRequest  uploadRequest});
+  Future<dynamic> uploadSignaature({ required String? RequestId, required File File,});
   Future<dynamic> getUserPendingDraftRepo();
   Future<dynamic> getUserPendingAllRepo();
   Future<dynamic> viewAccountRequest({required String? RequestId});

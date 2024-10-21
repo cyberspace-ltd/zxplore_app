@@ -2312,6 +2312,105 @@ class _RemoteApi implements RemoteApi {
   }
 
   @override
+  Future<dynamic> addSignature({
+    String? RequestId,
+    required File File,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'Content-Type': 'multipart/form-data'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = FormData();
+    if (RequestId != null) {
+      _data.fields.add(MapEntry(
+        'RequestId',
+        RequestId,
+      ));
+    }
+    _data.files.add(MapEntry(
+      'File',
+      MultipartFile.fromFileSync(
+        File.path,
+        filename: File.path.split(Platform.pathSeparator).last,
+      ),
+    ));
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          'Operation/addSignature',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<dynamic> uploadFiles({
+    String? RequestId,
+    String? DocumentType,
+    required File Files,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{r'Content-Type': 'multipart/form-data'};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = FormData();
+    if (RequestId != null) {
+      _data.fields.add(MapEntry(
+        'RequestId',
+        RequestId,
+      ));
+    }
+    if (DocumentType != null) {
+      _data.fields.add(MapEntry(
+        'DocumentType',
+        DocumentType,
+      ));
+    }
+    _data.files.add(MapEntry(
+      'Files',
+      MultipartFile.fromFileSync(
+        Files.path,
+        filename: Files.path.split(Platform.pathSeparator).last,
+      ),
+    ));
+    final _options = _setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+        .compose(
+          _dio.options,
+          'Operation/uploadFiles',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
   Future<dynamic> validateRequestForSubmission({String? RequestId}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'RequestId': RequestId};

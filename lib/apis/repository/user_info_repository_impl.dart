@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:zxplore_app/apis/repository/user_info_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:zxplore_app/apis/dio/remote_endpoints.dart';
@@ -22,6 +24,7 @@ import 'package:zxplore_app/models/epma_models/edit_personal_details_data.dart';
 import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_response.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
+import 'package:zxplore_app/models/epma_models/upload_request.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 
 /// UserInfoRepositoryImpl
@@ -1238,6 +1241,55 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
      try {
       final response = await api.addAssignedAccount(
         account: data,
+      );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+  
+  @override
+  Future uploadDocument({ required UploadRequest  uploadRequest}) async {
+     try {
+      final response = await api.uploadFiles(
+     RequestId: uploadRequest.requestId,
+     Files: uploadRequest.files,
+     DocumentType: uploadRequest.documentType,
+      );
+
+      return response;
+    } on FormatException catch (_) {
+      throw AppException(
+          'The response from the server was not in the correct format');
+    } on DioException catch (err) {
+      if (err.response?.statusCode == 401) {
+        throw UnauthorisedException(
+          err.response?.data['message'] ??
+              'Session expired. Kindly login again.',
+        );
+      }
+      throw AppException(
+          err.response?.data['message'] ?? 'Request process failed');
+    }
+  }
+  
+  @override
+  Future uploadSignaature({required String? RequestId, required File File}) async{
+     try {
+      final response = await api.addSignature(
+     RequestId:  RequestId,
+     File: File,
       );
 
       return response;

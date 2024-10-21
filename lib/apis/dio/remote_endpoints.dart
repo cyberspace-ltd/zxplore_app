@@ -1,5 +1,5 @@
+import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/models/delete_child.dart';
@@ -22,8 +22,10 @@ import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_resp
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
+import 'package:zxplore_app/models/epma_models/upload_request.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
+import 'package:dio/dio.dart' hide Headers;
 
 part 'remote_endpoints.g.dart';
 
@@ -157,212 +159,76 @@ abstract class RemoteApi {
 
   @POST('Operation/editPersonalDetail')
   Future<dynamic> editPersonalDetail({
-     @Field("formId")
-  int? formId,
-
-  @Field("requestId")
-  String? requestId,
-
-  @Field("rowVersion")
-  int? rowVersion,
-
-  @Field("itemStage")
-  String? itemStage,
-
-  @Field("surname")
-  String? surname,
-
-  @Field("firstName")
-  String? firstName,
-
-  @Field("otherNames")
-  String? otherNames,
-
-  @Field("maidenName")
-  String? maidenName,
-
-  @Field("genderCode")
-  String? genderCode,
-
-  @Field("birthDate")
-  String? birthDate,
-
-  @Field("birthPlace")
-  String? birthPlace,
-
-  @Field("identificationTypeId")
-  int? identificationTypeId,
-
-  @Field("identificationNo")
-  String? identificationNo,
-
-  @Field("idCountryCode")
-  String? idCountryCode,
-
-  @Field("idIssueAuthority")
-  String? idIssueAuthority,
-
-  @Field("idIssueDate")
-  String? idIssueDate,
-
-  @Field("idExpiryDate")
-  String? idExpiryDate,
-
-  @Field("niaVerificationNo")
-  String? niaVerificationNo,
-
-  @Field("ssnitNo")
-  String? ssnitNo,
-
-  @Field("tin")
-  String? tin,
-
-  @Field("citizenshipCode")
-  String? citizenshipCode,
-
-  @Field("altCitizenshipCode")
-  String? altCitizenshipCode,
-
-  @Field("countryOrigCode")
-  String? countryOrigCode,
-
-  @Field("homeTown")
-  String? homeTown,
-
-  @Field("hasPermanentResidence")
-  bool? hasPermanentResidence,
-
-  @Field("residencePermitNo")
-  String? residencePermitNo,
-
-  @Field("residencePermitPlaceCode")
-  String? residencePermitPlaceCode,
-
-  @Field("permitIssueDate")
-  String? permitIssueDate,
-
-  @Field("permitExpiryDate")
-  String? permitExpiryDate,
-
-  @Field("iddCode")
-  String? iddCode,
-
-  @Field("telNo")
-  String? telNo,
-
-  @Field("mobileNo")
-  String? mobileNo,
-
-  @Field("emailAddress")
-  String? emailAddress,
-
-  @Field("residentialAddress")
-  String? residentialAddress,
-
-  @Field("residentialAddress2")
-  String? residentialAddress2,
-
-  @Field("districtAssemblyArea")
-  String? districtAssemblyArea,
-
-  @Field("city")
-  String? city,
-
-  @Field("regionCode")
-  String? regionCode,
-
-  @Field("permanentResidentialAddress")
-  String? permanentResidentialAddress,
-
-  @Field("permanentResidentialCity")
-  String? permanentResidentialCity,
-
-  @Field("permanentResidentialCountryCode")
-  String? permanentResidentialCountryCode,
-
-  @Field("mailingAddress")
-  String? mailingAddress,
-
-  @Field("motherMaidenName")
-  String? motherMaidenName,
-
-  @Field("maritalStatus")
-  String? maritalStatus,
-
-  @Field("spouseName")
-  String? spouseName,
-
-  @Field("spouseOccupation")
-  String? spouseOccupation,
-
-  @Field("businessNatureId")
-  String? businessNatureId,
-
-  @Field("subBusinessNatureId")
-  String? subBusinessNatureId,
-
-  @Field("employmentTypeCode")
-  String? employmentTypeCode,
-
-  @Field("employerName")
-  String? employerName,
-
-  @Field("timeWithEmployer")
-  String? timeWithEmployer,
-
-  @Field("employerAddress")
-  String? employerAddress,
-
-  @Field("employerEmail")
-  String? employerEmail,
-
-  @Field("employerTel")
-  String? employerTel,
-
-  @Field("monthlyIncome")
-  int? monthlyIncome,
-
-  @Field("accountOwnership")
-  bool? accountOwnership,
-
-  @Field("accountOwnershipOther")
-  String? accountOwnershipOther,
-
-  @Field("customerResidentInGhana")
-  bool? customerResidentInGhana,
-
-  @Field("customerIsPep")
-  bool? customerIsPep,
-
-  @Field("pepReason")
-  String? pepReason,
-
-  @Field("customerClassificationId")
-  String? customerClassificationId,
-
-  @Field("setupIbank")
-  bool? setupIbank,
-
-  @Field("setupZPrompt")
-  bool? setupZPrompt,
-
-  @Field("setupStatementViaEmail")
-  bool? setupStatementViaEmail,
-
-  @Field("setupEmailIndemnity")
-  bool? setupEmailIndemnity,
-
-  @Field("isPhysicallyChallenged")
-  bool? isPhysicallyChallenged,
-
-  @Field("actionFlag")
-  String? actionFlag,
-
-  @Field("isNewRequest")
-  bool? isNewRequest,
-
-  @Field("gpsAddress")
-  String? gpsAddress,
+    @Field("formId") int? formId,
+    @Field("requestId") String? requestId,
+    @Field("rowVersion") int? rowVersion,
+    @Field("itemStage") String? itemStage,
+    @Field("surname") String? surname,
+    @Field("firstName") String? firstName,
+    @Field("otherNames") String? otherNames,
+    @Field("maidenName") String? maidenName,
+    @Field("genderCode") String? genderCode,
+    @Field("birthDate") String? birthDate,
+    @Field("birthPlace") String? birthPlace,
+    @Field("identificationTypeId") int? identificationTypeId,
+    @Field("identificationNo") String? identificationNo,
+    @Field("idCountryCode") String? idCountryCode,
+    @Field("idIssueAuthority") String? idIssueAuthority,
+    @Field("idIssueDate") String? idIssueDate,
+    @Field("idExpiryDate") String? idExpiryDate,
+    @Field("niaVerificationNo") String? niaVerificationNo,
+    @Field("ssnitNo") String? ssnitNo,
+    @Field("tin") String? tin,
+    @Field("citizenshipCode") String? citizenshipCode,
+    @Field("altCitizenshipCode") String? altCitizenshipCode,
+    @Field("countryOrigCode") String? countryOrigCode,
+    @Field("homeTown") String? homeTown,
+    @Field("hasPermanentResidence") bool? hasPermanentResidence,
+    @Field("residencePermitNo") String? residencePermitNo,
+    @Field("residencePermitPlaceCode") String? residencePermitPlaceCode,
+    @Field("permitIssueDate") String? permitIssueDate,
+    @Field("permitExpiryDate") String? permitExpiryDate,
+    @Field("iddCode") String? iddCode,
+    @Field("telNo") String? telNo,
+    @Field("mobileNo") String? mobileNo,
+    @Field("emailAddress") String? emailAddress,
+    @Field("residentialAddress") String? residentialAddress,
+    @Field("residentialAddress2") String? residentialAddress2,
+    @Field("districtAssemblyArea") String? districtAssemblyArea,
+    @Field("city") String? city,
+    @Field("regionCode") String? regionCode,
+    @Field("permanentResidentialAddress") String? permanentResidentialAddress,
+    @Field("permanentResidentialCity") String? permanentResidentialCity,
+    @Field("permanentResidentialCountryCode")
+    String? permanentResidentialCountryCode,
+    @Field("mailingAddress") String? mailingAddress,
+    @Field("motherMaidenName") String? motherMaidenName,
+    @Field("maritalStatus") String? maritalStatus,
+    @Field("spouseName") String? spouseName,
+    @Field("spouseOccupation") String? spouseOccupation,
+    @Field("businessNatureId") String? businessNatureId,
+    @Field("subBusinessNatureId") String? subBusinessNatureId,
+    @Field("employmentTypeCode") String? employmentTypeCode,
+    @Field("employerName") String? employerName,
+    @Field("timeWithEmployer") String? timeWithEmployer,
+    @Field("employerAddress") String? employerAddress,
+    @Field("employerEmail") String? employerEmail,
+    @Field("employerTel") String? employerTel,
+    @Field("monthlyIncome") int? monthlyIncome,
+    @Field("accountOwnership") bool? accountOwnership,
+    @Field("accountOwnershipOther") String? accountOwnershipOther,
+    @Field("customerResidentInGhana") bool? customerResidentInGhana,
+    @Field("customerIsPep") bool? customerIsPep,
+    @Field("pepReason") String? pepReason,
+    @Field("customerClassificationId") String? customerClassificationId,
+    @Field("setupIbank") bool? setupIbank,
+    @Field("setupZPrompt") bool? setupZPrompt,
+    @Field("setupStatementViaEmail") bool? setupStatementViaEmail,
+    @Field("setupEmailIndemnity") bool? setupEmailIndemnity,
+    @Field("isPhysicallyChallenged") bool? isPhysicallyChallenged,
+    @Field("actionFlag") String? actionFlag,
+    @Field("isNewRequest") bool? isNewRequest,
+    @Field("gpsAddress") String? gpsAddress,
   });
 
   @GET('Operation/getMonthlyActivityToEdit')
@@ -386,54 +252,22 @@ abstract class RemoteApi {
   });
   @POST('Operation/editFundingSource')
   Future<dynamic> editFundingSources({
-    
-  @Field("fundingSourcesId")
-  int? fundingSourcesId,
-
-  @Field("requestId")
-  String? requestId,
-
-  @Field("rowVersion")
-  int? rowVersion,
-
-  @Field("itemStage")
-  String? itemStage,
-
-  @Field("commissions")
-  bool? commissions,
-
-  @Field("dividends")
-  bool? dividends,
-
-  @Field("businessIncome")
-  bool? businessIncome,
-
-  @Field("personalSavings")
-  bool? personalSavings,
-
-  @Field("trustFund")
-  bool? trustFund,
-
-  @Field("salary")
-  bool? salary,
-
-  @Field("familyFriends")
-  bool? familyFriends,
-
-  @Field("rentalIncome")
-  bool? rentalIncome,
-
-  @Field("inheritanceGift")
-  bool? inheritanceGift,
-
-  @Field("others")
-  bool? others,
-
-  @Field("othersSpecify")
-  String? othersSpecify,
-
-  @Field("actionFlag")
-  String? actionFlag,
+    @Field("fundingSourcesId") int? fundingSourcesId,
+    @Field("requestId") String? requestId,
+    @Field("rowVersion") int? rowVersion,
+    @Field("itemStage") String? itemStage,
+    @Field("commissions") bool? commissions,
+    @Field("dividends") bool? dividends,
+    @Field("businessIncome") bool? businessIncome,
+    @Field("personalSavings") bool? personalSavings,
+    @Field("trustFund") bool? trustFund,
+    @Field("salary") bool? salary,
+    @Field("familyFriends") bool? familyFriends,
+    @Field("rentalIncome") bool? rentalIncome,
+    @Field("inheritanceGift") bool? inheritanceGift,
+    @Field("others") bool? others,
+    @Field("othersSpecify") String? othersSpecify,
+    @Field("actionFlag") String? actionFlag,
   });
 
   @GET('Operation/getAssignedAccountToEdit')
@@ -452,67 +286,34 @@ abstract class RemoteApi {
     @Body() required AssignedAccountToEditData? assignedAccount,
   });
 
-    @POST('Operation/generateAccount')
+  @POST('Operation/generateAccount')
   Future<dynamic> addAssignedAccount({
     @Body() required GenerateAssignedAccount? account,
   });
 
   @POST('Operation/editAccountPurpose')
   Future<dynamic> editAccountPurpose({
-  @Field("accountPurposesId")
-  int? accountPurposesId,
-
-  @Field("requestId")
-  String? requestId ,
-
-  @Field("rowVersion")
-  int? rowVersion ,
-
-  @Field("itemStage")
-  String? itemStage ,
-
-  @Field("salaryProcessing")
-  bool? salaryProcessing ,
-
-  @Field("toOtainLoan")
-  bool? toOtainLoan ,
-
-  @Field("businessTransactional")
-  bool? businessTransactional ,
-
-  @Field("savingsInvestment")
-  bool? savingsInvestment ,
-
-  @Field("conductSingleTransaction")
-  bool? conductSingleTransaction ,
-
-  @Field("secutirySafeKeeping")
-  bool? secutirySafeKeeping ,
-
-  @Field("accessToBankingServices")
-  bool? accessToBankingServices ,
-
-  @Field("thirdPartyPayment")
-  bool? thirdPartyPayment ,
-
-  @Field("recieptOfInflows")
-  bool? recieptOfInflows ,
-
-  @Field("others")
-  bool? others ,
-
-  @Field("othersSpecify")
-  String? othersSpecify ,
-
-  @Field("actionFlag")
-  String? actionFlag ,
-
+    @Field("accountPurposesId") int? accountPurposesId,
+    @Field("requestId") String? requestId,
+    @Field("rowVersion") int? rowVersion,
+    @Field("itemStage") String? itemStage,
+    @Field("salaryProcessing") bool? salaryProcessing,
+    @Field("toOtainLoan") bool? toOtainLoan,
+    @Field("businessTransactional") bool? businessTransactional,
+    @Field("savingsInvestment") bool? savingsInvestment,
+    @Field("conductSingleTransaction") bool? conductSingleTransaction,
+    @Field("secutirySafeKeeping") bool? secutirySafeKeeping,
+    @Field("accessToBankingServices") bool? accessToBankingServices,
+    @Field("thirdPartyPayment") bool? thirdPartyPayment,
+    @Field("recieptOfInflows") bool? recieptOfInflows,
+    @Field("others") bool? others,
+    @Field("othersSpecify") String? othersSpecify,
+    @Field("actionFlag") String? actionFlag,
   });
 
   @GET('Operation/getOtherBankAccountToEdit')
   Future<dynamic> getOtherBankAccountToEdit({
     @Query('RequestId') required String? RequestId,
-
     @Query('OtherAccountsId') required int? OtherAccountsId,
   });
   @POST('Operation/addOtherBankAccount')
@@ -645,25 +446,28 @@ abstract class RemoteApi {
   Future<dynamic> getDocumentAttachedToEdit(
       {@Query('RequestId') required String? RequestId,
       @Query('DocumentsAttachedId') required int? DocumentsAttachedId});
-  
+
   @POST('Operation/deleteRelatedBusiness')
   Future<dynamic> deleteDocument({
     @Body() required DeleteDocument? data,
   });
 
-  // @POST('Operation/addSignature')
-  // @MultiPart()
-  // Future<dynamic> addSignature({
-  //   @Query('RequestId') required String? RequestId,
-  //   @Part() required File? addSignatureImage,
-  // });
-  //   @POST('Operation/uploadFiles')
-  
-  // Future<dynamic> uploadFiles({
-  //   @Query('RequestId') required String? RequestId,
-  //   @Query('DocumentType') required String? DocumentType,
-  //   @Part() required File? addSignatureImage,
-  // });
+  @POST('Operation/addSignature')
+  @MultiPart()
+  @Headers( {'Content-Type':'multipart/form-data'})
+  Future<dynamic> addSignature({
+    @Part() required String? RequestId,
+    @Part() required File File,
+  });
+
+  @POST('Operation/uploadFiles')
+  @MultiPart()
+  @Headers( {'Content-Type':'multipart/form-data'})
+  Future<dynamic> uploadFiles({
+    @Part() required String? RequestId,
+    @Part() required String? DocumentType,
+    @Part() required File Files,
+  });
 
   @GET('Operation/validateRequestForSubmission')
   Future<dynamic> validateRequestForSubmission({
@@ -678,7 +482,6 @@ abstract class RemoteApi {
   Future<dynamic> completeRequest({
     @Query('RequestId') required String? RequestId,
   });
-  
 
   // ----------------- Add Endpoints ------------------
 }
