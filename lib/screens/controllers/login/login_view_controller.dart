@@ -11,8 +11,9 @@ part 'login_view_controller.g.dart';
 class LoginController extends _$LoginController {
   @override
   FutureOr<void> build() {
-    // nothing to do
+    return null;
   }
+
   var prefs = Preference();
 
   Future<dynamic> loginUser({
@@ -41,15 +42,20 @@ class LoginController extends _$LoginController {
               username: username,
               password: password);
         } else {
-
-          throw Exception('${loginRes.message}');
+          state = AsyncError('${loginRes.message}',
+              StackTrace.fromString('${loginRes.message}'));
+          return;
+          // throw Exception('${loginRes.message}');
         }
-          throw Exception('${loginRes.message}');
-
+        state = AsyncError('${loginRes.message}',
+            StackTrace.fromString('${loginRes.message}'));
+        return;
+        // throw Exception('${loginRes.message}');
       }
     } catch (e, s) {
       state = AsyncError(e, s);
-      throw Exception('${s.toString()}');
+      return;
+      // throw Exception('${s.toString()}');
     }
   }
 
@@ -88,18 +94,27 @@ class LoginController extends _$LoginController {
   Future<dynamic> extRenewToken() async {
     try {
       state = const AsyncValue.loading();
-        await prefs.load();
-      final oldToken=  prefs.getString(SharedPreferencesKeys.accessTokenKey);
+      await prefs.load();
+      final oldToken = prefs.getString(SharedPreferencesKeys.accessTokenKey);
       final repo = ref.read(authRespositoryImplProvider);
-      final renewTokenRes = await repo.renewToken(oldToken:oldToken);
+      final renewTokenRes = await repo.renewToken(oldToken: oldToken);
       if (renewTokenRes['status']) {
-        prefs.setString(SharedPreferencesKeys.accessTokenKey, renewTokenRes['data']);
+        prefs.setString(
+            SharedPreferencesKeys.accessTokenKey, renewTokenRes['data']);
+        state = AsyncValue.data(renewTokenRes['data']);
         return renewTokenRes['data'];
       } else {
-        throw AppException('${renewTokenRes['message']}');
+        state = AsyncError('${renewTokenRes['message']}',
+            StackTrace.fromString('An error occurred please try again'));
+        return null;
+
+        // throw AppException('${renewTokenRes['message']}');/
       }
-    } catch (e, s) {
-      throw AppException('${s.toString()}');
+    } catch (ex, s) {
+      state = AsyncError(
+          ex, StackTrace.fromString('An error occurred please try again'));
+      return null;
+      // throw AppException('${s.toString()}');
     }
   }
 }

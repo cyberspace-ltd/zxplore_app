@@ -567,11 +567,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
       (_, state) => state.showAlertDialogOnError(context,
           okAction: () {}, errorMsg: state.error),
     );
-//     ref.listen<AsyncValue<dynamic>>(editPersonalDetailsControllerProvider, (previous, next) {
-//  if(next.hasError){
-// next.showAlertDialogOnError(context, okAction: () {},errorMsg: next.error);
-//  }
-//   });
+ 
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(editPersonalDetailsControllerProvider).isLoading ||
@@ -2602,7 +2598,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     title: 'GPS-Addresss',
                     fillColor: Colors.transparent,
                     controller: _gpsAddressController,
-                    hint: 'GHA-00000000-0',
+                    hint: '12 abc close',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {

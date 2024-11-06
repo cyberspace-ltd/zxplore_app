@@ -98,9 +98,7 @@ try {
         mobileNo: accountData?.mobileNo,
         residentialAddress: accountData?.residentialAddress,
         city: accountData?.city,
-
         residentialAddress2: accountData?.residentialAddress2,
-
       );
       
       return response;

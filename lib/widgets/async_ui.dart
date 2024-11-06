@@ -13,7 +13,7 @@ extension AsyncValueUI on AsyncValue {
       showExceptionAlertDialog(
         context: context,
         title: 'Error',
-        exception:errorMsg.runtimeType.toString()=='_Exception'? errorMsg.message:  "Failed to complete request try again.",
+        exception:errorMsg.runtimeType.toString()=='_Exception'? errorMsg.message:  errorMsg??  "Failed to complete request try again.",
         okAction: okAction??(){},cancelAction: cancelAction??(){}
       );
     }
@@ -44,7 +44,7 @@ extension AsyncValueUI on AsyncValue {
       return errorMsg.message??'We are unable to process request, try again';
     }
     else{
-      return 'Something went wrong processinng  request';
+      return 'Something went wrong processing  request';
     }
   }
 }

@@ -103,8 +103,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       (_, state) => state.showAlertDialogOnError(context,errorMsg: state.error),
     );
     return ZxploreProgress(
-      inAsyncCall: ref.watch(getLoginModesProvider).isLoading ||
-          ref.watch(loginControllerProvider).isLoading,
+      inAsyncCall: ref.watch(getLoginModesProvider).isLoading 
+      ||ref.watch(loginControllerProvider).isLoading,
       child: Scaffold(
         body: SafeArea(
           child: Form(

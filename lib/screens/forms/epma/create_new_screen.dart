@@ -11,7 +11,6 @@ import 'package:zxplore_app/screens/controllers/meta/countries.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
 import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
 import 'package:zxplore_app/screens/home_screen.dart';
-import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/flushbar_helper.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
@@ -71,7 +70,7 @@ class _CreateNewAccountScreenState
   final DateFormat sdateFormatter = DateFormat('yyyy/mm/dd');
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
-  DateTime? _selectedDate;
+  // DateTime? _selectedDate;
 
   @override
   void dispose() {
@@ -508,7 +507,7 @@ class _CreateNewAccountScreenState
                     title: 'Telephone Number',
                     fillColor: Colors.transparent,
                     controller: telNoController,
-                    hint: 'Enter telephone number',
+                    hint: 'Telephone number eg.2338032489922',
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -523,7 +522,7 @@ class _CreateNewAccountScreenState
                     title: 'Mobile Number',
                     fillColor: Colors.transparent,
                     controller: mobileNoController,
-                    hint: 'Enter mobile number',
+                    hint: 'Mobile number eg.2338032489922',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -733,6 +732,8 @@ class _CreateNewAccountScreenState
                     title: 'ID Number',
                     fillColor: Colors.transparent,
                     controller: identificationNoController,
+                    showTitleTip: true,
+                    titleTip: ' (If its a Ghana CARD eg. GHA-00000-9)',
                     hint: 'Enter ID Number',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
@@ -802,7 +803,8 @@ class _CreateNewAccountScreenState
                     title: 'NIA Number',
                     fillColor: Colors.transparent,
                     controller: niaVerificationNoController,
-                    hint: 'Enter NIA number',
+                    hint: 'NIA number eg. 1234000',
+                    maxLenght: 7,
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -817,7 +819,8 @@ class _CreateNewAccountScreenState
                     title: 'IDD Code',
                     fillColor: Colors.transparent,
                     controller: iddCodeController,
-                    hint: 'Enter IDD code',
+                    hint: 'Enter IDD code eg. 0000',
+                    maxLenght: 4,
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -876,7 +879,7 @@ class _CreateNewAccountScreenState
         accountData: CreateAccountData(
             surname: lastNameController.text.toString(),
             firstName: firstNameController.text.toString(),
-            otherNames: lastNameController.text.toString(),
+            otherNames: otherNameController.text.toString(),
             identificationNo: identificationNoController.text.toString(),
             niaVerificationNo: niaVerificationNoController.text.toString(),
             iddCode: iddCodeController.text.toString(),

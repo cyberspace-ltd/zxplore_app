@@ -40,5 +40,28 @@ class CreateAccountData {
          this.residentialAddress2,
          this.city,
     });
-
+@override
+String toString() {
+  return 'CreateAccountData('
+      'surname: $surname, '
+      'firstName: $firstName, '
+      'otherNames: $otherNames, '
+      'genderCode: $genderCode, '
+      'birthDate: $birthDate, '
+      'citizenshipCode: $citizenshipCode, '
+      'identificationTypeId: $identificationTypeId, '
+      'identificationNo: $identificationNo, '
+      'idCountryCode: $idCountryCode, '
+      'idIssueAuthority: $idIssueAuthority, '
+      'idIssueDate: $idIssueDate, '
+      'idExpiryDate: $idExpiryDate, '
+      'niaVerificationNo: $niaVerificationNo, '
+      'iddCode: $iddCode, '
+      'telNo: $telNo, '
+      'mobileNo: $mobileNo, '
+      'residentialAddress: $residentialAddress, '
+      'residentialAddress2: $residentialAddress2, '
+      'city: $city'
+      ')';
+}
 }

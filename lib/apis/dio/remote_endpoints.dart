@@ -22,7 +22,6 @@ import 'package:zxplore_app/models/epma_models/get_assigned_account_to_edit_resp
 import 'package:zxplore_app/models/epma_models/get_related_business_response.dart';
 import 'package:zxplore_app/models/epma_models/login_modes_response.dart';
 import 'package:zxplore_app/models/epma_models/edit_monthly_activity_model.dart';
-import 'package:zxplore_app/models/epma_models/upload_request.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'remote_api_base.dart';
 import 'package:dio/dio.dart' hide Headers;
@@ -454,7 +453,7 @@ abstract class RemoteApi {
 
   @POST('Operation/addSignature')
   @MultiPart()
-  @Headers( {'Content-Type':'multipart/form-data'})
+  @Headers({'Content-Type': 'multipart/form-data'})
   Future<dynamic> addSignature({
     @Part() required String? RequestId,
     @Part() required File File,
@@ -462,7 +461,7 @@ abstract class RemoteApi {
 
   @POST('Operation/uploadFiles')
   @MultiPart()
-  @Headers( {'Content-Type':'multipart/form-data'})
+  @Headers({'Content-Type': 'multipart/form-data'})
   Future<dynamic> uploadFiles({
     @Part() required String? RequestId,
     @Part() required String? DocumentType,

@@ -17,7 +17,7 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
   FutureOr<dynamic> build() {
     //nadaa
   }
- 
+
   Future<dynamic> editPersonalDetailsData({
     required EditPersonalDetails? editPersonalDetails,
     required context,
@@ -39,6 +39,7 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
         ref
             .read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(editPersonalDetails?.requestId ?? '');
+            
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -56,32 +57,23 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
           ref.read(loginControllerProvider.notifier).extRenewToken();
           final ex = Exception('Failed to complete request ');
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-  
-                           throw Exception(requestResponse['message'] ??'Failed to complete request ');
+              ex, StackTrace.fromString('An error occurred please try again'));
 
+          throw Exception(
+              requestResponse['message'] ?? 'Failed to complete request ');
         }
-        final ex = Exception(
-            requestResponse['message'] ?? 'Failed to complete request');
-        state = AsyncError(
-            ex,
-            StackTrace.fromString(
-                requestResponse['message'] ?? 'Failed to complete request'));
-        afterFailed!.call();
-                           throw Exception(requestResponse['message'] ??'Failed to complete request ');
-
+      
+        throw Exception(
+            requestResponse['message'] ?? 'Failed to complete request ');
       }
     } catch (e, stackTrace) {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-                          throw Exception('Failed to complete request ');
-
+      throw Exception('Failed to complete request ');
     }
   }
 }
-
-
 
 @riverpod
 class ViewPersonalDetailsController extends _$ViewPersonalDetailsController {
@@ -120,13 +112,15 @@ class ViewPersonalDetailsController extends _$ViewPersonalDetailsController {
 
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          throw Exception(Exception(requestResponse['message']??'Failed to complete request '));
+          throw Exception(Exception(
+              requestResponse['message'] ?? 'Failed to complete request '));
           // final ex = Exception('Failed to complete request ');
           // state = AsyncError(
           //     ex, StackTrace.fromString('An error occured please try again'));
           //          return null;
         }
-          throw Exception(Exception(requestResponse['message']??'Failed to complete request '));
+        throw Exception(Exception(
+            requestResponse['message'] ?? 'Failed to complete request '));
         //  state = AsyncError(Exception(requestResponse['message']),
         //     StackTrace.fromString(requestResponse['message']));
         // return null;
@@ -135,9 +129,9 @@ class ViewPersonalDetailsController extends _$ViewPersonalDetailsController {
       final ex =
           Exception('Failed to complete request: ${stackTrace.toString()} ');
       state = AsyncError(ex, stackTrace);
-          throw Exception('Failed to complete request ');
+      throw Exception('Failed to complete request ');
 
       // return null;
     }
   }
- }
+}

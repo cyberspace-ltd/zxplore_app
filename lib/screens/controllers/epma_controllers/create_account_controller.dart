@@ -22,6 +22,7 @@ class CreateAccountController extends _$CreateAccountController {
 
       final registerResponse =
           await authRepository.createAccount(accountData: accountData);
+          print("-----__>${accountData.toString()}");
 
       if (registerResponse['status'] == true) {
         final result = CreateAccountResponse.fromMap(registerResponse);

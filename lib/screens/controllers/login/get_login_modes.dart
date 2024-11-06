@@ -36,15 +36,17 @@ Future<List<LoginModesData>?> getLoginModes(
           ref.read(loginControllerProvider.notifier).extRenewToken();
           final ex = Exception('Failed to complete request ');
            AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
+              ex, StackTrace.fromString('An error occurred please try again'));
               throw  Exception('Failed to complete request\n${loginModesResponse.message} ');
         }
+         const AsyncData([]);
+        return [];
     }
-    return documentsLIst;
   } catch (e, stackTrace) {
     final ex =
         Exception('Failed to Docs Categories: ${stackTrace.toString()} ');
     AsyncError(ex, stackTrace);
-    return null;
+              throw  Exception('Failed to complete request\n  $ex ');
+
   }
 }
