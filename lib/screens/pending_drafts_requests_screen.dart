@@ -52,20 +52,12 @@ class _PendingDraftsRequestsScreenState
   @override
   Widget build(BuildContext context) {
 
-       ref.listen<AsyncValue>(
-      viewRequestControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, errorMsg:  state.error,
-      // okAction: (){
-      //                           getSelectedRequestDetails( ref
-      //                               .read(latestSelectRequestProvider)?.reqId!);
-
-      // },cancelAction: ()=>Navigator.pop(context),
-    ));
+ 
     return RefreshIndicator(
       onRefresh: () async =>
           ref.invalidate(getPendingRequestsDraftDatumProvider),
       child: ZxploreProgress(
-        inAsyncCall: ref.watch(getPendingRequestsDraftDatumProvider).isLoading || ref
+        inAsyncCall: ref.watch(getPendingRequestsDraftDatumProvider(context)).isLoading || ref
         .watch(viewRequestControllerProvider).isLoading,
         child: Scaffold(
           appBar: AppBar(
@@ -107,7 +99,7 @@ class _PendingDraftsRequestsScreenState
                   },
                   onChanged: (query) {
                     final requestItemsAsyncValue =
-                        ref.watch(getPendingRequestsDraftDatumProvider);
+                        ref.watch(getPendingRequestsDraftDatumProvider(context));
                     requestItemsAsyncValue.whenData((requestItems) {
                       _filterBillers(query, requestItems ?? []);
                     });
@@ -117,7 +109,7 @@ class _PendingDraftsRequestsScreenState
                 Consumer(
                   builder: (context, watch, child) {
                     final requestItemsAsyncValue = ref.watch(
-                      getPendingRequestsDraftDatumProvider,
+                      getPendingRequestsDraftDatumProvider(context),
                     );
                     return requestItemsAsyncValue.when(
                       data: (requestItems) {
@@ -182,7 +174,7 @@ class _PendingDraftsRequestsScreenState
   Future<void> getSelectedRequestDetails(String? requestId) async {
     final requestResponse = await ref
         .read(viewRequestControllerProvider.notifier)
-        .getRequestDetailAsync(requestId!);
+        .getRequestDetailAsync(context,requestId!);
 
     if (requestResponse != null) {
       Navigator.push(

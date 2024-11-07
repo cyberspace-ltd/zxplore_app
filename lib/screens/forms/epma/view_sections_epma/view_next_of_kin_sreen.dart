@@ -7,7 +7,9 @@ import 'package:zxplore_app/screens/controllers/edit_controllers/edit_next_of_ki
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/add_data_forms/add_next_of_kin_sreen.dart';
+import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
+import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 // import 'package:zxplore_app/utils/app_sizes.dart';
@@ -16,8 +18,7 @@ import 'package:zxplore_app/widgets/zxplore_progress.dart';
 class ViewNextOfKinScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> formIndividualData;
 
-  const ViewNextOfKinScreen(
-      {Key? key, required this.formIndividualData})
+  const ViewNextOfKinScreen({Key? key, required this.formIndividualData})
       : super(key: key);
 
   @override
@@ -25,48 +26,60 @@ class ViewNextOfKinScreen extends ConsumerStatefulWidget {
       _ViewNextOfKinScreenState();
 }
 
-class _ViewNextOfKinScreenState
-    extends ConsumerState<ViewNextOfKinScreen> {
+class _ViewNextOfKinScreenState extends ConsumerState<ViewNextOfKinScreen> {
   @override
   Widget build(BuildContext context) {
-      final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
- final sectionData = requestData?.data?.nextOfKin ?? [];
+ 
+
+    final ViewAccountRequestResponse? requestData =
+        ref.watch(activelyViewedRequestProvider);
+    final sectionData = requestData?.data?.nextOfKin ?? [];
 
     return ZxploreProgress(
-        inAsyncCall: ref.watch(viewNextOfKinControllerProvider).isLoading||
-    ref.watch(viewRequestControllerProvider).isLoading
-      ,
+      inAsyncCall: ref.watch(viewNextOfKinControllerProvider).isLoading ||
+          ref.watch(viewRequestControllerProvider).isLoading,
       child: ZxploreProgress(
         inAsyncCall: ref.watch(viewNextOfKinControllerProvider).isLoading ||
-          ref.watch(viewRequestControllerProvider).isLoading,
+            ref.watch(viewRequestControllerProvider).isLoading,
         child: BaseFormScreen(
             title: 'Next of Kin',
             data: _flattenData(widget.formIndividualData),
-            showEdit: sectionData.isNotEmpty,
+            showEdit: false,
+            showAdd: true,
             onTapEdit: () {
               // to navigate to edit this section
+
+              zXFlushBar(context, "Tap menu option to edit Next of Kin");
             },
-            onTapAdd: (){
-                Navigator.push(
+            onTapAdd: () {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) => AddNextOfKinScreen(
-                          requestId: ref.read(activelyViewedRequestProvider)?.data?.reqId,
+                          requestId: ref
+                              .read(activelyViewedRequestProvider)
+                              ?.data
+                              ?.reqId,
                         )),
               );
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: sectionData.isNotEmpty?ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: sectionData.length,
-                  itemBuilder: (BuildContext context, index) {
-                    return Item(data:sectionData[index] ,);
-                  }):EmptyViewWidget(),
+              child: sectionData.isNotEmpty
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: sectionData.length,
+                      itemBuilder: (BuildContext context, index) {
+                        return Item(
+                          data: sectionData[index],
+                        );
+                      })
+                  : EmptyViewWidget(),
             )),
       ),
     );
   }
+
   Map<String, String> _flattenData(Map<String, dynamic> data) {
     Map<String, String> flattened = {};
     data.forEach((key, value) {
@@ -82,43 +95,35 @@ class _ViewNextOfKinScreenState
   }
 }
 
-class  Item extends ConsumerWidget {
+class Item extends ConsumerWidget {
   const Item({super.key, this.data});
   final NextOfKin? data;
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    return 
-    FoldableItem(
-      name: 'Name: ${data?.fullName ?? ''} - ${data?.relationship??''}',
-      number: 'Adresss ${data?.residentialAddress??''}',
+  Widget build(BuildContext context, WidgetRef ref) {
+
+       
+    return FoldableItem(
+      name: 'Name: ${data?.fullName ?? ''} - ${data?.relationship ?? ''}',
+      number: 'Address ${data?.residentialAddress ?? ''}',
       requestId: data?.reqId,
       subRequestId: data?.nextOfKinId,
-     onTapEdit: () {
+      onTapEdit: () {
         // to navigate to edit this section
-        ref.read(viewNextOfKinControllerProvider.notifier).getEditData(
-            context,
-            RequestId: data?.reqId ?? '',
-            NextOfKinId: data?.nextOfKinId);
+        ref.read(viewNextOfKinControllerProvider.notifier).getEditData(context,
+            RequestId: data?.reqId ?? '', NextOfKinId: data?.nextOfKinId);
       },
       onTapView: () {},
       onTapDelete: () {
-        ref
-            .read(viewNextOfKinControllerProvider.notifier)
-            .deleteNok(context,
-                RequestId: data?.reqId ?? '',
-                delData:DeleteNextOfKin(
-                  nextOfKinId: data?.nextOfKinId,
-                  requestId:data?.reqId ,
-                  rowVersion:data?.rowVersion ,
-                )
-                );
+        ref.read(viewNextOfKinControllerProvider.notifier).deleteNok(context,
+            RequestId: data?.reqId ?? '',
+            delData: DeleteNextOfKin(
+              nextOfKinId: data?.nextOfKinId,
+              requestId: data?.reqId,
+              rowVersion: data?.rowVersion,
+            ));
       },
       request: data,
     );
- 
-}
-
- 
-  
+  }
 }

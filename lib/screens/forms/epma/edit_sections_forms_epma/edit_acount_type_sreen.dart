@@ -468,8 +468,8 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                   if (hidePrevADAStage) ...[
                     Text(
                       'Anticipated Deposit Amount',
-                      overflow: TextOverflow.fade,
-                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
@@ -912,7 +912,7 @@ if (!hidePrevAWTStage) ...[
                      gapH16,
 
                     CustomTextFormField(
-                      title: "Anticipated Withrawal Transactions",
+                      title: "Anticipated Withdrawal Transactions",
                       fillColor: Colors.transparent,
                       controller: prevAWTStageController,
                       hint: '',

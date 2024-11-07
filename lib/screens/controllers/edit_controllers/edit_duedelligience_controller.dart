@@ -9,6 +9,7 @@ import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_due_deligience_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_due_deligience_sreen.dart';
+import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 part 'edit_duedelligience_controller.g.dart';
 
@@ -44,23 +45,27 @@ class EditDueDilligienceController extends _$EditDueDilligienceController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-                     throw Exception(requestResponse['message'] ??'Failed to complete request ');
-
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
         }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-                            throw Exception(requestResponse['message'] ??'Failed to complete request ');
-
+       // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
+        return null;
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-                      throw Exception('Failed to complete request ');
-
+      state = AsyncError(e, stackTrace);
+      showErrorDialog(context, e.toString());
+      return null;
     }
   }
 
@@ -81,7 +86,7 @@ class EditDueDilligienceController extends _$EditDueDilligienceController {
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(data?.requestId ?? '');
+            .getRequestDetailAsync(context,data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,

@@ -7,7 +7,7 @@ part of 'edit_child_controller.dart';
 // **************************************************************************
 
 String _$editChildControllerHash() =>
-    r'9a847d0d5d043c12bc31f1f4eeae302652e8a03a';
+    r'61bcf5e6c95f108706bf101a12ed43649376b1a6';
 
 /// See also [EditChildController].
 @ProviderFor(EditChildController)
@@ -24,7 +24,7 @@ final editChildControllerProvider =
 
 typedef _$EditChildController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewChildControllerHash() =>
-    r'fd164e4b14d7b9329bbe87c1dd6f217588af23e3';
+    r'6f52cde2523ff86e92affa3824797909dd289455';
 
 /// See also [ViewChildController].
 @ProviderFor(ViewChildController)

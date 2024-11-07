@@ -34,7 +34,7 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
         state = AsyncValue.data(result);
 
           // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(data?.reqId??'');
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(context,data?.reqId??'');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
@@ -79,7 +79,7 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
         state = AsyncValue.data(result);
 
           // refresh the latest viewed item.
-        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(reqId??'');
+        ref.read(viewRequestControllerProvider.notifier).getRequestDetailAsync(context,reqId??'');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
@@ -181,7 +181,7 @@ class ViewAssignedAccountController extends _$ViewAssignedAccountController {
 
         // refresh the latest viewed item.
         ref.read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(RequestId!);
+            .getRequestDetailAsync(context,RequestId!);
         state = AsyncValue.data(result);
         // Navigator.pushReplacement(
         //   context,

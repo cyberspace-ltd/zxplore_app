@@ -35,7 +35,7 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(data?.requestId ?? '');
+            .getRequestDetailAsync(context,data?.requestId ?? '');
 
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
@@ -75,6 +75,9 @@ class EditAccountPurposeController extends _$EditAccountPurposeController {
       return null;
     }
   }
+
+
+
 }
 
 @riverpod

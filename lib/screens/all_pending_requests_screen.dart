@@ -52,7 +52,7 @@ class _AllPendingRequestsScreenState
   Future<void> getSelectedRequestDetails(String? requestId) async {
     final requestResponse = await ref
         .read(viewRequestControllerProvider.notifier)
-        .getRequestDetailAsync(requestId!);
+        .getRequestDetailAsync(context,requestId!);
 
     if (requestResponse != null) {
       Navigator.push(
@@ -240,7 +240,7 @@ class AccountRequestItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.18,
+        height: MediaQuery.of(context).size.height * 0.20,
         padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
@@ -273,46 +273,43 @@ class AccountRequestItem extends StatelessWidget {
                         ?.copyWith(fontWeight: FontWeight.w500),
                   ),
                 ),
-                SizedBox(
-                  // width: 70,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircleAvatar(
-                          radius: 10,
-                          backgroundColor:
-                              request?.stage?.toLowerCase() == 'draft'
-                                  ? Colors.purpleAccent
-                                  : request?.stage?.toLowerCase() ==
-                                          'pending posting'
-                                      ? Colors.yellow
-                                      : Colors.green),
-                      PopupMenuButton<int>(onSelected: (value) {
-                        if (value == 0) {
-                          onTapView!();
-                        } 
-                        // else {
-                        //   onTapEdit!();
-                        // }
-                      }, itemBuilder: (BuildContext context) {
-                        return <PopupMenuEntry<int>>[
-                          PopupMenuItem<int>(
-                              value: 0,
-                              child: GestureDetector(
-                                  onTap: onTapView, child: Text('View'))),
-                          //   PopupMenuItem<int>(
-                          // value: 1,
-                          // child: GestureDetector(
-                          //   onTap: onTapEdit,
-                          //   child: Text('Edit')))
-                          // PopupMenuItem<int>(
-                          //     value: 1,
-                          //     child: GestureDetector(
-                          //         onTap: onTapDelete, child: Text('Delete'))),
-                        ];
-                      })
-                    ],
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircleAvatar(
+                        radius: 10,
+                        backgroundColor:
+                            request?.stage?.toLowerCase() == 'draft'
+                                ? Colors.purpleAccent
+                                : request?.stage?.toLowerCase() ==
+                                        'pending posting'
+                                    ? Colors.yellow
+                                    : Colors.green),
+                    PopupMenuButton<int>(onSelected: (value) {
+                      if (value == 0) {
+                        onTapView!();
+                      } 
+                      // else {
+                      //   onTapEdit!();
+                      // }
+                    }, itemBuilder: (BuildContext context) {
+                      return <PopupMenuEntry<int>>[
+                        PopupMenuItem<int>(
+                            value: 0,
+                            child: GestureDetector(
+                                onTap: onTapView, child: Text('View'))),
+                        //   PopupMenuItem<int>(
+                        // value: 1,
+                        // child: GestureDetector(
+                        //   onTap: onTapEdit,
+                        //   child: Text('Edit')))
+                        // PopupMenuItem<int>(
+                        //     value: 1,
+                        //     child: GestureDetector(
+                        //         onTap: onTapDelete, child: Text('Delete'))),
+                      ];
+                    })
+                  ],
                 )
               ],
             ),

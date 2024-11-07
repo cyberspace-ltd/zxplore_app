@@ -30,10 +30,10 @@ class _ViewRelatedBusinessState
   @override
   Widget build(BuildContext context) {
 
-          ref.listen<AsyncValue>(
-      viewRelatedBusinessControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
-    );
+    //       ref.listen<AsyncValue>(
+    //   viewRelatedBusinessControllerProvider,
+    //   (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    // );
       final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
  final sectionData = requestData?.data?.relatedBusiness ?? [];
 

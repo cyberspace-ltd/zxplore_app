@@ -72,10 +72,10 @@ class _AddOtherBankAccountScreenState
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-      editOtherAccountControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
-    );
+    // ref.listen<AsyncValue>(
+    //   editOtherAccountControllerProvider,
+    //   (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    // );
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(editOtherAccountControllerProvider).isLoading,

@@ -7,7 +7,7 @@ part of 'edit_personal_details_controller.dart';
 // **************************************************************************
 
 String _$editPersonalDetailsControllerHash() =>
-    r'f5af0c4511614e15fe7f7cdb12cf1b1a54714284';
+    r'4eeff1891e32d9a5f7bdcb4b115faf0c423bb52c';
 
 /// See also [EditPersonalDetailsController].
 @ProviderFor(EditPersonalDetailsController)
@@ -24,7 +24,7 @@ final editPersonalDetailsControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditPersonalDetailsController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewPersonalDetailsControllerHash() =>
-    r'e6579e388d31e411b7b05cf3d5f40f17adfd8dec';
+    r'17a9226df83d58f86f966019a22c66799a0f07b1';
 
 /// See also [ViewPersonalDetailsController].
 @ProviderFor(ViewPersonalDetailsController)

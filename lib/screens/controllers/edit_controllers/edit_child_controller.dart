@@ -33,7 +33,7 @@ class EditChildController extends _$EditChildController {
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(data?.requestId ?? '');
+            .getRequestDetailAsync(context,data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
@@ -79,7 +79,7 @@ class EditChildController extends _$EditChildController {
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(data?.requestId ?? '');
+            .getRequestDetailAsync(context,data?.requestId ?? '');
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,
@@ -186,7 +186,7 @@ class ViewChildController extends _$ViewChildController {
         // refresh the latest viewed item.
         ref
             .read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(RequestId!);
+            .getRequestDetailAsync(context,RequestId!);
         state = AsyncValue.data(result);
 
         return result;

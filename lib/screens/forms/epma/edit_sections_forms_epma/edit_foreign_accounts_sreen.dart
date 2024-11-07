@@ -235,10 +235,10 @@ class _EditForeignAaccountScreenState
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-      editForeignAaccountsControllerrProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
-    );
+    // ref.listen<AsyncValue>(
+    //   editForeignAaccountsControllerrProvider,
+    //   (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    // );
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(editForeignAaccountsControllerrProvider).isLoading ||

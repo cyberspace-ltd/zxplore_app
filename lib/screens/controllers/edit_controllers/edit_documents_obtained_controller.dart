@@ -78,7 +78,7 @@ Future<dynamic> deletDocument(BuildContext context,
             GenericResponse.fromMap(requestResponse);
         // refresh the latest viewed item.
         ref.read(viewRequestControllerProvider.notifier)
-            .getRequestDetailAsync(RequestId!);
+            .getRequestDetailAsync(context,RequestId!);
         state = AsyncValue.data(result);
         Navigator.pushReplacement(
           context,

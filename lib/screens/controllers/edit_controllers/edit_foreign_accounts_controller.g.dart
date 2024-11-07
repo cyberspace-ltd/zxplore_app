@@ -7,7 +7,7 @@ part of 'edit_foreign_accounts_controller.dart';
 // **************************************************************************
 
 String _$editForeignAaccountsControllerrHash() =>
-    r'93992b97e6160211ad4aa5535bc8cb5bdb1fba76';
+    r'ec8cbbf670e55832bd279e62969f94e2d76f300b';
 
 /// See also [EditForeignAaccountsControllerr].
 @ProviderFor(EditForeignAaccountsControllerr)
@@ -25,7 +25,7 @@ final editForeignAaccountsControllerrProvider =
 
 typedef _$EditForeignAaccountsControllerr = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewForeignAaccountsControllerHash() =>
-    r'0005b4174ae5c644eaca07cbbc56aa93bba5e52e';
+    r'9d9092f49a716bd5b8dd4b1e5a6d7480de654d05';
 
 /// See also [ViewForeignAaccountsController].
 @ProviderFor(ViewForeignAaccountsController)

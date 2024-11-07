@@ -100,11 +100,7 @@ class _EditRefereeScreenState extends ConsumerState<EditRefereeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-      editRefereeControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context,
-          okAction: () {}, errorMsg: state.error),
-    );
+   
     return ZxploreProgress(
       inAsyncCall: ref.watch(editRefereeControllerProvider).isLoading ||
           ref.watch(viewRequestControllerProvider).isLoading,

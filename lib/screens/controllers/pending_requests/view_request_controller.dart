@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/view_account_request.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
+import 'package:zxplore_app/widgets/alert_dialogs.dart';
 part 'view_request_controller.g.dart';
 
 @riverpod
@@ -12,7 +14,7 @@ class ViewRequestController extends _$ViewRequestController {
     return null;
   }
 
-  Future<dynamic> getRequestDetailAsync(String requestId) async {
+  Future<dynamic> getRequestDetailAsync(BuildContext context,String requestId) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
 
     try {
@@ -30,23 +32,28 @@ class ViewRequestController extends _$ViewRequestController {
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
-          // renew token
-          ref.read(loginControllerProvider.notifier).extRenewToken();
-          throw Exception('Failed to complete request ');
-          // final ex = Exception('Failed to complete request ');
-          // state = AsyncError(
-          //     ex, StackTrace.fromString('An error occured please try again'));
-          //     return null;
+          await ref.read(loginControllerProvider.notifier).extRenewToken();
+          // Update state before showing error
+          state = AsyncError(
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
         }
-        state = AsyncValue.data(requestResponse);
-        throw Exception(
-            requestResponse['message'] ?? 'Failed to complete request ');
+        // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
+        return null;
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-      throw Exception('Failed to complete request ');
+      state = AsyncError(e, stackTrace);
+      showErrorDialog(context, e.toString());
+      return null;
     }
   }
 }

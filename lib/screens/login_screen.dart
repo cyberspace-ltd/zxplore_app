@@ -263,7 +263,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 onPressed: () =>
                                     ref.invalidate(getLoginModesProvider),
                                 child: const Text(
-                                  'An error occured fetch login modes. Check connection ,tap to refresh',
+                                  'An error occurred fetch login modes. Check connection ,tap to refresh',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -271,7 +271,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 onTap: () =>
                                     ref.invalidate(getLoginModesProvider),
                                 child: const Text(
-                                  'An error occured fetch login modes.Tap to refresh',
+                                  'An error occurred fetch login modes.Tap to refresh',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),

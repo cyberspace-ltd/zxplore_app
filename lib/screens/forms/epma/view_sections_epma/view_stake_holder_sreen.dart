@@ -27,10 +27,10 @@ class _StackHolderdersScreenState
     extends ConsumerState<StackHolderdersScreen> {
   @override
   Widget build(BuildContext context) {
-        ref.listen<AsyncValue>(
-      viewStakeHoldersControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
-    );
+    //     ref.listen<AsyncValue>(
+    //   viewStakeHoldersControllerProvider,
+    //   (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    // );
        final ViewAccountRequestResponse? requestData =  ref.watch(activelyViewedRequestProvider);
  final sectionData = requestData?.data?.stakeHolders ?? [];
 

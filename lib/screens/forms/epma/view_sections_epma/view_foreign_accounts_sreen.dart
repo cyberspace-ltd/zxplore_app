@@ -6,6 +6,7 @@ import 'package:zxplore_app/screens/all_pending_requests_screen.dart';
 import 'package:zxplore_app/screens/controllers/edit_controllers/edit_foreign_accounts_controller.dart';
 import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
+import 'package:zxplore_app/screens/forms/epma/create_new_screen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/base_view_widget.dart';
 import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/empty_view.dart';
@@ -25,11 +26,11 @@ class ViewForeignAccount extends ConsumerStatefulWidget {
 class _ViewForeignAccountState extends ConsumerState<ViewForeignAccount> {
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-      viewForeignAaccountsControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context,
-          okAction: () {}, errorMsg: state.error),
-    );
+    // ref.listen<AsyncValue>(
+    //   viewForeignAaccountsControllerProvider,
+    //   (_, state) => state.showAlertDialogOnError(context,
+    //       okAction: () {}, errorMsg: state.error),
+    // );
 
     final ViewAccountRequestResponse? requestData =
         ref.watch(activelyViewedRequestProvider);
@@ -44,9 +45,13 @@ class _ViewForeignAccountState extends ConsumerState<ViewForeignAccount> {
           data: _flattenData(widget.formIndividualData),
           showEdit: false, //sectionData.isNotEmpty,
           onTapEdit: () {
+                        zXFlushBar(
+                      context, "Unavailable/Coming soon");
             // to navigate to edit this section
           },
           onTapAdd: () {
+               zXFlushBar(
+                      context, "Unavailable/Coming soon");
             // rroute to add new item page
           },
           child: Padding(

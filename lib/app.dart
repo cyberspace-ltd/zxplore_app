@@ -4,7 +4,7 @@ import 'colors.dart';
 import 'screens/home_screen.dart';
 import 'screens/splash_screen.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
+
 import 'package:zxplore_app/utils/util.dart';
 import 'package:zxplore_app/utils/theme.dart';
 

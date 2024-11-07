@@ -195,12 +195,14 @@ class CustomTextFormField extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
-              title,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+              ),
             ),
              SizedBox(height: 4,),
             if (showTitleTip)

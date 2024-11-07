@@ -357,12 +357,12 @@ class _AddNextOfKinScreenState extends ConsumerState<AddNextOfKinScreen> {
                     title: 'Residential Address',
                     fillColor: Colors.transparent,
                     controller: addressController,
-                    hint: 'Enter bank',
+                    hint: 'Enter Address',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value?.isEmpty == true) {
-                        return 'Bank is required';
+                        return 'Address is required';
                       }
                       return null;
                     },
@@ -371,13 +371,15 @@ class _AddNextOfKinScreenState extends ConsumerState<AddNextOfKinScreen> {
                   CustomTextFormField(
                     title: 'Telephone Number',
                     fillColor: Colors.transparent,
-                    controller: addressController,
-                    hint: 'Enter number',
+                    controller: telNoController,
+                    hint: '233000000001',
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value?.isEmpty == true) {
                         return 'Telephone Number is required';
+                      }else if(value!.length!=12){
+                        return 'Invalid phone number';
                       }
                       return null;
                     },
@@ -387,7 +389,7 @@ class _AddNextOfKinScreenState extends ConsumerState<AddNextOfKinScreen> {
                     title: 'Relationship',
                     fillColor: Colors.transparent,
                     controller: relationshipeController,
-                    hint: 'Enter account name',
+                    hint: 'Enter Relationship',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {

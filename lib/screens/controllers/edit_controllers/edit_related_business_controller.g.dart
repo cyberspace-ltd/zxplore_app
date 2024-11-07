@@ -7,7 +7,7 @@ part of 'edit_related_business_controller.dart';
 // **************************************************************************
 
 String _$editRelatedBusinessControllerHash() =>
-    r'1cf988d6f261b25b262b0e9fc0cc039436e63110';
+    r'2c15cf069b7f4e9504cfeee865fe85715083df26';
 
 /// See also [EditRelatedBusinessController].
 @ProviderFor(EditRelatedBusinessController)
@@ -24,7 +24,7 @@ final editRelatedBusinessControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditRelatedBusinessController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewRelatedBusinessControllerHash() =>
-    r'78754a6e18da1801307bf6916f4616a29b48d193';
+    r'be7113995640da7e847e91befaf263700a6ee191';
 
 /// See also [ViewRelatedBusinessController].
 @ProviderFor(ViewRelatedBusinessController)

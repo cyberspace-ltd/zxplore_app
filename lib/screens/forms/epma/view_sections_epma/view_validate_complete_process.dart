@@ -18,12 +18,12 @@ class _ProcessFlowWidgetState extends ConsumerState<ProcessFlowWidget> {
   
   @override
   Widget build(BuildContext context) {
-      ref.listen<AsyncValue>(
-      submitAccountRequestControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context,okAction: (){
+    //   ref.listen<AsyncValue>(
+    //   submitAccountRequestControllerProvider,
+    //   (_, state) => state.showAlertDialogOnError(context,okAction: (){
 
-      }),
-    );
+    //   }),
+    // );
     return ZxploreProgress(
       inAsyncCall: ref.watch(submitAccountRequestControllerProvider).isLoading,
       child: Scaffold(
@@ -41,12 +41,12 @@ class _ProcessFlowWidgetState extends ConsumerState<ProcessFlowWidget> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildTextButton('Validate', _onValidatePressed),
+                      _buildTextButton(context, 'Validate',()=> _onValidatePressed(context)),
                       SizedBox(height: 16),
-                      _buildTextButton(
-                          'Process External', _onProcessExternalPressed),
+                      _buildTextButton(context,
+                          'Process External',()=> _onProcessExternalPressed(context)),
                       SizedBox(height: 16),
-                      _buildTextButton('Complete', _onCompletePressed),
+                      _buildTextButton(context,'Complete',()=> _onCompletePressed(context)),
                     ],
                   ),
                 ),
@@ -98,7 +98,7 @@ class _ProcessFlowWidgetState extends ConsumerState<ProcessFlowWidget> {
     );
   }
 
-  Widget _buildTextButton(String label, VoidCallback onPressed) {
+  Widget _buildTextButton(BuildContext  context,String label, VoidCallback onPressed) {
     return TextButton(
       onPressed: onPressed,
       child: Text(label),
@@ -109,30 +109,30 @@ class _ProcessFlowWidgetState extends ConsumerState<ProcessFlowWidget> {
     );
   }
 
-  Future<void> _onValidatePressed() async {
+  Future<void> _onValidatePressed(BuildContext  context) async {
     final ViewAccountRequestResponse? requestData =
         ViewAccountRequestResponse.fromMap(widget.formIndividualData);
     final sectionData = requestData?.data?.taxJurisdiction ?? [];
     ref
         .read(submitAccountRequestControllerProvider.notifier)
-        .validateRequestForSubmission(RequestId: sectionData[0].reqId);
+        .validateRequestForSubmission(context,RequestId: sectionData[0].reqId);
   }
 
-  void _onProcessExternalPressed() {
+  void _onProcessExternalPressed(BuildContext  context) {
     final ViewAccountRequestResponse? requestData =
         ViewAccountRequestResponse.fromMap(widget.formIndividualData);
     final sectionData = requestData?.data?.taxJurisdiction ?? [];
     ref
         .read(submitAccountRequestControllerProvider.notifier)
-        .processRequestExternal(RequestId: sectionData[0].reqId);
+        .processRequestExternal(context,RequestId: sectionData[0].reqId);
   }
 
-  void _onCompletePressed() {
+  void _onCompletePressed(BuildContext  context) {
     final ViewAccountRequestResponse? requestData =
         ViewAccountRequestResponse.fromMap(widget.formIndividualData);
     final sectionData = requestData?.data?.taxJurisdiction ?? [];
     ref
         .read(submitAccountRequestControllerProvider.notifier)
-        .completeRequest(RequestId: sectionData[0].reqId);
+        .completeRequest(context,RequestId: sectionData[0].reqId);
   }
 }

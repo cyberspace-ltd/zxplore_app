@@ -4178,19 +4178,19 @@ if (anticipatedAmountWithdraw == null) {
           _riskRankController.add(offlineAccount.riskRank);
         }
 
-        if (offlineAccount.signatoryDetails?.first.mmda != null &&
+        if (offlineAccount.signatoryDetails.first.mmda != null &&
             offlineAccount.signatoryDetails!.first.mmda!.isNotEmpty) {
           try {
             List<StateEntity> states = await DBProvider.db.getStates();
 
             print("REPORT " + offlineAccount.signatoryDetails!.first.mmda!);
 
-            _mmdaController.add(offlineAccount.signatoryDetails?.first.mmda!);
+            _mmdaController.add(offlineAccount.signatoryDetails.first.mmda!);
           } catch (err) {
             _mmdaController.add(offlineAccount.classCode);
           }
         }
-        if (offlineAccount.signatoryDetails?.first.placeOfBirth != null &&
+        if (offlineAccount.signatoryDetails.first.placeOfBirth != null &&
             offlineAccount.signatoryDetails!.first.placeOfBirth!.isNotEmpty) {}
         if (offlineAccount.classCode != null &&
             offlineAccount.classCode!.isNotEmpty) {
@@ -4222,19 +4222,19 @@ if (anticipatedAmountWithdraw == null) {
           _surnameController.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.lastName!));
         }
-        if (offlineAccount.signatoryDetails?.first.firstName != null &&
+        if (offlineAccount.signatoryDetails.first.firstName != null &&
             offlineAccount.signatoryDetails!.first.firstName!.isNotEmpty) {
           _firstNameController.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.firstName!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.tin != null &&
+        if (offlineAccount.signatoryDetails.first.tin != null &&
             offlineAccount.signatoryDetails!.first.tin!.isNotEmpty) {
           _admissionNoController
               .add(offlineAccount.signatoryDetails!.first.tin!);
         }
 
-        if (offlineAccount.signatoryDetails?.first.middleName != null &&
+        if (offlineAccount.signatoryDetails.first.middleName != null &&
             offlineAccount.signatoryDetails!.first.middleName!.isNotEmpty) {
           _otherNameController.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.middleName!));
@@ -4246,7 +4246,7 @@ if (anticipatedAmountWithdraw == null) {
 //              accountResponse.data.signatoryDetails.first.middleName));
 //        }
 
-        if (offlineAccount.signatoryDetails?.first.nextOfKinPhone != null &&
+        if (offlineAccount.signatoryDetails.first.nextOfKinPhone != null &&
             offlineAccount.signatoryDetails!.first.nextOfKinPhone!.isNotEmpty) {
           String dd = CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.nextOfKinPhone!);
@@ -4255,7 +4255,7 @@ if (anticipatedAmountWithdraw == null) {
               offlineAccount.signatoryDetails!.first.nextOfKinPhone!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.nextOfKinRelationship !=
+        if (offlineAccount.signatoryDetails.first.nextOfKinRelationship !=
                 null &&
             offlineAccount
                 .signatoryDetails!.first.nextOfKinRelationship!.isNotEmpty) {
@@ -4266,7 +4266,7 @@ if (anticipatedAmountWithdraw == null) {
               offlineAccount.signatoryDetails!.first.nextOfKinRelationship!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.cerpacRPplaceofIssue !=
+        if (offlineAccount.signatoryDetails.first.cerpacRPplaceofIssue !=
                 null &&
             offlineAccount
                 .signatoryDetails!.first.cerpacRPplaceofIssue!.isNotEmpty) {
@@ -4277,7 +4277,7 @@ if (anticipatedAmountWithdraw == null) {
               offlineAccount.signatoryDetails!.first.cerpacRPplaceofIssue!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.nextOfKinGender != null &&
+        if (offlineAccount.signatoryDetails.first.nextOfKinGender != null &&
             offlineAccount
                 .signatoryDetails!.first.nextOfKinGender!.isNotEmpty) {
           _nextOfKinGenderController
@@ -4289,20 +4289,20 @@ if (anticipatedAmountWithdraw == null) {
           _monthlyIncomeController.add(offlineAccount.monthlyIncome!);
         }
 
-        if (offlineAccount.signatoryDetails?.first.homeTown != null &&
+        if (offlineAccount.signatoryDetails.first.homeTown != null &&
             offlineAccount.signatoryDetails!.first.homeTown!.isNotEmpty) {
           _homeTownController
               .add(offlineAccount.signatoryDetails!.first.homeTown!);
         }
 
-        if (offlineAccount.signatoryDetails?.first.motherMaidenName != null &&
+        if (offlineAccount.signatoryDetails.first.motherMaidenName != null &&
             offlineAccount
                 .signatoryDetails!.first.motherMaidenName!.isNotEmpty) {
           _mothersMaidenNameController.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.motherMaidenName!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.dateOfBirth != null &&
+        if (offlineAccount.signatoryDetails.first.dateOfBirth != null &&
             offlineAccount.signatoryDetails!.first.dateOfBirth!.isNotEmpty) {
           _dateOfBirthController.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.dateOfBirth!));
@@ -4315,14 +4315,14 @@ if (anticipatedAmountWithdraw == null) {
 //              accountResponse.data.signatoryDetails.first.dateOfBirth));
 //        }
 
-        if (offlineAccount.signatoryDetails?.first.stateOfOrigin != null &&
+        if (offlineAccount.signatoryDetails.first.stateOfOrigin != null &&
             offlineAccount.signatoryDetails!.first.stateOfOrigin!.isNotEmpty) {
           //    print("REPORT " + offlineAccount.signatoryDetails!.first.stateOfOrigin!);
           _placeOfBirthController
               .add(offlineAccount.signatoryDetails!.first.stateOfOrigin!);
         }
 
-        if (offlineAccount.signatoryDetails?.first.stateOfOrigin != null &&
+        if (offlineAccount.signatoryDetails.first.stateOfOrigin != null &&
             offlineAccount.signatoryDetails!.first.stateOfOrigin!.isNotEmpty) {
           //    print("REPORT " + offlineAccount.signatoryDetails!.first.stateOfOrigin!);
           _placeOfBirthController
@@ -4338,13 +4338,13 @@ if (anticipatedAmountWithdraw == null) {
           _countryOfOriginController.add(offlineAccount.countryOfOrigin);
         }
 
-        if (offlineAccount.signatoryDetails?.first.emailAddress != null &&
+        if (offlineAccount.signatoryDetails.first.emailAddress != null &&
             offlineAccount.signatoryDetails!.first.emailAddress!.isNotEmpty) {
           _emailController.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.emailAddress!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.phoneNumber != null &&
+        if (offlineAccount.signatoryDetails.first.phoneNumber != null &&
             offlineAccount.signatoryDetails!.first.phoneNumber!.isNotEmpty) {
           String bgd = CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.phoneNumber!);
@@ -4352,7 +4352,7 @@ if (anticipatedAmountWithdraw == null) {
               offlineAccount.signatoryDetails!.first.phoneNumber!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.nextOfKin != null &&
+        if (offlineAccount.signatoryDetails.first.nextOfKin != null &&
             offlineAccount.signatoryDetails!.first.nextOfKin!.isNotEmpty) {
           String ggds = CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.nextOfKin!);
@@ -4361,20 +4361,20 @@ if (anticipatedAmountWithdraw == null) {
               offlineAccount.signatoryDetails!.first.nextOfKin!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.addressLine1 != null &&
+        if (offlineAccount.signatoryDetails.first.addressLine1 != null &&
             offlineAccount.signatoryDetails!.first.addressLine1!.isNotEmpty) {
           _address1Controller.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.addressLine1!));
         }
 
-        if (offlineAccount.signatoryDetails?.first.addressLine2 != null &&
+        if (offlineAccount.signatoryDetails.first.addressLine2 != null &&
             offlineAccount.signatoryDetails!.first.addressLine2!.isNotEmpty) {
           _address2Controller.add(CryptoHelper.decrypt(
               offlineAccount.signatoryDetails!.first.addressLine2!));
         }
         _countryOfResidenceController.add('GHANA');
 
-        if (offlineAccount.signatoryDetails?.first.state != null &&
+        if (offlineAccount.signatoryDetails.first.state != null &&
             offlineAccount.signatoryDetails!.first.state!.isNotEmpty) {
           _stateOfResidenceController
               .add(offlineAccount.signatoryDetails!.first.state);
@@ -4513,12 +4513,12 @@ if (anticipatedAmountWithdraw == null) {
               .add(offlineAccount.preferredNameOnCard);
         }
 
-        if (offlineAccount.signatoryDetails?.first.city != null &&
+        if (offlineAccount.signatoryDetails.first.city != null &&
             offlineAccount.signatoryDetails!.first.city!.isNotEmpty) {
           _cityOfResidenceController
               .add(offlineAccount.signatoryDetails!.first.city);
         }
-        if (offlineAccount.signatoryDetails?.first.sex != null &&
+        if (offlineAccount.signatoryDetails.first.sex != null &&
             offlineAccount.signatoryDetails!.first.sex!.isNotEmpty) {
           if (offlineAccount.signatoryDetails!.first.sex == 'M') {
             _genderController.add('MALE');
@@ -4526,7 +4526,7 @@ if (anticipatedAmountWithdraw == null) {
             _genderController.add('FEMALE');
           }
         }
-        if (offlineAccount.signatoryDetails?.first.occupation != null &&
+        if (offlineAccount.signatoryDetails.first.occupation != null &&
             offlineAccount.signatoryDetails!.first.occupation!.isNotEmpty) {
           if (offlineAccount.signatoryDetails!.first.occupation!
               .contains("OTHER (PLEASE SPECIFY)")) {
@@ -4542,18 +4542,18 @@ if (anticipatedAmountWithdraw == null) {
           }
         }
 
-        if (offlineAccount.signatoryDetails?.first.maritalStatus != null &&
+        if (offlineAccount.signatoryDetails.first.maritalStatus != null &&
             offlineAccount.signatoryDetails!.first.maritalStatus!.isNotEmpty) {
           _maritalStatusController
               .add(offlineAccount.signatoryDetails!.first.maritalStatus);
         }
 
-        if (offlineAccount.signatoryDetails?.first.meansOfId != null &&
+        if (offlineAccount.signatoryDetails.first.meansOfId != null &&
             offlineAccount.signatoryDetails!.first.meansOfId!.isNotEmpty) {
           _idTypeController
               .add(offlineAccount.signatoryDetails!.first.meansOfId);
         }
-        if (offlineAccount.signatoryDetails?.first.idIssuer != null &&
+        if (offlineAccount.signatoryDetails.first.idIssuer != null &&
             offlineAccount.signatoryDetails!.first.idIssuer!.isNotEmpty) {
           _idIssuerController
               .add(offlineAccount.signatoryDetails!.first.idIssuer);
@@ -4561,35 +4561,35 @@ if (anticipatedAmountWithdraw == null) {
           _idIssuerOthersController
               .add(offlineAccount.signatoryDetails!.first.idIssuer);
         }
-        if (offlineAccount.signatoryDetails?.first.idNumber != null &&
+        if (offlineAccount.signatoryDetails.first.idNumber != null &&
             offlineAccount.signatoryDetails!.first.idNumber!.isNotEmpty) {
           _idNumberController
               .add(offlineAccount.signatoryDetails!.first.idNumber);
         }
-        if (offlineAccount.signatoryDetails?.first.idPlaceOfIssue != null &&
+        if (offlineAccount.signatoryDetails.first.idPlaceOfIssue != null &&
             offlineAccount.signatoryDetails!.first.idPlaceOfIssue!.isNotEmpty) {
           _idPlaceOfIssueController
               .add(offlineAccount.signatoryDetails!.first.idPlaceOfIssue);
         }
 
-        if (offlineAccount.signatoryDetails?.first.foreignAddress1 != null &&
+        if (offlineAccount.signatoryDetails.first.foreignAddress1 != null &&
             offlineAccount
                 .signatoryDetails!.first.foreignAddress1!.isNotEmpty) {
           _countryOfIDCountryIssueController
               .add(offlineAccount.signatoryDetails!.first.foreignAddress1);
         }
 
-        if (offlineAccount.signatoryDetails?.first.idIssueDate != null &&
+        if (offlineAccount.signatoryDetails.first.idIssueDate != null &&
             offlineAccount.signatoryDetails!.first.idIssueDate!.isNotEmpty) {
           _idIssueDateController
               .add(offlineAccount.signatoryDetails!.first.idIssueDate);
         }
-        if (offlineAccount.signatoryDetails?.first.idExpiryDate != null &&
+        if (offlineAccount.signatoryDetails.first.idExpiryDate != null &&
             offlineAccount.signatoryDetails!.first.idExpiryDate!.isNotEmpty) {
           _idExpiryDateController
               .add(offlineAccount.signatoryDetails!.first.idExpiryDate);
         }
-        if (offlineAccount.signatoryDetails?.first.useEmailForStatement !=
+        if (offlineAccount.signatoryDetails.first.useEmailForStatement !=
                 null &&
             offlineAccount
                 .signatoryDetails!.first.useEmailForStatement!.isNotEmpty) {
@@ -4695,7 +4695,7 @@ if (anticipatedAmountWithdraw == null) {
         }
         */
 
-        if (offlineAccount.signatoryDetails?.first.attachments != null) {
+        if (offlineAccount.signatoryDetails.first.attachments != null) {
           var _idCardAttachment = offlineAccount
               .signatoryDetails!.first.attachments!
               .where((i) => i.type == 'IdentityCard')

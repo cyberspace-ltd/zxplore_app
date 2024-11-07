@@ -154,7 +154,9 @@ class _PersonalInfoEditSscreenState
   final TextEditingController? searchCountryController = TextEditingController();
     /// resident permit country
     final resPermitCountryValueListenable = ValueNotifier<CountryDatum?>(null);
+    final customerClassificationValueListenable = ValueNotifier<CustomerClassificationDatum?>(null);
   final TextEditingController? resPermitSearchCountryController = TextEditingController();
+  // final TextEditingController? _customerClassificationIdController = TextEditingController();
     /// region 
   final regionValueListenable = ValueNotifier<RegionDatum?>(null);
 final TextEditingController regionSearchEditingController = TextEditingController();
@@ -223,6 +225,10 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   String? permsSelectedCountryName;
   String? permsSelectedCitizenshipCode;
 
+  CustomerClassificationDatum? customerClassificationDatumValue;
+  String? customerClassificationDatumCode;
+  String? customerClassificationDatumName;
+
   String? dob;
   String? identityDateIssued;
   String? identityDateExpire;
@@ -251,6 +257,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final userData = widget.data?.data;
+        selectedIdentificationTypeCode= userData?.identificationTypeId??-1;
           selectedItemStage = userData?.itemStage;
                  prevItemStageController.text = userData?.itemStage ?? 'No selection';
         preRegionCode = userData?.regionCode ?? '';
@@ -562,11 +569,11 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   @override
   Widget build(BuildContext context) {
     // /check  for  errors here
-    ref.listen<AsyncValue>(
-      editPersonalDetailsControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context,
-          okAction: () {}, errorMsg: state.error),
-    );
+    // ref.listen<AsyncValue>(
+    //   editPersonalDetailsControllerProvider,
+    //   (_, state) => state.showAlertDialogOnError(context,
+    //       okAction: () {}, errorMsg: state.error),
+    // );
  
 
     return ZxploreProgress(
@@ -584,7 +591,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
           child: PrimaryButton(
               onPressed: () {
                 if (!_personalInfoEditFormKey.currentState!.validate()) {
-                  zXFlushBar(context, "Required feilds are missing");
+                  zXFlushBar(context, "Required fields are missing");
 
                   return;
                 }
@@ -592,7 +599,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
  if (permIdentityDateExpire == null ||
                     permIdentityDateIssued == null || permIdentityDateIssued!.isEmpty||permIdentityDateExpire!.isEmpty) {
                   zXFlushBar(
-                      context, "Permanent ID isssue/expiry date is required");
+                      context, "Permanent ID issues/expiry date is required");
                   return;
                 }
                 }
@@ -618,7 +625,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                   return;
                 }
 
-                if (selectedIdType == null) {
+                if (selectedIdType == null || selectedIdentificationTypeCode==null) {
                   zXFlushBar(context, "ID type is required");
                   return;
                 }
@@ -635,6 +642,14 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                 if (identityDateIssued == null &&
                     widget.data?.data?.idIssueDate == null) {
                   zXFlushBar(context, "ID issued date is required");
+                  return;
+                }
+                if (permsSelectedCountry == null ) {
+                  zXFlushBar(context, "Permanent Address country is required");
+                  return;
+                }
+                if (customerClassificationDatumValue == null ) {
+                  zXFlushBar(context, "Customer classification is required");
                   return;
                 }
                 editAccountRequest(context);
@@ -994,11 +1009,11 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                       ),
                                     ),
                                   )
-                                : Text('empty gender'),
+                                : Text('Empty gender'),
                             error: (e, s) => GestureDetector(
                                 onTap: () => ref.invalidate(getGenderProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -1170,7 +1185,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                             error: (e, s) => GestureDetector(
                                 onTap: () => ref.invalidate(getRegionsProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -1352,7 +1367,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                 onTap: () =>
                                     ref.invalidate(getCountriesProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -1492,7 +1507,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                 onTap: () => ref
                                     .invalidate(getIdentificationTypesProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -1639,7 +1654,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                       getSubBusinessNaturesProvider(int.parse(
                                           selectedBusinessNaturesCode!))),
                                   child: const Text(
-                                    'An error occured',
+                                    'An error occurred',
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   )),
@@ -1769,7 +1784,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                 onTap: () => ref
                                     .invalidate(getIdentificationTypesProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -1897,7 +1912,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                 onTap: () =>
                                     ref.invalidate(getEmploymentTypeProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -2032,10 +2047,10 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                           residentPermitStatus == false)) ...[
                     const SizedBox(height: 16),
                     CustomTextFormField(
-                      title: "Permanent Residence Permit Number",
+                      title: "Permanent Res. Permit Number",
                       fillColor: Colors.transparent,
                       controller: _residencePermitNoController,
-                      hint: 'Enter Resident Permit Number',
+                      hint: 'Enter Res. Permit Number',
                       inputType: TextInputType.text,
                       useDefaultErrorText: false,
                       validator: (value) {
@@ -2047,7 +2062,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
-                      title: "Permanent Residential Address",
+                      title: "Permanent Res. Address",
                       fillColor: Colors.transparent,
                       controller: _permanentResidentialAddressController,
                       hint: 'Enter Permanent address',
@@ -2062,7 +2077,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     ),
                     const SizedBox(height: 16),
                     CustomTextFormField(
-                      title: "Permanent Residential Address City",
+                      title: "Permanent Res. Address City",
                       fillColor: Colors.transparent,
                       controller: _permanentResidentialCityController,
                       hint: 'Enter Permanent address city',
@@ -2077,7 +2092,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     ),
                     const SizedBox(height: 16),
                          Text(
-                    'Customer Class',
+                    'Permanent Address Country',
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     style: Theme.of(context)
@@ -2095,7 +2110,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                       child: DropdownButton2<CountryDatum>(
                                         isExpanded: true,
                                         hint: Text(
-                                          'Select permanent country',
+                                          'Permanent address country',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
@@ -2240,7 +2255,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                   onTap: () =>
                                       ref.invalidate(getCountriesProvider),
                                   child: const Text(
-                                    'An error occured',
+                                    'An error occurred',
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   )),
@@ -2248,6 +2263,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                             );
                       },
                     ),
+                   
                     const SizedBox(height: 16),
                     CustomTextFormField(
                       title: "Place Of Issue",
@@ -2322,6 +2338,181 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                       ),
                     ],
                   ],
+                  const SizedBox(height: 16),
+
+
+                         Text(
+                    'Customer Classification',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getCustomerClassificationProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<CustomerClassificationDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Customer classification',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        dropdownSearchData: DropdownSearchData<
+                                              CustomerClassificationDatum>(
+                                          searchInnerWidgetHeight: 150,
+                                          searchInnerWidget: Container(
+                                            height: 50,
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 4,
+                                              right: 8,
+                                              left: 8,
+                                            ),
+                                            child: TextFormField(
+                                              expands: true,
+                                              maxLines: null,
+                                              controller:
+                                                  _customerClassificationIdController,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                hintText:
+                                                    'Class...',
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                   
+                                          searchController:
+                                              _customerClassificationIdController,
+                                          searchMatchFn: (item, searchValue) {
+                                            return item.value!.customerClassificationId!.toUpperCase()
+                                            .startsWith(searchValue.toUpperCase());
+                                          }),
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          _customerClassificationIdController.clear();
+                                        }
+                                      },
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    CustomerClassificationDatum>>((item) =>
+                                                DropdownMenuItem<CustomerClassificationDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.customerClassificationId ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: customerClassificationDatumValue,
+                                        onChanged: (CustomerClassificationDatum? newValue) {
+                                          customerClassificationValueListenable.value=newValue;
+                                          setState(() {
+                                            /// Set selected item params
+                                            customerClassificationDatumValue = newValue;
+                                            customerClassificationDatumCode =
+                                                newValue?.customerClassificationId;
+                                            
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
+                                        ),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
+                                        ),
+                                      ),
+                                    )
+                                  : GestureDetector(
+                                      child: Text(
+                                          'No? class?, Tap to refresh, '),
+                                      onTap: () =>
+                                          ref.invalidate(getCountriesProvider),
+                                    ),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getCountriesProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                   
                   const SizedBox(height: 16),
 
                   /// MaritalStatus
@@ -2439,7 +2630,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                 onTap: () =>
                                     ref.invalidate(getMaritalStatusProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -2536,7 +2727,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     title: 'Address',
                     fillColor: Colors.transparent,
                     controller: _residentialAddressController,
-                    hint: 'Enter adress',
+                    hint: 'Enter address',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -2565,7 +2756,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     title: 'Other Address',
                     fillColor: Colors.transparent,
                     controller: _residentialAddress2Controller,
-                    hint: 'Enter other adress',
+                    hint: 'Enter other address',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -2595,7 +2786,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                   const SizedBox(height: 16),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'GPS-Addresss',
+                    title: 'GPS-Address',
                     fillColor: Colors.transparent,
                     controller: _gpsAddressController,
                     hint: '12 abc close',
@@ -2603,9 +2794,9 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'GPS-Addresss is  required';
-                      } else if (value.toString().length < 12) {
-                        return 'Minimum 12 characters';
+                        return 'GPS-Address is  required';
+                      } else if (value.toString().length > 12) {
+                        return 'Maximum of 12 characters';
                       }
                       return null;
                     },
@@ -2741,7 +2932,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                 onTap: () => ref
                                     .invalidate(getIdentificationTypesProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -2875,7 +3066,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
 
                   const SizedBox(height: 16),
                   Text(
-                    'Other Informtion',
+                    'Other Information',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
