@@ -7,7 +7,7 @@ part of 'edit_assigned_account_controller.dart';
 // **************************************************************************
 
 String _$editAssignedAccountControllerHash() =>
-    r'a217bf31619880a6e519c249d2bf34a02411c97a';
+    r'12de43d416ab355a556d36e2be113fdca5e29d26';
 
 /// See also [EditAssignedAccountController].
 @ProviderFor(EditAssignedAccountController)
@@ -24,7 +24,7 @@ final editAssignedAccountControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditAssignedAccountController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewAssignedAccountControllerHash() =>
-    r'f44eff32df1b37f1e95b940474d4414c7f43eec3';
+    r'392c84c5bfa79d26662ece4bd3dae458281b19db';
 
 /// See also [ViewAssignedAccountController].
 @ProviderFor(ViewAssignedAccountController)

@@ -349,7 +349,7 @@ abstract class RemoteApi {
   @GET('Operation/getNextOfKinToEdit')
   Future<dynamic> getNextOfKinToEdit(
       {@Query('RequestId') required String? RequestId,
-      @Query('ChildId') required int? NextOfKinId});
+      @Query('NextOfKinId') required int? NextOfKinId});
 
   @POST('Operation/addChild')
   Future<dynamic> addChild({
@@ -390,7 +390,7 @@ abstract class RemoteApi {
   Future<dynamic> editReferee({
     @Body() required AddReferee? data,
   });
-  @POST('Operation/deleteRefree')
+  @POST('Operation/deleteReferee')
   Future<dynamic> deleteRefree({
     @Body() required DeleteReferee? data,
   });

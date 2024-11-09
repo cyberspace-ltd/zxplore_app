@@ -292,6 +292,7 @@ class UserInfoRepositoryImpl extends UserInfoRepository {
   Future getNextOfKinToEdit(
       {required String? RequestId, required int? NextOfKinId}) async {
     try {
+      print('===>$NextOfKinId $RequestId');
       final response = await api.getNextOfKinToEdit(
           RequestId: RequestId, NextOfKinId: NextOfKinId);
 

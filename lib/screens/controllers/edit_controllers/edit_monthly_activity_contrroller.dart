@@ -9,6 +9,7 @@ import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_acount_type_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_acount_type_monthly_activity_sreen.dart';
+import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 part 'edit_monthly_activity_contrroller.g.dart';
@@ -69,7 +70,7 @@ class EditMonthlyActivityController extends _$EditMonthlyActivityController {
       }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }
@@ -127,7 +128,7 @@ class ViewMonthlyActivityController extends _$ViewMonthlyActivityController {
       }
     } catch (e, stackTrace) {
      state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
 
     }

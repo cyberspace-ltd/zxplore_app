@@ -9,6 +9,7 @@ import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_personal_info.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
+import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/widgets/alert_dialogs.dart';
 part 'edit_personal_details_controller.g.dart';
 
@@ -76,7 +77,7 @@ class EditPersonalDetailsController extends _$EditPersonalDetailsController {
       }
     } catch (e, stackTrace) {
        state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }
@@ -138,7 +139,7 @@ class ViewPersonalDetailsController extends _$ViewPersonalDetailsController {
       }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }

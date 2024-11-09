@@ -9,6 +9,7 @@ import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_funding_sources_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_funding_sources_sreen.dart';
+import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 part 'edit_funding_sources_controller.g.dart';
@@ -73,7 +74,7 @@ class EditFundingSourcesController extends _$EditFundingSourcesController {
       }
     } catch (e, stackTrace) {
             state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }
@@ -129,7 +130,7 @@ class ViewFundingSourcesController extends _$ViewFundingSourcesController {
       }
     } catch (e, stackTrace) {
          state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }

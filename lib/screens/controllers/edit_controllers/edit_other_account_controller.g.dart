@@ -7,7 +7,7 @@ part of 'edit_other_account_controller.dart';
 // **************************************************************************
 
 String _$editOtherAccountControllerHash() =>
-    r'223228f916ee9d92b2c5a67af26f930f44df153c';
+    r'2a8d520ace892ffeab1be514c4628dac5148566f';
 
 /// See also [EditOtherAccountController].
 @ProviderFor(EditOtherAccountController)
@@ -24,7 +24,7 @@ final editOtherAccountControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditOtherAccountController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewOtherAccountControllerHash() =>
-    r'85a3ea6646de863053f6e2058ec46864feb4a33d';
+    r'dcf1a4552342b8d3683faa391c0d8019b1d9227f';
 
 /// See also [ViewOtherAccountController].
 @ProviderFor(ViewOtherAccountController)

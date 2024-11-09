@@ -10,6 +10,8 @@ import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_children_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_children_sreen.dart';
+import 'package:zxplore_app/utils/app_strings.dart';
+import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 part 'edit_child_controller.g.dart';
 
@@ -94,27 +96,28 @@ class EditChildController extends _$EditChildController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception(
-              requestResponse['message'] ?? 'Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex,
-              StackTrace.fromString(requestResponse['message'] ??
-                  'An error occured please try again'));
-          throw Exception(
-              requestResponse['message'] ?? 'Failed to complete request ');
-        }
-        final ex = Exception('Failed to complete request ');
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
+           }
+          // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
         state = AsyncError(
-            ex, StackTrace.fromString('An error occured please try again'));
-
-        throw Exception(
-            requestResponse['message'] ?? 'Failed to complete request ');
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
+        return null;
       }
     } catch (e, stackTrace) {
-      final ex = Exception('Failed to complete request,try again ');
-      debugPrint('${stackTrace.toString()}');
-      state = AsyncError(ex, stackTrace);
-      throw Exception('Failed to complete request ');
+     state = AsyncError(e, stackTrace);
+      showErrorDialog(context,  AppStrings.errorInProcessing);
+      return null;
+
     }
   }
 }
@@ -150,22 +153,28 @@ class ViewChildController extends _$ViewChildController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-          throw Exception(
-              requestResponse['message'] ?? 'Failed to complete request ');
-        }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
-        throw Exception(
-            requestResponse['message'] ?? 'Failed to complete request ');
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
+           }
+          // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
+        return null;
       }
     } catch (e, stackTrace) {
-      final ex = Exception('Failed to complete request,try again ');
-      debugPrint('${stackTrace.toString()}');
-      state = AsyncError(ex, stackTrace);
-      throw Exception('Failed to complete request ');
+     state = AsyncError(e, stackTrace);
+      showErrorDialog(context,  AppStrings.errorInProcessing);
+      return null;
+
     }
   }
 
@@ -190,32 +199,31 @@ class ViewChildController extends _$ViewChildController {
         state = AsyncValue.data(result);
 
         return result;
-      } else {
+      }  else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception(
-              requestResponse['message'] ?? 'Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex,
-              StackTrace.fromString(requestResponse['message'] ??
-                  'An error occured please try again'));
-                             throw Exception(requestResponse['message'] ??'Failed to complete request ');
-
-        }
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
+           }
+          // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
         state = AsyncError(
-            Exception(requestResponse['message'] ??
-                'An error occured please try again'),
-            StackTrace.fromString(requestResponse['message'] ??
-                'An error occured please try again'));
-                             throw Exception(requestResponse['message'] ??'Failed to complete request ');
-
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
+        return null;
       }
     } catch (e, stackTrace) {
-      final ex = Exception('Failed to complete request: ');
-      debugPrint('${stackTrace.toString()}');
-      state = AsyncError(ex, stackTrace);
-                       throw Exception('Failed to complete request ');
+     state = AsyncError(e, stackTrace);
+      showErrorDialog(context,  AppStrings.errorInProcessing);
+      return null;
 
     }
   }

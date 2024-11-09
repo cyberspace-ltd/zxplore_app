@@ -8,7 +8,6 @@ import 'package:zxplore_app/screens/controllers/pending_requests/pending_request
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
-import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
@@ -51,14 +50,14 @@ class _PendingDraftsRequestsScreenState
 
   @override
   Widget build(BuildContext context) {
-
- 
     return RefreshIndicator(
       onRefresh: () async =>
           ref.invalidate(getPendingRequestsDraftDatumProvider),
       child: ZxploreProgress(
-        inAsyncCall: ref.watch(getPendingRequestsDraftDatumProvider(context)).isLoading || ref
-        .watch(viewRequestControllerProvider).isLoading,
+        inAsyncCall: ref
+                .watch(getPendingRequestsDraftDatumProvider(context))
+                .isLoading ||
+            ref.watch(viewRequestControllerProvider).isLoading,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: ZxplorePrimaryColor,
@@ -98,8 +97,8 @@ class _PendingDraftsRequestsScreenState
                     return null;
                   },
                   onChanged: (query) {
-                    final requestItemsAsyncValue =
-                        ref.watch(getPendingRequestsDraftDatumProvider(context));
+                    final requestItemsAsyncValue = ref
+                        .watch(getPendingRequestsDraftDatumProvider(context));
                     requestItemsAsyncValue.whenData((requestItems) {
                       _filterBillers(query, requestItems ?? []);
                     });
@@ -174,7 +173,7 @@ class _PendingDraftsRequestsScreenState
   Future<void> getSelectedRequestDetails(String? requestId) async {
     final requestResponse = await ref
         .read(viewRequestControllerProvider.notifier)
-        .getRequestDetailAsync(context,requestId!);
+        .getRequestDetailAsync(context, requestId!);
 
     if (requestResponse != null) {
       Navigator.push(
@@ -184,8 +183,6 @@ class _PendingDraftsRequestsScreenState
                   formIndividualData: requestResponse.toMap(),
                 )),
       );
-    } else {
-      
-    }
+    } else {}
   }
 }

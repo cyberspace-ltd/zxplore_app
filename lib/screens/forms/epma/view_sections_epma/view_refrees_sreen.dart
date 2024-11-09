@@ -29,10 +29,10 @@ class _ViewRefreesScreenState extends ConsumerState<ViewRefreesScreen> {
         ref.watch(activelyViewedRequestProvider);
     final sectionData = requestData?.data?.referees ?? [];
 
-     ref.listen<AsyncValue>(
-      viewRefereeControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
-    );
+    //  ref.listen<AsyncValue>(
+    //   viewRefereeControllerProvider,
+    //   (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
+    // );
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(viewRefereeControllerProvider).isLoading ||

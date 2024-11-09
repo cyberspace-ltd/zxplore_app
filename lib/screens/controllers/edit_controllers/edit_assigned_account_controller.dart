@@ -9,11 +9,14 @@ import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_assigned_type_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_assigned_type_sreen.dart';
+import 'package:zxplore_app/utils/app_strings.dart';
+import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 part 'edit_assigned_account_controller.g.dart';
 
 @riverpod
 class EditAssignedAccountController extends _$EditAssignedAccountController {
+
   @override
   FutureOr<dynamic> build() {
     //nadaa
@@ -49,19 +52,28 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        return null;
-        }
-        state = AsyncValue.data(null);
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
+           }
+          // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
         return null;
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
+     state = AsyncError(e, stackTrace);
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
+
     }
   }
 
@@ -90,25 +102,31 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
                   )),
         );
         return result;
-      } else {
+      }else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-                     throw Exception(requestResponse['message'] ??'Failed to complete request ');
-
-        }
-        state = AsyncValue.data(null);
-             throw Exception(requestResponse['message'] ??'Failed to complete request ');
-
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
+           }
+          // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
+        return null;
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
-            throw Exception('Failed to complete request ');
+     state = AsyncError(e, stackTrace);
+      showErrorDialog(context,  AppStrings.errorInProcessing);
+      return null;
 
     }
   }
@@ -144,23 +162,32 @@ class ViewAssignedAccountController extends _$ViewAssignedAccountController {
         );
         state = AsyncValue.data(result);
         return result;
-      } else {
+      }  else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
+           }
+          // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
         return null;
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
+     state = AsyncError(e, stackTrace);
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
+
     }
   }
 
@@ -183,32 +210,37 @@ class ViewAssignedAccountController extends _$ViewAssignedAccountController {
         ref.read(viewRequestControllerProvider.notifier)
             .getRequestDetailAsync(context,RequestId!);
         state = AsyncValue.data(result);
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (BuildContext context) => ViewAssignedAccountScreen(
-        //             formIndividualData:
-        //                 ref.read(activelyViewedRequestProvider)!.toMap(),
-        //           )),
-        // );
+       
         return result;
-      } else {
+      }  else {
         if (requestResponse['message'] == 'token expired/invalid') {
           // renew token
           ref.read(loginControllerProvider.notifier).extRenewToken();
-          final ex = Exception('Failed to complete request ');
+          // Update state before showing error
           state = AsyncError(
-              ex, StackTrace.fromString('An error occured please try again'));
-        }
-        state = AsyncError(Exception(requestResponse['message']),
-            StackTrace.fromString(requestResponse['message']));
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
+           }
+          // Update state for other errors
+        final errorMessage = requestResponse['message'] ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
         return null;
       }
     } catch (e, stackTrace) {
-      final ex =
-          Exception('Failed to complete request: ${stackTrace.toString()} ');
-      state = AsyncError(ex, stackTrace);
+     state = AsyncError(e, stackTrace);
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
+
     }
   }
+
+
+
 }

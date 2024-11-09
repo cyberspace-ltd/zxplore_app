@@ -110,6 +110,7 @@ class Item extends ConsumerWidget {
       subRequestId: data?.nextOfKinId,
       onTapEdit: () {
         // to navigate to edit this section
+       
         ref.read(viewNextOfKinControllerProvider.notifier).getEditData(context,
             RequestId: data?.reqId ?? '', NextOfKinId: data?.nextOfKinId);
       },

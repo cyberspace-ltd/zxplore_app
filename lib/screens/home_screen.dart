@@ -97,12 +97,12 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                                   horizontal: 20.0, vertical: 40),
                               child: Container(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.5,
+                                    MediaQuery.of(context).size.height * 0.51,
                                 padding: EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     color: brightness == Brightness.light
-                                        ? Color(0xffffffff)
+                                        ? Color(0xfff0eeee)
                                         : ZxplorePrimaryColor,
                                     boxShadow: brightness == Brightness.light
                                         ? [
@@ -158,7 +158,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             )
                           : Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(AppStrings.errorInProccessing),
+                              child: Text(AppStrings.errorInProcessing),
                             );
                     },
                     error: (error, stk) => Center(
@@ -167,7 +167,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                             child: GestureDetector(
                                 onTap: () => ref
                                     .invalidate(getUserStatisticsDataProvider),
-                                child: Text(AppStrings.errorInProccessing)),
+                                child: Text(AppStrings.errorInProcessing)),
                           ),
                         ),
                     loading: () => const SizedBox.shrink());
@@ -269,40 +269,49 @@ class StatisItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: onPressed,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.12,
-        padding: EdgeInsets.all(16.0),
-        margin: EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: ZxplorePrimaryColor,
-            boxShadow: brightness == Brightness.light
-                ? [
-                    BoxShadow(
-                      offset: const Offset(4, 4),
-                      color: Colors.grey.withOpacity(0.25),
-                      blurRadius: 4,
+      child: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.12,
+            padding: EdgeInsets.all(16.0),
+            margin: EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: ZxplorePrimaryColor,
+                // boxShadow: brightness == Brightness.light
+                //     ? [
+                //         BoxShadow(
+                //           offset: const Offset(4, 4),
+                //           color: Colors.grey.withOpacity(0.25),
+                //           blurRadius: 4,
+                //         ),
+                //       ]
+                //     : []
                     ),
-                  ]
-                : []),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title ?? '',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-            ),
-            Chip(
-                label: Text(
-                  formatNumberInKs(value),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title ?? '',
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                      color: Colors.white, fontWeight: FontWeight.w600),
                 ),
-                backgroundColor: ZxploreRedColor,
-                side: BorderSide(color: Colors.red))
-          ],
-        ),
+                Chip(
+                    label: Text(
+                      formatNumberInKs(value),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    backgroundColor: ZxploreRedColor,
+                    side: BorderSide(color: Colors.red))
+              ],
+            ),
+          ),
+          Divider(
+            height: 0.3,
+            color: Colors.grey.withOpacity(.2),
+          ),
+        ],
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/auth_repo_provider.dart';
@@ -5,6 +6,7 @@ import 'package:zxplore_app/models/epma_models/rennew_token_response.dart';
 import 'package:zxplore_app/utils/app_exception.dart';
 import 'package:zxplore_app/utils/preferences.dart';
 import 'package:zxplore_app/utils/shared_preference_keys.dart';
+import 'package:zxplore_app/widgets/alert_dialogs.dart';
 part 'login_view_controller.g.dart';
 
 @riverpod
@@ -16,7 +18,7 @@ class LoginController extends _$LoginController {
 
   var prefs = Preference();
 
-  Future<dynamic> loginUser({
+  Future<dynamic> loginUser(BuildContext context,{
     required VoidCallback? onSuccess,
     required String? loginMode,
     required String? username,
@@ -33,33 +35,39 @@ class LoginController extends _$LoginController {
         state = AsyncValue.data(loginRes.data);
         onSuccess!.call();
         return loginRes;
-      } else {
+      }   else {
         if (loginRes.message == 'token expired/invalid' ||
             loginRes.code == 401) {
-          renewToken(
+         renewToken(context,
               onSuccess: onSuccess,
               loginMode: loginMode,
               username: username,
               password: password);
-        } else {
-          state = AsyncError('${loginRes.message}',
-              StackTrace.fromString('${loginRes.message}'));
-          return;
-          // throw Exception('${loginRes.message}');
+          // Update state before showing error
+          state = AsyncError(
+            Exception('Session expired. Please try again.'),
+            StackTrace.current,
+          );
+          showErrorDialog(context, 'Session expired. Please try again.');
+          return null;
         }
-        state = AsyncError('${loginRes.message}',
-            StackTrace.fromString('${loginRes.message}'));
-        return;
-        // throw Exception('${loginRes.message}');
+        // Update state for other errors
+        final errorMessage = loginRes.message ?? 'Failed to complete request';
+        state = AsyncError(
+          Exception(errorMessage),
+          StackTrace.current,
+        );
+        showErrorDialog(context, errorMessage);
+        return null;
       }
-    } catch (e, s) {
-      state = AsyncError(e, s);
-      return;
-      // throw Exception('${s.toString()}');
+    } catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
+      showErrorDialog(context, e.toString());
+      return null;
     }
   }
 
-  Future<RenewTokenResponse> renewToken({
+  Future<RenewTokenResponse> renewToken(BuildContext context,{
     required VoidCallback? onSuccess,
     required String? loginMode,
     required String? username,
@@ -75,6 +83,7 @@ class LoginController extends _$LoginController {
       if (renewTokenRes.status) {
         state = AsyncValue.data(renewTokenRes);
         loginUser(
+          context,
             onSuccess: onSuccess,
             loginMode: loginMode,
             username: username,

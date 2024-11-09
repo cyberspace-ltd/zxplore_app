@@ -248,15 +248,8 @@ class AccountRequestItem extends StatelessWidget {
             color: brightness == Brightness.light
                 ? Color(0xfff0eeee)
                 : ZxplorePrimaryColor,
-            boxShadow: brightness == Brightness.light
-                ? [
-                    BoxShadow(
-                      offset: const Offset(0, 4),
-                      color: Colors.grey.withOpacity(0.25),
-                      blurRadius: 4,
-                    ),
-                  ]
-                : []),
+          
+                ),
         child: Column(
           children: [
             Row(

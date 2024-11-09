@@ -52,7 +52,7 @@ class ViewRequestController extends _$ViewRequestController {
       }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context, 'Something went wrong completing request,Try  again.');
       return null;
     }
   }

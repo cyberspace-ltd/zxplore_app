@@ -1630,7 +1630,7 @@ class _RemoteApi implements RemoteApi {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'RequestId': RequestId,
-      r'ChildId': NextOfKinId,
+      r'NextOfKinId': NextOfKinId,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -1937,7 +1937,7 @@ class _RemoteApi implements RemoteApi {
     )
         .compose(
           _dio.options,
-          'Operation/deleteRefree',
+          'Operation/deleteReferee',
           queryParameters: queryParameters,
           data: _data,
         )

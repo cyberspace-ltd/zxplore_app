@@ -35,9 +35,11 @@ class ApiInterceptor extends Interceptor {
     }
 
     debugPrint(
-      'Request: ${options.method} ${options.baseUrl}${options.path} '
-      'headers: ${options.headers} data: ${options.data}',
-    );
+      'Request: ${options.method} ${options.baseUrl}${options.path} ');
+       debugPrint( 'Request Data: ${options.data}   ');
+       debugPrint( 'Request Qr: ${options.queryParameters}   ');
+       debugPrint( 'headers: ${options.headers} data: ${options.data}');
+    
 
     return super.onRequest(options, handler);
   }
@@ -99,7 +101,7 @@ class ApiInterceptor extends Interceptor {
       debugPrint('❌❌❌ Error  Response Name2:${err.type.name}');
       return handler.resolve(Response(
         statusCode: err.response?.statusCode ?? 0,
-        statusMessage: err.message ?? AppStrings.errorInProccessing,
+        statusMessage: err.message ?? AppStrings. errorInProcessing,
         data: {
           "success": false,
           "error_code": err.response?.data['error_code'] ?? -1,
@@ -123,7 +125,7 @@ class ApiInterceptor extends Interceptor {
 
         return handler.resolve(Response(
           statusCode: 0000,
-          statusMessage: err.message ?? AppStrings.errorInProccessing,
+          statusMessage: err.message ?? AppStrings. errorInProcessing,
           data: {
             "succeeded": false,
             "message": NetworkExceptions.getDioException(err.type)
@@ -137,7 +139,7 @@ class ApiInterceptor extends Interceptor {
 
       return handler.resolve(Response(
         statusCode: err.response?.statusCode ?? 0,
-        statusMessage: err.message ?? AppStrings.errorInProccessing,
+        statusMessage: err.message ?? AppStrings. errorInProcessing,
         data: {
           "succeeded": false,
           "message": err.response?.data['message'] ??

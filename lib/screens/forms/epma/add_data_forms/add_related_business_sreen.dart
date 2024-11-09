@@ -255,7 +255,7 @@ class _AddRelatedBusinessScreenState
                     fillColor: Colors.transparent,
                     controller: relationshipNatureController,
                     hint: 'Enter business relationship',
-                    inputType: TextInputType.number,
+                    inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value?.isEmpty == true) {

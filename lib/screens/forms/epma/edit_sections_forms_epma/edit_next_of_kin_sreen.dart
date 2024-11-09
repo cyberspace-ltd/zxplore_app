@@ -16,7 +16,6 @@ import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_per
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_next_of_kin_sreen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
-import 'package:zxplore_app/widgets/async_ui.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
@@ -101,14 +100,12 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-      editNextOfKinControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context, okAction: () {},errorMsg: state.error),
-    );
+  
     return ZxploreProgress(
       inAsyncCall: ref.watch(editNextOfKinControllerProvider).isLoading ||
           ref.watch(viewRequestControllerProvider).isLoading,
       child: BaseEditForm(
+        
         title: 'Editing Next Of Kin',
         // widgetToGoOnCancel: Container(),
         widgetToGoOnCancel: ViewNextOfKinScreen(
@@ -134,7 +131,9 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
               title: 'Save'),
         ),
 
-        onCancel: () {},
+        onCancel: () {
+          Navigator.pop(context);
+        },
         data: {},
         child: SingleChildScrollView(
           child: Padding(
@@ -393,7 +392,7 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
                             error: (e, s) => GestureDetector(
                                 onTap: () => ref.invalidate(getGenderProvider),
                                 child: const Text(
-                                  'An error occured',
+                                  'An error occurred',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -406,12 +405,12 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
                     title: 'Residential Address',
                     fillColor: Colors.transparent,
                     controller: addressController,
-                    hint: 'Enter bank',
+                    hint: 'Enter Residential Address',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value?.isEmpty == true) {
-                        return 'Bank is required';
+                        return 'Address is required';
                       }
                       return null;
                     },
@@ -420,7 +419,7 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
                   CustomTextFormField(
                     title: 'Telephone Number',
                     fillColor: Colors.transparent,
-                    controller: addressController,
+                    controller: telNoController,
                     hint: 'Enter number',
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
@@ -436,7 +435,7 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
                     title: 'Relationship',
                     fillColor: Colors.transparent,
                     controller: relationshipeController,
-                    hint: 'Enter account name',
+                    hint: 'Enter Relationship  ',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {

@@ -7,7 +7,7 @@ part of 'edit_monthly_activity_contrroller.dart';
 // **************************************************************************
 
 String _$editMonthlyActivityControllerHash() =>
-    r'146af4891a09b41ee8133594bb59adb6321e1df5';
+    r'd0a78ef9aac5acf97375ff7840505dbd2ce385d9';
 
 /// See also [EditMonthlyActivityController].
 @ProviderFor(EditMonthlyActivityController)
@@ -24,7 +24,7 @@ final editMonthlyActivityControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditMonthlyActivityController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewMonthlyActivityControllerHash() =>
-    r'17a6c550d706ee44d3db68b9b08c47a615bd20b0';
+    r'5e0f799491df2fef52e4d54873ebcd4c6b739343';
 
 /// See also [ViewMonthlyActivityController].
 @ProviderFor(ViewMonthlyActivityController)

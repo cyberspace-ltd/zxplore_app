@@ -61,8 +61,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
   }
 
-  Future<void> loginUser() async {
+  Future<void> loginUser(BuildContext context) async {
     ref.read(loginControllerProvider.notifier).loginUser(
+      context,
         onSuccess: () {
           /// call the required Meta
           ref.read(getAnticipatedAmountProvider);
@@ -328,7 +329,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       if (!loginFrmKey.currentState!.validate()) {
                         return;
                       }
-                      loginUser();
+                      loginUser( context);
                     },
                     title: 'Login',
                   ),

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -31,15 +30,12 @@ import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_initial_creation_info_screen.dart';
 import 'package:zxplore_app/utils/app_sizes.dart';
 import 'package:zxplore_app/utils/string_extentions.dart';
-import 'package:zxplore_app/widgets/async_ui.dart';
-// import 'package:zxplore_app/utils/string_extentions.dart';
 import 'package:zxplore_app/widgets/custom_text_field.dart';
 import 'package:zxplore_app/widgets/submit_button.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
-import '../../../../utils/app_exception.dart';
 
 final div = Divider(
   height: 0,
@@ -87,8 +83,8 @@ class _PersonalInfoEditSscreenState
   final TextEditingController _homeTownController = TextEditingController();
   final TextEditingController _residencePermitNoController =
       TextEditingController();
-  final TextEditingController _residencePermitPlaceCodeController =
-      TextEditingController();
+  // final TextEditingController _residencePermitPlaceCodeController =
+  //     TextEditingController();
   final TextEditingController _permitIssueDateController =
       TextEditingController();
   final TextEditingController _permitExpiryDateController =
@@ -156,7 +152,12 @@ class _PersonalInfoEditSscreenState
     final resPermitCountryValueListenable = ValueNotifier<CountryDatum?>(null);
     final customerClassificationValueListenable = ValueNotifier<CustomerClassificationDatum?>(null);
   final TextEditingController? resPermitSearchCountryController = TextEditingController();
-  // final TextEditingController? _customerClassificationIdController = TextEditingController();
+  /// residence Permit Place Code  
+  final TextEditingController residencePermitPlaceCountryCodeController = TextEditingController();
+    final residencePermitPlaceCountryCodeValueListenable = ValueNotifier<CountryDatum?>(null);
+   CountryDatum? residencePermitPlaceCodeCountryValue;
+  String? residencePermitPlaceCountryCode;
+  String? residencePermitPlaceCountryCodeName;
     /// region 
   final regionValueListenable = ValueNotifier<RegionDatum?>(null);
 final TextEditingController regionSearchEditingController = TextEditingController();
@@ -164,29 +165,26 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
 
   bool? residentPermitStatus;
   bool isSelected = false;
-  bool hasPermanentResidence = false; //1
-  bool accountOwnership = false; //2
-  bool customerResidentInGhana = false; //3
-  bool isPhysicallyChallenged = false; //4
-  bool customerIsPEP = false; //5
-  bool setupIbank = false; //6
-  bool setupZPrompt = false; //7
-  bool setupStatementViaEmail = false; //8
-  bool setupEmailIndemnity = false; //9
-  bool isPhysicallyChallanged = false; //10
-  bool isNewRequest = false; //11
-  bool? customerIsPep = false; //12
-
-  // DateTime? _selectedDate;
+  bool hasPermanentResidence = false; 
+  bool accountOwnership = false; 
+  bool customerResidentInGhana = false; 
+  bool isPhysicallyChallenged = false;  
+  bool customerIsPEP = false;  
+  bool setupIbank = false;  
+  bool setupZPrompt = false;  
+  bool setupStatementViaEmail = false;  
+  bool setupEmailIndemnity = false;  
+  bool isPhysicallyChallanged = false;  
+  bool isNewRequest = false;  
+  bool? customerIsPep = false;  
+ 
 
   GendersDatum? selectedGenderItem;
   String? selectedGenderCode;
   String? selectedGenderName;
 
   String? preRegionCode;
-  // IdentificationTypesDatum? selectedIdentificationItem;
-  // int? selectedIdentificationCode;
-  // String? selectedIdentificationName;
+ 
 
   BusinessNaturesDatum? businessNaturesItem;
   String? selectedBusinessNaturesCode;
@@ -274,6 +272,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
             "${userData?.identificationNo ?? ''}";
         _identificationNoController.text =
             "${userData?.identificationNo ?? ''}";
+            selectedCountryCode="${userData?.idCountryCode ?? ''}";
         _idCountryCodeController.text = "${userData?.idCountryCode ?? ''}";
         _idIssueAuthorityController.text =
             "${userData?.idIssueAuthority ?? ''}";
@@ -291,6 +290,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         _tinController.text = "${userData?.tin ?? ''}";
         _genderCodeController.text = "${userData?.genderCode ?? ''}";
         _countryOrigCodeController.text = "${userData?.citizenshipCode ?? ''}";
+        selectedRegionCode="${userData?.regionCode ?? ''}";
         _regionCodeController.text = "${userData?.regionCode ?? ''}";
         _maritalStatusController.text = "${userData?.maritalStatus ?? ''}";
         _businessNatureIdController.text =
@@ -309,7 +309,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         _homeTownController.text = "${userData?.homeTown ?? ''}";
         _residencePermitNoController.text =
             "${userData?.residencePermitNo ?? ''}";
-        _residencePermitPlaceCodeController.text =
+        residencePermitPlaceCountryCodeController.text =
             "${userData?.residencePermitPlaceCode ?? ''}";
         _permitIssueDateController.text =
             "${formatDate(userData?.permitIssueDate ?? '')}";
@@ -358,6 +358,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         customerResidentInGhana = userData?.customerResidentInGhana ?? false;
         customerIsPEP = userData?.customerIsPep ?? false;
         setupIbank = userData?.setupIbank ?? false;
+        selectedGenderCode= userData?.genderCode ?? '';
         setupZPrompt = userData?.setupZPrompt ?? false;
         setupStatementViaEmail = userData?.setupStatementViaEmail ?? false;
         setupEmailIndemnity = userData?.setupEmailIndemnity ?? false;
@@ -408,7 +409,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
     _countryOrigCodeController.dispose();
     _homeTownController.dispose();
     _residencePermitNoController.dispose();
-    _residencePermitPlaceCodeController.dispose();
+    residencePermitPlaceCountryCodeController.dispose();
     _permitIssueDateController.dispose();
     _permitExpiryDateController.dispose();
     _districtAssemblyAreaController.dispose();
@@ -466,7 +467,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   }
 
   Future<void> editAccountRequest(BuildContext context) async {
-    print(">>>>$permIdentityDateIssued");
+ 
     // final lat = ref.read(userLatitudeProvider);
     // final long = ref.read(userLongitudeProvider);
     final DateTime tempnow = DateTime.now();
@@ -499,12 +500,12 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         permanentResidentialAddress:
             _permanentResidentialAddressController.text,
         permanentResidentialCity: _permanentResidentialCityController.text,
-        permanentResidentialCountryCode:
+        permanentResidentialCountryCode: permsSelectedCountry?.countryCode??
             _permanentResidentialCountryCodeController.text,
         residencePermitNo: _residencePermitNoController.text,
-        residencePermitPlaceCode: _residencePermitPlaceCodeController.text,
+        residencePermitPlaceCode: residencePermitPlaceCountryCode,
         itemStage: initialData?.itemStage ?? '',
-        businessNatureId: selectedBusinessNaturesCode,
+        businessNatureId: '$selectedBusinessNaturesCode',
         employerTel: _employerTelController.text,
         employmentTypeCode: selectedEmploymentTypesCode,
         employerName: _employerNameController.text,
@@ -512,7 +513,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         niaVerificationNo: _niaVerificationNoController.text,
         spouseName: _spouseNameController.text,
         spouseOccupation: _spouseOccupationController.text,
-        subBusinessNatureId: subBusinessNaturesCode,
+        subBusinessNatureId: '$subBusinessNaturesCode',
         timeWithEmployer: _timeWithEmployerController.text,
         tin: _tinController.text,
         gpsAddress: _gpsAddressController.text,
@@ -558,22 +559,11 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
             afterFailed: () {});
   }
 
-  Future<List<CountryDatum>?> fetchCountries() async {
-    try {
-      return ref.read(getCountriesProvider).value;
-    } on DioException catch (err, _) {
-      throw AppException('$err. Please try again');
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context) {
-    // /check  for  errors here
-    // ref.listen<AsyncValue>(
-    //   editPersonalDetailsControllerProvider,
-    //   (_, state) => state.showAlertDialogOnError(context,
-    //       okAction: () {}, errorMsg: state.error),
-    // );
+    
  
 
     return ZxploreProgress(
@@ -604,15 +594,15 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                 }
                 }
                
-                if (regionsItem == null) {
+                if (regionsItem == null || selectedRegionCode==null) {
                   zXFlushBar(context, "Region is required");
                   return;
                 }
-                if (selectedCountry == null) {
+                if (selectedCountry == null || selectedCountryCode==null) {
                   zXFlushBar(context, "Country is required");
                   return;
                 }
-                if (selectedGenderItem == null) {
+                if (selectedGenderItem == null||selectedGenderCode==null) {
                   zXFlushBar(context, "Gender is required");
                   return;
                 }
@@ -1299,14 +1289,9 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                               newValue?.countryName;
                                           selectedCitizenshipCode =
                                               newValue?.countryCode;
-                                          _idCountryCodeController.text =
-                                              newValue?.countryCode ?? '';
-                                          _altCitizenshipCodeController.text =
-                                              newValue?.countryName ?? '';
-                                          _altCitizenshipCodeController.text =
-                                              newValue?.countryName ?? '';
-                                          _citizenshipCodeController.text =
-                                              newValue?.countryName ?? '';
+                                          _idCountryCodeController.text =   newValue?.countryCode ?? '';
+                                          _altCitizenshipCodeController.text =  newValue?.countryCode ?? '';
+                                          _citizenshipCodeController.text =    newValue?.countryName ?? '';
                                         });
                                       },
                                       buttonStyleData: ButtonStyleData(
@@ -1520,7 +1505,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                       subBusinessNaturesItem != null) ...[
                     /// Sub bus category
                     Text(
-                      ' Sub  Business  class',
+                      'Sub Business class',
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: Theme.of(context)
@@ -1537,7 +1522,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                             .when(
                               data: (data) => (data == null || data.isEmpty)
                                   ? GestureDetector(
-                                      child: Text('Empty  Sub-classification'),
+                                      child: Text('Empty Sub-classification'),
                                       onTap: () => ref.invalidate(
                                           getSubBusinessNaturesProvider(
                                               int.parse(businessNaturesItem
@@ -2037,11 +2022,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                       });
                     },
                   ),
-                  // CheckboxListTile(
-                  //   title: Text('Has Permanent Residence'),
-                  //   value: hasPermanentResidence,
-                  //   onChanged: (value) => _handleCheckboxChange(1, value),
-                  // ),
+                 
                   if (residentPermitStatus != null &&
                       (residentPermitStatus == true ||
                           residentPermitStatus == false)) ...[
@@ -2265,20 +2246,175 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     ),
                    
                     const SizedBox(height: 16),
-                    CustomTextFormField(
-                      title: "Place Of Issue",
-                      fillColor: Colors.transparent,
-                      controller: _residencePermitPlaceCodeController,
-                      hint: 'Enter place of issue',
-                      inputType: TextInputType.text,
-                      useDefaultErrorText: false,
-                      validator: (value) {
-                        // if (value.toString().isEmpty) {
-                        //   return 'Permanent address is required';
-                        // }
-                        return null;
-                      },
-                    ),
+                    
+
+                  Text(
+                    'Place Of Issue',
+                    overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                  const SizedBox(height: 6),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getCountriesProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<CountryDatum>(
+                                           isExpanded: true,
+                                        hint: Text(
+                                        'Select country',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData<
+                                              CountryDatum>(
+                                          searchInnerWidgetHeight: 150,
+                                          searchInnerWidget: Container(
+                                            height: 50,
+                                            padding: const EdgeInsets.only(
+                                              top: 8,
+                                              bottom: 4,
+                                              right: 8,
+                                              left: 8,
+                                            ),
+                                            child: TextFormField(
+                                              expands: true,
+                                              maxLines: null,
+                                              controller:
+                                                  searchCountryController,
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 10,
+                                                  vertical: 8,
+                                                ),
+                                                hintText:
+                                                    'Search for country...',
+                                                hintStyle: const TextStyle(
+                                                    fontSize: 12),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                   
+                                          searchController:
+                                              residencePermitPlaceCountryCodeController,
+                                          searchMatchFn: (item, searchValue) {
+                                            return item.value!.countryName!.toUpperCase()
+                                            .startsWith(searchValue.toUpperCase());
+                                          }),
+                                      onMenuStateChange: (isOpen) {
+                                        if (!isOpen) {
+                                          residencePermitPlaceCountryCodeController?.clear();
+                                        }
+                                      },
+                                      items: data
+                                          .map<DropdownMenuItem<CountryDatum>>(
+                                              (item) => DropdownMenuItem<CountryDatum>(
+                                                    value: item,
+                                                    child: Text( item.countryName ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:  TextOverflow.ellipsis,
+                                                    ),
+                                                  ))
+                                          .toList(),
+                                      value: residencePermitPlaceCodeCountryValue,
+                                      onChanged: (CountryDatum? newValue) {
+                                          residencePermitPlaceCountryCodeValueListenable.value = newValue;
+
+                                        setState(() {
+                                          /// Set selected item params
+                                          residencePermitPlaceCodeCountryValue = newValue;
+                                          residencePermitPlaceCountryCode =newValue?.countryCode;
+                                          residencePermitPlaceCountryCodeName =newValue?.countryName;
+                                         });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                        ),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
+                                        ),
+                                      ),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                      ),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    child: Text(
+                                        'No? countries?, Tap to refresh, '),
+                                    onTap: () =>
+                                        ref.invalidate(getCountriesProvider),
+                                  ),
+                            error: (e, s) => GestureDetector(
+                                onTap: () =>
+                                    ref.invalidate(getCountriesProvider),
+                                child: const Text(
+                                  'An error occurred',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+
                     const SizedBox(height: 16),
                     CustomTextFormField(
                       onTap: () =>

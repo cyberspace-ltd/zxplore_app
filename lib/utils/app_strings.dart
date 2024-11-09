@@ -1,3 +1,3 @@
 class AppStrings {
-  static const errorInProccessing='Error processing request.';
+  static const errorInProcessing='Something went wrong completing request'; //AppStrings.errorInProcessing
 }

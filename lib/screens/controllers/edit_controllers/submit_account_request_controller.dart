@@ -5,6 +5,7 @@ import 'package:zxplore_app/models/epma_models/complete_request_response.dart';
 import 'package:zxplore_app/models/epma_models/process_request_response.dart';
 import 'package:zxplore_app/models/epma_models/validate_request_response.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
+import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/widgets/alert_dialogs.dart';
 part 'submit_account_request_controller.g.dart';
 
@@ -50,7 +51,7 @@ class SubmitAccountRequestController extends _$SubmitAccountRequestController {
       }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }
@@ -90,7 +91,7 @@ class SubmitAccountRequestController extends _$SubmitAccountRequestController {
       }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }
@@ -129,7 +130,7 @@ class SubmitAccountRequestController extends _$SubmitAccountRequestController {
       }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }

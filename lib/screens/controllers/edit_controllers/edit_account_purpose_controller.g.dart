@@ -7,7 +7,7 @@ part of 'edit_account_purpose_controller.dart';
 // **************************************************************************
 
 String _$editAccountPurposeControllerHash() =>
-    r'85b0f02f856fdb9434c311553e7ffad8c47a2981';
+    r'f8042910cf86cfa553050b8e604e08193545f773';
 
 /// See also [EditAccountPurposeController].
 @ProviderFor(EditAccountPurposeController)
@@ -24,7 +24,7 @@ final editAccountPurposeControllerProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$EditAccountPurposeController = AutoDisposeAsyncNotifier<dynamic>;
 String _$viewAccountPurposeControllerHash() =>
-    r'b1b37030eb37e8673125f3caab3ce06d6006fbf4';
+    r'7bd49b17b9914e4fa12e82b99d5562fbc7cba367';
 
 /// See also [ViewAccountPurposeController].
 @ProviderFor(ViewAccountPurposeController)

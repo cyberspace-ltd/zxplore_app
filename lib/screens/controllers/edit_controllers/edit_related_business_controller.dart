@@ -9,6 +9,7 @@ import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart
 import 'package:zxplore_app/screens/controllers/pending_requests/view_request_controller.dart';
 import 'package:zxplore_app/screens/forms/epma/edit_sections_forms_epma/edit_related_business_sreen.dart';
 import 'package:zxplore_app/screens/forms/epma/view_sections_epma/view_related_business_sreen.dart';
+import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/widgets/alert_dialogs.dart';
 
 part 'edit_related_business_controller.g.dart';
@@ -70,7 +71,7 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
       }
     } catch (e, stackTrace) {
         state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }
@@ -124,7 +125,7 @@ class EditRelatedBusinessController extends _$EditRelatedBusinessController {
       }
     } catch (e, stackTrace) {
         state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }
@@ -182,7 +183,7 @@ class ViewRelatedBusinessController extends _$ViewRelatedBusinessController {
         return null; }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;  }
   }
 
@@ -235,7 +236,7 @@ class ViewRelatedBusinessController extends _$ViewRelatedBusinessController {
       }
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
-      showErrorDialog(context, e.toString());
+      showErrorDialog(context,  AppStrings.errorInProcessing);
       return null;
     }
   }

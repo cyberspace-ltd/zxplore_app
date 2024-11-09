@@ -104,7 +104,7 @@ class ErrorAlert extends StatelessWidget {
         if (onRetry != null)
           TextButton(
             onPressed: onRetry,
-            child: const Text('Retry'),
+            child: const Text('Ok'),
           ),
       ],
     );
