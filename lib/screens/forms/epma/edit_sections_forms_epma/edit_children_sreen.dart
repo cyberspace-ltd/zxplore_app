@@ -45,13 +45,29 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
   final TextEditingController ageCtrl = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
   final TextEditingController prevItemStageController = TextEditingController();
+  final TextEditingController prevGenderController = TextEditingController();
+  final TextEditingController prevCountryController = TextEditingController();
 
   bool hidePrevItemStage = false;
+  bool hidePrevGender = false;
+  bool hidePrevCountry = false;
   String? selectedItemStage;
 
   void togglePrevItemStage() {
     setState(() {
       hidePrevItemStage = !hidePrevItemStage;
+    });
+  }
+
+  void togglePrevGender() {
+    setState(() {
+      hidePrevGender = !hidePrevGender;
+    });
+  }
+
+  void togglePrevCountry() {
+    setState(() {
+      hidePrevGender = !hidePrevGender;
     });
   }
 
@@ -79,6 +95,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
     birthDateController.dispose();
     ageCtrl.dispose();
     prevItemStageController.dispose();
+    prevGenderController.dispose();
+    prevCountryController.dispose();
     super.dispose();
   }
 
@@ -98,6 +116,10 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
         ageCtrl.text = '${userData?.age ?? 0}';
         selectedItemStage = userData?.itemStage;
         prevItemStageController.text = userData?.itemStage ?? 'No selection';
+        prevGenderController.text =
+            selectedGenderItem?.genderName ?? 'No selection';
+        prevCountryController.text =
+            selectedCountry?.countryName ?? 'No selection';
       } catch (e) {}
     });
   }
@@ -401,248 +423,298 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                     },
                   ),
                   gapH16,
-                  Text(
-                    'Gender',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getGenderProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<GendersDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select gender',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<DropdownMenuItem<GendersDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      GendersDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      '${item.genderName}',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: selectedGenderItem,
-                                      onChanged: (GendersDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          selectedGenderItem = newValue;
-                                          genderName = newValue?.genderName;
-                                          genderCode = newValue?.genderCode;
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
-                                        ),
-                                      ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : TextButton(
-                                    onPressed: () =>
-                                        ref.invalidate(getGenderProvider),
-                                    child: Text('Empty data, Tap to retry')),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(getGenderProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  Text(
-                    'Country',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getCountriesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<CountryDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select country',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<DropdownMenuItem<CountryDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      CountryDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.countryName ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: selectedCountry,
-                                      onChanged: (CountryDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          selectedCountry = newValue;
-                                          selectedCountryCode =
-                                              newValue?.countryCode;
+                                    if (!hidePrevGender) ...[
+                    CustomTextFormField(
+                      title: "Gender",
+                      fillColor: Colors.transparent,
+                      controller: prevGenderController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevGender();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
 
-                                          selectedCountryName =
-                                              newValue?.countryName;
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                                  if (hidePrevGender) ...[
+                    Text(
+                      'Gender',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getGenderProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<GendersDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select gender',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    GendersDatum>>((item) =>
+                                                DropdownMenuItem<GendersDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    '${item.genderName}',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedGenderItem,
+                                        onChanged: (GendersDatum? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            selectedGenderItem = newValue;
+                                            genderName = newValue?.genderName;
+                                            genderCode = newValue?.genderCode;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
+                                    )
+                                  : TextButton(
+                                      onPressed: () =>
+                                          ref.invalidate(getGenderProvider),
+                                      child: Text('Empty data, Tap to retry')),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getGenderProvider),
+                                  child: const Text(
+                                    'An error occured',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
+                  if (!hidePrevCountry) ...[
+                    CustomTextFormField(
+                      title: "Country",
+                      fillColor: Colors.transparent,
+                      controller: prevCountryController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevGender();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevCountry) ...[
+                    Text(
+                      'Country',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getCountriesProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<CountryDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select country',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    CountryDatum>>((item) =>
+                                                DropdownMenuItem<CountryDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.countryName ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedCountry,
+                                        onChanged: (CountryDatum? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            selectedCountry = newValue;
+                                            selectedCountryCode =
+                                                newValue?.countryCode;
+
+                                            selectedCountryName =
+                                                newValue?.countryName;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
+                                        ),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
+                                        ),
                                       ),
+                                    )
+                                  : GestureDetector(
+                                      child: Text(
+                                          'No? countries?, Tap to refresh, '),
+                                      onTap: () =>
+                                          ref.invalidate(getCountriesProvider),
                                     ),
-                                  )
-                                : GestureDetector(
-                                    child: Text(
-                                        'No? countries?, Tap to refresh, '),
-                                    onTap: () =>
-                                        ref.invalidate(getCountriesProvider),
-                                  ),
-                            error: (e, s) => GestureDetector(
-                                onTap: () =>
-                                    ref.invalidate(getCountriesProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getCountriesProvider),
+                                  child: const Text(
+                                    'An error occured',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
                   const SizedBox(height: 24),
                 ],
               ),

@@ -173,9 +173,9 @@ class _CreateNewAccountScreenState
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'other name is  required';
-                      }
+                      // if (value.toString().isEmpty) {
+                      //   return 'other name is  required';
+                      // }
                       return null;
                     },
                   ),

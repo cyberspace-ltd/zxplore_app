@@ -49,7 +49,7 @@ class _SectionScreenState extends ConsumerState<SectionScreen> {
       // _categories.add(Category(id: 4, name: 'Other Information'));
       _categories.add(Category(id: 5, name: 'Other Accounts'));
       _categories.add(Category(id: 6, name: 'Foreign Accounts'));
-      _categories.add(Category(id: 7, name: 'Documents Attached'));
+      _categories.add(Category(id: 7, name: 'Upload Documents'));
       _categories.add(Category(id: 8, name: 'Account Type'));
       _categories.add(Category(id: 9, name: 'Next Of Kin'));
       _categories.add(Category(id: 10, name: 'Referees'));

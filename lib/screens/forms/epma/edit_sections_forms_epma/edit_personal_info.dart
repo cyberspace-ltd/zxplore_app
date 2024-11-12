@@ -36,7 +36,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:zxplore_app/widgets/zxplore_progress.dart';
 
-
 final div = Divider(
   height: 0,
   color: ZxplorePrimaryColor.withOpacity(0.5),
@@ -145,46 +144,66 @@ class _PersonalInfoEditSscreenState
   final TextEditingController _employerNameController = TextEditingController();
   final TextEditingController _customerClassificationIdController =
       TextEditingController();
-/// country
+
+  /// country
   final countryValueListenable = ValueNotifier<CountryDatum?>(null);
-  final TextEditingController? searchCountryController = TextEditingController();
-    /// resident permit country
-    final resPermitCountryValueListenable = ValueNotifier<CountryDatum?>(null);
-    final customerClassificationValueListenable = ValueNotifier<CustomerClassificationDatum?>(null);
-  final TextEditingController? resPermitSearchCountryController = TextEditingController();
-  /// residence Permit Place Code  
-  final TextEditingController residencePermitPlaceCountryCodeController = TextEditingController();
-    final residencePermitPlaceCountryCodeValueListenable = ValueNotifier<CountryDatum?>(null);
-   CountryDatum? residencePermitPlaceCodeCountryValue;
+  final TextEditingController? searchCountryController =
+      TextEditingController();
+
+  /// resident permit country
+  final resPermitCountryValueListenable = ValueNotifier<CountryDatum?>(null);
+  final customerClassificationValueListenable =
+      ValueNotifier<CustomerClassificationDatum?>(null);
+  final TextEditingController? resPermitSearchCountryController =
+      TextEditingController();
+
+  /// residence Permit Place Code
+  final TextEditingController residencePermitPlaceCountryCodeController =
+      TextEditingController();
+  final residencePermitPlaceCountryCodeValueListenable =
+      ValueNotifier<CountryDatum?>(null);
+  CountryDatum? residencePermitPlaceCodeCountryValue;
   String? residencePermitPlaceCountryCode;
   String? residencePermitPlaceCountryCodeName;
-    /// region 
+
+  /// region
   final regionValueListenable = ValueNotifier<RegionDatum?>(null);
-final TextEditingController regionSearchEditingController = TextEditingController();
+  final TextEditingController regionSearchEditingController =
+      TextEditingController();
   final TextEditingController prevItemStageController = TextEditingController();
+  final TextEditingController prevGenderController = TextEditingController();
+  final TextEditingController prevRegionController = TextEditingController();
+  final TextEditingController prevCountryController = TextEditingController();
+  final TextEditingController prevBizNatureController = TextEditingController();
+  final TextEditingController prevCustomerClassController =
+      TextEditingController();
+  final TextEditingController prevEmploymentTypeController =
+      TextEditingController();
+  final TextEditingController prevMaritalStatusController =
+      TextEditingController();
+
+  final TextEditingController prevIdTypeController = TextEditingController();
 
   bool? residentPermitStatus;
   bool isSelected = false;
-  bool hasPermanentResidence = false; 
-  bool accountOwnership = false; 
-  bool customerResidentInGhana = false; 
-  bool isPhysicallyChallenged = false;  
-  bool customerIsPEP = false;  
-  bool setupIbank = false;  
-  bool setupZPrompt = false;  
-  bool setupStatementViaEmail = false;  
-  bool setupEmailIndemnity = false;  
-  bool isPhysicallyChallanged = false;  
-  bool isNewRequest = false;  
-  bool? customerIsPep = false;  
- 
+  bool hasPermanentResidence = false;
+  bool accountOwnership = false;
+  bool customerResidentInGhana = false;
+  bool isPhysicallyChallenged = false;
+  bool customerIsPEP = false;
+  bool setupIbank = false;
+  bool setupZPrompt = false;
+  bool setupStatementViaEmail = false;
+  bool setupEmailIndemnity = false;
+  bool isPhysicallyChallanged = false;
+  bool isNewRequest = false;
+  bool? customerIsPep = false;
 
   GendersDatum? selectedGenderItem;
   String? selectedGenderCode;
   String? selectedGenderName;
 
   String? preRegionCode;
- 
 
   BusinessNaturesDatum? businessNaturesItem;
   String? selectedBusinessNaturesCode;
@@ -209,7 +228,6 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   MaritalStatusDatum? maritalStatusItem;
   String? maritalStatusCode;
   String? maritalStatusName;
- 
 
   IdentificationTypesDatum? selectedIdType;
   int? selectedIdentificationTypeCode;
@@ -238,12 +256,68 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
 
-    bool hidePrevItemStage = false;
+  bool hidePrevItemStage = false;
+  bool hidePrevGender = false;
+  bool hidePrevRegion = false;
+  bool hidePrevCountry = false;
+  bool hidePrevBizNature = false;
+  bool hideCustomerClass = false;
+  bool hideEmploymentType = false;
+  bool hideMaritalStatus = false;
+  bool hideIdType = false;
   String? selectedItemStage;
 
   void togglePrevItemStage() {
     setState(() {
       hidePrevItemStage = !hidePrevItemStage;
+    });
+  }
+
+  void togglePrevGender() {
+    setState(() {
+      hidePrevGender = !hidePrevGender;
+    });
+  }
+
+  void togglePrevRegion() {
+    setState(() {
+      hidePrevRegion = !hidePrevRegion;
+    });
+  }
+
+  void togglePrevCountry() {
+    setState(() {
+      hidePrevCountry = !hidePrevCountry;
+    });
+  }
+
+  void togglePrevBizNature() {
+    setState(() {
+      hidePrevBizNature = !hidePrevBizNature;
+    });
+  }
+
+  void toggleCustomerClass() {
+    setState(() {
+      hideCustomerClass = !hideCustomerClass;
+    });
+  }
+
+  void toggleEmploymentType() {
+    setState(() {
+      hideEmploymentType = !hideEmploymentType;
+    });
+  }
+
+  void toggleMaritalStatus() {
+    setState(() {
+      hideMaritalStatus = !hideMaritalStatus;
+    });
+  }
+
+  void toggleIdType() {
+    setState(() {
+      hideIdType = !hideIdType;
     });
   }
 
@@ -255,9 +329,25 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
     WidgetsBinding.instance.addPostFrameCallback((_) {
       try {
         final userData = widget.data?.data;
-        selectedIdentificationTypeCode= userData?.identificationTypeId??-1;
-          selectedItemStage = userData?.itemStage;
-                 prevItemStageController.text = userData?.itemStage ?? 'No selection';
+        selectedIdentificationTypeCode = userData?.identificationTypeId ?? -1;
+        selectedItemStage = userData?.itemStage;
+        selectedGenderCode = userData?.genderCode ?? 'No selection';
+        residentPermitStatus = userData?.hasPermanentResidence;
+        prevItemStageController.text = userData?.itemStage ?? 'No selection';
+        prevEmploymentTypeController.text =
+            employmentTypesItem?.employmentTypeName ?? 'No Selection';
+        prevIdTypeController.text =
+            selectedIdType?.identificationTypeName ?? 'No selection';
+        prevMaritalStatusController.text =
+            maritalStatusItem?.maritalStatusDesc ?? 'No selection';
+        prevCustomerClassController.text =
+            customerClassificationsItem?.description ?? 'No Selection';
+        prevGenderController.text = userData?.genderCode ?? 'No selection';
+        prevRegionController.text = regionsItem?.regionName ?? 'No selection';
+        prevCountryController.text =
+            selectedCountry?.countryName ?? 'No selection';
+        prevBizNatureController.text =
+            businessNaturesItem?.businessNatureName ?? 'No selection';
         preRegionCode = userData?.regionCode ?? '';
         // Initialize each controller with a unique value
         _surnameController.text = "${userData?.surname ?? ''}";
@@ -272,7 +362,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
             "${userData?.identificationNo ?? ''}";
         _identificationNoController.text =
             "${userData?.identificationNo ?? ''}";
-            selectedCountryCode="${userData?.idCountryCode ?? ''}";
+        selectedCountryCode = "${userData?.idCountryCode ?? ''}";
         _idCountryCodeController.text = "${userData?.idCountryCode ?? ''}";
         _idIssueAuthorityController.text =
             "${userData?.idIssueAuthority ?? ''}";
@@ -290,7 +380,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         _tinController.text = "${userData?.tin ?? ''}";
         _genderCodeController.text = "${userData?.genderCode ?? ''}";
         _countryOrigCodeController.text = "${userData?.citizenshipCode ?? ''}";
-        selectedRegionCode="${userData?.regionCode ?? ''}";
+        selectedRegionCode = "${userData?.regionCode ?? ''}";
         _regionCodeController.text = "${userData?.regionCode ?? ''}";
         _maritalStatusController.text = "${userData?.maritalStatus ?? ''}";
         _businessNatureIdController.text =
@@ -358,7 +448,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         customerResidentInGhana = userData?.customerResidentInGhana ?? false;
         customerIsPEP = userData?.customerIsPep ?? false;
         setupIbank = userData?.setupIbank ?? false;
-        selectedGenderCode= userData?.genderCode ?? '';
+     
         setupZPrompt = userData?.setupZPrompt ?? false;
         setupStatementViaEmail = userData?.setupStatementViaEmail ?? false;
         setupEmailIndemnity = userData?.setupEmailIndemnity ?? false;
@@ -419,6 +509,11 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
     _pepReasonController.dispose();
     _gpsAddressController.dispose();
     prevItemStageController.dispose();
+    prevBizNatureController.dispose();
+    prevEmploymentTypeController.dispose();
+    prevCountryController.dispose();
+    prevMaritalStatusController.dispose();
+    prevRegionController.dispose();
 
     super.dispose();
   }
@@ -467,7 +562,6 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   }
 
   Future<void> editAccountRequest(BuildContext context) async {
- 
     // final lat = ref.read(userLatitudeProvider);
     // final long = ref.read(userLongitudeProvider);
     final DateTime tempnow = DateTime.now();
@@ -488,21 +582,32 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
         setupIbank: setupIbank,
         mailingAddress: _mailingAddressController.text,
         districtAssemblyArea: selectedRegionName,
-
-        /// if user has an indefinite permission set  expiry to 200 years
-        permitExpiryDate: residentPermitStatus == true
-            ? DateTime(tempnow.year + 200, tempnow.month, tempnow.day)
-                .toIso8601String()
-            : identityDateExpire, //_permitExpiryDateController.text,
+        permitExpiryDate:
+            (residentPermitStatus == true || residentPermitStatus == null)
+                ? null
+                : _permitExpiryDateController.text,
         permitIssueDate:
-            permIdentityDateIssued, //_permitIssueDateController.text,
+            (residentPermitStatus == true || residentPermitStatus == null)
+                ? null
+                : _permitIssueDateController.text,
         hasPermanentResidence: residentPermitStatus,
         permanentResidentialAddress:
-            _permanentResidentialAddressController.text,
-        permanentResidentialCity: _permanentResidentialCityController.text,
-        permanentResidentialCountryCode: permsSelectedCountry?.countryCode??
-            _permanentResidentialCountryCodeController.text,
-        residencePermitNo: _residencePermitNoController.text,
+            (residentPermitStatus == true || residentPermitStatus == null)
+                ? null
+                : _permanentResidentialAddressController.text,
+        permanentResidentialCity:
+            (residentPermitStatus == true || residentPermitStatus == null)
+                ? null
+                : _permanentResidentialCityController.text,
+        permanentResidentialCountryCode:
+            (residentPermitStatus == true || residentPermitStatus == null)
+                ? null
+                : permsSelectedCountry?.countryCode ??
+                    _permanentResidentialCountryCodeController.text,
+        residencePermitNo:
+            (residentPermitStatus == true || residentPermitStatus == null)
+                ? null
+                : _residencePermitNoController.text,
         residencePermitPlaceCode: residencePermitPlaceCountryCode,
         itemStage: initialData?.itemStage ?? '',
         businessNatureId: '$selectedBusinessNaturesCode',
@@ -559,12 +664,8 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
             afterFailed: () {});
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-    
- 
 
     return ZxploreProgress(
       inAsyncCall: ref.watch(editPersonalDetailsControllerProvider).isLoading ||
@@ -585,24 +686,26 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
 
                   return;
                 }
-                if(residentPermitStatus!=null){
- if (permIdentityDateExpire == null ||
-                    permIdentityDateIssued == null || permIdentityDateIssued!.isEmpty||permIdentityDateExpire!.isEmpty) {
-                  zXFlushBar(
-                      context, "Permanent ID issues/expiry date is required");
-                  return;
+                if (residentPermitStatus != null) {
+                  if (permIdentityDateExpire == null ||
+                      permIdentityDateIssued == null ||
+                      permIdentityDateIssued!.isEmpty ||
+                      permIdentityDateExpire!.isEmpty) {
+                    zXFlushBar(
+                        context, "Permanent ID issues/expiry date is required");
+                    return;
+                  }
                 }
-                }
-               
-                if (regionsItem == null || selectedRegionCode==null) {
+
+                if (regionsItem == null && selectedRegionCode == null) {
                   zXFlushBar(context, "Region is required");
                   return;
                 }
-                if (selectedCountry == null || selectedCountryCode==null) {
+                if (selectedCountry == null && selectedCountryCode == null) {
                   zXFlushBar(context, "Country is required");
                   return;
                 }
-                if (selectedGenderItem == null||selectedGenderCode==null) {
+                if (selectedGenderItem == null && selectedGenderCode == null) {
                   zXFlushBar(context, "Gender is required");
                   return;
                 }
@@ -615,7 +718,8 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                   return;
                 }
 
-                if (selectedIdType == null || selectedIdentificationTypeCode==null) {
+                if (selectedIdType == null &&
+                    selectedIdentificationTypeCode == null) {
                   zXFlushBar(context, "ID type is required");
                   return;
                 }
@@ -634,11 +738,16 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                   zXFlushBar(context, "ID issued date is required");
                   return;
                 }
-                if (permsSelectedCountry == null ) {
-                  zXFlushBar(context, "Permanent Address country is required");
-                  return;
+                if (residentPermitStatus == true ||
+                    residentPermitStatus == false) {
+                  if (permsSelectedCountry == null) {
+                    zXFlushBar(
+                        context, "Permanent Address country is required");
+                    return;
+                  }
                 }
-                if (customerClassificationDatumValue == null ) {
+
+                if (customerClassificationDatumValue == null) {
                   zXFlushBar(context, "Customer classification is required");
                   return;
                 }
@@ -660,7 +769,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                    gapH24,
+                  gapH24,
                   Text(
                     'Personal',
                     style: Theme.of(context)
@@ -669,7 +778,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   div,
-                      gapH16,
+                  gapH16,
                   if (!hidePrevItemStage) ...[
                     CustomTextFormField(
                       title: "Item Stage",
@@ -892,614 +1001,729 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     },
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    'Gender',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getGenderProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<GendersDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select gender',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<DropdownMenuItem<GendersDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      GendersDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.genderName ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: selectedGenderItem,
-                                      onChanged: (GendersDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          selectedGenderItem = newValue;
-                                          selectedGenderCode =
-                                              newValue?.genderCode;
-                                          selectedGenderName =
-                                              newValue?.genderName;
-                                          _genderCodeController.text =
-                                              newValue?.genderName ?? '';
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                  if (!hidePrevGender) ...[
+                    CustomTextFormField(
+                      title: "Gender",
+                      fillColor: Colors.transparent,
+                      controller: prevGenderController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevGender();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevGender) ...[
+                    Text(
+                      'Gender',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getGenderProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<GendersDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select gender',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    GendersDatum>>((item) =>
+                                                DropdownMenuItem<GendersDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.genderName ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedGenderItem,
+                                        onChanged: (GendersDatum? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            selectedGenderItem = newValue;
+                                            selectedGenderCode =
+                                                newValue?.genderCode;
+                                            selectedGenderName =
+                                                newValue?.genderName;
+                                            _genderCodeController.text =
+                                                newValue?.genderName ?? '';
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty gender'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(getGenderProvider),
-                                child: const Text(
-                                  'An error occurred',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                                    )
+                                  : Text('Empty gender'),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getGenderProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
+
                   const SizedBox(height: 16),
 
                   /// Region
-                  Text(
-                    'Region',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getRegionsProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<RegionDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select region',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      dropdownSearchData: DropdownSearchData<
-                                              RegionDatum>(
-                                          searchInnerWidgetHeight: 150,
-                                          searchInnerWidget: Container(
-                                            height: 50,
-                                            padding: const EdgeInsets.only(
-                                              top: 8,
-                                              bottom: 4,
-                                              right: 8,
-                                              left: 8,
-                                            ),
-                                            child: TextFormField(
-                                              expands: true,
-                                              maxLines: null,
-                                              controller:
-                                                  regionSearchEditingController,
-                                              decoration: InputDecoration(
-                                                isDense: true,
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 8,
-                                                ),
-                                                hintText:
-                                                    'Search for region...',
-                                                hintStyle: const TextStyle(
-                                                    fontSize: 12),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                           searchController :
-                                              regionSearchEditingController,
-                                          searchMatchFn: (item, searchValue) {
-                                            return item.value!.regionName!.toUpperCase()
-                                            .startsWith(searchValue.toUpperCase());
-                                          }),
-                                      onMenuStateChange: (isOpen) {
-                                        if (!isOpen) {
-                                          regionSearchEditingController.clear();
-                                        }
-                                      },
-                                      items: data
-                                          .map<DropdownMenuItem<RegionDatum>>(
-                                              (item) =>
-                                                  DropdownMenuItem<RegionDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      //  preRegionCode!=null? data.where((item)=>item.regionCode==preRegionCode
-                                                      //   ).first.regionName??'':
-                                                      item.regionName ?? '',
-                                                      // item.regionName. ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: regionsItem,
-                                      onChanged: (RegionDatum? newValue) {
-                                         regionValueListenable.value = newValue;
-
-                                        setState(() {
-                                          /// Set selected item params
-                                          regionsItem = newValue;
-                                          // preRegionCode= newValue?.regionCode;
-                                          selectedRegionName =
-                                              newValue?.regionName;
-                                          selectedRegionCode =
-                                              newValue?.regionCode;
-                                          _regionCodeController.text =
-                                              newValue?.regionCode ?? '';
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
-                                        ),
-                                      ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty regions'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(getRegionsProvider),
-                                child: const Text(
-                                  'An error occurred',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  Text(
-                    'Country',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getCountriesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<CountryDatum>(
-                                           isExpanded: true,
+                  if (!hidePrevRegion) ...[
+                    CustomTextFormField(
+                      title: "Region",
+                      fillColor: Colors.transparent,
+                      controller: prevRegionController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevRegion();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevRegion) ...[
+                    Text(
+                      'Region',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getRegionsProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<RegionDatum>(
+                                        isExpanded: true,
                                         hint: Text(
-                                        'Select country',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
+                                          'Select region',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      dropdownSearchData: DropdownSearchData<
-                                              CountryDatum>(
-                                          searchInnerWidgetHeight: 150,
-                                          searchInnerWidget: Container(
-                                            height: 50,
-                                            padding: const EdgeInsets.only(
-                                              top: 8,
-                                              bottom: 4,
-                                              right: 8,
-                                              left: 8,
-                                            ),
-                                            child: TextFormField(
-                                              expands: true,
-                                              maxLines: null,
-                                              controller:
-                                                  searchCountryController,
-                                              decoration: InputDecoration(
-                                                isDense: true,
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 8,
-                                                ),
-                                                hintText:
-                                                    'Search for country...',
-                                                hintStyle: const TextStyle(
-                                                    fontSize: 12),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
+                                        dropdownSearchData: DropdownSearchData<
+                                                RegionDatum>(
+                                            searchInnerWidgetHeight: 150,
+                                            searchInnerWidget: Container(
+                                              height: 50,
+                                              padding: const EdgeInsets.only(
+                                                top: 8,
+                                                bottom: 4,
+                                                right: 8,
+                                                left: 8,
+                                              ),
+                                              child: TextFormField(
+                                                expands: true,
+                                                maxLines: null,
+                                                controller:
+                                                    regionSearchEditingController,
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 8,
+                                                  ),
+                                                  hintText:
+                                                      'Search for region...',
+                                                  hintStyle: const TextStyle(
+                                                      fontSize: 12),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                   
-                                          searchController:
-                                              searchCountryController,
-                                          searchMatchFn: (item, searchValue) {
-                                            return item.value!.countryName!.toUpperCase()
-                                            .startsWith(searchValue.toUpperCase());
-                                          }),
-                                      onMenuStateChange: (isOpen) {
-                                        if (!isOpen) {
-                                          searchCountryController?.clear();
-                                        }
-                                      },
-                                      items: data
-                                          .map<DropdownMenuItem<CountryDatum>>(
-                                              (item) => DropdownMenuItem<CountryDatum>(
-                                                    value: item,
-                                                    child: Text( item.countryName ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
+                                            searchController:
+                                                regionSearchEditingController,
+                                            searchMatchFn: (item, searchValue) {
+                                              return item.value!.regionName!
+                                                  .toUpperCase()
+                                                  .startsWith(searchValue
+                                                      .toUpperCase());
+                                            }),
+                                        onMenuStateChange: (isOpen) {
+                                          if (!isOpen) {
+                                            regionSearchEditingController
+                                                .clear();
+                                          }
+                                        },
+                                        items: data
+                                            .map<DropdownMenuItem<RegionDatum>>(
+                                                (item) => DropdownMenuItem<
+                                                        RegionDatum>(
+                                                      value: item,
+                                                      child: Text(
+                                                        //  preRegionCode!=null? data.where((item)=>item.regionCode==preRegionCode
+                                                        //   ).first.regionName??'':
+                                                        item.regionName ?? '',
+                                                        // item.regionName. ?? '',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
-                                                      overflow:  TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: selectedCountry,
-                                      onChanged: (CountryDatum? newValue) {
-                                          countryValueListenable.value = newValue;
+                                                    ))
+                                            .toList(),
+                                        value: regionsItem,
+                                        onChanged: (RegionDatum? newValue) {
+                                          regionValueListenable.value =
+                                              newValue;
 
-                                        setState(() {
-                                          /// Set selected item params
-                                          selectedCountry = newValue;
-                                          selectedCountryCode =
-                                              newValue?.countryCode;
-                                          _countryOrigCodeController.text =
-                                              newValue?.countryCode ?? '';
-                                          selectedCountryName =
-                                              newValue?.countryName;
-                                          selectedCitizenshipCode =
-                                              newValue?.countryCode;
-                                          _idCountryCodeController.text =   newValue?.countryCode ?? '';
-                                          _altCitizenshipCodeController.text =  newValue?.countryCode ?? '';
-                                          _citizenshipCodeController.text =    newValue?.countryName ?? '';
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                                          setState(() {
+                                            /// Set selected item params
+                                            regionsItem = newValue;
+                                            // preRegionCode= newValue?.regionCode;
+                                            selectedRegionName =
+                                                newValue?.regionName;
+                                            selectedRegionCode =
+                                                newValue?.regionCode;
+                                            _regionCodeController.text =
+                                                newValue?.regionCode ?? '';
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
+                                        ),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
+                                        ),
+                                      ),
+                                    )
+                                  : Text('Empty regions'),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getRegionsProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
+
+                  const SizedBox(height: 16),
+                  if (!hidePrevCountry) ...[
+                    CustomTextFormField(
+                      title: "Country",
+                      fillColor: Colors.transparent,
+                      controller: prevCountryController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevCountry();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevCountry) ...[
+                    Text(
+                      'Country',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getCountriesProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<CountryDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select country',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        dropdownSearchData: DropdownSearchData<
+                                                CountryDatum>(
+                                            searchInnerWidgetHeight: 150,
+                                            searchInnerWidget: Container(
+                                              height: 50,
+                                              padding: const EdgeInsets.only(
+                                                top: 8,
+                                                bottom: 4,
+                                                right: 8,
+                                                left: 8,
+                                              ),
+                                              child: TextFormField(
+                                                expands: true,
+                                                maxLines: null,
+                                                controller:
+                                                    searchCountryController,
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 8,
+                                                  ),
+                                                  hintText:
+                                                      'Search for country...',
+                                                  hintStyle: const TextStyle(
+                                                      fontSize: 12),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            searchController:
+                                                searchCountryController,
+                                            searchMatchFn: (item, searchValue) {
+                                              return item.value!.countryName!
+                                                  .toUpperCase()
+                                                  .startsWith(searchValue
+                                                      .toUpperCase());
+                                            }),
+                                        onMenuStateChange: (isOpen) {
+                                          if (!isOpen) {
+                                            searchCountryController?.clear();
+                                          }
+                                        },
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    CountryDatum>>((item) =>
+                                                DropdownMenuItem<CountryDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.countryName ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value: selectedCountry,
+                                        onChanged: (CountryDatum? newValue) {
+                                          countryValueListenable.value =
+                                              newValue;
+
+                                          setState(() {
+                                            /// Set selected item params
+                                            selectedCountry = newValue;
+                                            selectedCountryCode =
+                                                newValue?.countryCode;
+                                            _countryOrigCodeController.text =
+                                                newValue?.countryCode ?? '';
+                                            selectedCountryName =
+                                                newValue?.countryName;
+                                            selectedCitizenshipCode =
+                                                newValue?.countryCode;
+                                            _idCountryCodeController.text =
+                                                newValue?.countryCode ?? '';
+                                            _altCitizenshipCodeController.text =
+                                                newValue?.countryCode ?? '';
+                                            _citizenshipCodeController.text =
+                                                newValue?.countryName ?? '';
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
+                                    )
+                                  : GestureDetector(
+                                      child: Text(
+                                          'No? countries?, Tap to refresh, '),
+                                      onTap: () =>
+                                          ref.invalidate(getCountriesProvider),
                                     ),
-                                  )
-                                : GestureDetector(
-                                    child: Text(
-                                        'No? countries?, Tap to refresh, '),
-                                    onTap: () =>
-                                        ref.invalidate(getCountriesProvider),
-                                  ),
-                            error: (e, s) => GestureDetector(
-                                onTap: () =>
-                                    ref.invalidate(getCountriesProvider),
-                                child: const Text(
-                                  'An error occurred',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getCountriesProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
 
                   /// business Nature
 
                   const SizedBox(height: 16),
-                  Text(
-                    'Business Nature',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getBusinessNaturesProvider).when(
-                            data: (data) => (data == null ||
-                                    data.isEmpty == true)
-                                ? GestureDetector(
-                                    onTap: () => ref.invalidate(
-                                        getIdentificationTypesProvider),
-                                    child: Text(
-                                        'Empty classification.Tap  to refresh'))
-                                : DropdownButtonHideUnderline(
-                                    child:
-                                        DropdownButton2<BusinessNaturesDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select nature of business',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      BusinessNaturesDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      BusinessNaturesDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.businessNatureName ??
-                                                          '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: businessNaturesItem,
-                                      onChanged:
-                                          (BusinessNaturesDatum? newValue) {
-                                        setState(() {
-                                          subBusinessNaturesItem = null;
-
-                                          /// Set selected item params
-                                          businessNaturesItem = newValue;
-                                          selectedBusinessNaturesName =
-                                              newValue?.businessNatureName;
-                                          selectedBusinessNaturesCode =
-                                              newValue?.businessNatureId;
-                                          _businessNatureIdController.text =
-                                              newValue?.businessNatureId ?? '';
-                                        });
-                                        // refresh subs
-                                        ref.invalidate(
-                                            getSubBusinessNaturesProvider(
-                                                int.parse(newValue!
-                                                    .businessNatureId!)));
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                  if (!hidePrevBizNature) ...[
+                    CustomTextFormField(
+                      title: "Business Nature",
+                      fillColor: Colors.transparent,
+                      controller: prevBizNatureController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        togglePrevBizNature();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hidePrevBizNature) ...[
+                    Text(
+                      'Business Nature',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getBusinessNaturesProvider).when(
+                              data: (data) => (data == null ||
+                                      data.isEmpty == true)
+                                  ? GestureDetector(
+                                      onTap: () => ref.invalidate(
+                                          getIdentificationTypesProvider),
+                                      child: Text(
+                                          'Empty classification.Tap  to refresh'))
+                                  : DropdownButtonHideUnderline(
+                                      child:
+                                          DropdownButton2<BusinessNaturesDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select nature of business',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                    DropdownMenuItem<
+                                                        BusinessNaturesDatum>>(
+                                                (item) => DropdownMenuItem<
+                                                        BusinessNaturesDatum>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.businessNatureName ??
+                                                            '',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        value: businessNaturesItem,
+                                        onChanged:
+                                            (BusinessNaturesDatum? newValue) {
+                                          setState(() {
+                                            subBusinessNaturesItem = null;
+
+                                            /// Set selected item params
+                                            businessNaturesItem = newValue;
+                                            selectedBusinessNaturesName =
+                                                newValue?.businessNatureName;
+                                            selectedBusinessNaturesCode =
+                                                newValue?.businessNatureId;
+                                            _businessNatureIdController.text =
+                                                newValue?.businessNatureId ??
+                                                    '';
+                                          });
+                                          // refresh subs
+                                          ref.invalidate(
+                                              getSubBusinessNaturesProvider(
+                                                  int.parse(newValue!
+                                                      .businessNatureId!)));
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
                                         ),
-                                      ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref
-                                    .invalidate(getIdentificationTypesProvider),
-                                child: const Text(
-                                  'An error occurred',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () => ref.invalidate(
+                                      getIdentificationTypesProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
+
                   const SizedBox(height: 16),
                   if (selectedBusinessNaturesCode != null ||
                       subBusinessNaturesItem != null) ...[
@@ -1651,260 +1875,311 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
 
                   /// Customer Classification category
                   const SizedBox(height: 16),
-                  Text(
-                    'Customer Class',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getCustomerClassificationProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<
-                                        CustomerClassificationDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select class',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      CustomerClassificationDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      CustomerClassificationDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.description ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: customerClassificationsItem,
-                                      onChanged: (CustomerClassificationDatum?
-                                          newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          customerClassificationsItem =
-                                              newValue;
-                                          selectedCustomerClassificationsName =
-                                              newValue
-                                                  ?.customerClassificationId;
-                                          _customerClassificationIdController
-                                              .text = newValue
-                                                  ?.customerClassificationId ??
-                                              '';
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                  if (!hideCustomerClass) ...[
+                    CustomTextFormField(
+                      title: "Customer Class",
+                      fillColor: Colors.transparent,
+                      controller: prevCustomerClassController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        toggleCustomerClass();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hideCustomerClass) ...[
+                    Text(
+                      'Customer Class',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref
+                            .watch(getCustomerClassificationProvider)
+                            .when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<
+                                          CustomerClassificationDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select class',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                    DropdownMenuItem<
+                                                        CustomerClassificationDatum>>(
+                                                (item) => DropdownMenuItem<
+                                                        CustomerClassificationDatum>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.description ?? '',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        value: customerClassificationsItem,
+                                        onChanged: (CustomerClassificationDatum?
+                                            newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            customerClassificationsItem =
+                                                newValue;
+                                            selectedCustomerClassificationsName =
+                                                newValue
+                                                    ?.customerClassificationId;
+                                            _customerClassificationIdController
+                                                .text = newValue
+                                                    ?.customerClassificationId ??
+                                                '';
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty   classification'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref
-                                    .invalidate(getIdentificationTypesProvider),
-                                child: const Text(
-                                  'An error occurred',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                                    )
+                                  : Text('Empty   classification'),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () => ref.invalidate(
+                                      getIdentificationTypesProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
                   const SizedBox(height: 16),
 
                   /// EmploymentType
-                  Text(
-                    'Employment Type',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getEmploymentTypeProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<EmploymentTypeDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select employment type',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      EmploymentTypeDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      EmploymentTypeDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      item.employmentTypeName ??
-                                                          '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: employmentTypesItem,
-                                      onChanged:
-                                          (EmploymentTypeDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          employmentTypesItem = newValue;
-                                          selectedEmploymentTypessName =
-                                              newValue?.employmentTypeName;
-                                          selectedEmploymentTypesCode =
-                                              newValue?.employmentTypeCode;
-                                          _employmentTypeCodeController.text =
-                                              newValue?.employmentTypeCode ??
-                                                  '';
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                  ///
+                  if (!hideEmploymentType) ...[
+                    CustomTextFormField(
+                      title: "Employment Type",
+                      fillColor: Colors.transparent,
+                      controller: prevEmploymentTypeController,
+                      hint: '',
+                      readOnly: true,
+                      showCursor: false,
+                      suffixIcon: Icon(Icons.close_sharp),
+                      inputType: TextInputType.text,
+                      useDefaultErrorText: false,
+                      showDropDownSuffixIcon: true,
+                      onTap: () {
+                        toggleEmploymentType();
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    )
+                  ],
+                  if (hideEmploymentType) ...[
+                    Text(
+                      'Employment Type',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getEmploymentTypeProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child:
+                                          DropdownButton2<EmploymentTypeDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select employment type',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                    DropdownMenuItem<
+                                                        EmploymentTypeDatum>>(
+                                                (item) => DropdownMenuItem<
+                                                        EmploymentTypeDatum>(
+                                                      value: item,
+                                                      child: Text(
+                                                        item.employmentTypeName ??
+                                                            '',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        value: employmentTypesItem,
+                                        onChanged:
+                                            (EmploymentTypeDatum? newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            employmentTypesItem = newValue;
+                                            selectedEmploymentTypessName =
+                                                newValue?.employmentTypeName;
+                                            selectedEmploymentTypesCode =
+                                                newValue?.employmentTypeCode;
+                                            _employmentTypeCodeController.text =
+                                                newValue?.employmentTypeCode ??
+                                                    '';
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : Text('Empty   employment types'),
-                            error: (e, s) => GestureDetector(
-                                onTap: () =>
-                                    ref.invalidate(getEmploymentTypeProvider),
-                                child: const Text(
-                                  'An error occurred',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                                    )
+                                  : Text('Empty   employment types'),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getEmploymentTypeProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
+
                   if (selectedEmploymentTypessName == "EMPLOYED") ...[
                     const SizedBox(height: 16),
                     CustomTextFormField(
@@ -1998,8 +2273,9 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     groupValue: residentPermitStatus,
                     onChanged: (bool? value) {
                       setState(() {
-                        residentPermitStatus = value;
+                        residentPermitStatus = null;
                       });
+                      print('Not Applicable $value');
                     },
                   ),
                   RadioListTile<bool?>(
@@ -2010,6 +2286,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                       setState(() {
                         residentPermitStatus = value;
                       });
+                      print('Indefinite $value');
                     },
                   ),
                   RadioListTile<bool?>(
@@ -2020,9 +2297,10 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                       setState(() {
                         residentPermitStatus = value;
                       });
+                      print(' Not Indefinite $value');
                     },
                   ),
-                 
+
                   if (residentPermitStatus != null &&
                       (residentPermitStatus == true ||
                           residentPermitStatus == false)) ...[
@@ -2072,16 +2350,16 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                       },
                     ),
                     const SizedBox(height: 16),
-                         Text(
-                    'Permanent Address Country',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
+                    Text(
+                      'Permanent Address Country',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
                     Consumer(
                       builder: (context, ref, child) {
                         return ref.watch(getCountriesProvider).when(
@@ -2100,51 +2378,55 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         dropdownSearchData: DropdownSearchData<
-                                              CountryDatum>(
-                                          searchInnerWidgetHeight: 150,
-                                          searchInnerWidget: Container(
-                                            height: 50,
-                                            padding: const EdgeInsets.only(
-                                              top: 8,
-                                              bottom: 4,
-                                              right: 8,
-                                              left: 8,
-                                            ),
-                                            child: TextFormField(
-                                              expands: true,
-                                              maxLines: null,
-                                              controller:
-                                                  resPermitSearchCountryController,
-                                              decoration: InputDecoration(
-                                                isDense: true,
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 8,
-                                                ),
-                                                hintText:
-                                                    'Search for country...',
-                                                hintStyle: const TextStyle(
-                                                    fontSize: 12),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
+                                                CountryDatum>(
+                                            searchInnerWidgetHeight: 150,
+                                            searchInnerWidget: Container(
+                                              height: 50,
+                                              padding: const EdgeInsets.only(
+                                                top: 8,
+                                                bottom: 4,
+                                                right: 8,
+                                                left: 8,
+                                              ),
+                                              child: TextFormField(
+                                                expands: true,
+                                                maxLines: null,
+                                                controller:
+                                                    resPermitSearchCountryController,
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 8,
+                                                  ),
+                                                  hintText:
+                                                      'Search for country...',
+                                                  hintStyle: const TextStyle(
+                                                      fontSize: 12),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                   
-                                          searchController:
-                                              resPermitSearchCountryController,
-                                          searchMatchFn: (item, searchValue) {
-                                            return item.value!.countryName!.toUpperCase()
-                                            .startsWith(searchValue.toUpperCase());
-                                          }),
-                                      onMenuStateChange: (isOpen) {
-                                        if (!isOpen) {
-                                          resPermitSearchCountryController?.clear();
-                                        }
-                                      },
+                                            searchController:
+                                                resPermitSearchCountryController,
+                                            searchMatchFn: (item, searchValue) {
+                                              return item.value!.countryName!
+                                                  .toUpperCase()
+                                                  .startsWith(searchValue
+                                                      .toUpperCase());
+                                            }),
+                                        onMenuStateChange: (isOpen) {
+                                          if (!isOpen) {
+                                            resPermitSearchCountryController
+                                                ?.clear();
+                                          }
+                                        },
                                         items: data
                                             .map<
                                                 DropdownMenuItem<
@@ -2167,7 +2449,8 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                             .toList(),
                                         value: permsSelectedCountry,
                                         onChanged: (CountryDatum? newValue) {
-                                          resPermitCountryValueListenable.value=newValue;
+                                          resPermitCountryValueListenable
+                                              .value = newValue;
                                           setState(() {
                                             /// Set selected item params
                                             permsSelectedCountry = newValue;
@@ -2244,176 +2527,189 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                             );
                       },
                     ),
-                   
-                    const SizedBox(height: 16),
-                    
 
-                  Text(
-                    'Place Of Issue',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getCountriesProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<CountryDatum>(
-                                           isExpanded: true,
+                    const SizedBox(height: 16),
+
+                    Text(
+                      'Place Of Issue',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getCountriesProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<CountryDatum>(
+                                        isExpanded: true,
                                         hint: Text(
-                                        'Select country',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
+                                          'Select country',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
+                                            color: ZxplorePrimaryColor,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      dropdownSearchData: DropdownSearchData<
-                                              CountryDatum>(
-                                          searchInnerWidgetHeight: 150,
-                                          searchInnerWidget: Container(
-                                            height: 50,
-                                            padding: const EdgeInsets.only(
-                                              top: 8,
-                                              bottom: 4,
-                                              right: 8,
-                                              left: 8,
-                                            ),
-                                            child: TextFormField(
-                                              expands: true,
-                                              maxLines: null,
-                                              controller:
-                                                  searchCountryController,
-                                              decoration: InputDecoration(
-                                                isDense: true,
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                  horizontal: 10,
-                                                  vertical: 8,
-                                                ),
-                                                hintText:
-                                                    'Search for country...',
-                                                hintStyle: const TextStyle(
-                                                    fontSize: 12),
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
+                                        dropdownSearchData: DropdownSearchData<
+                                                CountryDatum>(
+                                            searchInnerWidgetHeight: 150,
+                                            searchInnerWidget: Container(
+                                              height: 50,
+                                              padding: const EdgeInsets.only(
+                                                top: 8,
+                                                bottom: 4,
+                                                right: 8,
+                                                left: 8,
+                                              ),
+                                              child: TextFormField(
+                                                expands: true,
+                                                maxLines: null,
+                                                controller:
+                                                    searchCountryController,
+                                                decoration: InputDecoration(
+                                                  isDense: true,
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 8,
+                                                  ),
+                                                  hintText:
+                                                      'Search for country...',
+                                                  hintStyle: const TextStyle(
+                                                      fontSize: 12),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                   
-                                          searchController:
-                                              residencePermitPlaceCountryCodeController,
-                                          searchMatchFn: (item, searchValue) {
-                                            return item.value!.countryName!.toUpperCase()
-                                            .startsWith(searchValue.toUpperCase());
-                                          }),
-                                      onMenuStateChange: (isOpen) {
-                                        if (!isOpen) {
-                                          residencePermitPlaceCountryCodeController?.clear();
-                                        }
-                                      },
-                                      items: data
-                                          .map<DropdownMenuItem<CountryDatum>>(
-                                              (item) => DropdownMenuItem<CountryDatum>(
-                                                    value: item,
-                                                    child: Text( item.countryName ?? '',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:  TextOverflow.ellipsis,
+                                            searchController:
+                                                residencePermitPlaceCountryCodeController,
+                                            searchMatchFn: (item, searchValue) {
+                                              return item.value!.countryName!
+                                                  .toUpperCase()
+                                                  .startsWith(searchValue
+                                                      .toUpperCase());
+                                            }),
+                                        onMenuStateChange: (isOpen) {
+                                          if (!isOpen) {
+                                            residencePermitPlaceCountryCodeController
+                                                ?.clear();
+                                          }
+                                        },
+                                        items: data
+                                            .map<
+                                                DropdownMenuItem<
+                                                    CountryDatum>>((item) =>
+                                                DropdownMenuItem<CountryDatum>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item.countryName ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color:
+                                                          ZxplorePrimaryColor,
                                                     ),
-                                                  ))
-                                          .toList(),
-                                      value: residencePermitPlaceCodeCountryValue,
-                                      onChanged: (CountryDatum? newValue) {
-                                          residencePermitPlaceCountryCodeValueListenable.value = newValue;
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        value:
+                                            residencePermitPlaceCodeCountryValue,
+                                        onChanged: (CountryDatum? newValue) {
+                                          residencePermitPlaceCountryCodeValueListenable
+                                              .value = newValue;
 
-                                        setState(() {
-                                          /// Set selected item params
-                                          residencePermitPlaceCodeCountryValue = newValue;
-                                          residencePermitPlaceCountryCode =newValue?.countryCode;
-                                          residencePermitPlaceCountryCodeName =newValue?.countryName;
-                                         });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: ZxplorePrimaryColor,
+                                          setState(() {
+                                            /// Set selected item params
+                                            residencePermitPlaceCodeCountryValue =
+                                                newValue;
+                                            residencePermitPlaceCountryCode =
+                                                newValue?.countryCode;
+                                            residencePermitPlaceCountryCodeName =
+                                                newValue?.countryName;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
+                                        ),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
                                           ),
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
-                                        ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                        ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
+                                    )
+                                  : GestureDetector(
+                                      child: Text(
+                                          'No? countries?, Tap to refresh, '),
+                                      onTap: () =>
+                                          ref.invalidate(getCountriesProvider),
                                     ),
-                                  )
-                                : GestureDetector(
-                                    child: Text(
-                                        'No? countries?, Tap to refresh, '),
-                                    onTap: () =>
-                                        ref.invalidate(getCountriesProvider),
-                                  ),
-                            error: (e, s) => GestureDetector(
-                                onTap: () =>
-                                    ref.invalidate(getCountriesProvider),
-                                child: const Text(
-                                  'An error occurred',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () =>
+                                      ref.invalidate(getCountriesProvider),
+                                  child: const Text(
+                                    'An error occurred',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
 
                     const SizedBox(height: 16),
                     CustomTextFormField(
@@ -2476,8 +2772,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                   ],
                   const SizedBox(height: 16),
 
-
-                         Text(
+                  Text(
                     'Customer Classification',
                     overflow: TextOverflow.fade,
                     maxLines: 1,
@@ -2487,24 +2782,25 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                         ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
                   const SizedBox(height: 6),
-                    Consumer(
-                      builder: (context, ref, child) {
-                        return ref.watch(getCustomerClassificationProvider).when(
-                              data: (data) => (data != null &&
-                                      data.isNotEmpty == true)
-                                  ? DropdownButtonHideUnderline(
-                                      child: DropdownButton2<CustomerClassificationDatum>(
-                                        isExpanded: true,
-                                        hint: Text(
-                                          'Customer classification',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.normal,
-                                            color: ZxplorePrimaryColor,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return ref.watch(getCustomerClassificationProvider).when(
+                            data: (data) => (data != null &&
+                                    data.isNotEmpty == true)
+                                ? DropdownButtonHideUnderline(
+                                    child: DropdownButton2<
+                                        CustomerClassificationDatum>(
+                                      isExpanded: true,
+                                      hint: Text(
+                                        'Customer classification',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.normal,
+                                          color: ZxplorePrimaryColor,
                                         ),
-                                        dropdownSearchData: DropdownSearchData<
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      dropdownSearchData: DropdownSearchData<
                                               CustomerClassificationDatum>(
                                           searchInnerWidgetHeight: 150,
                                           searchInnerWidget: Container(
@@ -2527,8 +2823,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                                   horizontal: 10,
                                                   vertical: 8,
                                                 ),
-                                                hintText:
-                                                    'Class...',
+                                                hintText: 'Class...',
                                                 hintStyle: const TextStyle(
                                                     fontSize: 12),
                                                 border: OutlineInputBorder(
@@ -2538,117 +2833,123 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                                               ),
                                             ),
                                           ),
-                                   
                                           searchController:
                                               _customerClassificationIdController,
                                           searchMatchFn: (item, searchValue) {
-                                            return item.value!.customerClassificationId!.toUpperCase()
-                                            .startsWith(searchValue.toUpperCase());
+                                            return item.value!
+                                                .customerClassificationId!
+                                                .toUpperCase()
+                                                .startsWith(
+                                                    searchValue.toUpperCase());
                                           }),
                                       onMenuStateChange: (isOpen) {
                                         if (!isOpen) {
-                                          _customerClassificationIdController.clear();
+                                          _customerClassificationIdController
+                                              .clear();
                                         }
                                       },
-                                        items: data
-                                            .map<
-                                                DropdownMenuItem<
-                                                    CustomerClassificationDatum>>((item) =>
-                                                DropdownMenuItem<CustomerClassificationDatum>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item.customerClassificationId ?? '',
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      color:
-                                                          ZxplorePrimaryColor,
+                                      items: data
+                                          .map<
+                                                  DropdownMenuItem<
+                                                      CustomerClassificationDatum>>(
+                                              (item) => DropdownMenuItem<
+                                                      CustomerClassificationDatum>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.customerClassificationId ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color:
+                                                            ZxplorePrimaryColor,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ))
-                                            .toList(),
-                                        value: customerClassificationDatumValue,
-                                        onChanged: (CustomerClassificationDatum? newValue) {
-                                          customerClassificationValueListenable.value=newValue;
-                                          setState(() {
-                                            /// Set selected item params
-                                            customerClassificationDatumValue = newValue;
-                                            customerClassificationDatumCode =
-                                                newValue?.customerClassificationId;
-                                            
-                                          });
-                                        },
-                                        buttonStyleData: ButtonStyleData(
-                                          height: 60,
-                                          // width: 160,
-                                          padding: const EdgeInsets.only(
-                                              left: 0, right: 14),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                            border: Border.all(
-                                              color: ZxplorePrimaryColor,
-                                            ),
-                                          ),
-                                          elevation: 0,
-                                        ),
-                                        iconStyleData: const IconStyleData(
-                                          icon: Icon(
-                                            CupertinoIcons.chevron_down,
-                                          ),
-                                          iconSize: 14,
-                                          iconEnabledColor: ZxplorePrimaryColor,
-                                          iconDisabledColor: Colors.grey,
-                                        ),
-                                        dropdownStyleData: DropdownStyleData(
-                                          maxHeight: 200,
-                                          // width: 200,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                          // offset: const Offset(0, 0),
-                                          scrollbarTheme:
-                                              const ScrollbarThemeData(
-                                            radius: Radius.circular(40),
-                                            thickness:
-                                                WidgetStatePropertyAll<double>(
-                                                    6),
-                                            thumbVisibility:
-                                                WidgetStatePropertyAll<bool>(
-                                                    true),
+                                                  ))
+                                          .toList(),
+                                      value: customerClassificationDatumValue,
+                                      onChanged: (CustomerClassificationDatum?
+                                          newValue) {
+                                        customerClassificationValueListenable
+                                            .value = newValue;
+                                        setState(() {
+                                          /// Set selected item params
+                                          customerClassificationDatumValue =
+                                              newValue;
+                                          customerClassificationDatumCode =
+                                              newValue
+                                                  ?.customerClassificationId;
+                                        });
+                                      },
+                                      buttonStyleData: ButtonStyleData(
+                                        height: 60,
+                                        // width: 160,
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 14),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: ZxplorePrimaryColor,
                                           ),
                                         ),
-                                        menuItemStyleData:
-                                            const MenuItemStyleData(
-                                          height: 40,
-                                          padding: EdgeInsets.only(
-                                              left: 14, right: 14),
+                                        elevation: 0,
+                                      ),
+                                      iconStyleData: const IconStyleData(
+                                        icon: Icon(
+                                          CupertinoIcons.chevron_down,
+                                        ),
+                                        iconSize: 14,
+                                        iconEnabledColor: ZxplorePrimaryColor,
+                                        iconDisabledColor: Colors.grey,
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        // width: 200,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                        ),
+                                        // offset: const Offset(0, 0),
+                                        scrollbarTheme:
+                                            const ScrollbarThemeData(
+                                          radius: Radius.circular(40),
+                                          thickness:
+                                              WidgetStatePropertyAll<double>(6),
+                                          thumbVisibility:
+                                              WidgetStatePropertyAll<bool>(
+                                                  true),
                                         ),
                                       ),
-                                    )
-                                  : GestureDetector(
-                                      child: Text(
-                                          'No? class?, Tap to refresh, '),
-                                      onTap: () =>
-                                          ref.invalidate(getCountriesProvider),
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
+                                        height: 40,
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
+                                      ),
                                     ),
-                              error: (e, s) => GestureDetector(
-                                  onTap: () =>
-                                      ref.invalidate(getCountriesProvider),
-                                  child: const Text(
-                                    'An error occurred',
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                  )),
-                              loading: () => SizedBox(height: 16.0),
-                            );
-                      },
-                    ),
-                   
+                                  )
+                                : GestureDetector(
+                                    child: Text('No? class?, Tap to refresh, '),
+                                    onTap: () =>
+                                        ref.invalidate(getCountriesProvider),
+                                  ),
+                            error: (e, s) => GestureDetector(
+                                onTap: () =>
+                                    ref.invalidate(getCountriesProvider),
+                                child: const Text(
+                                  'An error occurred',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
+                            loading: () => SizedBox(height: 16.0),
+                          );
+                    },
+                  ),
+
                   const SizedBox(height: 16),
 
                   /// MaritalStatus
@@ -2837,9 +3138,6 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
                     validator: (value) {
-                      // if (value.toString().isEmpty) {
-                      //   return 'other name is  required';
-                      // }
                       return null;
                     },
                   ),
@@ -2873,6 +3171,7 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
                   CustomTextFormField(
                     title: "Home Town",
                     fillColor: Colors.transparent,
@@ -3327,8 +3626,8 @@ final TextEditingController regionSearchEditingController = TextEditingControlle
   Future<void> _showDatePicker(BuildContext dateContext,
       {required String dateCategory}) async {
     final DateTime tempnow = DateTime.now();
-   
-    final DateTime firstDate =   DateTime(1900);
+
+    final DateTime firstDate = DateTime(1900);
     final DateTime lastDate = DateTime(2060);
     if (mounted) {
       final DateTime? fPickedDate = await showDatePicker(

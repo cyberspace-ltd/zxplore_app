@@ -94,17 +94,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue>(
-      loginControllerProvider,
-      (_, state) => state.showAlertDialogOnError(context,errorMsg: state.error),
-    );
-
-       ref.listen<AsyncValue>(
-      getLoginModesProvider,
-      (_, state) => state.showAlertDialogOnError(context,errorMsg: state.error),
-    );
+  
     return ZxploreProgress(
-      inAsyncCall: ref.watch(getLoginModesProvider).isLoading 
+      inAsyncCall: ref.watch(getLoginModesProvider(context)).isLoading 
       ||ref.watch(loginControllerProvider).isLoading,
       child: Scaffold(
         body: SafeArea(
@@ -165,7 +157,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   child: 
                   Consumer(
                     builder: (context, ref, child) {
-                      return ref.watch(getLoginModesProvider).when(
+                      return ref.watch(getLoginModesProvider(context)).when(
                             data: (data) => (data != null &&
                                     data.isNotEmpty == true)
                                 ? DropdownButtonHideUnderline(
