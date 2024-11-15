@@ -240,7 +240,7 @@ class AccountRequestItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.20,
+        height: MediaQuery.of(context).size.height * 0.23,
         padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 16),
         margin: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
@@ -263,7 +263,11 @@ class AccountRequestItem extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w500),
+                        ?.copyWith(fontWeight: FontWeight.w500,color: 
+                        brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
+                        ),
                   ),
                 ),
                 Row(
@@ -315,21 +319,27 @@ class AccountRequestItem extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall
-                      ?.copyWith(fontWeight: FontWeight.normal),
+                      ?.copyWith(fontWeight: FontWeight.normal,color: 
+                        brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,),
                 ),
               ],
             ),
-            Row(
+            Wrap(
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  // width: MediaQuery.of(context).size.width * 0.75,
                   child: Text(
                     'Started on:${getDayDateAndYear(request?.createDate.toIso8601String() ?? '')}',
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context)
                         .textTheme
                         .bodySmall
-                        ?.copyWith(fontWeight: FontWeight.normal),
+                        ?.copyWith(fontWeight: FontWeight.normal,color: 
+                        brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,),
                   ),
                 ),
               ],
