@@ -19,7 +19,7 @@ import 'package:zxplore_app/widgets/zxplore_progress.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 
-///CreateNewAccountScreen new account request primarily usinngthe EPMA service
+///CreateNewAccountScreen new account request primarily using the EPMA service
 class CreateNewAccountScreen extends ConsumerStatefulWidget {
   const CreateNewAccountScreen({super.key});
 
@@ -317,7 +317,7 @@ class _CreateNewAccountScreenState
                             error: (e, s) => GestureDetector(
                                 onTap: () => ref.invalidate(getGenderProvider),
                                 child: const Text(
-                                  'An error occured fetch login modes.Tap to refresh',
+                                  'An error occurred fetch login modes.Tap to refresh',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -488,7 +488,7 @@ class _CreateNewAccountScreenState
                                 onTap: () =>
                                     ref.invalidate(getCountriesProvider),
                                 child: const Text(
-                                  'An error occured fetch login modes.Tap to refresh',
+                                  'An error occurred fetch login modes.Tap to refresh',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -537,12 +537,12 @@ class _CreateNewAccountScreenState
                     title: 'Address',
                     fillColor: Colors.transparent,
                     controller: residentialAddressController,
-                    hint: 'Enter adress',
+                    hint: 'Enter address',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Address is  required';
+                        return 'Address is required';
                       }
                       return null;
                     },
@@ -552,7 +552,7 @@ class _CreateNewAccountScreenState
                     title: 'Other Address',
                     fillColor: Colors.transparent,
                     controller: residentialAddressController2,
-                    hint: 'Enter other adress',
+                    hint: 'Enter other address',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -572,7 +572,7 @@ class _CreateNewAccountScreenState
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'City is  required';
+                        return 'City is required';
                       }
                       return null;
                     },
@@ -704,7 +704,7 @@ class _CreateNewAccountScreenState
                                 onTap: () => ref
                                     .invalidate(getIdentificationTypesProvider),
                                 child: const Text(
-                                  'An error occured fetch login modes.Tap to refresh',
+                                  'An error occurred fetch login modes.Tap to refresh',
                                   maxLines: 3,
                                   overflow: TextOverflow.ellipsis,
                                 )),
@@ -825,7 +825,7 @@ class _CreateNewAccountScreenState
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'IDD Code is  required';
+                        return 'IDD Code is required';
                       }
                       return null;
                     },

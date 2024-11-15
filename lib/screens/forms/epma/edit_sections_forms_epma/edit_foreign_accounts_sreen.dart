@@ -70,6 +70,7 @@ class _EditForeignAaccountScreenState
   bool inflowFrequencyQuarterly = false;
   bool inflowFrequencyOther = false;
   bool fundSourceBusinessIncome = false;
+  
 
   @override
   void initState() {
@@ -78,6 +79,7 @@ class _EditForeignAaccountScreenState
       final originalData = widget.data?.data;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
+          selectedItemStage= originalData?.itemStage??'No selection';
           hasRelatedAccount = originalData?.hasRelatedAccount ?? false;
           maintainMandate = originalData?.maintainMandate ?? false;
           offShoreUSD = originalData?.offShoreUsd ?? false;
@@ -200,7 +202,7 @@ class _EditForeignAaccountScreenState
         .editForeignAccount(
             context: context,
             editAccount: EditForeignAccount(
-              itemStage: originalData?.itemStage,
+              itemStage: selectedItemStage,
               requestId: originalData?.reqId,
               rowVersion: originalData?.rowVersion,
               actionFlag:  originalData?.actionFlag,
@@ -249,6 +251,10 @@ class _EditForeignAaccountScreenState
           padding: const EdgeInsets.all(16.0),
           child: PrimaryButton(
                         onPressed: () {
+                              if (selectedItemStage == null) {
+                  zXFlushBar(context, "Form stage is required");
+                  return;
+                }
                           if (!_fundingFormFormKey.currentState!.validate()) {
                             return;
                           }

@@ -16,6 +16,7 @@ Future<List< AccountTypesDatum>?> getAccountTypes(
   try {
     const AsyncLoading();
     final response =    await repo.getDocumentTypes();
+    print("TYPES:: $response");
 
     if (response['status']==true) {
       final result = AccountTypesResponse.fromJson(response);

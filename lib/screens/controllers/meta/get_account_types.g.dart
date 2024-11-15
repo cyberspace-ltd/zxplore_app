@@ -6,7 +6,7 @@ part of 'get_account_types.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getAccountTypesHash() => r'7953b48ad53f886d8fcc32fdb75064d6fd01ac33';
+String _$getAccountTypesHash() => r'ccf1539d5f126971801c41f035b72e0bede18d33';
 
 /// Get getAccountTypes
 ///

@@ -37,8 +37,8 @@ class AccountClassResponse {
 }
 
 class AccountClassDatum {
-    String accountClass;
-    String accountClassName;
+    String? accountClass;
+    String? accountClassName;
 
     AccountClassDatum({
         required this.accountClass,

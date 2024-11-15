@@ -83,7 +83,7 @@ class _EditOherBankAccountScreenState
     final userData = widget.data?.data;
     final account = AddOtherBankAccount(
       requestId: userData?.reqId,
-      itemStage: userData?.itemStage,
+      itemStage: selectedItemStage,
       otherAccountsId: userData?.otherAccountsId,
       rowVersion: userData?.rowVersion,
       actionFlag: userData?.actionFlag,
@@ -123,7 +123,7 @@ class _EditOherBankAccountScreenState
                   return;
                 }
                      if (selectedItemStage == null) {
-                  zXFlushBar(context, "Item stage is required");
+                  zXFlushBar(context, "Form stage is required");
                 }
                 /// perform trn if all is well
                 _submitForm(context);

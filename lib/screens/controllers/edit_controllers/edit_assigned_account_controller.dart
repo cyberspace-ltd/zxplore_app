@@ -77,7 +77,7 @@ class EditAssignedAccountController extends _$EditAssignedAccountController {
     }
   }
 
- Future<dynamic> addAssignedAccount(
+Future<dynamic> addAssignedAccount(
       {required GenerateAssignedAccount? data,String?  reqId,
       required BuildContext context}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);

@@ -119,7 +119,7 @@ class _EditNextOfKinScreenState extends ConsumerState<EditNextOfKinScreen> {
                   return;
                 }
                 if (selectedItemStage == null) {
-                  zXFlushBar(context, "Item stage is required");
+                  zXFlushBar(context, "Form stage is required");
                 }
                 if (selectedGenderItem == null) {
                   zXFlushBar(context, "Gender is required");

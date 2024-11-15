@@ -15,6 +15,7 @@ import 'package:zxplore_app/screens/controllers/meta/customer_classification.dar
 import 'package:zxplore_app/screens/controllers/meta/employment_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/fatca_status.dart';
 import 'package:zxplore_app/screens/controllers/meta/gender.dart';
+import 'package:zxplore_app/screens/controllers/meta/get_account_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/get_documents_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/identification_types.dart';
 import 'package:zxplore_app/screens/controllers/meta/marital_status.dart';
@@ -80,6 +81,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ref.read(getReconStatusProvider);
           ref.read(getRegionsProvider);
           ref.read(getSearchOptionsProvider);
+          ref.read(getAccountTypesProvider);
+
        
           ///! End
           Navigator.pushReplacement(

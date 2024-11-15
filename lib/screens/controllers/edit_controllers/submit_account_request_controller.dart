@@ -4,6 +4,7 @@ import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/complete_request_response.dart';
 import 'package:zxplore_app/models/epma_models/process_request_response.dart';
 import 'package:zxplore_app/models/epma_models/validate_request_response.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
 import 'package:zxplore_app/utils/app_strings.dart';
 import 'package:zxplore_app/widgets/alert_dialogs.dart';
@@ -16,18 +17,22 @@ class SubmitAccountRequestController extends _$SubmitAccountRequestController {
   }
 
   Future<dynamic> validateRequestForSubmission(BuildContext context,
-      {required String? RequestId}) async {
+      { dynamic afterSuccess }) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
+
+    final reqId = ref.read(activelyViewedRequestProvider);
 
     try {
       state = const AsyncLoading();
       final requestResponse =
-          await repo.validateRequestForSubmission(RequestId: RequestId);
+          await repo.validateRequestForSubmission(RequestId: reqId?.data?.reqId);
 
       if (requestResponse['status'] == true) {
-        final result = ValidateRequestRsponse.fromMap(requestResponse);
+        final result = ValidateRequestResponse.fromMap(requestResponse);
 
         state = AsyncValue.data(result);
+        afterSuccess();
+
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -56,18 +61,21 @@ class SubmitAccountRequestController extends _$SubmitAccountRequestController {
     }
   }
 
-  Future<dynamic> processRequestExternal(BuildContext  context,{required String? RequestId}) async {
+  Future<dynamic> processRequestExternal(BuildContext  context,{ dynamic afterSuccess}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
+    final reqId = ref.read(activelyViewedRequestProvider);
+
 
     try {
       state = const AsyncLoading();
       final requestResponse =
-          await repo.processRequestExternal(RequestId: RequestId);
+          await repo.processRequestExternal(RequestId:  reqId?.data?.reqId);
 
       if (requestResponse['status'] == true) {
         final result = ProcessRequestResponse.fromMap(requestResponse);
 
         state = AsyncValue.data(result);
+        afterSuccess();
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {
@@ -96,17 +104,21 @@ class SubmitAccountRequestController extends _$SubmitAccountRequestController {
     }
   }
 
-  Future<dynamic> completeRequest(BuildContext  context,{required String? RequestId}) async {
+  Future<dynamic> completeRequest(BuildContext  context,{dynamic afterSuccess}) async {
     final repo = ref.read(userInfoRepositoryImplProvider);
+    final reqId = ref.read(activelyViewedRequestProvider);
+
 
     try {
       state = const AsyncLoading();
-      final requestResponse = await repo.completeRequest(RequestId: RequestId);
+      final requestResponse = await repo.completeRequest(RequestId:  reqId?.data?.reqId);
 
       if (requestResponse['status'] == true) {
         final result = CompleteRequestRsponse.fromMap(requestResponse);
 
         state = AsyncValue.data(result);
+        afterSuccess();
+
         return result;
       } else {
         if (requestResponse['message'] == 'token expired/invalid') {

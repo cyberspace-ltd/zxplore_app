@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/meta_data_provider.dart';
-import 'package:zxplore_app/models/epma_models/meta/account_series_response.dart'; 
+import 'package:zxplore_app/models/epma_models/meta/account_series_response.dart';
+import 'package:zxplore_app/screens/controllers/epma_controllers/actively_viewed_request.dart'; 
 
 part 'get_account_series.g.dart';
 
@@ -8,14 +9,15 @@ part 'get_account_series.g.dart';
 
 /// Get getAccountSeries
 Future<List<AccountSeriesDatum>?> getAccountSeries(
- GetAccountSeriesRef ref,String? requiestId, String? accountType
+ GetAccountSeriesRef ref, String? accountType
 ) async {
   final repo = ref.read(metaRepositoryImplProvider);
   final responseList = <AccountSeriesDatum>[];
+  final reqId = ref.read(activelyViewedRequestProvider);
 
   try {
     const AsyncLoading();
-    final response =    await repo.getAccountSeries(requestId: requiestId,accountType: accountType);
+    final response =    await repo.getAccountSeries(requestId: reqId?.data?.reqId??'',accountType: accountType);
 
     if (response['status']==true) {
       final result = AccountSeriesResponse.fromJson(response);

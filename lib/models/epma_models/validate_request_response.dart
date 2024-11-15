@@ -1,27 +1,27 @@
 // To parse this JSON data, do
 //
-//     final validateRequestRsponse = validateRequestRsponseFromMap(jsonString);
+//     final ValidateRequestResponse = ValidateRequestResponseFromMap(jsonString);
 
 import 'dart:convert';
 
-ValidateRequestRsponse validateRequestRsponseFromMap(String str) => ValidateRequestRsponse.fromMap(json.decode(str));
+ValidateRequestResponse ValidateRequestResponseFromMap(String str) => ValidateRequestResponse.fromMap(json.decode(str));
 
-String validateRequestRsponseToMap(ValidateRequestRsponse data) => json.encode(data.toMap());
+String ValidateRequestResponseToMap(ValidateRequestResponse data) => json.encode(data.toMap());
 
-class ValidateRequestRsponse {
+class ValidateRequestResponse {
     int? code;
     bool? status;
     String? message;
     VallidationData? data;
 
-    ValidateRequestRsponse({
+    ValidateRequestResponse({
         this.code,
         this.status,
         this.message,
         this.data,
     });
 
-    factory ValidateRequestRsponse.fromMap(Map<String, dynamic> json) => ValidateRequestRsponse(
+    factory ValidateRequestResponse.fromMap(Map<String, dynamic> json) => ValidateRequestResponse(
         code: json["code"],
         status: json["status"],
         message: json["message"],

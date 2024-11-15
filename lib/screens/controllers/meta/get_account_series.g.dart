@@ -6,7 +6,7 @@ part of 'get_account_series.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getAccountSeriesHash() => r'5038d9eb81fcb36896a40723971297c1d69f50f7';
+String _$getAccountSeriesHash() => r'fe19c99f7ff10ada3e23b6f10f0bdc8bb8ad0a3c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -49,11 +49,9 @@ class GetAccountSeriesFamily
   ///
   /// Copied from [getAccountSeries].
   GetAccountSeriesProvider call(
-    String? requiestId,
     String? accountType,
   ) {
     return GetAccountSeriesProvider(
-      requiestId,
       accountType,
     );
   }
@@ -63,7 +61,6 @@ class GetAccountSeriesFamily
     covariant GetAccountSeriesProvider provider,
   ) {
     return call(
-      provider.requiestId,
       provider.accountType,
     );
   }
@@ -92,12 +89,10 @@ class GetAccountSeriesProvider
   ///
   /// Copied from [getAccountSeries].
   GetAccountSeriesProvider(
-    String? requiestId,
     String? accountType,
   ) : this._internal(
           (ref) => getAccountSeries(
             ref as GetAccountSeriesRef,
-            requiestId,
             accountType,
           ),
           from: getAccountSeriesProvider,
@@ -109,7 +104,6 @@ class GetAccountSeriesProvider
           dependencies: GetAccountSeriesFamily._dependencies,
           allTransitiveDependencies:
               GetAccountSeriesFamily._allTransitiveDependencies,
-          requiestId: requiestId,
           accountType: accountType,
         );
 
@@ -120,11 +114,9 @@ class GetAccountSeriesProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.requiestId,
     required this.accountType,
   }) : super.internal();
 
-  final String? requiestId;
   final String? accountType;
 
   @override
@@ -141,7 +133,6 @@ class GetAccountSeriesProvider
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        requiestId: requiestId,
         accountType: accountType,
       ),
     );
@@ -155,14 +146,12 @@ class GetAccountSeriesProvider
   @override
   bool operator ==(Object other) {
     return other is GetAccountSeriesProvider &&
-        other.requiestId == requiestId &&
         other.accountType == accountType;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, requiestId.hashCode);
     hash = _SystemHash.combine(hash, accountType.hashCode);
 
     return _SystemHash.finish(hash);
@@ -170,9 +159,6 @@ class GetAccountSeriesProvider
 }
 
 mixin GetAccountSeriesRef on FutureProviderRef<List<AccountSeriesDatum>?> {
-  /// The parameter `requiestId` of this provider.
-  String? get requiestId;
-
   /// The parameter `accountType` of this provider.
   String? get accountType;
 }
@@ -182,8 +168,6 @@ class _GetAccountSeriesProviderElement
     with GetAccountSeriesRef {
   _GetAccountSeriesProviderElement(super.provider);
 
-  @override
-  String? get requiestId => (origin as GetAccountSeriesProvider).requiestId;
   @override
   String? get accountType => (origin as GetAccountSeriesProvider).accountType;
 }

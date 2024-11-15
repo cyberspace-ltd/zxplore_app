@@ -83,18 +83,21 @@ Future<void> showNotImplementedAlertDialog({required BuildContext context}) =>
 
 class ErrorAlert extends StatelessWidget {
   final String message;
+  final String? title;
   final VoidCallback? onRetry;
 
   const ErrorAlert({
     Key? key,
+    this.title,
     required this.message,
-    this.onRetry,
+    this.onRetry, 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Error'),
+      
+      title:   Text(title??'Error'),
       content: Text(message),
       actions: [
         TextButton(
@@ -112,13 +115,14 @@ class ErrorAlert extends StatelessWidget {
 }
 
 void showErrorDialog(
-    BuildContext context, String message, {VoidCallback? retry}) {
+    BuildContext context, String message, {VoidCallback? retry,  String? title}) {
   // Avoid showing dialog if not mounted
   if (!context.mounted) return;
 
   showDialog(
     context: context,
     builder: (context) => ErrorAlert(
+      title: title??'Error',
       message: message,
       onRetry: () {
         Navigator.pop(context);

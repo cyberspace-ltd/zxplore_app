@@ -115,7 +115,7 @@ class _EditRefereeScreenState extends ConsumerState<EditRefereeScreen> {
                 }
 
                 if (selectedItemStage == null) {
-                  zXFlushBar(context, "Item stage is required");
+                  zXFlushBar(context, "Form stage is required");
                 }
 
                 /// perform trn if all is well

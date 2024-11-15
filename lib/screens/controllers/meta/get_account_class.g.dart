@@ -6,7 +6,7 @@ part of 'get_account_class.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getAccountClassHash() => r'504b0a8a6ef94855ed77c358dd40a12fef20fe02';
+String _$getAccountClassHash() => r'5bdbab4d8a9f930c9ca0d87ebef4df5092ee960f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -49,12 +49,10 @@ class GetAccountClassFamily
   ///
   /// Copied from [getAccountClass].
   GetAccountClassProvider call(
-    String? requestId,
     String? accountTypeValue,
     String? seriesCodeValue,
   ) {
     return GetAccountClassProvider(
-      requestId,
       accountTypeValue,
       seriesCodeValue,
     );
@@ -65,7 +63,6 @@ class GetAccountClassFamily
     covariant GetAccountClassProvider provider,
   ) {
     return call(
-      provider.requestId,
       provider.accountTypeValue,
       provider.seriesCodeValue,
     );
@@ -94,13 +91,11 @@ class GetAccountClassProvider extends FutureProvider<List<AccountClassDatum>?> {
   ///
   /// Copied from [getAccountClass].
   GetAccountClassProvider(
-    String? requestId,
     String? accountTypeValue,
     String? seriesCodeValue,
   ) : this._internal(
           (ref) => getAccountClass(
             ref as GetAccountClassRef,
-            requestId,
             accountTypeValue,
             seriesCodeValue,
           ),
@@ -113,7 +108,6 @@ class GetAccountClassProvider extends FutureProvider<List<AccountClassDatum>?> {
           dependencies: GetAccountClassFamily._dependencies,
           allTransitiveDependencies:
               GetAccountClassFamily._allTransitiveDependencies,
-          requestId: requestId,
           accountTypeValue: accountTypeValue,
           seriesCodeValue: seriesCodeValue,
         );
@@ -125,12 +119,10 @@ class GetAccountClassProvider extends FutureProvider<List<AccountClassDatum>?> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.requestId,
     required this.accountTypeValue,
     required this.seriesCodeValue,
   }) : super.internal();
 
-  final String? requestId;
   final String? accountTypeValue;
   final String? seriesCodeValue;
 
@@ -148,7 +140,6 @@ class GetAccountClassProvider extends FutureProvider<List<AccountClassDatum>?> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        requestId: requestId,
         accountTypeValue: accountTypeValue,
         seriesCodeValue: seriesCodeValue,
       ),
@@ -163,7 +154,6 @@ class GetAccountClassProvider extends FutureProvider<List<AccountClassDatum>?> {
   @override
   bool operator ==(Object other) {
     return other is GetAccountClassProvider &&
-        other.requestId == requestId &&
         other.accountTypeValue == accountTypeValue &&
         other.seriesCodeValue == seriesCodeValue;
   }
@@ -171,7 +161,6 @@ class GetAccountClassProvider extends FutureProvider<List<AccountClassDatum>?> {
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, requestId.hashCode);
     hash = _SystemHash.combine(hash, accountTypeValue.hashCode);
     hash = _SystemHash.combine(hash, seriesCodeValue.hashCode);
 
@@ -180,9 +169,6 @@ class GetAccountClassProvider extends FutureProvider<List<AccountClassDatum>?> {
 }
 
 mixin GetAccountClassRef on FutureProviderRef<List<AccountClassDatum>?> {
-  /// The parameter `requestId` of this provider.
-  String? get requestId;
-
   /// The parameter `accountTypeValue` of this provider.
   String? get accountTypeValue;
 
@@ -195,8 +181,6 @@ class _GetAccountClassProviderElement
     with GetAccountClassRef {
   _GetAccountClassProviderElement(super.provider);
 
-  @override
-  String? get requestId => (origin as GetAccountClassProvider).requestId;
   @override
   String? get accountTypeValue =>
       (origin as GetAccountClassProvider).accountTypeValue;

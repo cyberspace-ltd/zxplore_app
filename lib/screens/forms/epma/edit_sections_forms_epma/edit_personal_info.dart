@@ -170,7 +170,6 @@ class _PersonalInfoEditSscreenState
   final regionValueListenable = ValueNotifier<RegionDatum?>(null);
   final TextEditingController regionSearchEditingController =
       TextEditingController();
-  final TextEditingController prevItemStageController = TextEditingController();
   final TextEditingController prevGenderController = TextEditingController();
   final TextEditingController prevRegionController = TextEditingController();
   final TextEditingController prevCountryController = TextEditingController();
@@ -256,7 +255,6 @@ class _PersonalInfoEditSscreenState
   String dobFormattedDate = 'dd/mm/yyy';
   String sDobFormattedDate = 'yyyy/mm/dd';
 
-  bool hidePrevItemStage = false;
   bool hidePrevGender = false;
   bool hidePrevRegion = false;
   bool hidePrevCountry = false;
@@ -265,8 +263,10 @@ class _PersonalInfoEditSscreenState
   bool hideEmploymentType = false;
   bool hideMaritalStatus = false;
   bool hideIdType = false;
-  String? selectedItemStage;
 
+  final TextEditingController prevItemStageController = TextEditingController();
+  String? selectedItemStage;
+  bool hidePrevItemStage = false;
   void togglePrevItemStage() {
     setState(() {
       hidePrevItemStage = !hidePrevItemStage;
@@ -462,6 +462,9 @@ class _PersonalInfoEditSscreenState
   void dispose() {
     // Dispose the controllers to free up resources
     countryValueListenable.dispose();
+    customerClassificationValueListenable.dispose();
+       residencePermitPlaceCountryCodeController.dispose();
+    residencePermitPlaceCountryCodeValueListenable.dispose();
     _surnameController.dispose();
     _firstNameController.dispose();
     _otherNamesController.dispose();
@@ -482,11 +485,17 @@ class _PersonalInfoEditSscreenState
     _telNoController.dispose();
     _mobileNoController.dispose();
     _emailAddressController.dispose();
-    _residentialAddressController.dispose();
     _residentialAddress2Controller.dispose();
     _cityController.dispose();
     _permanentResidentialAddressController.dispose();
     _permanentResidentialCityController.dispose();
+    _permanentResidentialCountryCodeController.dispose();
+     _residencePermitNoController.dispose();
+    residencePermitPlaceCountryCodeController.dispose();
+    _permitIssueDateController.dispose();
+    _permitExpiryDateController.dispose();
+    _residentialAddressController.dispose();
+
 
     _motherMaidenNameController.dispose();
     _spouseNameController.dispose();
@@ -498,12 +507,8 @@ class _PersonalInfoEditSscreenState
     _monthlyIncomeController.dispose();
     _countryOrigCodeController.dispose();
     _homeTownController.dispose();
-    _residencePermitNoController.dispose();
-    residencePermitPlaceCountryCodeController.dispose();
-    _permitIssueDateController.dispose();
-    _permitExpiryDateController.dispose();
+ 
     _districtAssemblyAreaController.dispose();
-    _permanentResidentialCountryCodeController.dispose();
     _mailingAddressController.dispose();
     _accountOwnershipOtherController.dispose();
     _pepReasonController.dispose();
@@ -691,9 +696,9 @@ class _PersonalInfoEditSscreenState
                       permIdentityDateIssued == null ||
                       permIdentityDateIssued!.isEmpty ||
                       permIdentityDateExpire!.isEmpty) {
-                    zXFlushBar(
-                        context, "Permanent ID issues/expiry date is required");
-                    return;
+                  zXFlushBar(
+                      context, "Permanent ID issue/expiry date is required");
+                  return;
                   }
                 }
 
@@ -750,6 +755,9 @@ class _PersonalInfoEditSscreenState
                 if (customerClassificationDatumValue == null) {
                   zXFlushBar(context, "Customer classification is required");
                   return;
+                }
+                  if (selectedItemStage == null) {
+                  zXFlushBar(context, "Form stage is required");
                 }
                 editAccountRequest(context);
               },
@@ -882,6 +890,8 @@ class _PersonalInfoEditSscreenState
                       ),
                     ),
                   ],
+                 
+                 
                   gapH16,
                   CustomTextFormField(
                     title: 'First name',
@@ -2770,7 +2780,9 @@ class _PersonalInfoEditSscreenState
                       ),
                     ],
                   ],
-                  const SizedBox(height: 16),
+                 
+                 
+                 const SizedBox(height: 16),
 
                   Text(
                     'Customer Classification',
@@ -3212,7 +3224,7 @@ class _PersonalInfoEditSscreenState
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'City is  required';
+                        return 'City is required';
                       }
                       return null;
                     },
@@ -3221,10 +3233,11 @@ class _PersonalInfoEditSscreenState
                   const SizedBox(height: 16),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'GPS-Address',
+                    title: 'GPS Address',
                     fillColor: Colors.transparent,
                     controller: _gpsAddressController,
-                    hint: '12 abc close',
+                                        hint: 'GH-930030-3393',
+
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
