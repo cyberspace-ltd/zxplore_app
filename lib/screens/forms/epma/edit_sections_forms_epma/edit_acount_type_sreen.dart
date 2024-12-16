@@ -70,7 +70,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
 
   final prevATAStageController = TextEditingController();
   bool hidePrevADTStage = false; //pre  anticipated  deposite trxn amount
-  ///pre  anticipated  deposite trxn 
+  ///pre  anticipated  deposite trxn
   void togglePrevADTStage() {
     setState(() {
       hidePrevADTStage = !hidePrevADTStage;
@@ -140,10 +140,13 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
           prevATAStageController.text =
               '${originalData?.anticipatedDepositeTrans}';
           //withdrawwals
-          anticipatedWithdrawalsAmount = originalData?.anticipatedWithdrawAmount;
+          anticipatedWithdrawalsAmount =
+              originalData?.anticipatedWithdrawAmount;
           anticipatedWithdrawalsTrxn = originalData?.anticipatedWithdrawTrans;
-          prevAWAStageController.text= '${originalData?.anticipatedWithdrawAmount}';
-          prevAWTStageController.text = '${originalData?.anticipatedWithdrawTrans}';
+          prevAWAStageController.text =
+              '${originalData?.anticipatedWithdrawAmount}';
+          prevAWTStageController.text =
+              '${originalData?.anticipatedWithdrawTrans}';
         });
       });
     } catch (e) {}
@@ -202,8 +205,7 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
         anticipatedDepositeAmount:
             anticipatedDepositDepositAmount, //int.parse(anticipatedDepositeAmountController.text),
 
-        anticipatedWithdrawTrans:
-           anticipatedWithdrawalsTrxn, //drop down
+        anticipatedWithdrawTrans: anticipatedWithdrawalsTrxn, //drop down
         anticipatedWithdrawAmount:
             anticipatedWithdrawalsAmount, //int.parse(anticipatedWithdrawAmountController.text),
         foriegnTransactionExpected: foriegnTransactionExpected,
@@ -241,12 +243,12 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                 if (selectedItemStage == null) {
                   zXFlushBar(context, "Item stage is required");
                 }
-                if ( anticipaatedDepositTrxn==null) {
+                if (anticipaatedDepositTrxn == null) {
                   zXFlushBar(context, "Anticipated transaction is required");
                   return;
                 }
 
-                if ( anticipatedDepositDepositAmount==null) {
+                if (anticipatedDepositDepositAmount == null) {
                   zXFlushBar(context, "Anticipated Deposit amount is required");
 
                   return;
@@ -443,7 +445,6 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                   ),
                   div,
                   gapH16,
-
                   if (!hidePrevADAStage) ...[
                     CustomTextFormField(
                       title: "Anticipated Deposit Amount",
@@ -595,7 +596,6 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                     ),
                     const SizedBox(height: 16)
                   ],
-
                   if (!hidePrevADTStage) ...[
                     CustomTextFormField(
                       title: "Anticipated Deposit Transactions",
@@ -755,9 +755,8 @@ class _EditAccountTypeScreenState extends ConsumerState<EditAccountTypeScreen> {
                       },
                     ),
                   ],
-                  
-if (!hidePrevAWAStage) ...[
-     gapH16,
+                  if (!hidePrevAWAStage) ...[
+                    gapH16,
                     CustomTextFormField(
                       title: "Anticipated Deposit Amount",
                       fillColor: Colors.transparent,
@@ -778,139 +777,138 @@ if (!hidePrevAWAStage) ...[
                     ),
                     gapH16,
                   ],
-               
-                if (hidePrevAWAStage) ... [ 
-                     gapH16,
-                   Text(
-                    'Anticipated Withdrawal Amount',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getAnticipatedAmountProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<
-                                        AnticipatedAmountsDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select anticipated withdrawals amount',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      AnticipatedAmountsDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      AnticipatedAmountsDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      ' ${item.amountValue}',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value: anticipatedWithdrawalsAmountItem,
-                                      onChanged:
-                                          (AnticipatedAmountsDatum? newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          anticipatedWithdrawalsAmountItem =
-                                              newValue;
-                                          anticipatedWithdrawalsAmount =
-                                              newValue?.amountValue;
-                                          anticipateWithdrawalsAmountName =
-                                              newValue?.amountName;
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                  if (hidePrevAWAStage) ...[
+                    gapH16,
+                    Text(
+                      'Anticipated Withdrawal Amount',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref.watch(getAnticipatedAmountProvider).when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<
+                                          AnticipatedAmountsDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select anticipated withdrawals amount',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                    DropdownMenuItem<
+                                                        AnticipatedAmountsDatum>>(
+                                                (item) => DropdownMenuItem<
+                                                        AnticipatedAmountsDatum>(
+                                                      value: item,
+                                                      child: Text(
+                                                        ' ${item.amountValue}',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        value: anticipatedWithdrawalsAmountItem,
+                                        onChanged: (AnticipatedAmountsDatum?
+                                            newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            anticipatedWithdrawalsAmountItem =
+                                                newValue;
+                                            anticipatedWithdrawalsAmount =
+                                                newValue?.amountValue;
+                                            anticipateWithdrawalsAmountName =
+                                                newValue?.amountName;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : TextButton(
-                                    onPressed: () => ref.invalidate(
-                                        getAnticipatedAmountProvider),
-                                    child: Text('Empty data, Tap to retry')),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref
-                                    .invalidate(getAnticipatedAmountProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
-                 ],
-if (!hidePrevAWTStage) ...[
-                     gapH16,
-
+                                    )
+                                  : TextButton(
+                                      onPressed: () => ref.invalidate(
+                                          getAnticipatedAmountProvider),
+                                      child: Text('Empty data, Tap to retry')),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () => ref
+                                      .invalidate(getAnticipatedAmountProvider),
+                                  child: const Text(
+                                    'An error occured',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
+                  ],
+                  if (!hidePrevAWTStage) ...[
+                    gapH16,
                     CustomTextFormField(
                       title: "Anticipated Withdrawal Transactions",
                       fillColor: Colors.transparent,
@@ -932,134 +930,138 @@ if (!hidePrevAWTStage) ...[
                     gapH16,
                   ],
                   const SizedBox(height: 16),
-                 if (hidePrevAWTStage) ... [ 
-                   Text(
-                    'Anticipated withdrawal Transactions',
-                    overflow: TextOverflow.fade,
-                    maxLines: 1,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  const SizedBox(height: 6),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      return ref.watch(getAnticipatedTransactionProvider).when(
-                            data: (data) => (data != null &&
-                                    data.isNotEmpty == true)
-                                ? DropdownButtonHideUnderline(
-                                    child: DropdownButton2<
-                                        AnticipatedTransactionsDatum>(
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select anticipated transactions',
-                                        style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.normal,
-                                          color: ZxplorePrimaryColor,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      items: data
-                                          .map<
-                                                  DropdownMenuItem<
-                                                      AnticipatedTransactionsDatum>>(
-                                              (item) => DropdownMenuItem<
-                                                      AnticipatedTransactionsDatum>(
-                                                    value: item,
-                                                    child: Text(
-                                                      '${item.transactionValue}',
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        color:
-                                                            ZxplorePrimaryColor,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ))
-                                          .toList(),
-                                      value:
-                                          anticipatedWithdrawalTransactionsItem,
-                                      onChanged: (AnticipatedTransactionsDatum?
-                                          newValue) {
-                                        setState(() {
-                                          /// Set selected item params
-                                          anticipatedWithdrawalTransactionsItem =
-                                              newValue;
-                                          anticipatedWithdrawalsTrxn =
-                                              newValue?.transactionValue;
-                                          anticipatedWithdrawalsTrxnName =
-                                              newValue?.transactionName;
-                                        });
-                                      },
-                                      buttonStyleData: ButtonStyleData(
-                                        height: 60,
-                                        // width: 160,
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 14),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
+                  if (hidePrevAWTStage) ...[
+                    Text(
+                      'Anticipated withdrawal Transactions',
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),
+                    ),
+                    const SizedBox(height: 6),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        return ref
+                            .watch(getAnticipatedTransactionProvider)
+                            .when(
+                              data: (data) => (data != null &&
+                                      data.isNotEmpty == true)
+                                  ? DropdownButtonHideUnderline(
+                                      child: DropdownButton2<
+                                          AnticipatedTransactionsDatum>(
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select anticipated transactions',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.normal,
                                             color: ZxplorePrimaryColor,
                                           ),
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        elevation: 0,
-                                      ),
-                                      iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          CupertinoIcons.chevron_down,
+                                        items: data
+                                            .map<
+                                                    DropdownMenuItem<
+                                                        AnticipatedTransactionsDatum>>(
+                                                (item) => DropdownMenuItem<
+                                                        AnticipatedTransactionsDatum>(
+                                                      value: item,
+                                                      child: Text(
+                                                        '${item.transactionValue}',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color:
+                                                              ZxplorePrimaryColor,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                        value:
+                                            anticipatedWithdrawalTransactionsItem,
+                                        onChanged:
+                                            (AnticipatedTransactionsDatum?
+                                                newValue) {
+                                          setState(() {
+                                            /// Set selected item params
+                                            anticipatedWithdrawalTransactionsItem =
+                                                newValue;
+                                            anticipatedWithdrawalsTrxn =
+                                                newValue?.transactionValue;
+                                            anticipatedWithdrawalsTrxnName =
+                                                newValue?.transactionName;
+                                          });
+                                        },
+                                        buttonStyleData: ButtonStyleData(
+                                          height: 60,
+                                          // width: 160,
+                                          padding: const EdgeInsets.only(
+                                              left: 0, right: 14),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            border: Border.all(
+                                              color: ZxplorePrimaryColor,
+                                            ),
+                                          ),
+                                          elevation: 0,
                                         ),
-                                        iconSize: 14,
-                                        iconEnabledColor: ZxplorePrimaryColor,
-                                        iconDisabledColor: Colors.grey,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        // width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
+                                        iconStyleData: const IconStyleData(
+                                          icon: Icon(
+                                            CupertinoIcons.chevron_down,
+                                          ),
+                                          iconSize: 14,
+                                          iconEnabledColor: ZxplorePrimaryColor,
+                                          iconDisabledColor: Colors.grey,
                                         ),
-                                        // offset: const Offset(0, 0),
-                                        scrollbarTheme:
-                                            const ScrollbarThemeData(
-                                          radius: Radius.circular(40),
-                                          thickness:
-                                              WidgetStatePropertyAll<double>(6),
-                                          thumbVisibility:
-                                              WidgetStatePropertyAll<bool>(
-                                                  true),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          // width: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                          ),
+                                          // offset: const Offset(0, 0),
+                                          scrollbarTheme:
+                                              const ScrollbarThemeData(
+                                            radius: Radius.circular(40),
+                                            thickness:
+                                                WidgetStatePropertyAll<double>(
+                                                    6),
+                                            thumbVisibility:
+                                                WidgetStatePropertyAll<bool>(
+                                                    true),
+                                          ),
+                                        ),
+                                        menuItemStyleData:
+                                            const MenuItemStyleData(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 14, right: 14),
                                         ),
                                       ),
-                                      menuItemStyleData:
-                                          const MenuItemStyleData(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 14, right: 14),
-                                      ),
-                                    ),
-                                  )
-                                : TextButton(
-                                    onPressed: () => ref.invalidate(
-                                        getAnticipatedTransactionProvider),
-                                    child: Text('Empty data, Tap to retry')),
-                            error: (e, s) => GestureDetector(
-                                onTap: () => ref.invalidate(
-                                    getAnticipatedTransactionProvider),
-                                child: const Text(
-                                  'An error occured',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                )),
-                            loading: () => SizedBox(height: 16.0),
-                          );
-                    },
-                  ),
+                                    )
+                                  : TextButton(
+                                      onPressed: () => ref.invalidate(
+                                          getAnticipatedTransactionProvider),
+                                      child: Text('Empty data, Tap to retry')),
+                              error: (e, s) => GestureDetector(
+                                  onTap: () => ref.invalidate(
+                                      getAnticipatedTransactionProvider),
+                                  child: const Text(
+                                    'An error occured',
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                              loading: () => SizedBox(height: 16.0),
+                            );
+                      },
+                    ),
                   ],
                   gapH16,
                   const SizedBox(height: 24),

@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/meta_data_provider.dart';
-import 'package:zxplore_app/models/epma_models/meta/business_natures.dart';
 import 'package:zxplore_app/models/epma_models/meta/fatca_status_response.dart';
 
 part 'fatca_status.g.dart';

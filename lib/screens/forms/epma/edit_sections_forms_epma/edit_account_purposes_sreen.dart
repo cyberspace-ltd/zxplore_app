@@ -357,7 +357,7 @@ class _EditAccountPurposeScreenState
                   ),
                   gapH12,
                   CheckboxListTile(
-                    title: Text('Secutiry Safe Keeping'),
+                    title: Text('Security Safe Keeping'),
                     value: secutirySafeKeeping,
                     onChanged: (value) => _handleCheckboxChange(6, value),
                   ),
@@ -376,7 +376,7 @@ class _EditAccountPurposeScreenState
                   gapH12,
 
                   CheckboxListTile(
-                    title: Text('Reciept Of Inflows'),
+                    title: Text('Receipt Of Inflows'),
                     value: recieptOfInflows,
                     onChanged: (value) => _handleCheckboxChange(9, value),
                   ),
@@ -391,7 +391,7 @@ class _EditAccountPurposeScreenState
                   if (others) ...[
                     gapH12,
                     CustomTextFormField(
-                      title: 'Specicy others',
+                      title: 'Specify others',
                       fillColor: Colors.transparent,
                       controller: actionFlagController,
                       hint: 'Enter others',

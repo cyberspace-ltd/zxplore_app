@@ -136,7 +136,7 @@ class _CreateNewAccountScreenState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CustomTextFormField(
-                    title: 'First name',
+                    title: 'First Name',
                     fillColor: Colors.transparent,
                     controller: firstNameController,
                     hint: 'Enter first name',
@@ -151,7 +151,7 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Last name',
+                    title: 'Last Name',
                     fillColor: Colors.transparent,
                     controller: lastNameController,
                     hint: 'Enter last name',
@@ -166,7 +166,7 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Other name',
+                    title: 'Other Name',
                     fillColor: Colors.transparent,
                     controller: otherNameController,
                     hint: 'Enter other name',
@@ -327,7 +327,7 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Country',
+                    'Citizenship(Country)',
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     style: Theme.of(context)
@@ -504,25 +504,25 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 8),
                   CustomTextFormField(
-                    title: 'Telephone Number',
+                    title: 'Cell Number 1',
                     fillColor: Colors.transparent,
                     controller: telNoController,
-                    hint: 'Telephone number eg.2338032489922',
+                    hint: 'eg. 233551234567',
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Telephone Number is  required';
+                        return 'Cell Number is  required';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Mobile Number',
+                    title: 'Cell Number 2',
                     fillColor: Colors.transparent,
                     controller: mobileNoController,
-                    hint: 'Mobile number eg.2338032489922',
+                    hint: 'eg. 233551234567',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -586,7 +586,7 @@ class _CreateNewAccountScreenState
                   const SizedBox(height: 8),
                   const SizedBox(height: 16),
                   Text(
-                    'ID Type',
+                    'Identification Type',
                     overflow: TextOverflow.fade,
                     maxLines: 1,
                     style: Theme.of(context)
@@ -714,10 +714,10 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'ID Issuer',
+                    title: 'Issuing Authority',
                     fillColor: Colors.transparent,
                     controller: idIssueAuthorityController,
-                    hint: 'Enter ID Issuer',
+                    hint: 'ID Issued By',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -729,7 +729,7 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'ID Number',
+                    title: 'Identification No.',
                     fillColor: Colors.transparent,
                     controller: identificationNoController,
                     showTitleTip: true,
@@ -749,13 +749,13 @@ class _CreateNewAccountScreenState
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'ISSUE');
                     },
-                    title: 'Issue Date',
+                    title: 'ID Issue Date',
                     showCursor: false,
                     readOnly: true,
                     fillColor: Colors.transparent,
                     controller: datedIssuedController,
                     showDropDownSuffixIcon: true,
-                    hint: 'ID Issue Date',
+                    hint: 'dd/mm/yyyy',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     suffixIcon: Icon(
@@ -776,7 +776,7 @@ class _CreateNewAccountScreenState
                     onTap: () {
                       _showDatePicker(context, dateCategory: 'EXPIRY');
                     },
-                    title: 'Expiry Date',
+                    title: 'ID expiry Date',
                     readOnly: true,
                     showDropDownSuffixIcon: true,
                     showCursor: false,
@@ -786,12 +786,12 @@ class _CreateNewAccountScreenState
                     ),
                     fillColor: Colors.transparent,
                     controller: dateExpireController,
-                    hint: 'ID Expiry Date',
+                    hint: 'dd/mm/yyyy',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'ID Expiry is required';
+                        return 'ID expiry date is required';
                       } else if (value == 'dd-mm-yyyy') {
                         return 'Enter a valid date';
                       }
@@ -800,10 +800,10 @@ class _CreateNewAccountScreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'NIA Number',
+                    title: 'NIA Verification No.',
                     fillColor: Colors.transparent,
                     controller: niaVerificationNoController,
-                    hint: 'NIA number eg. 1234000',
+                    hint: 'NIA No. eg. 1234000',
                     maxLenght: 7,
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
@@ -819,7 +819,7 @@ class _CreateNewAccountScreenState
                     title: 'IDD Code',
                     fillColor: Colors.transparent,
                     controller: iddCodeController,
-                    hint: 'Enter IDD code eg. 0000',
+                    hint: 'Enter IDD code',
                     maxLenght: 4,
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
@@ -837,7 +837,7 @@ class _CreateNewAccountScreenState
                           return;
                         }
                         if (selectedCountry == null) {
-                          zXFlushBar(context, "Country is required");
+                          zXFlushBar(context, "Citizenship(Country) is required");
                           return;
                         }
                         if (selectedGenderItem == null) {

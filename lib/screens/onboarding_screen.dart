@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:zxplore_app/screens/account_form.dart';
+import 'package:flutter/material.dart'; 
 import 'package:zxplore_app/screens/page_1_onboarding_screen.dart';
 import 'package:zxplore_app/screens/page_2_onboarding_screen.dart';
 import 'package:zxplore_app/screens/page_3_onboarding_screen.dart';
+import 'package:zxplore_app/widgets/dot.dart';
 
 class OnboardingMainPage extends StatefulWidget {
   OnboardingMainPage({Key? key}) : super(key: key);

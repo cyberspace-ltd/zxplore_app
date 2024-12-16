@@ -569,7 +569,7 @@ class _PersonalInfoEditSscreenState
   Future<void> editAccountRequest(BuildContext context) async {
     // final lat = ref.read(userLatitudeProvider);
     // final long = ref.read(userLongitudeProvider);
-    final DateTime tempnow = DateTime.now();
+    // final DateTime tempnow = DateTime.now();
     final initialData = widget.data?.data;
     final editPersonalDetails = EditPersonalDetails(
         accountOwnershipOther: _accountOwnershipOtherController.text,
@@ -691,13 +691,11 @@ class _PersonalInfoEditSscreenState
 
                   return;
                 }
+
                 if (residentPermitStatus != null) {
-                  if (permIdentityDateExpire == null ||
-                      permIdentityDateIssued == null ||
-                      permIdentityDateIssued!.isEmpty ||
-                      permIdentityDateExpire!.isEmpty) {
-                  zXFlushBar(
-                      context, "Permanent ID issue/expiry date is required");
+                  if (permIdentityDateExpire == null || permIdentityDateIssued == null ||
+                      permIdentityDateIssued!.isEmpty || permIdentityDateExpire!.isEmpty) {
+                  zXFlushBar(context, "Permanent ID issue/expiry date is required");
                   return;
                   }
                 }
@@ -894,7 +892,7 @@ class _PersonalInfoEditSscreenState
                  
                   gapH16,
                   CustomTextFormField(
-                    title: 'First name',
+                    title: 'First Name',
                     fillColor: Colors.transparent,
                     controller: _firstNameController,
                     hint: 'Enter first name',
@@ -909,7 +907,7 @@ class _PersonalInfoEditSscreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Last name',
+                    title: 'Last Name',
                     fillColor: Colors.transparent,
                     controller: _surnameController,
                     hint: 'Enter last name',
@@ -924,7 +922,7 @@ class _PersonalInfoEditSscreenState
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Other name',
+                    title: 'Other Name',
                     fillColor: Colors.transparent,
                     controller: _otherNamesController,
                     hint: 'Enter other name',
@@ -1004,9 +1002,9 @@ class _PersonalInfoEditSscreenState
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
-                      if (value.toString().isEmpty) {
-                        return 'Mother\'s Maiden Name is  required';
-                      }
+                      // if (value.toString().isEmpty) {
+                      //   return 'Mother\'s Maiden Name is  required';
+                      // }
                       return null;
                     },
                   ),
@@ -2285,7 +2283,7 @@ class _PersonalInfoEditSscreenState
                       setState(() {
                         residentPermitStatus = null;
                       });
-                      print('Not Applicable $value');
+                     
                     },
                   ),
                   RadioListTile<bool?>(
@@ -2296,7 +2294,7 @@ class _PersonalInfoEditSscreenState
                       setState(() {
                         residentPermitStatus = value;
                       });
-                      print('Indefinite $value');
+                      
                     },
                   ),
                   RadioListTile<bool?>(
@@ -2307,7 +2305,6 @@ class _PersonalInfoEditSscreenState
                       setState(() {
                         residentPermitStatus = value;
                       });
-                      print(' Not Indefinite $value');
                     },
                   ),
 
@@ -2614,7 +2611,7 @@ class _PersonalInfoEditSscreenState
                                         onMenuStateChange: (isOpen) {
                                           if (!isOpen) {
                                             residencePermitPlaceCountryCodeController
-                                                ?.clear();
+                                                .clear();
                                           }
                                         },
                                         items: data
@@ -3128,25 +3125,25 @@ class _PersonalInfoEditSscreenState
                   ),
                   const SizedBox(height: 8),
                   CustomTextFormField(
-                    title: 'Telephone Number',
+                    title: 'Cell Number 1',
                     fillColor: Colors.transparent,
                     controller: _telNoController,
-                    hint: 'Enter telephone number',
+                    hint: 'Enter cell number',
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
                     validator: (value) {
                       if (value.toString().isEmpty) {
-                        return 'Telephone Number is  required';
+                        return 'Cell Number is  required';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomTextFormField(
-                    title: 'Mobile Number',
+                    title: 'Cell Number 2',
                     fillColor: Colors.transparent,
                     controller: _mobileNoController,
-                    hint: 'Enter mobile number',
+                    hint: 'Enter cell number',
                     inputType: TextInputType.phone,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -3236,8 +3233,7 @@ class _PersonalInfoEditSscreenState
                     title: 'GPS Address',
                     fillColor: Colors.transparent,
                     controller: _gpsAddressController,
-                                        hint: 'GH-930030-3393',
-
+                     hint: 'GH-930030-3393',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {
@@ -3504,7 +3500,7 @@ class _PersonalInfoEditSscreenState
                     title: 'SSNIT  Number',
                     fillColor: Colors.transparent,
                     controller: _ssnitNoController,
-                    hint: 'Enter SSN code',
+                    hint: 'Enter SSNIT Number',
                     inputType: TextInputType.text,
                     useDefaultErrorText: false,
                     validator: (value) {

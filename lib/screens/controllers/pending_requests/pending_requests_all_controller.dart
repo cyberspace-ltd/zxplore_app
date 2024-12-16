@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zxplore_app/apis/repository/providers/user_info_repo.dart';
 import 'package:zxplore_app/models/epma_models/pending_requests_all_response.dart';
 import 'package:zxplore_app/screens/controllers/login/login_view_controller.dart';
-import 'package:zxplore_app/utils/app_exception.dart';
 
 part 'pending_requests_all_controller.g.dart';
 

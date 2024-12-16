@@ -337,7 +337,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                   ),
                   gapH16,
                   CustomTextFormField(
-                    title: 'OtherNames',
+                    title: 'Other Names',
                     fillColor: Colors.transparent,
                     controller: otherNamesCtrl,
                     hint: 'Enter Other Names',
@@ -589,7 +589,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                   ],
                   if (hidePrevCountry) ...[
                     Text(
-                      'Country',
+                      'Citizen (Country)',
                       overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: Theme.of(context)
@@ -706,7 +706,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                                   onTap: () =>
                                       ref.invalidate(getCountriesProvider),
                                   child: const Text(
-                                    'An error occured',
+                                    'An error occurred',
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   )),

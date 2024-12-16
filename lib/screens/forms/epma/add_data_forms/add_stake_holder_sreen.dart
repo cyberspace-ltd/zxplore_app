@@ -1827,7 +1827,7 @@ class _AddStakeHolderScreenState extends ConsumerState<AddStakeHolderScreen> {
                                         onMenuStateChange: (isOpen) {
                                           if (!isOpen) {
                                             residencePermitPlaceCountryCodeController
-                                                ?.clear();
+                                                .clear();
                                           }
                                         },
                                         items: data
